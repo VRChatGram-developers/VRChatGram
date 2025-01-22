@@ -11,5 +11,7 @@ USER node
 
 # Install dependencies
 WORKDIR /app
-COPY --chown=node:node ./package.json ./
+COPY --chown=node:node /front ./
 RUN npm install
+
+RUN chmod -R 755 ./node_modules
