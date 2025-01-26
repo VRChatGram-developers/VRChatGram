@@ -1,4 +1,13 @@
 services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vrchatgram
+    ports:
+      - 3306:3306
+    volumes:
+    - mysql-data:/var/lib/mysql
   nextjs:
     container_name: nextjs
     build:
@@ -21,3 +30,4 @@ services:
     stdin_open: true
 volumes:
   node_modules:
+  mysql-data:
