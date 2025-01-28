@@ -1,13 +1,13 @@
-import BreadList from "../../../features/sample/components/BreadList";
+import BreadList from "../../../features/sample/components/TestList";
 import { fetchBreads } from "@/features/sample/endpoint";
 
 export default async function Page() {
-  const breads = await fetchBreads();
+  const tests = await fetchBreads();
 
   return (
     <>
       <div>
-        <BreadList breads={breads} />
+        <BreadList tests={tests} />
       </div>
     </>
   );
