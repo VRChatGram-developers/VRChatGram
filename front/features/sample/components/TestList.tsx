@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Tests, Test } from "../types/test";
+import { Test, Tests } from "../types/test";
 import Link from "next/link";
 
 interface TestListProps {
@@ -8,40 +8,71 @@ interface TestListProps {
 }
 
 const BreadList: React.FC<TestListProps> = ({ tests }) => {
-  console.log(tests);
   return (
-    <>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {tests.tests.map((test: Test) => (
-          <div
-            key={test.id}
-            className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-gray-200"
-          >
-            <Link href={`/sample/test/${test.id}`} className="text-indigo-600 hover:underline">
-              {test.id}
-            </Link>
-            <div className="border-t border-b border-gray-200 py-2 mb-4">
-              <p className="text-sm text-gray-500 mb-2">
-                <span className="font-bold text-gray-700">Coat:</span> {test.name}
-              </p>
-              <p className="text-sm text-gray-500 mb-2">
-                <span className="font-bold text-gray-700">Country:</span> {test.content}
-              </p>
-              <p className="text-sm text-gray-500 mb-2">
-                {test.createdAt}
-              </p>
-              <p className="text-sm text-gray-500 mb-4">
-                {test.updatedAt}
-              </p>
-            </div>
-
-            <button className="mt-4 w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-300">
-              Learn More
-            </button>
-          </div>
-        ))}
+    <div className="min-h-screen flex justify-center items-start p-6">
+      <div className="w-full max-w-6xl overflow-x-auto bg-white rounded-lg shadow-lg">
+        <table className="min-w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-8 py-4 text-left text-lg font-semibold border border-gray-300">
+                ID
+              </th>
+              <th className="px-8 py-4 text-left text-lg font-semibold border border-gray-300">
+                名前
+              </th>
+              <th className="px-8 py-4 text-left text-lg font-semibold border border-gray-300">
+                内容
+              </th>
+              <th className="px-8 py-4 text-left text-lg font-semibold border border-gray-300">
+                作成日
+              </th>
+              <th className="px-8 py-4 text-left text-lg font-semibold border border-gray-300">
+                更新日
+              </th>
+              <th className="px-8 py-4 text-left text-lg font-semibold border border-gray-300">
+                アクション
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {tests.tests.map((test: Test) => (
+              <tr key={test.id} className="hover:bg-gray-50">
+                <td className="px-8 py-6 border border-gray-300">
+                  <Link
+                    href={`/sample/test/${test.id}`}
+                    className="text-blue-600 hover:text-blue-800 hover:underline text-lg"
+                  >
+                    {test.id}
+                  </Link>
+                </td>
+                <td className="px-8 py-6 text-lg border border-gray-300">{test.name}</td>
+                <td className="px-8 py-6 text-lg border border-gray-300">{test.content}</td>
+                <td className="px-8 py-6 text-lg border border-gray-300">
+                  {test.createdAt}
+                </td>
+                <td className="px-8 py-6 text-lg border border-gray-300">
+                  {test.updatedAt}
+                </td>
+                <td className="px-8 py-6 space-x-4 border border-gray-300">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                    onClick={() => console.log("更新:", test.id)}
+                  >
+                    更新
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                    onClick={() => console.log("削除:", test.id)}
+                  >
+                    削除
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,8 +1,8 @@
 import BreadList from "../../../features/sample/components/TestList";
-import { fetchBreads } from "@/features/sample/endpoint";
+import { fetchTests } from "@/features/sample/endpoint";
 
 export default async function Page() {
-  const tests = await fetchBreads();
+  const tests = await fetchTests();
 
   return (
     <>
