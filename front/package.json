@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
+    "firebase": "^11.2.0",
+    "firebase-admin": "^13.0.2",
     "next": "15.1.4",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "ts-node": "^10.9.2"
