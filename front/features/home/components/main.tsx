@@ -12,7 +12,7 @@ export const Main = ({ notifications }: { notifications: Notifications }) => {
           <Image
             src="/top-image.png"
             alt="メイン画像"
-            width={1680} 
+            width={1680}
             height={384}
             className="w-full h-96 object-cover"
           />
@@ -105,8 +105,64 @@ export const Main = ({ notifications }: { notifications: Notifications }) => {
           <div className="border-l border-[#D9D9D9] mx-4 self-stretch"></div>
 
           <div className="flex-1 rounded-md">
-          <p className="font-semibold text-lg">お知らせ</p>
-            <div className="flex space-x-4 mt-4 overflow-hidden"></div>
+            <p className="font-semibold text-lg">お知らせ</p>
+            <div className="">
+              {notifications.notifications.map((notification) => (
+                <div key={notification.id} className="bg-white rounded-lg duration-200">
+                  <div className="pt-4">
+                    <div className="flex flex-col">
+                      <div className="flex items-center">
+                        <span
+                          style={{
+                            width: "118px",
+                            height: "56px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "16px 16px 16px 16px",
+                            background:
+                              notification.notification_type === "release"
+                                ? "#69BEEFCC"
+                                : notification.notification_type === "important"
+                                ? "#EBEF69CC"
+                                : "rgba(234, 179, 8, 0.8)",
+                          }}
+                          className="text-[#000000] text-base font-medium"
+                        >
+                          {notification.notification_type}
+                        </span>
+                        <div className="ml-7 flex flex-col">
+                          <time
+                            className="text-sm text-gray-500"
+                            style={{ fontSize: "12px", fontFamily: "Noto Sans JP" }}
+                          >
+                            {new Date(notification.published_at)
+                              .toLocaleDateString("ja-JP", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              })
+                              .replace(/\//g, ".")}
+                          </time>
+                          {notification.content && (
+                            <p
+                              className="mt-1 text-sm text-gray-600"
+                              style={{
+                                fontSize: "12px",
+                                fontFamily: "Noto Sans JP",
+                                whiteSpace: "pre-wrap",
+                              }}
+                            >
+                              {notification.content}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
