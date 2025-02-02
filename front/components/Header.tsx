@@ -9,7 +9,7 @@ export const Header = () => {
   
   return (
     <header className="fixed top-0 w-full h-[50px] bg-white shadow-md flex items-center px-4 z-10">
-      <Image src="/logo.png" alt="Logo" width={118} height={32} className="ml-[25px]" />
+      <Image src="/logo.png" alt="Logo" width={118} height={32} className="ml-[25px]" onClick={() => router.push("/")}/>
       <div className="flex-1 mx-[165px] relative">
         <div className="relative">
           <input
