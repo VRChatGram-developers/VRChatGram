@@ -1,34 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { auth } from "@/libs/firebase/client";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import { Link, TextField } from "@mui/material";
+import { auth } from "@/libs/firebase/client";
 
-export const SignInForm = () => {
+export const SignUpForm = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSignIn = async () => {
-    if (!email || !password) return;
-
+  const handleSignUp = async () => {
     try {
-      const credentials = await signInWithEmailAndPassword(auth, email, password);
-      const token = await credentials.user.getIdToken();
-      const result = await signIn("credentials", {
-        idToken: token,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        console.error("認証エラー:", result.error);
-        return;
-      }
-
-      // 成功時の処理
+      const password = Math.random().toString(8).slice(2, 10);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       window.location.href = "/";
+      console.log(userCredential);
     } catch (error) {
       console.error(error);
     }
@@ -37,23 +23,15 @@ export const SignInForm = () => {
   return (
     <>
       <div className="flex">
-        <div className="flex-1 relative h-full">
-          <Image
-            src="/login_page.png"
-            alt="Login page image"
-            className="object-cover w-full h-full"
-            width={864}
-            height={800}
-          />
-        </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="max-w-md p-8">
-            <h1 style={{ fontSize: "40px" }} className="font-bold leading-[40px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-2">
-              おかえりなさい！
+            <h1
+              style={{ fontSize: "40px" }}
+              className="font-bold leading-[40px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-2"
+            >
+              アカウントの作成
             </h1>
-            <p style={{ fontSize: "14px" }} className="font-bold leading-[14px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-8">
-              今日も素敵な写真をいっぱい投稿しましょう
-            </p>
+
             <div className="flex flex-col gap-6 w-[260px] mx-auto">
               <TextField
                 fullWidth
@@ -81,7 +59,7 @@ export const SignInForm = () => {
                   },
                 }}
               />
-              <TextField
+              {/* <TextField
                 fullWidth
                 type="password"
                 label="パスワード"
@@ -107,21 +85,24 @@ export const SignInForm = () => {
                     },
                   },
                 }}
-              />
+              /> */}
               <button
-                onClick={handleSignIn}
+                onClick={handleSignUp}
                 style={{
                   height: "56px",
-                  marginTop: "32px"
+                  marginTop: "32px",
                 }}
                 className="bg-[#69BEEF] text-white rounded-md hover:bg-[#5CAADB]"
               >
-                ログイン
+                作成する
               </button>
-              <p style={{ marginTop: "16px" }} className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px] text-center">
-                アカウントをお持ちではありませんか？{" "}
-                <Link href="/sign-up" className="underline">
-                  アカウント作成
+              <p
+                style={{ marginTop: "16px" }}
+                className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px] text-center"
+              >
+                既にアカウントをお持ちですか？{" "}
+                <Link href="/sign-in" className="underline">
+                  ログイン
                 </Link>
               </p>
               <p style={{ marginTop: "48px" }} className="text-center text-[#000000] mt-[30px]">
@@ -134,7 +115,7 @@ export const SignInForm = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginTop: "16px" 
+                  marginTop: "16px",
                 }}
                 className="text-[#000000] rounded-md hover:bg-gray-200"
               >
@@ -143,6 +124,15 @@ export const SignInForm = () => {
               </button>
             </div>
           </div>
+        </div>
+        <div className="flex-1 relative h-full">
+          <Image
+            src="/signup-icon.png"
+            alt="Login page image"
+            className="object-cover w-full h-full"
+            width={864}
+            height={800}
+          />
         </div>
       </div>
     </>
