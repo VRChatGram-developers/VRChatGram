@@ -27,7 +27,9 @@ export const Header = () => {
         >
           ログイン
         </button>
-        <button className="w-[118px] h-[32px] bg-[#69BEEF] text-white text-[12px] font-bold leading-[15px] tracking-[0.21666669845581055px] text-center rounded-[16px] flex items-center justify-center">
+        <button 
+          onClick={() => router.push("/sign-up")}
+          className="w-[118px] h-[32px] bg-[#69BEEF] text-white text-[12px] font-bold leading-[15px] tracking-[0.21666669845581055px] text-center rounded-[16px] flex items-center justify-center">
           新規登録
         </button>
       </div>
