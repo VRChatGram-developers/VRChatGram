@@ -43,15 +43,21 @@ export const SignInForm = () => {
             alt="Login page image"
             className="object-cover w-full h-full"
             width={864}
-            height={800}
+            height={1000}
           />
         </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="max-w-md p-8">
-            <h1 style={{ fontSize: "40px" }} className="font-bold leading-[40px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-2">
+            <h1
+              style={{ fontSize: "40px" }}
+              className="font-bold leading-[40px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-2"
+            >
               おかえりなさい！
             </h1>
-            <p style={{ fontSize: "14px" }} className="font-bold leading-[14px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-8">
+            <p
+              style={{ fontSize: "14px" }}
+              className="font-bold leading-[14px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-8"
+            >
               今日も素敵な写真をいっぱい投稿しましょう
             </p>
             <div className="flex flex-col gap-6 w-[260px] mx-auto">
@@ -61,7 +67,6 @@ export const SignInForm = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 variant="outlined"
-                style={{ marginTop: "48px" }}
                 InputLabelProps={{
                   shrink: true,
                   sx: {
@@ -88,7 +93,6 @@ export const SignInForm = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 variant="outlined"
-                style={{ marginTop: "16px" }}
                 InputLabelProps={{
                   shrink: true,
                   sx: {
@@ -112,19 +116,20 @@ export const SignInForm = () => {
                 onClick={handleSignIn}
                 style={{
                   height: "56px",
-                  marginTop: "32px"
                 }}
                 className="bg-[#69BEEF] text-white rounded-md hover:bg-[#5CAADB]"
               >
                 ログイン
               </button>
-              <p style={{ marginTop: "16px" }} className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px] text-center">
+              <p
+                className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px] text-center"
+              >
                 アカウントをお持ちではありませんか？{" "}
                 <Link href="/sign-up" className="underline">
                   アカウント作成
                 </Link>
               </p>
-              <p style={{ marginTop: "48px" }} className="text-center text-[#000000] mt-[30px]">
+              <p className="text-center text-[#000000]" style={{ marginTop: "32px", fontSize: "10px" }}>
                 ---------------------------または---------------------------
               </p>
               <button
@@ -134,7 +139,6 @@ export const SignInForm = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginTop: "16px" 
                 }}
                 className="text-[#000000] rounded-md hover:bg-gray-200"
               >

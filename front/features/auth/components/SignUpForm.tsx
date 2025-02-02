@@ -105,7 +105,7 @@ export const SignUpForm = () => {
                   ログイン
                 </Link>
               </p>
-              <p style={{ marginTop: "48px" }} className="text-center text-[#000000] mt-[30px]">
+              <p style={{ marginTop: "32px", fontSize: "10px" }} className="text-center text-[#000000] mt-[30px]">
                 ---------------------------または---------------------------
               </p>
               <button
