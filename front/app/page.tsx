@@ -1,8 +1,11 @@
 import { Main } from "@/features/home/components/main";
-import { fetchNotifications } from "@/features/home/endpoint";
+import { fetchNotifications, fetchLatestPosts } from "@/features/home/endpoint";
 export default async function Home() {
   const notifications = await fetchNotifications();
+  const latestPosts = await fetchLatestPosts();
   console.log(notifications);
-  return <Main notifications={notifications} />;
+  console.log(`latestPosts`);
+  console.log(latestPosts);
+  return <Main notifications={notifications} latestPosts={latestPosts} />;
 }
 
