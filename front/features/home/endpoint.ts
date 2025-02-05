@@ -1,4 +1,4 @@
-import { Notifications, Posts } from "./types/notification";
+import { Notifications } from "./types/notification";
 
 const API_GET_URL = "http://localhost:3000";
 
@@ -10,8 +10,10 @@ export const fetchNotifications = async (): Promise<Notifications> => {
   return response.json();
 };
 
-export const fetchLatestPosts = async (): Promise<Posts> => {
-  const response = await fetch(`${API_GET_URL}/api/posts?order=desc&limit=4`);
+export const fetchHomeFeed = async <T>(): Promise<T> => {
+  const response = await fetch(`${API_GET_URL}/api/home-feed`);
+  const data = await response.json();
+  
   if (!response.ok) {
     throw new Error("Failed to fetch posts");
   }
