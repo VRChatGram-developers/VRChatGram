@@ -55,10 +55,23 @@ export async function GET() {
       },
     });
 
+    const latestPostListWithX = await prisma.posts.findMany({
+      orderBy: { created_at: "desc" },
+      where: { is_posted_x: true },
+      select: {
+        id: true,
+        is_sensitive: true,
+        images: true,
+        is_posted_x: true,
+      },
+      take: Number(4),
+    });
+
     return NextResponse.json({
       popularPostList: popularPostList.map(toJson),
       latestPosts: latestPostList.map(toJson),
       popularTagList: popularTagList.map(toJson),
+      latestPostListWithX: latestPostListWithX.map(toJson),
     });
   } catch (error) {
     return NextResponse.json({ error: `Failed to connect to database ${error}` }, { status: 500 });
