@@ -124,6 +124,7 @@ model posts {
   updated_at    DateTime    @updatedAt
   deleted_at    DateTime?
   is_sensitive  Boolean     @default(false)
+  is_posted_x   Boolean     @default(false)
   
   // リレーション
   user          users        @relation(fields: [user_id], references: [id])
