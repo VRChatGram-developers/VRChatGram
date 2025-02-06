@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Post } from "@/features/home/types/post";
 
 import { PrismaClient } from "@prisma/client";
 
@@ -23,9 +24,17 @@ export async function GET(request: Request) {
 
   try {
     await connect();
-    const posts = await prisma.posts.findMany({
-      orderBy: { created_at: order as "asc" | "desc" },
+    // const posts = await prisma.posts.findMany({
+    //   orderBy: { created_at: order as "asc" | "desc" },
+    //   take: Number(limit),
+    // });
+
+    const laterPosts = await prisma.posts.findMany({
+      orderBy: { created_at: "desc" },
       take: Number(limit),
+      include: {
+        likes: true,
+      },
     });
 
     const serializedPosts = posts.map((post) => ({

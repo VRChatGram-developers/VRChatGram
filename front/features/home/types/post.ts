@@ -5,6 +5,7 @@ export type Post = {
   is_sensitive: boolean;
   images: PostImage[]; // Assuming `PostImage` is another type for `post_images`
   likes: Like[]; // Assuming `Like` is another type for `likes`
+  is_posted_x?: boolean;
 };
 
 export type Posts = {
