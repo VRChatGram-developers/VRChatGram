@@ -12,6 +12,7 @@ export const fetchNotifications = async (): Promise<Notifications> => {
 
 export const fetchHomeFeed = async <T>(): Promise<T> => {
   const response = await fetch(`${API_GET_URL}/api/home-feed`);
+  const data = await response.json();
   
   if (!response.ok) {
     throw new Error("Failed to fetch posts");
