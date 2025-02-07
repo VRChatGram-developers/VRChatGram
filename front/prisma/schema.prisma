@@ -13,14 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tests {
-  id Int @id @default(autoincrement())
-  name String?
-  content String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-}
-
 // 基本的なenumの定義
 enum genders {
   male
@@ -132,6 +124,7 @@ model posts {
   updated_at    DateTime    @updatedAt
   deleted_at    DateTime?
   is_sensitive  Boolean     @default(false)
+  is_posted_x   Boolean     @default(false)
   
   // リレーション
   user          users        @relation(fields: [user_id], references: [id])
@@ -223,6 +216,7 @@ model notifications {
   published_at      DateTime
   created_at        DateTime        @default(now())
   updated_at        DateTime        @updatedAt
+  deleted_at        DateTime?
   user_id           BigInt
   user              users            @relation(fields: [user_id], references: [id])
 
