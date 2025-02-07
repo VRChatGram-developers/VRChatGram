@@ -25,7 +25,7 @@ export async function GET() {
         is_sensitive: true,
         images: true,
       },
-      take: Number(10),
+      take: Number(12),
     });
 
     const latestPostList = await prisma.posts.findMany({
@@ -53,6 +53,7 @@ export async function GET() {
         id: true,
         name: true,
       },
+      take: Number(6),
     });
 
     const latestPostListWithX = await prisma.posts.findMany({
