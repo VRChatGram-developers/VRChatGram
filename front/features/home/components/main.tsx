@@ -24,6 +24,16 @@ export const Main = ({
   latestPostListWithX: Post[];
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const transformNotificationList = notifications.notifications.map((notification) => {
+    const year = new Date(notification.published_at).getFullYear();
+    const month = String(new Date(notification.published_at).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
+    const day = String(new Date(notification.published_at).getDate()).padStart(2, "0");
+    const formattedDate = `${year}.${month}.${day}`;
+    return {
+      ...notification,
+      published_at: formattedDate,
+    };
+  });
 
   return (
     <>
@@ -48,7 +58,7 @@ export const Main = ({
                     alt="画像2"
                     width={402}
                     height={64}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg opacity-70 hover:opacity-100"
                   />
                 </div>
                 <div className="w-1/2">
@@ -57,7 +67,7 @@ export const Main = ({
                     alt="画像3"
                     width={402}
                     height={64}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg opacity-70 hover:opacity-100"
                   />
                 </div>
               </div>
@@ -71,7 +81,7 @@ export const Main = ({
                     alt="画像2"
                     width={402}
                     height={64}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg opacity-70 hover:opacity-100 "
                   />
                 </div>
                 <div className="w-1/2">
@@ -80,7 +90,7 @@ export const Main = ({
                     alt="画像3"
                     width={402}
                     height={64}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg opacity-70 hover:opacity-100"
                   />
                 </div>
               </div>
@@ -128,9 +138,9 @@ export const Main = ({
             <div className="flex-1 rounded-md">
               <p className="font-semibold text-lg">お知らせ</p>
               <div className="">
-                {notifications.notifications.map((notification) => (
+                {transformNotificationList.map((notification) => (
                   <div key={notification.id} className="bg-white rounded-lg duration-200">
-                    <div className="pt-4">
+                    <div className="pt-6">
                       <div className="flex flex-col">
                         <div className="flex items-center">
                           <span
@@ -155,7 +165,12 @@ export const Main = ({
                           <div className="ml-7 flex flex-col">
                             <time
                               className="text-sm text-gray-500"
-                              style={{ fontSize: "12px", fontFamily: "Noto Sans JP" }}
+                              style={{
+                                fontSize: "12px",
+                                fontFamily: "Noto Sans JP",
+                                fontWeight: "bold",
+                                color: "#000000",
+                              }}
                             >
                               {notification.published_at}
                             </time>
@@ -166,6 +181,8 @@ export const Main = ({
                                   fontSize: "12px",
                                   fontFamily: "Noto Sans JP",
                                   whiteSpace: "pre-wrap",
+                                  fontWeight: "bold",
+                                  color: "#000000",
                                 }}
                               >
                                 {notification.content}
