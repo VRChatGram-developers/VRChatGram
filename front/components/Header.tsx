@@ -9,11 +9,8 @@ import { RiArrowDownSLine } from "react-icons/ri";
 
 export const Header = () => {
   const router = useRouter();
-  const { data: session, status } = useSession();
-  console.log(session);
-  console.log(`status`);
-  console.log(status);
 
+  const { status } = useSession();
   return (
     <header className="fixed top-0 w-full h-[50px] bg-white shadow-md flex items-center px-4 z-10">
       <Image
