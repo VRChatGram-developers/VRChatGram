@@ -31,10 +31,10 @@ export const PopularPost = ({
           {chunkPopularPostList(popularPostList).map((chunckedPost, index) => (
             <div key={index} className="flex justify-center mt-6 mb-6 space-x-4">
               {chunckedPost.map((post) => (
-                <div key={`${index}-${post}`} className="w-1/4 relative">
+                <div key={`${index}-${post.id}`} className="w-1/4 relative">
                   <Image
                     src="/pickup-image.png"
-                    alt={`ピックアップ画像 ${post}-${index}`}
+                    alt={`ピックアップ画像 ${post.id}-${index}`}
                     width={402}
                     height={384}
                     className="w-full h-full object-cover rounded-lg"
