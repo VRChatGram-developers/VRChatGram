@@ -12,9 +12,6 @@ export default async function Home() {
   }>();
   const { popularPostList, latestPosts, popularTagList, latestPostListWithX } = homeData;
 
-  console.log(notifications);
-  console.log(`latestPosts`);
-  console.log(latestPosts);
   return (
     <Main
       notifications={notifications}
