@@ -57,8 +57,47 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
                   </div>
                 </div>
                 <div className="w-1/2">
-                  <div className="w-full h-80 bg-[#151C4B] relative rounded-lg flex items-center justify-center">
-                    <p className="text-white text-center text-2xl">ワールドー写真</p>
+                  <div className="w-full h-80 bg-[#151C4B] relative rounded-lg flex items-center justify-center relative">
+                    <div className="absolute inset-0 bg-black opacity-60 rounded-lg z-10"></div>
+                    <p
+                      className="text-white absolute text-4xl font-bold font-NotoSansJP"
+                      style={{
+                        top: "76px",
+                        right: "100px",
+                        fontSize: "40px",
+                        fontFamily: "Noto Sans JP",
+                        fontWeight: "bold",
+                        width: "260px",
+                      }}
+                    >
+                      ワールド写真
+                    </p>
+                    <div
+                      className="absolute bg-[#FFFFFF]"
+                      style={{ top: "172px", right: "100px", width: "260px", borderRadius: "16px" }}
+                    >
+                      <p
+                        className="text-[#151C4B] text-center"
+                        style={{
+                          fontSize: "40px",
+                          fontFamily: "Noto Sans JP",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        探す
+                      </p>
+                    </div>
+                    <div className="absolute right-[70%] translate-x-1/2 w-64 h-64 rounded-full overflow-hidden">
+                      <Image
+                        src="/home/world-search-icon.png"
+                        alt="search"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <p className="text-white font-bold absolute z-40" style={{ fontSize: "64px" }}>
+                      Coming soon
+                    </p>
                   </div>
                 </div>
               </div>
