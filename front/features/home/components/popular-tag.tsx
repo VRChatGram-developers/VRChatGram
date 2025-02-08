@@ -5,9 +5,9 @@ import { Tag } from "../types/tag";
 export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   return (
     <>
-      <div className="w-full h-auto">
-        <div className="mx-6">
-          <div className="max-w-full mx-auto pt-10">
+      <div className="w-full h-auto bg-[#FFFFFF]" style={{ padding: "3rem 1.5rem" }}>
+        <div>
+          <div className="max-w-full mx-auto">
             <h2 className="text-[#151C4B] text-center text-4xl font-bold font-NotoSansJP">
               作品を検索する
             </h2>

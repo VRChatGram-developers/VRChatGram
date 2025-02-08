@@ -20,8 +20,8 @@ export const PopularPost = ({
 
   return (
     <>
-      <div className="mx-6">
-        <div className="w-full mx-auto pt-[40px] bg-[#F5F5F5] pb-[40px]">
+      <div style={{ padding: "3rem 1.5rem" }}>
+        <div className="w-full mx-auto">
           <h2
             className="text-[#151C4B] font-medium text-center"
             style={{ fontWeight: "bold", fontSize: "40px", fontFamily: "Noto Sans JP" }}
