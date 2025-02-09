@@ -17,6 +17,13 @@ async function main() {
         status: "active",
         birthday: new Date("1990-01-01"),
         my_id: "user1",
+        introduce: "テストユーザー1の自己紹介です。",
+        social_links: {
+          create: {
+            platform_name: "twitter",
+            platform_url: "https://twitter.com/user1",
+          },
+        },
       },
     }),
     prisma.users.create({
@@ -29,6 +36,13 @@ async function main() {
         status: "active",
         birthday: new Date("1995-02-15"),
         my_id: "user2",
+        introduce: "テストユーザー2の自己紹介です。",
+        social_links: {
+          create: {
+            platform_name: "twitter",
+            platform_url: "https://twitter.com/user2",
+          },
+        },
       },
     }),
   ]);
