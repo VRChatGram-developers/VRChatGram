@@ -37,7 +37,7 @@ export const Main = ({
 
   return (
     <>
-      <div className="mx-6">
+      <div style={{ padding: "0px 1.5rem 1.5rem 3rem" }} className="bg-[#FFFFFF]">
         <div className="max-w-full mx-auto">
           <div>
             <Image

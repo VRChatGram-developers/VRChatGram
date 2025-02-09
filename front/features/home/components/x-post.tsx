@@ -13,8 +13,8 @@ export const XPost = ({
 }) => {
   return (
     <>
-      <div className="mx-6 bg-[#FFFFFF]">
-        <div className="max-w-full mx-auto pt-[40px] ">
+      <div style={{ padding: "3rem 1.5rem" }} className="bg-[#FFFFFF]">
+        <div className="max-w-full mx-auto">
           <h2
             className="text-[#151C4B] font-medium text-center"
             style={{ fontWeight: "bold", fontSize: "40px", fontFamily: "Noto Sans JP" }}

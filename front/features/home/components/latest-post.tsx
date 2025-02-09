@@ -11,9 +11,9 @@ export const LatestPost = ({
 }: { latestPosts: Post[]; isLiked: boolean; setIsLiked: React.Dispatch<React.SetStateAction<boolean>> }) => {
   return (
     <>
-      <div className="max-w-full h-full bg-[#F5F5F5]">
-        <div className="mx-6">
-          <div className="max-w-full mx-auto pt-[40px]">
+      <div className="max-w-full h-full" style={{ padding: "3rem 1.5rem" }}>
+        <div>
+          <div className="max-w-full mx-auto">
             <h2
               className="text-[#151C4B] font-medium text-center"
               style={{ fontWeight: "bold", fontSize: "40px", fontFamily: "Noto Sans JP" }}
