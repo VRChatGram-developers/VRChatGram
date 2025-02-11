@@ -5,6 +5,7 @@ import { User } from "@/features/users/types/user";
 import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
 import { useState } from "react";
+
 export const UserHome = ({ user }: { user: User }) => {
   const [isLiked, setIsLiked] = useState(false);
 
