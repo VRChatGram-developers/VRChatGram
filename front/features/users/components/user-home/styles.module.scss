@@ -1,0 +1,97 @@
+.profileContent {
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+
+  .profileContentIntroduction {
+    width: 65%;
+    height: 400px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    font-size: 24px;
+    color: #000000;
+  }
+
+  .profileSocialLinks {
+    width: 40%;
+    height: 400px;
+    background-color: #ffffff;
+    border-radius: 10px;
+  }
+}
+
+.likesPosts {
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem 1.5rem;
+
+  .likesPostsTitle {
+    font-size: 24px;
+    font-weight: bold;
+    color: #151c4b;
+    padding: 0 0 1.5rem 0;
+  }
+
+  .likesPostsList {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+
+    .likesPostsItem {
+      width: 25%;
+      position: relative;
+
+      .likesPostsItemImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0.5rem;
+      }
+
+      .likesPostsItemImageContents {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 64px;
+        height: 32px;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 40px;
+
+        .MdOutlinePhoto {
+          color: white;
+          font-size: 1.5rem;
+          width: 18px;
+          height: 18px;
+        }
+
+        .likesPostsItemImageContentsText {
+          color: white;
+          margin-left: 15px;
+          font-size: 14px;
+          font-family: "Noto Sans JP", sans-serif;
+          font-weight: bold;
+        }
+      }
+
+      .likesPostsItemLikeContents {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+
+        .likesPostsItemLikeItem {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 64px;
+          height: 64px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
