@@ -4,13 +4,10 @@ import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
 import _ from "lodash";
 
-//インスタンスを作成
 const prisma = new PrismaClient();
 
-// データベースに接続する関数
 export const connect = async () => {
   try {
-    //prismaでデータベースに接続
     prisma.$connect();
   } catch (error) {
     return new Error(`DB接続失敗しました: ${error}`);
@@ -47,18 +44,19 @@ export async function GET(request: Request, { params }: { params: { id: string }
             likes: {
               select: {
                 id: true,
-              }
-            }
+              },
+            },
           },
         },
       },
     });
 
-    const postsWithLikes = user?.posts.map(post => ({
-      ...toJson(post),
-      likesCount: post.likes.length,
-      images: post.images.map(toJson)
-    })) || [];
+    const postsWithLikes =
+      user?.posts.map((post) => ({
+        ...toJson(post),
+        likesCount: post.likes.length,
+        images: post.images.map(toJson),
+      })) || [];
 
     const totalLikes = postsWithLikes.reduce((total, post) => total + post.likesCount, 0);
     const top4Posts = postsWithLikes.sort((a, b) => b.likesCount - a.likesCount).slice(0, 4);
@@ -66,15 +64,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const chunkedPostsWithLikes = _.chunk(postsWithLikes, 20);
 
     const response = {
-        id: toJson(user?.id),
-        name: user?.name,
-        introduce: user?.introduce,
-        posts: chunkedPostsWithLikes,
-        totalLikes: totalLikes,
-        top4Posts: top4Posts,
-        totalViews: totalViews,
+      id: toJson(user?.id),
+      name: user?.name,
+      introduce: user?.introduce,
+      posts: chunkedPostsWithLikes,
+      totalLikes: totalLikes,
+      top4Posts: top4Posts,
+      totalViews: totalViews,
     };
-
 
     return NextResponse.json(response);
   } catch (error) {

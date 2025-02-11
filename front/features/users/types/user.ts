@@ -1,4 +1,3 @@
-// ユーザーとその関連情報の型定義
 export type User = {
   id: bigint;
   name: string;
@@ -9,7 +8,6 @@ export type User = {
   top4Posts: Post[];
 };
 
-// 投稿の型定義
 export type Post = {
   id: bigint;
   title: string;
@@ -18,7 +16,6 @@ export type Post = {
   images: Image[];
 };
 
-// 画像の型定義
 export type Image = {
   id: bigint;
   url: string;

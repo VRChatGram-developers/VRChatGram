@@ -1,13 +1,10 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-//インスタンスを作成
 const prisma = new PrismaClient();
 
-// データベースに接続する関数
 export const connect = async () => {
   try {
-    //prismaでデータベースに接続
     prisma.$connect();
   } catch (error) {
     return new Error(`DB接続失敗しました: ${error}`);
@@ -23,8 +20,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
     }
     await prisma.follows.create({
       data: {
-        following_id: BigInt(id), // フォローするユーザーのID
-        follower_id: BigInt(1), // フォローされるユーザーのID(自分のID)
+        following_id: BigInt(id),
+        follower_id: BigInt(1),
         created_at: new Date(),
         updated_at: new Date(),
       },
