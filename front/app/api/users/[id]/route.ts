@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
+import _ from "lodash";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
@@ -62,12 +63,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const totalLikes = postsWithLikes.reduce((total, post) => total + post.likesCount, 0);
     const top4Posts = postsWithLikes.sort((a, b) => b.likesCount - a.likesCount).slice(0, 4);
     const totalViews = postsWithLikes.reduce((total, post) => total + post.view_count, 0);
+    const chunkedPostsWithLikes = _.chunk(postsWithLikes, 20);
 
     const response = {
         id: toJson(user?.id),
         name: user?.name,
         introduce: user?.introduce,
-        posts: postsWithLikes,
+        posts: chunkedPostsWithLikes,
         totalLikes: totalLikes,
         top4Posts: top4Posts,
         totalViews: totalViews,

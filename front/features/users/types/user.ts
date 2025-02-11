@@ -5,7 +5,7 @@ export type User = {
   introduce: string;
   totalLikes: number;
   totalViews: number;
-  posts: Post[];
+  posts: Post[][];
   top4Posts: Post[];
 };
 
