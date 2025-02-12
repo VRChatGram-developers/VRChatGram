@@ -7,11 +7,16 @@ import { useSession } from "next-auth/react";
 import { FaCamera } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
 import styles from "./styles.module.scss";
-
+import { useState } from "react";
 export const Header = () => {
   const router = useRouter();
 
   const { status } = useSession();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    router.push(`/posts?query=${searchQuery}`);
+  };
   return (
     <header className={styles.header}>
       <Image
@@ -24,8 +29,14 @@ export const Header = () => {
       />
       <div className={styles.searchInput}>
         <div>
-          <input type="text" placeholder="何かお探しですか？" />
-          <FaSearch className={styles.FaSearch} />
+          <input
+            type="text"
+            placeholder="何かお探しですか？"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          />
+          <FaSearch className={styles.FaSearch} onClick={handleSearch} />
         </div>
       </div>
       <div className={styles.headerButtonsContainer}>
