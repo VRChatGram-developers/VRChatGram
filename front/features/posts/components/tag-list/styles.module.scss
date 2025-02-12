@@ -1,0 +1,30 @@
+.tagList {
+  display: flex;
+  padding: 1.5rem 0;
+  gap: 8px;
+
+  .tagItem {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    width: 64px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .selectedTagItem {
+    background-color: #111111;
+    border-radius: 1rem;
+    width: 64px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+  }
+}
