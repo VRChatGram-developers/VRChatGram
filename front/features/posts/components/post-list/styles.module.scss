@@ -1,0 +1,95 @@
+.userPostsContainer {
+  width: 100%;
+  height: 100%;
+
+  .mostPopularPost {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 1.5rem;
+    position: relative;
+
+    .mostPopularPostTitle {
+      font-size: 40px;
+      font-weight: bold;
+      color: #151c4b;
+      font-family: "Noto Sans JP", sans-serif;
+      position: absolute;
+      top: 25%;
+      left: 15%;
+    }
+
+    .mostPopularPostCount {
+      font-size: 20px;
+      color: #151c4b;
+      font-family: "Noto Sans JP", sans-serif;
+      position: absolute;
+      top: 50%;
+      left: 15%;
+      font-weight: bold;
+    }
+  }
+  .userPostsTitle {
+    font-size: 40px;
+    font-weight: bold;
+    color: #151c4b;
+  }
+
+  .userPostsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-left: 0;
+    list-style: none;
+
+    .userPostsItem {
+      flex-grow: 1;
+      list-style: none;
+      object-fit: cover;
+
+      .userPostsItemImageContainer {
+        .userPostsItemImage {
+          // max-height: 100%;
+          height: 402px;
+          min-width: 100%;
+          object-fit: cover;
+          vertical-align: bottom;
+          border-radius: 1rem;
+        }
+      }
+    }
+    .userPostsItem:last-child {
+      flex-grow: 10;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    gap: 1.5rem;
+
+    .paginationButton {
+      background-color: #ffffff;
+      color: 000000;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .paginationButtonIcon {
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .paginationSelectedButton {
+      background-color: #69beef;
+      color: #ffffff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  }
+}
