@@ -19,10 +19,10 @@ services:
       - '3000:3000'
     volumes:
       - type: bind
-        source: ./front
+        source: ./nextjs
         target: /app
       - type: bind
-        source: ./front/node_modules
+        source: ./nextjs/node_modules
         target: /app/node_modules
     environment:
       - WATCHPACK_POLLING=true

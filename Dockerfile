@@ -11,7 +11,7 @@ USER node
 
 # Install dependencies
 WORKDIR /app
-COPY --chown=node:node /front ./
+COPY --chown=node:node /nextjs ./
 RUN npm install
 
 RUN chmod -R 755 ./node_modules
