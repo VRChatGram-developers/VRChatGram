@@ -1,13 +1,12 @@
 "use client";
 
-import styles from "./styles.module.scss";
-import { PostList } from "./post-list/post-list";
-import { Post } from "@/features/posts/types/post";
-import { Tag } from "@/features/posts/types/tag";
-import { TagList } from "./tag-list/tag-list";
+import styles from "../styles/post-list.module.scss";
+import { SearchResult } from "./search-result";
+import { Tag, Post } from "@/features/posts/types/index";
+import { TagList } from "./tag-list";
 import { useState, useMemo } from "react";
 
-export const Posts = ({ posts, popularTags }: { posts: Post[][]; popularTags: Tag[] }) => {
+export const PostList = ({ posts, popularTags }: { posts: Post[][]; popularTags: Tag[] }) => {
   const [selectedTag, setSelectedTag] = useState("");
 
   const addAllToPopularTags = useMemo(
@@ -23,7 +22,7 @@ export const Posts = ({ posts, popularTags }: { posts: Post[][]; popularTags: Ta
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
         />
-        <PostList posts={posts} selectedTag={selectedTag} />
+        <SearchResult posts={posts} selectedTag={selectedTag} />
       </div>
     </>
   );

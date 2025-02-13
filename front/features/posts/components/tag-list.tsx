@@ -1,7 +1,7 @@
 "use client";
 
-import styles from "./styles.module.scss";
-import { Tag } from "@/features/posts/types/tag";
+import styles from "../styles/tag-list.module.scss";
+import { Tag } from "@/features/posts/types/index";
 export const TagList = ({
   popularTags,
   selectedTag,

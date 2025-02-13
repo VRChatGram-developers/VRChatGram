@@ -1,23 +1,28 @@
 "use client";
 
-import styles from "./styles.module.scss";
+import styles from "../styles/search-result.module.scss";
 import { Post } from "@/features/posts/types/post";
 import Image from "next/image";
 import { useState } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
 import { fetchPosts } from "@/features/posts/endpoint";
-export const PostList = ({ posts, selectedTag }: { posts: Post[][]; selectedTag: string }) => {
+import { useRouter } from "next/navigation";
+export const SearchResult = ({ posts, selectedTag }: { posts: Post[][]; selectedTag: string }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [postList, setPostList] = useState<Post[][]>([]);
+  const router = useRouter();
+  
   const totalPages = posts.length;
   const currentPosts = posts[currentPage] || [];
-  console.log(currentPosts);
-  console.log(currentPage);
 
   const handlePageChange = async (page: number) => {
     setCurrentPage(page);
     setPostList(await fetchPosts(page));
+  };
+
+  const handleToPostDetail = (id: string) => {
+    router.push(`/posts/${id}`);
   };
 
   return (
@@ -31,7 +36,10 @@ export const PostList = ({ posts, selectedTag }: { posts: Post[][]; selectedTag:
         <ul className={styles.userPostsList}>
           {(currentPosts || postList).map((post) => (
             <li key={post.id} className={styles.userPostsItem}>
-              <div className={styles.userPostsItemImageContainer}>
+              <div
+                className={styles.userPostsItemImageContainer}
+                onClick={() => handleToPostDetail(post.id.toString())}
+              >
                 <Image
                   src={
                     Number(post.id) % 2 === 0
