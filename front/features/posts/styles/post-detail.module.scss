@@ -1,0 +1,247 @@
+.postDetailContainerFirst {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 1.5rem 1.5rem;
+  gap: 1.5rem;
+  align-items: stretch;
+
+  .postImageContainer {
+    width: 100%;
+
+
+    .postImage {
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      // aspect-ratio: 1 / 1;
+    }   
+  }
+
+  .postContentContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .postContentLabel {
+      background-color: #69beef;
+      color: #ffffff;
+      border-radius: 0.5rem;
+      font-size: 24px;
+      font-weight: bold;
+      font-family: "Noto Sans JP", sans-serif;
+      width: 260px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .postContentTitle {
+      font-size: 40px;
+      font-weight: bold;
+      font-family: "Noto Sans JP", sans-serif;
+      width: 100%;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      color: #000000;
+      margin: 1.5rem 0;
+    }
+
+    .postContentIcons {
+      display: flex;
+      width: 100%;
+      gap: 2rem;
+      color: #5d5d5d;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: "Noto Sans JP", sans-serif;
+
+      .iconItem {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+
+        .eyeIcon {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .iconHeart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+
+        .heartIcon {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+
+    .userInfoContainer {
+      display: flex;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 1rem 1rem;
+      margin: 1.5rem 0;
+      height: 150px;
+      align-items: center;
+      gap:2rem;
+
+      .userInfoImage {
+        width: 100px;
+        height: 100px;
+      }
+
+      .userInfoContent {
+        height: 100px;
+
+        .userId {
+          font-size: 16px;
+          font-family: "Noto Sans JP", sans-serif;
+
+        }
+
+        .userInfoName {
+          padding: 0.5rem 0;
+          font-size: 24px;
+          font-family: "Noto Sans JP", sans-serif;
+          font-weight: bold;
+        }
+
+        .userInfoIcons {
+          display: flex;
+          gap: 1rem;
+        }
+      }
+    }
+
+    .postContentDescription {
+      font-size: 16px;
+      font-family: "Noto Sans JP", sans-serif;
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 1rem;
+      height: 100%;
+
+      .postContentDescriptionText {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000000;
+      }
+    }
+
+    .BoothItemList {
+      display: flex;
+      background-color: #ffffff;
+    }
+  }
+}
+
+.postDetailContainerSecond {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 0 1.5rem;
+  gap: 1.5rem;
+  align-items: stretch;
+  
+
+  .postImageListContainer {
+    width: 100%;
+    height: 100%;
+
+    .postImageList {
+      display: flex;
+      width: 100%;
+      
+      .postImageItem {
+        width: 25%;
+
+        .postImage {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .tagList {
+      width: 100%;
+      display: flex;
+      padding: 1.5rem 0;
+      gap: 8px;
+      flex-wrap: wrap;
+    
+      .tagItem {
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        width: 64px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    
+      .selectedTagItem {
+        background-color: #111111;
+        border-radius: 1rem;
+        width: 64px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .postBoothItemContainer {
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+
+    .postBoothDescription {
+      font-size: 24px;
+      font-weight: bold;
+      color: #000000;
+      padding-left: 1rem;
+      padding-top: 1rem;
+
+    }
+
+    .postBoothList {
+      padding-left: 1rem;
+
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+
+      .postBoothItem {
+        display: flex;
+        gap: 1rem;
+        padding-top: 1rem;
+      }
+    }
+  }
+}
