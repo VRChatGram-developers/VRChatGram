@@ -1,13 +1,13 @@
 "use client";
 
-import styles from "./styles.module.scss";
+import styles from "../styles/search-result.module.scss";
 import { Post } from "@/features/posts/types/post";
 import Image from "next/image";
 import { useState } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
 import { fetchPosts } from "@/features/posts/endpoint";
-export const PostList = ({ posts, selectedTag }: { posts: Post[][]; selectedTag: string }) => {
+export const SearchResult = ({ posts, selectedTag }: { posts: Post[][]; selectedTag: string }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [postList, setPostList] = useState<Post[][]>([]);
   const totalPages = posts.length;

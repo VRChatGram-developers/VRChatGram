@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { FaCamera } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
-import styles from "./styles.module.scss";
+import styles from "./styles/header.module.scss";
 import { useState } from "react";
 export const Header = () => {
   const router = useRouter();

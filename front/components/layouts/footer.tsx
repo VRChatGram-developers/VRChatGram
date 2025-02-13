@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./styles.module.scss";
+import styles from "./styles/footer.module.scss";
 
 export const Footer = () => {
   return (
