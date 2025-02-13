@@ -1,9 +1,8 @@
 "use client";
 
-import styles from "./styles/posts.module.scss";
+import styles from "../styles/post-list.module.scss";
 import { SearchResult } from "./search-result";
-import { Post } from "@/features/posts/types/post";
-import { Tag } from "@/features/posts/types/tag";
+import { Tag, Post } from "@/features/posts/types/index";
 import { TagList } from "./tag-list";
 import { useState, useMemo } from "react";
 
