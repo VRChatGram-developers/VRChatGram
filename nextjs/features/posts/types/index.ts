@@ -7,6 +7,13 @@ export type Post = {
   currentPage: number;
 };
 
+export type UserOtherPost = {
+  id: bigint;
+  title: string;
+  images: Image[];
+};
+
+
 export type Image = {
   id: bigint;
   url: string;
@@ -18,16 +25,24 @@ export type PostDetail = {
   description: string;
   images: Image[];
   tags: Tag[];
-  booths: Booth[];
+  booth_items: BoothItem[];
   user: User;
   likeCount: number;
-  viewCount: number;
+  view_count: number;
+  otherPostList: UserOtherPost[];
+};
+
+export type BoothItem = {
+  id: bigint;
+  booth: Booth;
+  booth_id: bigint;
+  post_id: bigint;
 };
 
 export type Booth = {
   id: bigint;
   title: string;
-  description: string;
+  detail: string;
   image: Image;
 };
 
