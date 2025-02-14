@@ -9,11 +9,11 @@
   .postImageContainer {
     width: 100%;
 
-
     .postImage {
       width: 100%;
       height: 100%;
       background-color: #ffffff;
+      border-radius: 1rem;
       // aspect-ratio: 1 / 1;
     }   
   }
@@ -169,6 +169,7 @@
     .postImageList {
       display: flex;
       width: 100%;
+      gap: 1.5rem;
       
       .postImageItem {
         width: 25%;
@@ -220,6 +221,7 @@
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
+    border-radius: 1rem;
 
     .postBoothDescription {
       font-size: 24px;

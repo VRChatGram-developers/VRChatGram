@@ -7,9 +7,11 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
 import Image from "next/image";
 import { PostDetail as PostDetailType } from "@/features/posts/types/index";
-
+import { useState } from "react";
+import { OtherPostList } from "./other-post-list";
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   console.log(post);
+  const [isLiked, setIsLiked] = useState(false);
   return (
     <>
       <div className={styles.postDetailContainerFirst}>
@@ -28,7 +30,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
           <div className={styles.postContentIcons}>
             <div className={styles.iconItem}>
               <FaRegEye className={styles.eyeIcon} />
-              <p>{post.viewCount}View</p>
+              <p>{post.view_count}View</p>
             </div>
             <div className={styles.iconHeart}>
               <FaHeart className={styles.heartIcon} />
@@ -95,24 +97,26 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             <p>Booth購入リスト</p>
           </div>
           <div className={styles.postBoothList}>
-            {[...Array(4)].map((_, index) => (
-              <div className={styles.postBoothItem} key={index}>
+            {post.booth_items.map((boothItem) => (
+              <div className={styles.postBoothItem} key={boothItem.id}>
                 <Image
-                  src="/home/femailtag-icon.png"
+                  src={boothItem.booth.image.url}
                   alt="avatar"
                   width={100}
                   height={100}
                   className={styles.postImage}
                 />
                 <div className={styles.postBoothItemContent}>
-                  <p>タイトル</p>
-                  <p>説明</p>
+                  <p>{boothItem.booth.title}</p>
+                  <p>{boothItem.booth.detail}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      <OtherPostList post={post} setIsLiked={setIsLiked} isLiked={isLiked} />
     </>
   );
 };
