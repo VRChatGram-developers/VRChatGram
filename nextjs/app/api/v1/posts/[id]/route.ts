@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
-import { toJson } from "@/utils/json";
-import _ from "lodash";
+import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
+import { OtherPostList } from '../../../../../features/posts/components/other-post-list';
 //インスタンスを作成
 const prisma = new PrismaClient();
 
@@ -23,7 +23,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
-    const post = await prisma.posts.findUnique({
+    const post = await prisma.posts.findUniqueOrThrow({
       where: { id: BigInt(id) },
       select: {
         id: true,
@@ -33,33 +33,58 @@ export async function GET(request: Request, { params }: { params: { id: string }
         images: true,
         tags: true,
         likes: true,
-        booth_items: true,
+        booth_items: {
+          include: {
+            booth: {
+              select: {
+                id: true,
+                title: true,
+                detail: true,
+                image: true,
+              },
+            },
+          },
+        },
         user: {
           select: {
             id: true,
             name: true,
             my_id: true,
-            profile_url: true
+            profile_url: true,
           },
         },
       },
     });
-    const postData = toJson(post);
-    const likeCount = post?.likes.length;
-    const tags = post?.tags.map(toJson);
-    const booths = post?.booth_items.map(toJson);
-    const images = post?.images.map(toJson);
+
+    const otherPostList = await prisma.posts.findMany({
+      where: { user_id: post.user.id, id: { not: post.id } },
+      select: {
+        id: true,
+        title: true,
+        images: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            profile_url: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+      take: 4,
+    });
+
+    const { likes, ...postData } = post;
+    const serializedPost = bigIntToStringMap(postData);
+    const likeCount = likes?.length ?? 0;
+    const serializedOtherPostList = bigIntToStringMap(otherPostList);
 
     return NextResponse.json({
-      id: postData?.id,
-      title: postData?.title,
-      viewCount: Number(postData?.view_count),
-      description: postData?.description,
-      likeCount: likeCount,
-      tags: tags,
-      booths: booths,
-      images: images,
-      user: toJson(postData?.user),
+      ...serializedPost,
+      likeCount,
+      otherPostList: serializedOtherPostList,
     });
   } catch (error) {
     return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });

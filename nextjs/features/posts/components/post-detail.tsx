@@ -7,15 +7,57 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
 import Image from "next/image";
 import { PostDetail as PostDetailType } from "@/features/posts/types/index";
+import { useState, useEffect } from "react";
+import { OtherPostList } from "./other-post-list";
+import { MdOutlineNavigateNext } from "react-icons/md";
+import { MdOutlineNavigateBefore } from "react-icons/md";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   console.log(post);
+
+  useEffect(() => {
+    setSelectedImage(post.images[0].url);
+  }, [post]);
+
+  const [selectedImage, setSelectedImage] = useState(post.images[0].url);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+
+  const handleNextImage = () => {
+    setCurrentIndex(currentIndex + 1);
+    setSelectedImage(post.images[currentIndex + 1].url);
+  };
+
+  const handleBeforeImage = () => {
+    setCurrentIndex(currentIndex - 1);
+    setSelectedImage(post.images[currentIndex - 1].url);
+  };
+
+  const [isLiked, setIsLiked] = useState(false);
   return (
     <>
       <div className={styles.postDetailContainerFirst}>
         <div className={styles.postImageContainer}>
           <div className={styles.postImage}>
-            <p>写真</p>
+            <Image
+              src={selectedImage}
+              alt="avatar"
+              width={100}
+              height={100}
+              className={styles.postImage}
+            />
+            {currentIndex !== post.images.length - 1 && (
+              <MdOutlineNavigateNext
+                className={styles.nextIcon}
+                onClick={handleNextImage}
+              />
+            )}
+            {currentIndex !== 0 && (
+              <MdOutlineNavigateBefore
+                className={styles.beforeIcon}
+                onClick={handleBeforeImage}
+              />
+            )}
           </div>
         </div>
         <div className={styles.postContentContainer}>
@@ -28,7 +70,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
           <div className={styles.postContentIcons}>
             <div className={styles.iconItem}>
               <FaRegEye className={styles.eyeIcon} />
-              <p>{post.viewCount}View</p>
+              <p>{post.view_count}View</p>
             </div>
             <div className={styles.iconHeart}>
               <FaHeart className={styles.heartIcon} />
@@ -70,22 +112,27 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
       <div className={styles.postDetailContainerSecond}>
         <div className={styles.postImageListContainer}>
           <div className={styles.postImageList}>
-            {[...Array(4)].map((_, index) => (
+            {post.images.map((image, index) => (
               <div className={styles.postImageItem} key={index}>
-                <Image
-                  src="/home/femailtag-icon.png"
-                  alt="avatar"
-                  width={100}
-                  height={100}
-                  className={styles.postImage}
-                />
+                {image.url && (
+                  <Image
+                    src={image.url}
+                    alt="avatar"
+                    width={100}
+                    height={100}
+                    className={
+                      selectedImage == image.url ? styles.postImageSelected : styles.postImage
+                    }
+                    onClick={() => setSelectedImage(image.url)}
+                  />
+                )}
               </div>
             ))}
           </div>
           <div className={styles.tagList}>
-            {[...Array(10)].map((_, index) => (
-              <div key={index} className={styles.tagItem}>
-                <button>#{index}</button>
+            {post.tags.map((tag) => (
+              <div key={tag.id} className={styles.tagItem}>
+                <button>#{tag.name}</button>
               </div>
             ))}
           </div>
@@ -95,24 +142,26 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             <p>Booth購入リスト</p>
           </div>
           <div className={styles.postBoothList}>
-            {[...Array(4)].map((_, index) => (
-              <div className={styles.postBoothItem} key={index}>
+            {post.booth_items.map((boothItem) => (
+              <div className={styles.postBoothItem} key={boothItem.id}>
                 <Image
-                  src="/home/femailtag-icon.png"
+                  src={boothItem.booth.image.url}
                   alt="avatar"
                   width={100}
                   height={100}
                   className={styles.postImage}
                 />
                 <div className={styles.postBoothItemContent}>
-                  <p>タイトル</p>
-                  <p>説明</p>
+                  <p>{boothItem.booth.title}</p>
+                  <p>{boothItem.booth.detail}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      <OtherPostList post={post} setIsLiked={setIsLiked} isLiked={isLiked} />
     </>
   );
 };
