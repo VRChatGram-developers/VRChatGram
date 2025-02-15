@@ -95,15 +95,13 @@ async function main() {
     )
   );
 
-  // 全ての投稿にランダムでタグ付けておく
   const tagPromises = Array.from({ length: 10 }, (_, i) =>
     prisma.tags.create({
       data: { name: `タグ${i + 1}` },
     })
   );
   const tags = await Promise.all(tagPromises); // ✅ Promise.all で並列処理
-  
-  // 🔹 ② 全ての投稿にランダムでタグを付与
+
   const taggings = posts.map((post, i) =>
     prisma.post_tags.create({
       data: {
@@ -112,10 +110,28 @@ async function main() {
       },
     })
   );
-  
-  await Promise.all(taggings); 
 
-  
+  await Promise.all(taggings);
+
+  await Promise.all(
+    posts.map(async (post) => {
+      const boothItem = await prisma.booth_items.create({
+        data: {
+          title: "booth_title_1",
+          detail: "booth_detail_1",
+          url: "https://example.com/booth_url_1",
+          image: "https://example.com/booth_image_1",
+        },
+      });
+
+      await prisma.post_booth_items.create({
+        data: {
+          post_id: post.id,
+          booth_id: boothItem.id,
+        },
+      });
+    })
+  );
 
   // notificationsとnotification_typesの作成
   const notifications = await Promise.all([

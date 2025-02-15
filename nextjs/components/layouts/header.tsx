@@ -20,7 +20,7 @@ export const Header = () => {
   return (
     <header className={styles.header}>
       <Image
-        src="/logo.png"
+        src="/header/logo.png"
         alt="Logo"
         width={118}
         height={32}
