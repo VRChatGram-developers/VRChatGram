@@ -1,14 +1,17 @@
 "use client";
 
-import { Post } from "../types/post";
-import Image from "next/image";
-import { MdOutlinePhoto } from "react-icons/md";
+import { LatestPost as LatestPostType } from "../types/index";
+import { PostCard } from "@/components/post-card";
 
 export const LatestPost = ({
   latestPosts,
   isLiked,
   setIsLiked,
-}: { latestPosts: Post[]; isLiked: boolean; setIsLiked: React.Dispatch<React.SetStateAction<boolean>> }) => {
+}: {
+  latestPosts: LatestPostType[];
+  isLiked: boolean;
+  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <>
       <div className="max-w-full h-full" style={{ padding: "3rem 1.5rem" }}>
@@ -22,52 +25,18 @@ export const LatestPost = ({
             </h2>
             <div className="flex justify-center mt-6 mb-6 space-x-4">
               {latestPosts.map((post) => (
-                <div key={post.id} className="w-1/4 relative">
-                  <Image
-                    src="/home/new-post-image.png"
-                    alt={`ピックアップ画像`}
-                    width={402}
-                    height={384}
-                    className="w-full h-[384px] object-cover rounded-lg"
-                  />
-                  <div
-                    className="absolute top-4 right-4 w-[64px] h-[32px] bg-[#00000033] flex items-center justify-center"
-                    style={{ borderRadius: "40px" }}
-                  >
-                    <MdOutlinePhoto
-                      className="text-white text-2xl"
-                      style={{ width: "18px", height: "18px" }}
-                    />
-                    <p
-                      className="text-white"
-                      style={{
-                        marginLeft: "15px",
-                        fontSize: "14px",
-                        fontFamily: "Noto Sans JP",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {post.images.length ?? 0}
-                    </p>
-                  </div>
-                  <div className="absolute bottom-4 right-4">
-                    <div
-                      className="flex items-center justify-center"
-                      style={{
-                        width: "64px",
-                        height: "64px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setIsLiked(!isLiked)}
-                    >
-                      {isLiked ? (
-                        <Image src="/heart.png" alt="heart" width={64} height={64} />
-                      ) : (
-                        <Image src="/heart-outline.png" alt="heart" width={64} height={64} />
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <PostCard
+                  key={post.id}
+                  postCardProps={{
+                    postName: post.title,
+                    postImageUrl: "/home/new-post-image.png",
+                    postImageCount: post.images.length,
+                    userName: post.user.name,
+                    userImageUrl: "/posts/sample-user-icon.png",
+                    isLiked: isLiked,
+                    setIsLiked: setIsLiked,
+                  }}
+                />
               ))}
             </div>
           </div>

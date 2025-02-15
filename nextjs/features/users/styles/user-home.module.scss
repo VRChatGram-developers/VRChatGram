@@ -43,6 +43,40 @@
       width: 25%;
       position: relative;
 
+      // 背景を暗くする
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0); // 初期状態は透明
+        transition: background-color 0.3s ease;
+        z-index: 1; // 他の要素の背面に配置
+    }
+
+      &:hover {
+        &::before {
+          background-color: rgba(0, 0, 0, 0.5); 
+        }
+
+        .userInfo,
+        .likesPostsItemLikeContents {
+          opacity: 1;
+          visibility: visible;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+          z-index: 2; 
+        }
+      }
+
+      .userInfo,
+      .likesPostsItemLikeContents {
+      opacity: 0;
+      visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
       .likesPostsItemImage {
         width: 100%;
         height: 100%;
@@ -78,10 +112,38 @@
         }
       }
 
-      .likesPostsItemLikeContents {
+      .userInfo { 
         position: absolute;
         bottom: 1rem;
-        right: 1rem;
+        left: 1rem;
+        width: 100%;      
+        
+        .userInfoTitle {
+          color: #ffffff;
+          font-size: 16px;
+          font-family: "Noto Sans JP", sans-serif;
+          font-weight: bold;
+        }
+
+        .userInfoContainer {
+          padding-top: 0.5rem;
+          display: flex;
+          align-items: center;
+          gap :0.5rem;
+
+          .userInfoName {
+            color: #ffffff;
+            font-size: 13px;
+            font-family: "Noto Sans JP", sans-serif;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .likesPostsItemLikeContents {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
 
         .likesPostsItemLikeItem {
           display: flex;
