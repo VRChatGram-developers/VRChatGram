@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Post } from "../types/post";
 import { Tag } from "../types/tag";
 import { PopularTag } from "./popular-tag";
-import { PopularPost } from "./popular-post";
+import { PopularPostList } from "./popular-post-list";
 import { LatestPost } from "./latest-post";
 import { XPost } from "./x-post";
 
@@ -200,7 +200,7 @@ export const Main = ({
         </div>
       </div>
 
-      <PopularPost popularPostList={popularPostList} isLiked={isLiked} setIsLiked={setIsLiked} />
+      <PopularPostList popularPostList={popularPostList} isLiked={isLiked} setIsLiked={setIsLiked} />
       <PopularTag popularTagList={popularTagList} />
       <LatestPost latestPosts={latestPosts} isLiked={isLiked} setIsLiked={setIsLiked} />
       <XPost latestPostListWithX={latestPostListWithX} isLiked={isLiked} setIsLiked={setIsLiked} />

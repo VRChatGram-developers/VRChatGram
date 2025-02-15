@@ -5,7 +5,7 @@ import { MdOutlinePhoto } from "react-icons/md";
 import Image from "next/image";
 import _ from "lodash";
 
-export const PopularPost = ({
+export const PopularPostList = ({
   popularPostList,
   isLiked,
   setIsLiked,
