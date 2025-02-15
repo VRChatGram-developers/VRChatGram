@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Post } from "../types/post";
 import { Tag } from "../types/tag";
 import { PopularTag } from "./popular-tag";
+import { LatestPost as LatestPostType, PopularPost as PopularPostType } from "../types/index";
 import { PopularPostList } from "./popular-post-list";
 import { LatestPost } from "./latest-post";
 import { XPost } from "./x-post";
@@ -18,9 +19,9 @@ export const Main = ({
   latestPostListWithX,
 }: {
   notifications: Notifications;
-  latestPosts: Post[];
+  latestPosts: LatestPostType[];
   popularTagList: Tag[];
-  popularPostList: Post[];
+  popularPostList: PopularPostType[];
   latestPostListWithX: Post[];
 }) => {
   const [isLiked, setIsLiked] = useState(false);
