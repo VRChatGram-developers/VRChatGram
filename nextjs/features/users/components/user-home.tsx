@@ -3,7 +3,7 @@
 import styles from "../styles/user-home.module.scss";
 import { User } from "@/features/users/types/user";
 import { useState } from "react";
-import { PostCard } from "@/components/ post-card";
+import { PostCard } from "@/components/post-card";
 
 export const UserHome = ({ user }: { user: User }) => {
   const [isLiked, setIsLiked] = useState(false);
