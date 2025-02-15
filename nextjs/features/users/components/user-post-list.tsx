@@ -1,13 +1,13 @@
 "use client";
 
-import styles from "./styles.module.scss";
+import styles from "../styles/user-post-list.module.scss";
 import { User } from "@/features/users/types/user";
 import Image from "next/image";
 import { useState } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
 
-export const UserPosts = ({ user }: { user: User }) => {
+export const UserPostList = ({ user }: { user: User }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = user.posts.length; // 既にチャンク化されているので、配列の長さがページ数
   const currentPosts = user.posts[currentPage] || []; // 現在のチャンクを直接参照

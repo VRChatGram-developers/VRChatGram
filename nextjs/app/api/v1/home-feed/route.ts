@@ -22,8 +22,16 @@ export async function GET() {
       orderBy: { likes: { _count: "desc" } },
       select: {
         id: true,
+        title: true,
         is_sensitive: true,
         images: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            profile_url: true,
+          },
+        },
       },
       take: Number(12),
     });
@@ -34,6 +42,13 @@ export async function GET() {
         id: true,
         is_sensitive: true,
         images: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            profile_url: true,
+          },
+        },
       },
       take: Number(4),
     });

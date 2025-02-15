@@ -1,13 +1,14 @@
 "use client";
 
-import styles from "./styles.module.scss";
+import styles from "../styles/users.module.scss";
 import Image from "next/image";
 import { User } from "@/features/users/types/user";
 import { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { UserHome } from "../user-home/user-home";
 import { followUser, unfollowUser } from "@/features/users/endpoint";
-import { UserPosts } from "../user-posts/user-posts";
+import { UserPostList } from "./user-post-list";
+import { UserHome } from "./user-home";
+
 
 export const Users = ({ user }: { user: User }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -83,7 +84,7 @@ export const Users = ({ user }: { user: User }) => {
         )}
       </div>
       {activeTab === 0 && <UserHome user={user} />}
-      {activeTab === 1 && <UserPosts user={user} />}
+      {activeTab === 1 && <UserPostList user={user} />}
     </>
   );
 };
