@@ -23,3 +23,14 @@ export type User = {
   name: string;
   profile_url: string;
 };
+
+export type NotificationType = "release" | "bug" | "important";
+
+export type Notification = {
+  id: number;
+  title: string;
+  published_at: string;
+  notification_type: NotificationType;
+  content: string | null;
+};
+

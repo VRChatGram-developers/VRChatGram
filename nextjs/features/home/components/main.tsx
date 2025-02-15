@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Notifications } from "../types/notification";
+import { Notification } from "../types/index";
 import { useState } from "react";
 import { Post } from "../types/post";
 import { Tag } from "../types/tag";
@@ -18,23 +18,13 @@ export const Main = ({
   notifications,
   latestPostListWithX,
 }: {
-  notifications: Notifications;
+  notifications: Notification[];
   latestPosts: LatestPostType[];
   popularTagList: Tag[];
   popularPostList: PopularPostType[];
   latestPostListWithX: Post[];
 }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const transformNotificationList = notifications.notifications.map((notification) => {
-    const year = new Date(notification.published_at).getFullYear();
-    const month = String(new Date(notification.published_at).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
-    const day = String(new Date(notification.published_at).getDate()).padStart(2, "0");
-    const formattedDate = `${year}.${month}.${day}`;
-    return {
-      ...notification,
-      published_at: formattedDate,
-    };
-  });
 
   return (
     <>
@@ -139,7 +129,7 @@ export const Main = ({
             <div className="flex-1 rounded-md">
               <p className="font-semibold text-lg">お知らせ</p>
               <div className="">
-                {transformNotificationList.map((notification) => (
+                {notifications.map((notification) => (
                   <div key={notification.id} className="bg-white rounded-lg duration-200">
                     <div className="pt-6">
                       <div className="flex flex-col">
