@@ -15,19 +15,13 @@ import { MdOutlineNavigateBefore } from "react-icons/md";
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   console.log(post);
 
-  const imageList = [
-    "https://images.vrcpic.com/photos/394/bc1b8c4b89151375fb0ab1bb0f6977e8.jpg",
-    "https://images.vrcpic.com/photos/394/468f203d4a7221881e074343e835a513.jpg",
-    "https://images.vrcpic.com/photos/394/4f3f8002e390b4abbe6da046ffaba5ff.jpg",
-    "https://images.vrcpic.com/photos/394/bc1b8c4b89151375fb0ab1bb0f6977e8.jpg",
-  ];
-
   useEffect(() => {
     setSelectedImage(post.images[0].url);
   }, [post]);
 
   const [selectedImage, setSelectedImage] = useState(post.images[0].url);
   const [currentIndex, setCurrentIndex] = useState(0);
+  
 
   const handleNextImage = () => {
     setCurrentIndex(currentIndex + 1);
@@ -36,7 +30,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
 
   const handleBeforeImage = () => {
     setCurrentIndex(currentIndex - 1);
-    setSelectedImage(imageList[currentIndex - 1]);
+    setSelectedImage(post.images[currentIndex - 1].url);
   };
 
   const [isLiked, setIsLiked] = useState(false);
@@ -52,18 +46,16 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               height={100}
               className={styles.postImage}
             />
-            {currentIndex !== imageList.length - 1 && (
+            {currentIndex !== post.images.length - 1 && (
               <MdOutlineNavigateNext
                 className={styles.nextIcon}
                 onClick={handleNextImage}
-                style={{ opacity: currentIndex === imageList.length - 1 ? 0 : 1 }}
               />
             )}
             {currentIndex !== 0 && (
               <MdOutlineNavigateBefore
                 className={styles.beforeIcon}
                 onClick={handleBeforeImage}
-                style={{ opacity: currentIndex === 0 ? 0 : 1 }}
               />
             )}
           </div>

@@ -11,6 +11,7 @@ export type UserOtherPost = {
   id: bigint;
   title: string;
   images: Image[];
+  user: User;
 };
 
 
