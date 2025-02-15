@@ -57,11 +57,18 @@ export async function GET(request: Request, { params }: { params: { id: string }
     });
 
     const otherPostList = await prisma.posts.findMany({
-      where: { user_id: post.user.id},
+      where: { user_id: post.user.id, id: { not: post.id } },
       select: {
         id: true,
         title: true,
         images: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            profile_url: true,
+          },
+        },
       },
       orderBy: {
         created_at: "desc",
