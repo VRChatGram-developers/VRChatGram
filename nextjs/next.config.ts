@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     config.resolve.alias["@"] = path.resolve(__dirname); // プロジェクトルートを "@" にマッピング
     return config;
   },
+  // 削除予定
+  images: {
+    domains: ['images.vrcpic.com'],
+  },
 };
 
 export default nextConfig;
