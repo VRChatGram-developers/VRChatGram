@@ -1,0 +1,22 @@
+.popularPostListContainer {
+    padding: 0 1.5rem 1.5rem 3rem;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    .popularPostListTitle {
+        color: #151C4B;
+        font-family: "Noto Sans JP";
+        font-weight: bold;
+        font-size: 40px;
+        text-align: center;
+    }
+
+    .popularPostList {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        gap: 1rem;
+    }
+}
