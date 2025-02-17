@@ -16,9 +16,8 @@ VRChatGramは、⚪︎⚪︎です
 
 ### 前提条件
 *以下がnextjs直下に配置すること
-.env
-
-firebaseSecretKey.json
+- .env
+- - firebaseSecretKey.json
 
 ### ローカル環境の起動
 
