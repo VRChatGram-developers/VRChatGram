@@ -1,9 +1,5 @@
-import { SignUpForm } from "@/features/auth/components/sign-up-form";
+import { UserCreate } from "@/features/users/components/user-create";
 
 export default async function Page() {
-  return (
-    <>
-        <SignUpForm />
-    </>
-  );
+  return <UserCreate />;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "../styles/user-post-list.module.scss";
-import { User } from "@/features/users/types/user";
+import { User } from "@/features/users/types/index";
 import Image from "next/image";
 import { useState } from "react";
 import { MdOutlineLastPage } from "react-icons/md";

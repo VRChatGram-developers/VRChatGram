@@ -2,7 +2,7 @@
 
 import styles from "../styles/users.module.scss";
 import Image from "next/image";
-import { User } from "@/features/users/types/user";
+import { User } from "@/features/users/types/index";
 import { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { followUser, unfollowUser } from "@/features/users/endpoint";

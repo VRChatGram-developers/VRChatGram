@@ -1,10 +1,11 @@
-import { User } from "./types/user";
+import { User, requestCreateUser } from "./types/index";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/libs/firebase/client";
 
-const API_GET_URL = "http://localhost:3000";
-const API_POST_URL = "http://localhost:3001";
+const API_URL = "http://localhost:3000";
 
 export const fetchUserById = async (id: bigint): Promise<User> => {
-  const response = await fetch(`${API_GET_URL}/api/users/${id}`);
+  const response = await fetch(`${API_URL}/api/users/${id}`);
   if (!response.ok) {
     throw new Error("Failed to fetch users");
   }
@@ -13,7 +14,7 @@ export const fetchUserById = async (id: bigint): Promise<User> => {
 
 export const followUser = async (id: bigint) => {
   try {
-    const response = await fetch(`${API_POST_URL}/api/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/users/${id}/followings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +30,7 @@ export const followUser = async (id: bigint) => {
 
 export const unfollowUser = async (id: bigint) => {
   try {
-    const response = await fetch(`${API_POST_URL}/api/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/users/${id}/followings`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -40,5 +41,25 @@ export const unfollowUser = async (id: bigint) => {
   } catch (error) {
     console.error(error);
     throw new Error("Failed to unfollow user");
+  }
+};
+
+export const createUser = async (user: requestCreateUser) => {
+  
+  try {
+    console.log(user);
+    await createUserWithEmailAndPassword(auth, user.email, user.password);
+    const response = await fetch(`${API_URL}/api/v1/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to create user");
   }
 };
