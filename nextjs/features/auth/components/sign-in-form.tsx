@@ -6,13 +6,45 @@ import { auth } from "@/libs/firebase/client";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import { Link, TextField } from "@mui/material";
+import styles from "@/features/auth/styles/sign-in-form.module.scss";
 
 export const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMail, setErrorMail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+
+  const mailValidation = () => {
+    if (email === "") {
+      setErrorMail("メールアドレスを入力してください");
+      return false;
+    }
+    setErrorMail("");
+    return true;
+  };
+
+  const passwordValidation = () => {
+    if (password === "") {
+      setErrorPassword("パスワードを入力してください");
+      return false;
+    }
+
+    if (password.length < 6) {
+      setErrorPassword("パスワードは6文字以上で入力してください");
+      return false;
+    }
+
+    setErrorPassword("");
+    return true;
+  };
 
   const handleSignIn = async () => {
-    if (!email || !password) return;
+    const isMailValid = mailValidation();
+    const isPasswordValid = passwordValidation();
+
+    if (!isMailValid || !isPasswordValid) {
+      return;
+    }
 
     try {
       const credentials = await signInWithEmailAndPassword(auth, email, password);
@@ -27,7 +59,6 @@ export const SignInForm = () => {
         return;
       }
 
-      // 成功時の処理
       window.location.href = "/";
     } catch (error) {
       console.error(error);
@@ -86,6 +117,7 @@ export const SignInForm = () => {
                   },
                 }}
               />
+              {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
               <TextField
                 fullWidth
                 type="password"
@@ -112,6 +144,7 @@ export const SignInForm = () => {
                   },
                 }}
               />
+              {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
               <button
                 onClick={handleSignIn}
                 style={{
