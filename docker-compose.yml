@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '3002:3000'
+      - '3000:3000'
     volumes:
       - type: bind
         source: ./nextjs

@@ -5,17 +5,14 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import { Link, TextField } from "@mui/material";
 import { auth } from "@/libs/firebase/client";
-import { useRouter } from "next/navigation";
-
 
 export const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      router.push("/register");
+      window.location.href = "/";
       console.log(userCredential);
     } catch (error) {
       console.error(error);

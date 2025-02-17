@@ -160,10 +160,6 @@ async function main() {
   ]);
 
   console.log("Seed data created:", { users, posts, notifications, likes });
-
-  createUserAndPost().catch((error) => {
-    console.error(error);
-  });
 }
 
 main()
@@ -174,82 +170,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-
-
-  const createUserAndPost = async () => {
-    // ユーザーを作成
-    const user = await prisma.users.create({
-      data: {
-        name: "テストユーザー榑林",
-        password: "password123",
-        email: "test1@example.com",
-        gender: "male",
-        profile_url: "https://example.com/profile1.jpg",
-        status: "active",
-        birthday: new Date("1990-01-01"),
-        my_id: "kohei",
-        introduce: "テストユーザー1の自己紹介です。",
-        social_links: {
-          create: {
-            platform_name: "twitter",
-            platform_url: "https://twitter.com/user1",
-          },
-        },
-      },
-    });
-  
-    // 投稿を作成
-    const post = await prisma.posts.create({
-      data: {
-        user_id: user.id,
-        title: "テスト投稿1",
-        description: "テスト投稿1の説明です。",
-      },
-    });
-  
-    // 画像1を作成
-    await prisma.post_images.create({
-      data: {
-        post_id: post.id,
-        url: "https://images.vrcpic.com/photos/394/bc1b8c4b89151375fb0ab1bb0f6977e8.jpg",
-      },
-    });
-  
-    // 画像2を作成
-    await prisma.post_images.create({
-      data: {
-        post_id: post.id,
-        url: "https://images.vrcpic.com/photos/394/468f203d4a7221881e074343e835a513.jpg",
-      },
-    });
-  
-    // 画像3を作成
-    await prisma.post_images.create({
-      data: {
-        post_id: post.id,
-        url: "https://images.vrcpic.com/photos/394/4f3f8002e390b4abbe6da046ffaba5ff.jpg",
-      },
-    });
-  
-    // 画像4を作成
-    await prisma.post_images.create({
-      data: {
-        post_id: post.id,
-        url: "", // 画像が無い場合
-      },
-    });
-  
-    // タグを追加
-    await prisma.post_tags.create({
-      data: {
-        post_id: post.id,
-        tag_id: 1, // タグがあらかじめ用意されている前提
-      },
-    });
-  };
-  
-  // 関数を実行
-  createUserAndPost().catch((error) => {
-    console.error(error);
-  });
-  
