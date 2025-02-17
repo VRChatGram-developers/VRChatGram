@@ -12,6 +12,10 @@ export const OtherPostList = ({
   setIsLiked: (isLiked: boolean) => void;
   isLiked: boolean;
 }) => {
+  if (post.otherPostList.length === 0) {
+    return null;
+  }
+
   return (
     <div className={styles.otherPosts}>
       <div className={styles.otherPostsTitle}>
