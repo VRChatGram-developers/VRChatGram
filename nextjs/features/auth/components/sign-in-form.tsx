@@ -7,13 +7,17 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import { Link, TextField } from "@mui/material";
 import styles from "@/features/auth/styles/sign-in-form.module.scss";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMail, setErrorMail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
-
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const mailValidation = () => {
     if (email === "") {
       setErrorMail("メールアドレスを入力してください");
@@ -38,6 +42,16 @@ export const SignInForm = () => {
     return true;
   };
 
+  useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (session) {
+      router.push("/");
+    }
+  }, [status, session, router]);
+
   const handleSignIn = async () => {
     const isMailValid = mailValidation();
     const isPasswordValid = passwordValidation();
@@ -59,7 +73,9 @@ export const SignInForm = () => {
         return;
       }
 
-      window.location.href = "/";
+      if (session) {
+        window.location.href = "/";
+      }
     } catch (error) {
       console.error(error);
     }
