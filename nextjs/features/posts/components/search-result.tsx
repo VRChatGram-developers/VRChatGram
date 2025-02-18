@@ -86,6 +86,7 @@ export const SearchResult = ({
 
   // useEffectでアイテム配置調整
   useEffect(() => {
+    // Todo 画像を取得できるようになってから
     // コンポーネントがレンダリングされた後にDOMを操作
     const items = document.querySelectorAll(".userPostsItemImageContainer");
 
@@ -97,15 +98,29 @@ export const SearchResult = ({
 
   return (
     <div className={styles.userPostsContainer}>
-      <div className={styles.mostPopularPost}>
+      <div className={styles.searchContainer}>
         <Image
           src="/posts/sample-icon.png"
           alt="logo"
+          className={styles.searchThumbnail}
           width={260}
           height={260}
         />
-        <p className={styles.mostPopularPostTitle}>{selectedTag}</p>
-        <p className={styles.mostPopularPostCount}>投稿数: 100</p>
+        <div className={styles.searchDetailContainer}>
+          <p className={styles.searchDetailTitle}>{selectedTag}</p>
+          <div className={styles.searchDetailContent}>
+            <p className={styles.searchPostCount}>投稿数: 100</p>
+            <div className={styles.searchSortContainer}>
+              <label className={styles.searchSortLabel}>
+                <select className={styles.searchSortSelect}>
+                  <option>新着順</option>
+                  <option>人気順</option>
+                  <option>今週の人気順</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
       <div>
         <div className={styles.userPostsList}>

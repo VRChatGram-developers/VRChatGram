@@ -1,31 +1,74 @@
 .userPostsContainer {
   width: 100%;
   height: 100%;
+  color: #151c4b;
+  font-family: "Noto Sans JP", sans-serif;
 
-  .mostPopularPost {
+  .searchContainer {
+    display: flex;
+    flex-direction: row;
     width: 100%;
     height: 100%;
     padding-bottom: 1.5rem;
-    position: relative;
 
-    .mostPopularPostTitle {
-      font-size: 40px;
-      font-weight: bold;
-      color: #151c4b;
-      font-family: "Noto Sans JP", sans-serif;
-      position: absolute;
-      top: 25%;
-      left: 15%;
+    .searchThumbnail {
+      max-width: 16rem;
+      max-height: 16rem;
     }
 
-    .mostPopularPostCount {
-      font-size: 20px;
-      color: #151c4b;
-      font-family: "Noto Sans JP", sans-serif;
-      position: absolute;
-      top: 50%;
-      left: 15%;
-      font-weight: bold;
+    .searchDetailContainer {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      margin-left: 1rem;
+      width: 100%;
+      .searchDetailTitle {
+        font-size: 40px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+      }
+
+      .searchDetailContent {
+        display: flex;
+        justify-content: space-between;
+        .searchPostCount {
+          font-size: 20px;
+        }
+        .searchSortContainer {
+          display: flex;
+          align-items: flex-end;
+          .searchSortLabel {
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            &::after {
+              position: absolute;
+              right: 15px;
+              width: 10px;
+              height: 7px;
+              background-color: #535353;
+              clip-path: polygon(0 0, 100% 0, 50% 100%);
+              content: "";
+              pointer-events: none;
+            }
+            .searchSortSelect {
+              appearance: none;
+              min-width: 230px;
+              height: 2.8em;
+              padding: 0.4em calc(0.8em + 30px) 0.4em 0.8em;
+              border: none;
+              border-radius: 3px;
+              box-shadow: 0 4px 4px rgb(0 0 0 / 2%),
+                0 2px 3px -2px rgba(0 0 0 / 5%);
+              background-color: #fff;
+              color: #333333;
+              font-size: 1em;
+              cursor: pointer;
+              text-align: center;
+            }
+          }
+        }
+      }
     }
   }
   .userPostsTitle {
