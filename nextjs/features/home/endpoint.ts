@@ -1,3 +1,4 @@
+import { Session } from "next-auth";
 import { Notifications } from "./types/notification";
 
 const API_GET_URL = "http://localhost:3000";
@@ -10,9 +11,12 @@ export const fetchNotifications = async (): Promise<Notifications> => {
   return response.json();
 };
 
-export const fetchHomeFeed = async <T>(): Promise<T> => {
-  const response = await fetch(`${API_GET_URL}/api/v1/home-feed`);
-  
+export const fetchHomeFeed = async <T>(session: Session | null): Promise<T> => {
+  const response = await fetch(`${API_GET_URL}/api/v1/home-feed`, {
+    method: "POST",
+    body: JSON.stringify({ session }),
+  });
+
   if (!response.ok) {
     throw new Error("Failed to fetch posts");
   }

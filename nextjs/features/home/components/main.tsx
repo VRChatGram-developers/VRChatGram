@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import { Notification } from "../types/index";
-import { useState } from "react";
-import { Post } from "../types/post";
+import { useState, useEffect } from "react";
 import { Tag } from "../types/tag";
 import { PopularTag } from "./popular-tag";
-import { LatestPost as LatestPostType, PopularPost as PopularPostType } from "../types/index";
+import {
+  LatestPost as LatestPostType,
+  PopularPost as PopularPostType,
+  XPost as XPostType,
+} from "../types/index";
 import { PopularPostList } from "./popular-post-list";
 import { LatestPost } from "./latest-post";
 import { XPost } from "./x-post";
@@ -14,18 +17,27 @@ import styles from "../styles/main.module.scss";
 
 export const Main = ({
   popularPostList,
-  latestPosts,
+  latestPostList,
   popularTagList,
   notifications,
   latestPostListWithX,
 }: {
   notifications: Notification[];
-  latestPosts: LatestPostType[];
+  latestPostList: LatestPostType[];
   popularTagList: Tag[];
   popularPostList: PopularPostType[];
-  latestPostListWithX: Post[];
+  latestPostListWithX: XPostType[];
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [latestPosts, setLatestPosts] = useState<LatestPostType[]>([]);
+  const [popularPosts, setPopularPosts] = useState<PopularPostType[]>([]);
+  const [latestPostsWithX, setLatestPostsWithX] = useState<XPostType[]>([]);
+
+  useEffect(() => {
+    setLatestPosts(latestPostList);
+    setPopularPosts(popularPostList);
+    setLatestPostsWithX(latestPostsWithX);
+  }, [latestPostList, popularPostList, latestPostsWithX]);
 
   return (
     <>
@@ -157,13 +169,20 @@ export const Main = ({
       </div>
 
       <PopularPostList
-        popularPostList={popularPostList}
-        isLiked={isLiked}
+        popularPostList={popularPosts}
         setIsLiked={setIsLiked}
+        setPopularPostList={setPopularPosts}
       />
       <PopularTag popularTagList={popularTagList} />
-      <LatestPost latestPosts={latestPosts} isLiked={isLiked} setIsLiked={setIsLiked} />
-      <XPost latestPostListWithX={latestPostListWithX} isLiked={isLiked} setIsLiked={setIsLiked} />
+      <LatestPost
+        latestPostList={latestPosts}
+        setIsLiked={setIsLiked}
+        setLatestPostList={setLatestPosts}
+      />
+      <XPost
+        latestPostListWithX={latestPostListWithX}
+        setLatestPostListWithX={setLatestPostsWithX}
+      />
     </>
   );
 };

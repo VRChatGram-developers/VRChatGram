@@ -1,9 +1,12 @@
 import { Main } from "@/features/home/components/main";
 import { fetchNotifications, fetchHomeFeed } from "@/features/home/endpoint";
-import { Post } from "@/features/home/types/post";
 import { Tag } from "@/features/home/types/tag";
-import { PopularPost as PopularPostType, LatestPost as LatestPostType  } from "@/features/home/types/index";
+import { PopularPost as PopularPostType, LatestPost as LatestPostType, XPost as XPostType } from "@/features/home/types/index";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+
 export default async function Home() {
+  const session = await getServerSession(authOptions);
   const notifications = await fetchNotifications();
   const serializedNotifications = notifications.notifications.map((notification) => {
     const year = new Date(notification.published_at).getFullYear();
@@ -17,16 +20,16 @@ export default async function Home() {
   });
   const homeData = await fetchHomeFeed<{
     popularPostList: PopularPostType[];
-    latestPosts: LatestPostType[];
+    latestPostList: LatestPostType[];
     popularTagList: Tag[];
-    latestPostListWithX: Post[];
-  }>();
-  const { popularPostList, latestPosts, popularTagList, latestPostListWithX } = homeData;
+    latestPostListWithX: XPostType[];
+  }>(session);
+  const { popularPostList, latestPostList, popularTagList, latestPostListWithX } = homeData;
 
   return (
     <Main
       notifications={serializedNotifications}
-      latestPosts={latestPosts}
+      latestPostList={latestPostList}
       popularTagList={popularTagList}
       popularPostList={popularPostList}
       latestPostListWithX={latestPostListWithX}

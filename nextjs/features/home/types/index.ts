@@ -1,27 +1,47 @@
 export type LatestPost = {
-  id: bigint;
+  id: string;
   title: string;
   images: Image[];
   user: User;
+  likes: Like[];
+  is_liked: boolean;
 };
 
 export type PopularPost = {
-  id: bigint;
+  id: string;
   title: string;
   is_sensitive: boolean;
   images: Image[];
   user: User;
+  likes: Like[];
+  is_liked: boolean;
+};
+
+export type XPost = {
+  id: string;
+  title: string;
+  images: Image[];
+  user: User;
+  likes: Like[];
+  is_liked: boolean;
 };
 
 export type Image = {
-  id: bigint;
+  id: string;
   url: string;
 };
 
 export type User = {
-  id: bigint;
+  id: string;
   name: string;
   profile_url: string;
+};
+
+export type Like = {
+  id: string;
+  post_id: string;
+  user_id: string;
+  posted_user_id: string;
 };
 
 export type NotificationType = "release" | "bug" | "important";

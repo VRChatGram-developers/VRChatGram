@@ -1,16 +1,37 @@
 "use client";
 import Image from "next/image";
-import { Post } from "../types/post";
+import { XPost as XPostType } from "../types/index";
+import useLikePost from "@/features/posts/hooks/use-like-post";
+import { useState } from "react";
 
 export const XPost = ({
   latestPostListWithX,
-  isLiked,
-  setIsLiked,
+  setLatestPostListWithX,
 }: {
-  latestPostListWithX: Post[];
-  isLiked: boolean;
-  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
+  latestPostListWithX: XPostType[];
+  setLatestPostListWithX: React.Dispatch<React.SetStateAction<XPostType[]>>;
 }) => {
+  console.log(latestPostListWithX);
+
+  const { handleLikeOrUnlike } = useLikePost();
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
+    Object.fromEntries(latestPostListWithX.map((post) => [post.id, post.is_liked]))
+  );
+
+  const handleLike = async (postId: string) => {
+    const currentLiked = likedPosts[postId];
+
+    await handleLikeOrUnlike(postId, currentLiked);
+
+    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
+
+    setLatestPostListWithX((prevList) =>
+      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+    );
+  };
+
+  console.log(likedPosts);
+
   return (
     <>
       <div style={{ padding: "3rem 1.5rem" }} className="bg-[#FFFFFF]">
@@ -39,12 +60,12 @@ export const XPost = ({
                       height: "64px",
                       cursor: "pointer",
                     }}
-                    onClick={() => setIsLiked(!isLiked)}
+                    onClick={() => handleLike(post.id)}
                   >
-                    {isLiked ? (
-                      <Image src="/heart.png" alt="heart" width={64} height={64} />
-                    ) : (
+                    {likedPosts[post.id] ? (
                       <Image src="/heart-outline.png" alt="heart" width={64} height={64} />
+                    ) : (
+                      <Image src="/heart.png" alt="heart" width={64} height={64} />
                     )}
                   </div>
                 </div>

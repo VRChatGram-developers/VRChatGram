@@ -2,16 +2,35 @@
 
 import { LatestPost as LatestPostType } from "../types/index";
 import { PostCard } from "@/components/post-card";
+import useLikePost from "@/features/posts/hooks/use-like-post";
+import { useState } from "react";
 
 export const LatestPost = ({
-  latestPosts,
-  isLiked,
+  latestPostList,
   setIsLiked,
+  setLatestPostList,
 }: {
-  latestPosts: LatestPostType[];
-  isLiked: boolean;
+  latestPostList: LatestPostType[];
   setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
+  setLatestPostList: React.Dispatch<React.SetStateAction<LatestPostType[]>>;
 }) => {
+  const { handleLikeOrUnlike } = useLikePost();
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
+    Object.fromEntries(latestPostList.map((post) => [post.id, post.is_liked]))
+  );
+
+  const handleLike = async (postId: string) => {
+    const currentLiked = likedPosts[postId];
+
+    await handleLikeOrUnlike(postId, currentLiked);
+
+    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
+
+    setLatestPostList((prevList) =>
+      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+    );
+  };
+
   return (
     <>
       <div className="max-w-full h-full" style={{ padding: "3rem 1.5rem" }}>
@@ -24,17 +43,20 @@ export const LatestPost = ({
               新着
             </h2>
             <div className="flex justify-center mt-6 mb-6 space-x-4">
-              {latestPosts.map((post) => (
+              {latestPostList.map((post) => (
                 <PostCard
                   key={post.id}
                   postCardProps={{
+                    postId: post.id,
+                    userId: post.user.id,
                     postName: post.title,
                     postImageUrl: "/home/new-post-image.png",
                     postImageCount: post.images.length,
                     userName: post.user.name,
                     userImageUrl: "/posts/sample-user-icon.png",
-                    isLiked: isLiked,
+                    isLiked: likedPosts[post.id],
                     setIsLiked: setIsLiked,
+                    handleLikeOrUnlike: () => handleLike(post.id),
                   }}
                 />
               ))}
