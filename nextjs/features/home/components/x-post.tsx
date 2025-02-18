@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
-import { Post } from "../types/post";
+import { XPost as XPostType } from "../types/index";
 
 export const XPost = ({
   latestPostListWithX,
   isLiked,
   setIsLiked,
 }: {
-  latestPostListWithX: Post[];
+  latestPostListWithX: XPostType[];
   isLiked: boolean;
   setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
