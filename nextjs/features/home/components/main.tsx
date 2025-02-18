@@ -3,10 +3,13 @@
 import Image from "next/image";
 import { Notification } from "../types/index";
 import { useState, useEffect } from "react";
-import { Post } from "../types/post";
 import { Tag } from "../types/tag";
 import { PopularTag } from "./popular-tag";
-import { LatestPost as LatestPostType, PopularPost as PopularPostType, XPost as XPostType } from "../types/index";
+import {
+  LatestPost as LatestPostType,
+  PopularPost as PopularPostType,
+  XPost as XPostType,
+} from "../types/index";
 import { PopularPostList } from "./popular-post-list";
 import { LatestPost } from "./latest-post";
 import { XPost } from "./x-post";
@@ -28,7 +31,7 @@ export const Main = ({
   const [isLiked, setIsLiked] = useState(false);
   const [latestPosts, setLatestPosts] = useState<LatestPostType[]>([]);
   const [popularPosts, setPopularPosts] = useState<PopularPostType[]>([]);
-  const [latestPostsWithX, setLatestPostsWithX] = useState<Post[]>([]);
+  const [latestPostsWithX, setLatestPostsWithX] = useState<XPostType[]>([]);
 
   useEffect(() => {
     setLatestPosts(latestPostList);
@@ -176,7 +179,10 @@ export const Main = ({
         setIsLiked={setIsLiked}
         setLatestPostList={setLatestPosts}
       />
-      <XPost latestPostListWithX={latestPostListWithX} isLiked={isLiked} setIsLiked={setIsLiked} />
+      <XPost
+        latestPostListWithX={latestPostListWithX}
+        setLatestPostListWithX={setLatestPostsWithX}
+      />
     </>
   );
 };
