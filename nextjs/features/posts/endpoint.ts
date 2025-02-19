@@ -47,3 +47,15 @@ export const unlikePost = async (postId: string) => {
   const data = await response.json();
   return data;
 };
+
+export const createPost = async (post: Post) => {
+  const response = await fetch(`http://localhost:3000/api/v1/posts`, {
+    method: "POST",
+    body: JSON.stringify(post),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create post");
+  }
+  const data = await response.json();
+  return data;
+};
