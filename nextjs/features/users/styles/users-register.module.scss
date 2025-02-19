@@ -1,41 +1,207 @@
 .registerContainer {
-  padding: 0 15%;
-  width: 100%;
-}
-
-.registerTitle {
-  font-size: 24px;
-  font-weight: bold;
-  height: 96px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #F1F1F1;
-  text-align: center;
+  overflow: scroll;
+  .registerContent {
+    max-width: 31rem;
+    border-radius: 1rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    .registerTitleContent {
+      text-align: center;
+      background-color: #f1f1f1;
+      padding: 2rem 0;
+      .registerTitle {
+        font-size: 24px;
+        font-weight: bold;
+        width: 100%;
+      }
+    }
+  }
 }
 
-.registerContent {
-  background-color: #FFFFFF;
-  height: 100%;
+.signinContainer {
+  display: grid;
+}
 
-  .nickName {
-    font-size: 16px;
-    font-weight: bold;
+.registerContentDetail {
+  background-color: #ffffff;
+  width: 100%;
+  padding: 4rem;
 
-    .nickNameLabel {
-      font-size: 16px;
+  .nameContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    .nameLabel {
+      font-size: 20px;
       font-weight: bold;
-      height: 32px;
-      
-    }   
-
-    .nickNameInput {
-      font-size: 16px;
-      font-weight: bold;
-      height: 32px;
     }
-    
-    
+
+    .nameForm {
+      font-size: 16px;
+      font-weight: bold;
+      height: 32px;
+      .nameFormInput {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #969da3;
+        border-radius: 3px;
+        font-size: 1em;
+        line-height: 1.5;
+        &::placeholder {
+          color: #999;
+        }
+      }
+    }
+
+    .warningLabel {
+      font-size: 13px;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .genderContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    .genderLabel {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .genderSelectSection {
+      display: flex;
+      flex-wrap: wrap;
+      border: none;
+      .genderSelectLabel {
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+        position: relative;
+        cursor: pointer;
+        &::before {
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 3px;
+          border: 2px solid #d6dde3;
+          content: "";
+        }
+        &:has(:checked)::after {
+          position: absolute;
+          top: 5px;
+          left: 9px;
+          transform: rotate(45deg);
+          width: 7px;
+          height: 12px;
+          border: solid #2589d0;
+          border-width: 0 3px 3px 0;
+          content: "";
+        }
+        .genderSelectInput {
+          display: none;
+          margin-left: 0.5rem;
+        }
+        &:not(:first-child) {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .birthdayContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    .birthdayLabel {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .birthdayContent {
+      width: 100%;
+      .birthdaySelectContent {
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+        &::after {
+          position: absolute;
+          right: 15px;
+          width: 10px;
+          height: 7px;
+          background-color: #535353;
+          clip-path: polygon(0 0, 100% 0, 50% 100%);
+          content: "";
+          pointer-events: none;
+        }
+        .birthdaySelect {
+          appearance: none;
+          min-width: 86px;
+          max-width: 110px;
+          height: 2.8em;
+          padding: 0.4em calc(0.8em + 30px) 0.4em 0.8em;
+          border: 1px solid #d0d0d0;
+          border-radius: 3px;
+          background-color: #fff;
+          color: #333333;
+          font-size: 1em;
+          cursor: pointer;
+        }
+        &:not(:first-child) {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .confirmationContainer {
+    margin-bottom: 3rem;
+    .confirmationLabel {
+      display: flex;
+      align-items: center;
+      display: flex;
+      align-items: center;
+      gap: 0 0.5em;
+      position: relative;
+      cursor: pointer;
+      &::before {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 3px;
+        border: 2px solid #d6dde3;
+        content: "";
+      }
+      &:has(:checked)::after {
+        position: absolute;
+        left: 9px;
+        transform: rotate(45deg);
+        width: 7px;
+        height: 12px;
+        border: solid #2589d0;
+        border-width: 0 3px 3px 0;
+        content: "";
+      }
+      .confirmationCheckbox {
+        display: none;
+      }
+    }
+  }
+
+  .signupContent {
+    width: 100%;
+    .userCreateButton {
+      width: 100%;
+      background-color: #69beef;
+      color: white;
+      height: 56px;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  }
+
+  .linkText {
+    color: #69beef;
+    border-bottom: 1px solid #69beef;
   }
 
   .errorNameMessage {
@@ -53,16 +219,62 @@
   .errorTermsMessage {
     color: red;
   }
-  
-
-  .userCreateButton {
-    background-color: #69BEEF;
-    color: white;
-    height: 56px;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
 }
 
+// 1025px以上（PC）
+@media (min-width: 1024px) {
+  .signinContainer {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    height: calc(100vh - 50px);
+  }
+  .registerContent {
+    width: 80%;
+  }
+}
+
+// 1024px未満（タブレット）
+@media (min-width: 768px) AND (max-width: 1023px) {
+  // .signinContainer {
+  //   grid-auto-flow: row;
+  //   grid-template-rows: auto 1fr;
+  // }
+  // .registerImageContainer {
+  //   height: 100px;
+  // }
+  // .registerContainer {
+  //   order: 1;
+  // }
+  .signinContainer {
+    height: calc(100vh - 50px);
+  }
+  .registerImageContainer {
+    display: none;
+  }
+  .registerContent {
+    width: 80%;
+  }
+}
+
+// 1024px未満（タブレット）
+@media (max-width: 767px) {
+  // .signinContainer {
+  //   grid-auto-flow: row;
+  //   grid-template-rows: auto 1fr;
+  // }
+  // .registerImageContainer {
+  //   height: 100px;
+  // }
+  // .registerContainer {
+  //   order: 1;
+  // }
+  .signinContainer {
+    height: calc(100vh - 50px);
+  }
+  .registerImageContainer {
+    display: none;
+  }
+  .registerContent {
+    width: 100%;
+  }
+}
