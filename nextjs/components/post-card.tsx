@@ -3,8 +3,11 @@
 import styles from "./styles/post-card.module.scss";
 import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 interface PostCardProps {
+  postId: string | bigint;
+  userId: string | bigint;
   postName: string;
   postImageUrl: string;
   postImageCount: number;
@@ -12,10 +15,36 @@ interface PostCardProps {
   userImageUrl: string;
   isLiked: boolean;
   setIsLiked: (isLiked: boolean) => void;
+  handleLikeOrUnlike: () => void;
 }
 
 export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) => {
-  const { postName, postImageUrl, postImageCount, userName, userImageUrl, isLiked, setIsLiked } = postCardProps;
+  const router = useRouter();
+
+  const {
+    postId,
+    userId,
+    postName,
+    postImageUrl,
+    postImageCount,
+    userName,
+    userImageUrl,
+    isLiked,
+    setIsLiked,
+    handleLikeOrUnlike,
+  } = postCardProps;
+
+  const handleForwardToPostDetail = (postId: string | bigint) => {
+    console.log(postId);
+    const postIdString = typeof postId === "bigint" ? postId.toString() : postId;
+    router.push(`/posts/${postIdString}`);
+  };
+
+  const handleForwardToUserDetail = (userId: string | bigint) => {
+    const userIdString = typeof userId === "bigint" ? userId.toString() : userId;
+    router.push(`/users/${userIdString}`);
+  };
+
   return (
     <div className={styles.likesPostsItem}>
       <Image
@@ -24,6 +53,7 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
         width={402}
         height={402}
         className={styles.likesPostsItemImage}
+        onClick={() => handleForwardToPostDetail(postId)}
       />
       <div className={styles.likesPostsItemImageContents}>
         <MdOutlinePhoto className={styles.MdOutlinePhoto} />
@@ -33,15 +63,17 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
         <p className={styles.userInfoTitle}>{postName}</p>
         <div className={styles.userInfoContainer}>
           <Image src={userImageUrl} alt="new-post-image" width={40} height={40} />
-          <p className={styles.userInfoName}>{userName}</p>
+          <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(userId)}>
+            {userName}
+          </p>
         </div>
       </div>
       <div className={styles.likesPostsItemLikeContents}>
-        <div className={styles.likesPostsItemLikeItem} onClick={() => setIsLiked(!isLiked)}>
+        <div className={styles.likesPostsItemLikeItem} onClick={() => handleLikeOrUnlike()}>
           {isLiked ? (
-            <Image src="/heart.png" alt="heart" width={40} height={40} />
-          ) : (
             <Image src="/heart-outline.png" alt="heart" width={40} height={40} />
+          ) : (
+            <Image src="/heart.png" alt="heart" width={40} height={40} />
           )}
         </div>
       </div>

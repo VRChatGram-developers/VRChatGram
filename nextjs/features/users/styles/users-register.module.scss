@@ -1,0 +1,68 @@
+.registerContainer {
+  padding: 0 15%;
+  width: 100%;
+}
+
+.registerTitle {
+  font-size: 24px;
+  font-weight: bold;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F1F1F1;
+  text-align: center;
+}
+
+.registerContent {
+  background-color: #FFFFFF;
+  height: 100%;
+
+  .nickName {
+    font-size: 16px;
+    font-weight: bold;
+
+    .nickNameLabel {
+      font-size: 16px;
+      font-weight: bold;
+      height: 32px;
+      
+    }   
+
+    .nickNameInput {
+      font-size: 16px;
+      font-weight: bold;
+      height: 32px;
+    }
+    
+    
+  }
+
+  .errorNameMessage {
+    color: red;
+  }
+
+  .errorBirthdayMessage {
+    color: red;
+  }
+
+  .errorSexMessage {
+    color: red;
+  }
+
+  .errorTermsMessage {
+    color: red;
+  }
+  
+
+  .userCreateButton {
+    background-color: #69BEEF;
+    color: white;
+    height: 56px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+}
+

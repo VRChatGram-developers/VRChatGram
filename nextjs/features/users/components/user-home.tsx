@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "../styles/user-home.module.scss";
-import { User } from "@/features/users/types/user";
+import { User } from "@/features/users/types/index";
 import { useState } from "react";
 import { PostCard } from "@/components/post-card";
 

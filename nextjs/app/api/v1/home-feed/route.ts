@@ -2,22 +2,31 @@ import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
-//インスタンスを作成
+
 const prisma = new PrismaClient();
 
-// データベースに接続する関数
 export const connect = async () => {
   try {
-    //prismaでデータベースに接続
     prisma.$connect();
   } catch (error) {
     return new Error(`DB接続失敗しました: ${error}`);
   }
 };
 
-export async function GET() {
+export async function POST(request: Request) {
   try {
     await connect();
+    let user = null;
+
+    const body = await request.json();
+    const session = body.session;
+
+    if (session) {
+      user = await prisma.users.findUniqueOrThrow({
+        where: { uid: session.user.uid },
+      });
+    }
+
     const popularPostList = await prisma.posts.findMany({
       orderBy: { likes: { _count: "desc" } },
       select: {
@@ -30,6 +39,14 @@ export async function GET() {
             id: true,
             name: true,
             profile_url: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+            post_id: true,
+            user_id: true,
+            posted_user_id: true,
           },
         },
       },
@@ -47,6 +64,14 @@ export async function GET() {
             id: true,
             name: true,
             profile_url: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+            post_id: true,
+            user_id: true,
+            posted_user_id: true,
           },
         },
       },
@@ -78,16 +103,45 @@ export async function GET() {
         id: true,
         is_sensitive: true,
         images: true,
-        is_posted_x: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            profile_url: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+            post_id: true,
+            user_id: true,
+            posted_user_id: true,
+          },
+        },
       },
       take: Number(4),
     });
 
+    const latestPostListWithIsLiked = latestPostList.map((post) => ({
+      ...post,
+      is_liked: post.likes.some((like) => like.user_id == user?.id),
+    }));
+
+    const popularPostListWithIsLiked = popularPostList.map((post) => ({
+      ...post,
+      is_liked: post.likes.some((like) => like.user_id == user?.id),
+    }));
+
+    const latestPostListWithXWithIsLiked = latestPostListWithX.map((post) => ({
+      ...post,
+      is_liked: post.likes.some((like) => like.user_id == user?.id),
+    }));
+
     return NextResponse.json({
-      popularPostList: popularPostList.map(toJson),
-      latestPosts: latestPostList.map(toJson),
+      popularPostList: popularPostListWithIsLiked.map(toJson),
+      latestPostList: latestPostListWithIsLiked.map(toJson),
       popularTagList: popularTagList.map(toJson),
-      latestPostListWithX: latestPostListWithX.map(toJson),
+      latestPostListWithX: latestPostListWithXWithIsLiked.map(toJson),
     });
   } catch (error) {
     return NextResponse.json({ error: `Failed to connect to database ${error}` }, { status: 500 });

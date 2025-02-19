@@ -6,13 +6,59 @@ import { auth } from "@/libs/firebase/client";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import { Link, TextField } from "@mui/material";
+import styles from "@/features/auth/styles/sign-in-form.module.scss";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMail, setErrorMail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const mailValidation = () => {
+    if (email === "") {
+      setErrorMail("メールアドレスを入力してください");
+      return false;
+    }
+    setErrorMail("");
+    return true;
+  };
+
+  const passwordValidation = () => {
+    if (password === "") {
+      setErrorPassword("パスワードを入力してください");
+      return false;
+    }
+
+    if (password.length < 6) {
+      setErrorPassword("パスワードは6文字以上で入力してください");
+      return false;
+    }
+
+    setErrorPassword("");
+    return true;
+  };
+
+  useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (session) {
+      router.push("/");
+    }
+  }, [status, session, router]);
 
   const handleSignIn = async () => {
-    if (!email || !password) return;
+    const isMailValid = mailValidation();
+    const isPasswordValid = passwordValidation();
+
+    if (!isMailValid || !isPasswordValid) {
+      return;
+    }
 
     try {
       const credentials = await signInWithEmailAndPassword(auth, email, password);
@@ -27,8 +73,9 @@ export const SignInForm = () => {
         return;
       }
 
-      // 成功時の処理
-      window.location.href = "/";
+      if (session) {
+        window.location.href = "/";
+      }
     } catch (error) {
       console.error(error);
     }
@@ -86,6 +133,7 @@ export const SignInForm = () => {
                   },
                 }}
               />
+              {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
               <TextField
                 fullWidth
                 type="password"
@@ -112,6 +160,7 @@ export const SignInForm = () => {
                   },
                 }}
               />
+              {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
               <button
                 onClick={handleSignIn}
                 style={{

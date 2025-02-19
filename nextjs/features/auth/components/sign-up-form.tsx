@@ -1,22 +1,58 @@
 "use client";
 
-import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import { Link, TextField } from "@mui/material";
-import { auth } from "@/libs/firebase/client";
+import { useState } from "react";
+import styles from "@/features/auth/styles/sign-up-form.module.scss";
+export const SignUpForm = ({
+  email,
+  password,
+  setEmail,
+  setPassword,
+  setIsSignUp,
+}: {
+  email: string;
+  password: string;
+  setEmail: (email: string) => void;
+  setPassword: (password: string) => void;
+  setIsSignUp: (isSignUp: boolean) => void;
+}) => {
+  const [errorMail, setErrorMail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
 
-export const SignUpForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const handleSignUp = async () => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      window.location.href = "/";
-      console.log(userCredential);
-    } catch (error) {
-      console.error(error);
+  const mailValidation = () => {
+    if (email === "") {
+      setErrorMail("メールアドレスを入力してください");
+      return false;
     }
+    setErrorMail("");
+    return true;
+  };
+
+  const passwordValidation = () => {
+    if (password === "") {
+      setErrorPassword("パスワードを入力してください");
+      return false;
+    }
+
+    if (password.length < 6) {
+      setErrorPassword("パスワードは6文字以上で入力してください");
+      return false;
+    }
+
+    setErrorPassword("");
+    return true;
+  };
+
+  const handleSignUp = () => {
+    const isMailValid = mailValidation();
+    const isPasswordValid = passwordValidation();
+
+    if (!isMailValid || !isPasswordValid) {
+      return;
+    }
+
+    setIsSignUp(true);
   };
 
   return (
@@ -58,6 +94,7 @@ export const SignUpForm = () => {
                   },
                 }}
               />
+              {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
               <TextField
                 fullWidth
                 type="password"
@@ -84,6 +121,7 @@ export const SignUpForm = () => {
                   },
                 }}
               />
+              {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
               <button
                 onClick={handleSignUp}
                 style={{
