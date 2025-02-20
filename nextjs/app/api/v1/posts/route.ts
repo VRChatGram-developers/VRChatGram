@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../auth/[...nextauth]/route";
+import { authOptions } from "../../../api/auth/[...nextauth]/route";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
@@ -25,30 +25,62 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
-    const { title, description, boothItems, images, tags, ageRestriction } = await request.json();
-    
+    const { title, description, boothItems, images, tags, isSensitive } = await request.json();
+
     const user = await prisma.users.findUnique({
       where: {
-        uid: session.user.id,
+        uid: session.user.uid,
       },
     });
-    
-    
+    if (!user) {
+      return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
+    }
 
-    const post = await prisma.posts.create({
+    // TODO　S3保存後、発行されや画像のurlを取得する
+    const serializedImages = images.map((image: any) => ({
+      url: "https://example.com/image.jpg",
+      width: image.width.toString(),
+      height: image.height.toString(),
+    }));
+
+    await prisma.posts.create({
       data: {
-        title,
-        description,
-        booth_items: boothItems,
-        images,
-        tags,
-        ageRestriction,
-        userId: session.user.id,
+        title: title,
+        description: description,
+        booth_items: {
+          create: boothItems.map(
+            (item: { url: string; name: string; detail: string; image: string }) => ({
+              booth: {
+                create: {
+                  title: item.name,
+                  url: item.url,
+                  detail: item.detail,
+                  image: item.image,
+                },
+              },
+            })
+          ),
+        },
+        images: {
+          create: serializedImages,
+        },
+        tags: {
+          create: tags.map((tag: string) => ({
+            tag: {
+              create: {
+                name: tag,
+              },
+            },
+          })),
+        },
+        is_sensitive: isSensitive,
+        user_id: user.id,
       },
     });
 
-    return NextResponse.json(post, { status: 201 });
+    return NextResponse.json({ status: 200, message: "投稿に成功しました" });
   } catch (error) {
+    console.log(error.stack);
     return NextResponse.json({ error: "投稿に失敗しました" }, { status: 500 });
   }
 }
