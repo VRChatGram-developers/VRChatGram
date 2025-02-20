@@ -58,3 +58,10 @@ export type Tag = {
   id: bigint;
   name: string;
 };
+
+export type ImageData = {
+  file: File;
+  file_data: string;
+  width: number;
+  height: number;
+};
