@@ -246,7 +246,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                 <input type="file" accept="image/*" onChange={handleImageChange} />
               </div>
             </div>
-            <div className={styles.submit_button}>
+            <div>
               <button onClick={handleSubmit}>投稿する</button>
             </div>
           </>
