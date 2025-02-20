@@ -81,7 +81,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     setBoothItems(newBoothItems);
   };
 
-  const checkBoothItemsLink = () => {
+  const isValidBoothItemsLink = () => {
     if (boothItems.length === 0) {
       return true;
     }
@@ -100,7 +100,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     return errorBoothItems.length === 1;
   };
 
-  const checkTitle = () => {
+  const isValidTitle = () => {
     if (title === "") {
       setErrorTitle("タイトルを入力してください");
       return false;
@@ -113,13 +113,16 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleSubmit = async () => {
-    const isBoothItemsLinkValid = checkBoothItemsLink();
-    const isTitleValid = checkTitle();
-
-    if (!isBoothItemsLinkValid || !isTitleValid) {
+    if (!isValidBoothItemsLink() || !isValidTitle()) {
       return;
     }
 
+    console.log(boothItems);
+    console.log(images);
+    console.log(tags);
+    console.log(isSensitive);
+    console.log(title);
+    console.log(description);
     try {
       await createPost({ title, description, boothItems, images, tags, isSensitive });
       onClose();
