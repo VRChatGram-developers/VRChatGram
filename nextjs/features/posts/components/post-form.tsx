@@ -117,12 +117,6 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       return;
     }
 
-    console.log(boothItems);
-    console.log(images);
-    console.log(tags);
-    console.log(isSensitive);
-    console.log(title);
-    console.log(description);
     try {
       await createPost({ title, description, boothItems, images, tags, isSensitive });
       onClose();
