@@ -14,10 +14,9 @@ export const connect = async () => {
 export async function POST(request: Request) {
   try {
     await connect();
-    const { name, password, email, introduce, gender, profile_url } = await request.json();
+    const { name, password, email, introduce, gender, profile_url, uid } = await request.json();
 
     await prisma.users.create({
-
       data: {
         name: name,
         password: password,
@@ -29,6 +28,7 @@ export async function POST(request: Request) {
         birthday: new Date(),
         my_id: "my_id",
         show_sensitive: false,
+        uid: uid,
       },
     });
 
@@ -65,3 +65,5 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     return new Error(`DB接続失敗しました: ${error}`);
   }
 }
+
+

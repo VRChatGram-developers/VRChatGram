@@ -17,11 +17,15 @@ export const SignInForm = () => {
   const [password, setPassword] = useState("");
   const [errorMail, setErrorMail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+  const [fireBaseError, setFireBaseError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: session, status } = useSession();
   const router = useRouter();
+
   const mailValidation = () => {
+    setErrorMail("");
+
     if (email === "") {
       setErrorMail("メールアドレスを入力してください");
       return false;
@@ -31,6 +35,8 @@ export const SignInForm = () => {
   };
 
   const passwordValidation = () => {
+    setErrorPassword("");
+
     if (password === "") {
       setErrorPassword("パスワードを入力してください");
       return false;
@@ -52,6 +58,8 @@ export const SignInForm = () => {
   }, [status, session, router]);
 
   const handleSignIn = async () => {
+    setFireBaseError("");
+
     const isMailValid = mailValidation();
     const isPasswordValid = passwordValidation();
 
@@ -69,12 +77,13 @@ export const SignInForm = () => {
         redirect: false,
       });
 
-
       if (result?.error) {
         console.error("認証エラー:", result.error);
         return;
       }
     } catch (error) {
+      setIsLoading(false);
+      setFireBaseError("パスワードまたはメールアドレスが間違っています");
       console.error(error);
     }
   };
@@ -110,6 +119,7 @@ export const SignInForm = () => {
               >
                 今日も素敵な写真をいっぱい投稿しましょう
               </p>
+              {fireBaseError && <p className={styles.errorMailMessage}>{fireBaseError}</p>}
               <div className="flex flex-col gap-6 w-[260px] mx-auto">
                 <TextField
                   fullWidth
