@@ -8,8 +8,12 @@ import { FaCamera } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
 import styles from "../styles/header.module.scss";
 import { useState } from "react";
+import { useModal } from "@/provider/modal-provider";
+import { PostForm } from "@/features/posts/components/post-form";
+
 export const Header = () => {
   const router = useRouter();
+  const { openModal, closeModal } = useModal();
 
   const { status } = useSession();
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,7 +58,7 @@ export const Header = () => {
         ) : (
           <>
             <div className={styles.postButton}>
-              <button onClick={() => router.push("/sign-in")}>
+              <button onClick={() => openModal(<PostForm onClose={closeModal} />)}>
                 写真を投稿
                 <FaCamera />
               </button>
