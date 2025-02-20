@@ -12,7 +12,7 @@ export const UserCreate = () => {
   return (
     <div>
       {isSignUp ? (
-        <AccountInfoInput email={email} password={password} />
+        <AccountInfoInput email={email} password={password} setIsSignUp={setIsSignUp} />
       ) : (
         <SignUpForm
           email={email}
