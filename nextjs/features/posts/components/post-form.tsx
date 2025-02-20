@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { createPost } from "../endpoint";
 import styles from "../styles/post-form.module.scss";
-
-type ImageData = {
-  file: File;
-  file_data: string;
-  width: number;
-  height: number;
-};
+import { ImageData } from "../types";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -19,6 +13,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [boothItems, setBoothItems] = useState<string[]>([]);
   const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
   const [errorTitle, setErrorTitle] = useState("");
+  const [mainImage, setMainImage] = useState<ImageData | null>(null);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -42,6 +37,9 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
               width: img.width,
               height: img.height,
             };
+            if (images.length === 0) {
+              setMainImage(imageData);
+            }
             setImages((prevImages) => [...prevImages, imageData]);
           };
           img.src = e.target?.result as string;
@@ -49,6 +47,10 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
         reader.readAsDataURL(file);
       });
     }
+  };
+
+  const handleChangeMainImage = (index: number) => {
+    setMainImage(images[index]);
   };
 
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,118 +128,130 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <div className="flex">
-      {images.length === 0 ? (
-        <div className="w-full p-24">
-          <div>ここにドロップ&ドロップまたは</div>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-        </div>
-      ) : (
-        <>
-          <div className="w-1/2 p-10">
-            <div>新規投稿</div>
-            <div>タイトル</div>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="画像の情報を入力してください"
-            />
-            {errorTitle && <div className={styles.error_message}>{errorTitle}</div>}
-            <div>タグ</div>
-            <div className="tag-input-container">
-              <div className="tags">
-                {tags.map((tag, index) => (
-                  <span key={index} className="tag">
-                    {tag}
-                    <button onClick={() => handleTagRemove(index)}>x</button>
-                  </span>
-                ))}
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={handleTagInputChange}
-                  onKeyDown={handleTagInputKeyDown}
-                  placeholder="タグを入力してEnterを押してください"
-                  className="tag-input"
+    <div className={styles.container}>
+      <div className="flex">
+        {images.length === 0 ? (
+          <div className="w-full p-24">
+            <div>ここにドロップ&ドロップまたは</div>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+          </div>
+        ) : (
+          <>
+            <div className="w-1/2 p-10">
+              <div>新規投稿</div>
+              <div>タイトル</div>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="画像の情報を入力してください"
+              />
+              {errorTitle && <div className={styles.error_message}>{errorTitle}</div>}
+              <div>タグ</div>
+              <div className="tag-input-container">
+                <div className="tags">
+                  {tags.map((tag, index) => (
+                    <span key={index} className="tag">
+                      {tag}
+                      <button onClick={() => handleTagRemove(index)}>x</button>
+                    </span>
+                  ))}
+                  <input
+                    type="text"
+                    value={tagInput}
+                    onChange={handleTagInputChange}
+                    onKeyDown={handleTagInputKeyDown}
+                    placeholder="タグを入力してEnterを押してください"
+                    className="tag-input"
+                  />
+                </div>
+              </div>
+              <div>
+                <div>年齢制限</div>
+                <div>
+                  {ageRestrictionOptions.map((option) => (
+                    <label key={option.value} style={{ display: "block", margin: "5px 0" }}>
+                      <input
+                        type="checkbox"
+                        name="ageRestriction"
+                        value={option.value}
+                        checked={option.isSensitive === isSensitive}
+                        onChange={() => handleCheckboxChange(option.value)}
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div>作品説明</div>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="作品の説明を入力してください"
                 />
               </div>
-            </div>
-            <div>
-              <div>年齢制限</div>
               <div>
-                {ageRestrictionOptions.map((option) => (
-                  <label key={option.value} style={{ display: "block", margin: "5px 0" }}>
-                    <input
-                      type="checkbox"
-                      name="ageRestriction"
-                      value={option.value}
-                      checked={option.isSensitive === isSensitive}
-                      onChange={() => handleCheckboxChange(option.value)}
-                    />
-                    {option.label}
-                  </label>
+                <div>使用した素材</div>
+                {boothItems.map((boothItem, index) => (
+                  <div key={index}>
+                    <form>
+                      <input
+                        type="text"
+                        value={boothItem}
+                        onChange={(e) => handleBoothItemChange(e, index)}
+                        placeholder={`フォーム ${index + 1}`}
+                      />
+                      {errorBoothItems[index] && (
+                        <div className={styles.error_message}>{errorBoothItems[index]}</div>
+                      )}
+                    </form>
+                  </div>
                 ))}
+                <button onClick={() => setBoothItems([...boothItems, ""])}>+</button>
+                <button
+                  className="pl-2"
+                  onClick={() =>
+                    setBoothItems(boothItems.filter((_, i) => i !== boothItems.length - 1))
+                  }
+                >
+                  -
+                </button>
               </div>
             </div>
-            <div>
-              <div>作品説明</div>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="作品の説明を入力してください"
-              />
-            </div>
-            <div>
-              <div>使用した素材</div>
-              {boothItems.map((boothItem, index) => (
-                <div key={index}>
-                  <form>
-                    <input
-                      type="text"
-                      value={boothItem}
-                      onChange={(e) => handleBoothItemChange(e, index)}
-                      placeholder={`フォーム ${index + 1}`}
+            <div className="w-1/2">
+              <div>投稿画像 {images.length}/4</div>
+              <div className="flex flex-wrap gap-4">
+                <div className={styles.image_container}>
+                  {mainImage && (
+                    <img
+                      src={URL.createObjectURL(mainImage.file)}
+                      alt="Uploaded"
+                      width={500}
+                      height={500}
                     />
-                    {errorBoothItems[index] && (
-                      <div className={styles.error_message}>{errorBoothItems[index]}</div>
-                    )}
-                  </form>
+                  )}
                 </div>
-              ))}
-              <button onClick={() => setBoothItems([...boothItems, ""])}>+</button>
-              <button
-                className="pl-2"
-                onClick={() =>
-                  setBoothItems(boothItems.filter((_, i) => i !== boothItems.length - 1))
-                }
-              >
-                -
-              </button>
+                {images.map((image, index) => (
+                  <div key={index} onClick={() => handleChangeMainImage(index)}>
+                    <img
+                      src={URL.createObjectURL(image.file)}
+                      alt="Uploaded"
+                      width={100}
+                      height={100}
+                    />
+                    {index !== 0 && <button onClick={() => handleImageRemove(index)}>x</button>}
+                  </div>
+                ))}
+                <input type="file" accept="image/*" onChange={handleImageChange} />
+              </div>
             </div>
-          </div>
-          <div className="w-1/2">
-            <div>投稿画像</div>
-            <div className="flex flex-wrap gap-4">
-              {images.map((image, index) => (
-                <div key={index}>
-                  <img
-                    src={URL.createObjectURL(image.file)}
-                    alt="Uploaded"
-                    width={300}
-                    height={300}
-                  />
-                  {index !== 0 && <button onClick={() => handleImageRemove(index)}>x</button>}
-                </div>
-              ))}
-              <input type="file" accept="image/*" onChange={handleImageChange} />
+            <div className={styles.submit_button}>
+              <button onClick={handleSubmit}>投稿する</button>
             </div>
-          </div>
-          <div>
-            <button onClick={handleSubmit}>投稿する</button>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
