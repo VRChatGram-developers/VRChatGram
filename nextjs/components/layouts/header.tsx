@@ -10,6 +10,7 @@ import styles from "../styles/header.module.scss";
 import { useState } from "react";
 import { useModal } from "@/provider/modal-provider";
 import { PostForm } from "@/features/posts/components/post-form";
+import { DropdownMenu } from "@/components/layouts/dropdown-menu";
 
 export const Header = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ export const Header = () => {
 
   const { status } = useSession();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSearch = () => {
     router.push(`/posts?query=${searchQuery}`);
@@ -48,10 +50,10 @@ export const Header = () => {
           <></>
         ) : status !== "authenticated" ? (
           <>
-            <button onClick={() => router.push("/sign-in")} className={styles.signInButton}>
+            <button onClick={() => router.push("/signin")} className={styles.signInButton}>
               ログイン
             </button>
-            <button onClick={() => router.push("/sign-up")} className={styles.signUpButton}>
+            <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
               新規登録
             </button>
           </>
@@ -65,7 +67,8 @@ export const Header = () => {
             </div>
             <div className={styles.userIcon}>
               <Image src="/header/user-sample-icon.png" alt="User Icon" width={40} height={40} />
-              <RiArrowDownSLine />
+              <RiArrowDownSLine onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
+              {isDropdownOpen && <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} />}
             </div>
           </>
         )}
