@@ -1,9 +1,10 @@
 import { useState } from "react";
-import Image from "next/image";
+import { createPost } from "../endpoint";
+import styles from "../styles/post-form.module.scss";
 
 type ImageData = {
   file: File;
-  url: string;
+  file_data: string;
   width: number;
   height: number;
 };
@@ -15,8 +16,9 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [tagInput, setTagInput] = useState<string>("");
   const [isSensitive, setIsSensitive] = useState(false);
   const [description, setDescription] = useState<string>("");
-  const [formsCount, setFormsCount] = useState<number[]>([0]);
-  const [boothItems, setBoothItems] = useState<{ [key: string]: string }>({});
+  const [boothItems, setBoothItems] = useState<string[]>([]);
+  const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
+  const [errorTitle, setErrorTitle] = useState("");
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -35,12 +37,12 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
           const img = new Image() as HTMLImageElement;
           img.onload = () => {
             const imageData: ImageData = {
-              file,
-              url: e.target?.result as string,
+              file: file,
+              file_data: e.target?.result as string,
               width: img.width,
               height: img.height,
             };
-            setImages((prevImages) => [...prevImages, imageData]); // 画像情報を追加
+            setImages((prevImages) => [...prevImages, imageData]);
           };
           img.src = e.target?.result as string;
         };
@@ -53,11 +55,15 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     setTagInput(e.target.value);
   };
 
+  const handleTagRemove = (index: number) => {
+    setTags(tags.filter((_, i) => i !== index));
+  };
+
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       setTags([...tags, tagInput.trim()]);
       setTagInput("");
-      e.preventDefault(); // フォームの送信を防ぐ
+      e.preventDefault();
     }
   };
 
@@ -69,38 +75,57 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const handleTagRemove = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
-  };
-
-  const addForm = () => {
-    setFormsCount([...formsCount, formsCount.length]); // 新しいフォームを追加
-  };
-
-  const removeForm = () => {
-    setFormsCount(formsCount.filter((_, i) => i !== formsCount.length - 1)); // 指定したインデックスのフォームを削除
-  };
-
-  const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newBoothItems = { ...boothItems };
-    newBoothItems[e.target.name] = e.target.value;
+  const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newBoothItems = [...boothItems];
+    newBoothItems[index] = e.target.value;
     setBoothItems(newBoothItems);
-    console.log(boothItems);
+  };
+
+  const checkBoothItemsLink = () => {
+    if (boothItems.length === 0) {
+      return true;
+    }
+
+    for (let index = 0; index < boothItems.length; index++) {
+      try {
+        new URL(boothItems[index]);
+      } catch (error) {
+        const errorMessage = "正しい形式のURLを入力してください";
+        const newErrorBoothItems = [...errorBoothItems];
+        newErrorBoothItems[index] = errorMessage;
+        setErrorBoothItems(newErrorBoothItems);
+      }
+    }
+
+    return errorBoothItems.length === 1;
+  };
+
+  const checkTitle = () => {
+    if (title === "") {
+      setErrorTitle("タイトルを入力してください");
+      return false;
+    }
+    return true;
   };
 
   const handleImageRemove = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
-    const post = {
-      title,
-      description,
-      boothItems,
-      images,
-      tags,
-      isSensitive,
-    };
+  const handleSubmit = async () => {
+    const isBoothItemsLinkValid = checkBoothItemsLink();
+    const isTitleValid = checkTitle();
+
+    if (!isBoothItemsLinkValid || !isTitleValid) {
+      return;
+    }
+
+    try {
+      await createPost({ title, description, boothItems, images, tags, isSensitive });
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -121,6 +146,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="画像の情報を入力してください"
             />
+            {errorTitle && <div className={styles.error_message}>{errorTitle}</div>}
             <div>タグ</div>
             <div className="tag-input-container">
               <div className="tags">
@@ -167,21 +193,30 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             </div>
             <div>
               <div>使用した素材</div>
-              <div>使用した素材</div>
-              {formsCount.map((_, index) => (
+              {boothItems.map((boothItem, index) => (
                 <div key={index}>
                   <form>
                     <input
                       type="text"
-                      value={boothItems[index]}
-                      onChange={handleBoothItemChange}
+                      value={boothItem}
+                      onChange={(e) => handleBoothItemChange(e, index)}
                       placeholder={`フォーム ${index + 1}`}
                     />
+                    {errorBoothItems[index] && (
+                      <div className={styles.error_message}>{errorBoothItems[index]}</div>
+                    )}
                   </form>
                 </div>
               ))}
-              <button onClick={addForm}>+</button>
-              <button onClick={() => removeForm}>-</button>
+              <button onClick={() => setBoothItems([...boothItems, ""])}>+</button>
+              <button
+                className="pl-2"
+                onClick={() =>
+                  setBoothItems(boothItems.filter((_, i) => i !== boothItems.length - 1))
+                }
+              >
+                -
+              </button>
             </div>
           </div>
           <div className="w-1/2">
@@ -189,7 +224,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             <div className="flex flex-wrap gap-4">
               {images.map((image, index) => (
                 <div key={index}>
-                  <Image
+                  <img
                     src={URL.createObjectURL(image.file)}
                     alt="Uploaded"
                     width={300}
