@@ -8,4 +8,10 @@ const nextConfig: NextConfig = {
   },
 };
 
+module.exports = {
+  images: {
+    domains: ["example.com"],
+  },
+};
+
 export default nextConfig;
