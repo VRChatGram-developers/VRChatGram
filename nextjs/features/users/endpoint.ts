@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 const API_URL = "http://localhost:3000";
 
 export const fetchUserById = async (id: bigint): Promise<User> => {
-  const response = await fetch(`${API_URL}/api/users/${id}`);
+  const response = await fetch(`${API_URL}/api/v1/users/${id}`);
   if (!response.ok) {
     throw new Error("Failed to fetch users");
   }
@@ -15,7 +15,7 @@ export const fetchUserById = async (id: bigint): Promise<User> => {
 
 export const followUser = async (id: bigint) => {
   try {
-    const response = await fetch(`${API_URL}/api/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ export const followUser = async (id: bigint) => {
 
 export const unfollowUser = async (id: bigint) => {
   try {
-    const response = await fetch(`${API_URL}/api/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
