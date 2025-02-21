@@ -2,6 +2,7 @@
 
 import styles from "../styles/tag-list.module.scss";
 import { Tag } from "@/features/posts/types/index";
+
 export const TagList = ({
   popularTags,
   selectedTag,
@@ -18,12 +19,17 @@ export const TagList = ({
   return (
     <div className={styles.tagList}>
       {popularTags.map((tag) => (
-        <div
+        <button
           key={tag.id}
-          className={selectedTag === tag.name ? styles.selectedTagItem : styles.tagItem}
+          className={
+            selectedTag === tag.name
+              ? `${styles.tagItem} ${styles.selectedTagItem}`
+              : styles.tagItem
+          }
+          onClick={() => handleTagClick(tag.name)}
         >
-          <button onClick={() => handleTagClick(tag.name)}>#{tag.name}</button>
-        </div>
+          {tag.name}
+        </button>
       ))}
     </div>
   );

@@ -85,7 +85,12 @@ export const AccountInfoInput = ({
 
   const handleCreateAccount = async () => {
     try {
-      if (!isValidNickName() || !isValidBirthday() || !isValidSex() || !isValidTerms()) {
+      if (
+        !isValidNickName() ||
+        !isValidBirthday() ||
+        !isValidSex() ||
+        !isValidTerms()
+      ) {
         return;
       }
 
@@ -111,106 +116,154 @@ export const AccountInfoInput = ({
           <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
         </div>
       ) : (
-        <div className="flex">
-          <div className="flex-1 flex items-center justify-center">
-            <div className={styles.registerContainer}>
-              <div className={styles.registerTitle}>
-                <p>アカウント作成</p>
+        <div className={styles.signinContainer}>
+          <div className={styles.registerContainer}>
+            <div className={styles.registerContent}>
+              <div className={styles.registerTitleContent}>
+                <p className={styles.registerTitle}>アカウント作成</p>
               </div>
-              <div className={styles.registerContent}>
-                <div className={styles.nickName}>
-                  <div className={styles.nicknameLabel}>
-                    <p>ニックネーム</p>
-                  </div>
-                  <div className={styles.nicknameInput}>
+              <div className={styles.registerContentDetail}>
+                <div className={styles.nameContainer}>
+                  <p className={styles.nameLabel}>ニックネーム</p>
+                  <div className={styles.nameForm}>
                     <input
                       type="text"
                       placeholder="ニックネーム"
                       value={name}
+                      className={styles.nameFormInput}
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <p>あなたの名前として表示されます</p>
-                  {errorName && <p className={styles.errorNameMessage}>{errorName}</p>}
+                  <p className={styles.warningLabel}>
+                    あなたの名前として表示されます
+                  </p>
+                  {errorName && (
+                    <p className={styles.errorNameMessage}>{errorName}</p>
+                  )}
                 </div>
-                <div>
-                  {sexOptions.map((option) => (
-                    <label key={option.value} className="mr-4">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={option.value}
-                        checked={selectedSex === option.value}
-                        onChange={(e) => setSelectedSex(e.target.value)}
-                      />
-                      {option.label}
-                    </label>
-                  ))}
-                  {errorSex && <p className={styles.errorSexMessage}>{errorSex}</p>}
+                <div className={styles.genderContainer}>
+                  <p className={styles.genderLabel}>性別</p>
+                  <div className={styles.genderSelectSection}>
+                    {sexOptions.map((option) => (
+                      <label
+                        key={option.value}
+                        className={styles.genderSelectLabel}
+                      >
+                        <input
+                          type="radio"
+                          name="gender"
+                          className={styles.genderSelectInput}
+                          value={option.value}
+                          checked={selectedSex === option.value}
+                          onChange={(e) => setSelectedSex(e.target.value)}
+                        />
+                        {option.label}
+                      </label>
+                    ))}
+                  </div>
+
+                  {errorSex && (
+                    <p className={styles.errorSexMessage}>{errorSex}</p>
+                  )}
                 </div>
-                <div>
-                  <label htmlFor="birthday">誕生日</label>
-                  <div>
-                    <select id="year" value={year} onChange={(e) => setYear(e.target.value)}>
-                      <option value="">年</option>
-                      {years.map((y) => (
-                        <option key={y} value={y}>
-                          {y}
-                        </option>
-                      ))}
-                    </select>
-
-                    <select id="month" value={month} onChange={(e) => setMonth(e.target.value)}>
-                      <option value="">月</option>
-                      {months.map((m) => (
-                        <option key={m} value={m}>
-                          {m}
-                        </option>
-                      ))}
-                    </select>
-
-                    <select id="day" value={day} onChange={(e) => setDay(e.target.value)}>
-                      <option value="">日</option>
-                      {days.map((d) => (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
-                      ))}
-                    </select>
-                    {errorBirthday && (
-                      <p className={styles.errorBirthdayMessage}>{errorBirthday}</p>
-                    )}
+                <div className={styles.birthdayContainer}>
+                  <p className={styles.birthdayLabel}>誕生日</p>
+                  <div className={styles.birthdayContent}>
+                    <div className={styles.birthdaySelectContent}>
+                      <select
+                        id="year"
+                        className={styles.birthdaySelect}
+                        value={year}
+                        onChange={(e) => setYear(e.target.value)}
+                      >
+                        <option value="">年</option>
+                        {years.map((y) => (
+                          <option key={y} value={y}>
+                            {y}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className={styles.birthdaySelectContent}>
+                      <select
+                        id="month"
+                        className={styles.birthdaySelect}
+                        value={month}
+                        onChange={(e) => setMonth(e.target.value)}
+                      >
+                        <option value="">月</option>
+                        {months.map((m) => (
+                          <option key={m} value={m}>
+                            {m}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className={styles.birthdaySelectContent}>
+                      <select
+                        id="day"
+                        className={styles.birthdaySelect}
+                        value={day}
+                        onChange={(e) => setDay(e.target.value)}
+                      >
+                        <option value="">日</option>
+                        {days.map((d) => (
+                          <option key={d} value={d}>
+                            {d}
+                          </option>
+                        ))}
+                      </select>
+                      {errorBirthday && (
+                        <p className={styles.errorBirthdayMessage}>
+                          {errorBirthday}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <label>
+                <div className={styles.confirmationContainer}>
+                  <label className={styles.confirmationLabel}>
                     <input
                       type="checkbox"
+                      className={styles.confirmationCheckbox}
                       checked={termsChecked}
                       onChange={(e) => setTermsChecked(e.target.checked)}
                     />
                     <span>
-                      <a href="/terms" target="_blank">
+                      <a
+                        href="/terms"
+                        target="_blank"
+                        className={styles.linkText}
+                      >
                         利用規約
                       </a>{" "}
                       と
-                      <a href="/privacy" target="_blank">
+                      <a
+                        href="/privacy"
+                        target="_blank"
+                        className={styles.linkText}
+                      >
                         プライバシーポリシー
                       </a>{" "}
                       に同意する
                     </span>
                   </label>
-                  {errorTerms && <p className={styles.errorTermsMessage}>{errorTerms}</p>}
+                  {errorTerms && (
+                    <p className={styles.errorTermsMessage}>{errorTerms}</p>
+                  )}
                 </div>
-              </div>
-              <div>
-                <button onClick={handleCreateAccount} className={styles.userCreateButton}>
-                  アカウント作成
-                </button>
+                <div className={styles.signupContent}>
+                  <button
+                    onClick={handleCreateAccount}
+                    className={styles.userCreateButton}
+                  >
+                    アカウント作成
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex-1 relative h-full">
+          <div className={styles.registerImageContainer}>
             <Image
               src="/signup-icon.png"
               alt="Login page image"

@@ -16,8 +16,10 @@ export const PopularPostList = ({
   setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
   setPopularPostList: React.Dispatch<React.SetStateAction<PopularPost[]>>;
 }) => {
-  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>({});
-  const [chunkedPosts, setChunkedPosts] = useState<PopularPost[][]>([]);
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
+    {}
+  );
+  // const [chunkedPosts, setChunkedPosts] = useState<PopularPost[][]>([]);
   const { handleLikeOrUnlike } = useLikePost();
 
   const chunkPopularPostList = (postList: PopularPost[]) => {
@@ -32,7 +34,9 @@ export const PopularPostList = ({
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
 
     setPopularPostList((prevList) =>
-      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+      prevList.map((post) =>
+        post.id === postId ? { ...post, is_liked: !currentLiked } : post
+      )
     );
   };
 
@@ -42,35 +46,32 @@ export const PopularPostList = ({
     );
     setLikedPosts(updatedLikedPosts);
 
-    const updatedChunkedPosts = chunkPopularPostList(popularPostList);
-    setChunkedPosts(updatedChunkedPosts);
+    // const updatedChunkedPosts = chunkPopularPostList(popularPostList);
   }, [popularPostList]);
 
   return (
     <>
       <div className={styles.popularPostListContainer}>
         <p className={styles.popularPostListTitle}>ピックアップ</p>
-        {chunkedPosts.map((chunckedPost, index) => (
-          <div key={index} className={styles.popularPostList}>
-            {chunckedPost.map((post) => (
-              <PostCard
-                key={`${index}-${post.id}`}
-                postCardProps={{
-                  postId: post.id,
-                  userId: post.user.id,
-                  postName: post.title,
-                  postImageUrl: "/pickup-image.png",
-                  postImageCount: post.images.length,
-                  userName: post.user.name,
-                  userImageUrl: "/posts/sample-user-icon.png",
-                  isLiked: likedPosts[post.id],
-                  setIsLiked: setIsLiked,
-                  handleLikeOrUnlike: () => handleLike(post.id),
-                }}
-              />
-            ))}
-          </div>
-        ))}
+        <div className={styles.popularPostList}>
+          {popularPostList.map((post, index) => (
+            <PostCard
+              key={`${index}-${post.id}`}
+              postCardProps={{
+                postId: post.id,
+                userId: post.user.id,
+                postName: post.title,
+                postImageUrl: "/pickup-image.png",
+                postImageCount: post.images.length,
+                userName: post.user.name,
+                userImageUrl: "/posts/sample-user-icon.png",
+                isLiked: likedPosts[post.id],
+                setIsLiked: setIsLiked,
+                handleLikeOrUnlike: () => handleLike(post.id),
+              }}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

@@ -103,7 +103,7 @@ export const Main = ({
           <div className={styles.mainSecondContainer}>
             <div className={styles.mainSecondContainerFirst}>
               <div className={styles.mainSecondContainerFirstBox}>
-                <p className={styles.mainSecondContainerFirstText}>初めての方はこちら</p>
+                <p className={styles.mainSecondTitle}>初めての方はこちら</p>
                 <Image
                   src="/shoshinsha-mark.png"
                   alt="初心者マーク"
@@ -134,35 +134,44 @@ export const Main = ({
               </div>
             </div>
 
-            <div className={styles.mainSecondContainerCentralLine}></div>
+            {/* <div className={styles.mainSecondContainerCentralLine}></div> */}
 
             <div className={styles.mainSecondContainerThirdBox}>
-              <p className={styles.mainSecondContainerThirdBoxText}>お知らせ</p>
-              {notifications.map((notification) => (
-                <div key={notification.id} className={styles.notificationsList}>
-                  <div className={styles.notificationsListBox}>
-                    <div className={styles.notificationsListBoxText}>
-                      <span
-                        className={
-                          notification.notification_type === "release"
-                            ? styles.notificationsListBoxTextRelease
-                            : notification.notification_type === "important"
-                            ? styles.notificationsListBoxTextImportant
-                            : styles.notificationsListBoxTextCommon
-                        }
-                      >
-                        {notification.notification_type}
-                      </span>
-                      <div className={styles.notificationsContainer}>
-                        <time className={styles.notificationTime}>{notification.published_at}</time>
-                        {notification.content && (
-                          <p className={styles.notificationContent}>{notification.content}</p>
-                        )}
+              <p className={styles.mainSecondTitle}>お知らせ</p>
+              <div className={styles.notificationContainer}>
+                {notifications.map((notification) => (
+                  <div
+                    key={notification.id}
+                    className={styles.notificationsList}
+                  >
+                    <div className={styles.notificationsListBox}>
+                      <div className={styles.notificationsListBoxText}>
+                        <span
+                          className={
+                            notification.notification_type === "release"
+                              ? styles.notificationsListBoxTextRelease
+                              : notification.notification_type === "important"
+                              ? styles.notificationsListBoxTextImportant
+                              : styles.notificationsListBoxTextCommon
+                          }
+                        >
+                          {notification.notification_type}
+                        </span>
+                        <div className={styles.notificationsContainer}>
+                          <time className={styles.notificationTime}>
+                            {notification.published_at}
+                          </time>
+                          {notification.content && (
+                            <p className={styles.notificationContent}>
+                              {notification.content}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>

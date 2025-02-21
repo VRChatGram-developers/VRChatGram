@@ -6,11 +6,17 @@ import { Tag, Post } from "@/features/posts/types/index";
 import { TagList } from "./tag-list";
 import { useState, useMemo } from "react";
 
-export const PostList = ({ posts, popularTags }: { posts: Post[][]; popularTags: Tag[] }) => {
+export const PostList = ({
+  posts,
+  popularTags,
+}: {
+  posts: Post[][];
+  popularTags: Tag[];
+}) => {
   const [selectedTag, setSelectedTag] = useState("");
 
   const addAllToPopularTags = useMemo(
-    () => [{ id: 0, name: "ALL" }, ...popularTags],
+    () => [{ id: 0, name: "#ALL" }, ...popularTags],
     [popularTags]
   );
 

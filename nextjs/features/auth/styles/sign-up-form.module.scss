@@ -1,3 +1,110 @@
+.signupContainer {
+  display: grid;
+  .signupContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: scroll;
+    .signupFormContent {
+      .signupTextFormContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .textForm {
+          font-size: 16px;
+          font-weight: bold;
+          margin-bottom: 1.5rem;
+          max-width: 20rem;
+          width: 100%;
+          &:first-child {
+            margin-top: 3rem;
+          }
+          .warningLabel {
+            font-size: 11px;
+          }
+        }
+
+        .createButtonContainer {
+          width: 100%;
+          max-width: 20rem;
+          margin-bottom: 2rem;
+          .createButton {
+            background-color: #69beef;
+            padding: 1rem 2.5rem;
+            color: #fff;
+            border-radius: 0.5rem;
+            width: 100%;
+          }
+        }
+
+        .separateLoginContainer {
+          .separateLoginText {
+            font-size: 11px;
+          }
+          &:not(:first-child) {
+            margin-top: 0.5rem;
+          }
+        }
+
+        .googleLoginContainer {
+          margin: 2rem;
+          width: 100%;
+          max-width: 15rem;
+          border-radius: 0.5rem;
+          .googleLoginButton {
+            width: 100%;
+            display: flex;
+            padding: 1rem 2.5rem 1rem 1.5rem;
+            background-color: #fff;
+          }
+          .googleLoginText {
+            margin-left: 2rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 1025px以上（PC）
+@media (min-width: 1024px) {
+  .signupContainer {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    height: calc(100vh - 50px);
+  }
+  .signupFormContent {
+    width: 80%;
+  }
+}
+
+// 1024px未満（タブレット）
+@media (min-width: 768px) AND (max-width: 1023px) {
+  .signupContainer {
+    height: calc(100vh - 50px);
+  }
+  .registerImageContainer {
+    display: none;
+  }
+  .signupFormContent {
+    width: 80%;
+  }
+}
+
+// 1024px未満（タブレット）
+@media (max-width: 767px) {
+  .signupContainer {
+    height: calc(100vh - 50px);
+  }
+  .registerImageContainer {
+    display: none;
+  }
+  .signupFormContent {
+    width: 100%;
+  }
+}
+
 .errorMailMessage {
   color: red;
 }
