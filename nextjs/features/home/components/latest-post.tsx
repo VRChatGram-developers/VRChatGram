@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "../styles/latest-post.module.scss";
 import { LatestPost as LatestPostType } from "../types/index";
 import { PostCard } from "@/components/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
@@ -27,7 +28,9 @@ export const LatestPost = ({
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
 
     setLatestPostList((prevList) =>
-      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+      prevList.map((post) =>
+        post.id === postId ? { ...post, is_liked: !currentLiked } : post
+      )
     );
   };
 
@@ -38,11 +41,15 @@ export const LatestPost = ({
           <div className="max-w-full mx-auto">
             <h2
               className="text-[#151C4B] font-medium text-center"
-              style={{ fontWeight: "bold", fontSize: "40px", fontFamily: "Noto Sans JP" }}
+              style={{
+                fontWeight: "bold",
+                fontSize: "40px",
+                fontFamily: "Noto Sans JP",
+              }}
             >
               新着
             </h2>
-            <div className="flex justify-center mt-6 mb-6 space-x-4">
+            <div className={styles.latestPostConatiner}>
               {latestPostList.map((post) => (
                 <PostCard
                   key={post.id}
