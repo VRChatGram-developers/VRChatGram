@@ -9,6 +9,7 @@ async function main() {
   const users = await Promise.all([
     prisma.users.create({
       data: {
+        uid: "test1",
         name: "テストユーザー1",
         password: "password123",
         email: "test1@example.com",
@@ -28,6 +29,7 @@ async function main() {
     }),
     prisma.users.create({
       data: {
+        uid: "test2",
         name: "テストユーザー2",
         password: "password123",
         email: "test2@example.com",
