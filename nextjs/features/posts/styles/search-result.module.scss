@@ -35,30 +35,36 @@
   }
 
   .userPostsList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    display: grid;
     padding-left: 0;
-    list-style: none;
+    // grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 1fr; /* すべての行の高さを均等に */
 
-    .userPostsItem {
-      flex-grow: 1;
-      list-style: none;
-      object-fit: cover;
-
-      .userPostsItemImageContainer {
-        .userPostsItemImage {
-          // max-height: 100%;
-          height: 402px;
-          min-width: 100%;
-          object-fit: cover;
-          vertical-align: bottom;
-          border-radius: 1rem;
-        }
+    .userPostsItemImageContainer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 1rem;
+      height: 100%;
+      width: 100%;
+      .userPostsItemImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1rem;
       }
-    }
-    .userPostsItem:last-child {
-      flex-grow: 10;
+
+      &.wide {
+        grid-column: span 1; // 奇数番目のアイテムは1カラム
+        aspect-ratio: 1 / 1; // 正方形
+      }
+
+      &.tall {
+        grid-column: span 2; // 偶数番目のアイテムは2カラム（ワイド）
+        aspect-ratio: 2 / 1; // 横長
+      }
     }
   }
 
@@ -91,5 +97,43 @@
       height: 40px;
       border-radius: 50%;
     }
+  }
+}
+
+// 1,280px以上（デスクトップ）
+@media (min-width: 1280px) {
+  .userPostsList {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+// 1040px以上1,279px未満（デスクトップ中）
+@media (min-width: 1040px) and (max-width: 1279px) {
+  .userPostsList {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+// 768px以上1,280px未満（タブレット）
+@media (min-width: 768px) and (max-width: 1039px) {
+  .userPostsList {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+// 768px以下（スマホ）
+@media (max-width: 767px) {
+  .userPostsList {
+    grid-template-columns: 1fr; // 1列に統一
+    gap: 1rem 0;
+  }
+
+  .userPostsItemImageContainer {
+    width: 100%;
+    aspect-ratio: 1 / 1; // 全て正方形に統一
+    grid-column: span 1;
   }
 }

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Link, TextField } from "@mui/material";
 import { useState } from "react";
 import styles from "@/features/auth/styles/sign-up-form.module.scss";
+import { checkEmail } from "@/features/users/endpoint";
+
 export const SignUpForm = ({
   email,
   password,
@@ -44,11 +46,17 @@ export const SignUpForm = ({
     return true;
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     const isMailValid = mailValidation();
     const isPasswordValid = passwordValidation();
 
     if (!isMailValid || !isPasswordValid) {
+      return;
+    }
+
+    const isEmailExist = await checkEmail(email);
+    if (isEmailExist) {
+      setErrorMail("このメールアドレスは既に使用されています");
       return;
     }
 
