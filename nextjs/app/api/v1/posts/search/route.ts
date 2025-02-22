@@ -4,6 +4,8 @@ import { PrismaClient } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { bigIntToStringMap } from "../../../../../utils/bigIntToStringMapper";
 import { getStartOfWeek } from "../../../../../utils/date";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../auth/[...nextauth]/route";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
@@ -19,6 +21,13 @@ export const connect = async () => {
 };
 
 export async function GET(request: Request) {
+  const session = await getServerSession(authOptions);
+  const user = await prisma.users.findFirst({
+    where: {
+      uid: session?.user.uid,
+    },
+  });
+
   // タグ名、投稿名でlike検索
   const tagName = request.nextUrl.searchParams.get("tag")
     ? decodeURIComponent(request.nextUrl.searchParams.get("tag") as string)
@@ -77,6 +86,21 @@ export async function GET(request: Request) {
         id: true,
         title: true,
         is_sensitive: true,
+        likes: {
+          select: {
+            id: true,
+            post_id: true,
+            user_id: true,
+            posted_user_id: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            profile_url: true,
+          },
+        },
         images: {
           select: {
             id: true,
@@ -86,11 +110,16 @@ export async function GET(request: Request) {
       },
     });
 
+    const postsWithIsLiked = posts.map((post) => ({
+      ...post,
+      is_liked: post.likes.some((like) => like.user_id == user?.id),
+    }));
+
     const postCount = await prisma.posts.count({ where: where });
 
     return NextResponse.json(
       {
-        posts: bigIntToStringMap(posts),
+        posts: bigIntToStringMap(postsWithIsLiked),
         totalPages: Math.ceil(postCount / limit),
         currentPage: page,
         postCount: postCount,
