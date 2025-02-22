@@ -1,13 +1,15 @@
 "use client";
 
 import styles from "../styles/search-result.module.scss";
-import { Post } from "@/features/posts/types/post";
+import { Post } from "@/features/posts/types/index";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
 import { fetchPosts } from "@/features/posts/endpoint";
 import { useRouter } from "next/navigation";
+import { createQueryParams } from "@/utils/queryParams";
+import { useSearchStore } from "@/libs/store/search-store";
 
 const breakpoints = {
   large: 1280, // 1280px以上
@@ -52,21 +54,35 @@ const adjustGridLayout = (items: NodeListOf<Element>, columns: number) => {
 export const SearchResult = ({
   posts,
   selectedTag,
+  postCount,
+  currentPage,
+  totalPages,
 }: {
-  posts: Post[][];
+  posts: Post[];
   selectedTag: string;
+  postCount: number;
+  currentPage: number;
+  totalPages: number;
 }) => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [postList, setPostList] = useState<Post[][]>([]);
+  const [changedCurrentPage, setChangedCurrentPage] = useState(currentPage - 1);
+
+  const [postList, setPostList] = useState<Post[]>(posts);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const router = useRouter();
+  const { searchQuery } = useSearchStore();
 
-  const totalPages = posts.length;
-  const currentPosts = posts[currentPage] || [];
+  useEffect(() => {
+    setPostList(posts);
+  }, [posts, changedCurrentPage]);
 
   const handlePageChange = async (page: number) => {
-    setCurrentPage(page);
-    setPostList(await fetchPosts(page));
+    setChangedCurrentPage(page);
+    const query = searchQuery.includes("#")
+      ? createQueryParams({ tag: searchQuery, page: page + 1 })
+      : createQueryParams({ title: searchQuery, page: page + 1 });
+
+    const postsList = await fetchPosts(query);
+    setPostList(postsList.posts);
   };
 
   const handleToPostDetail = (id: string) => {
@@ -109,7 +125,7 @@ export const SearchResult = ({
         <div className={styles.searchDetailContainer}>
           <p className={styles.searchDetailTitle}>{selectedTag}</p>
           <div className={styles.searchDetailContent}>
-            <p className={styles.searchPostCount}>投稿数: 100</p>
+            <p className={styles.searchPostCount}>投稿数: {postCount}</p>
             <div className={styles.searchSortContainer}>
               <label className={styles.searchSortLabel}>
                 <select className={styles.searchSortSelect}>
@@ -124,20 +140,16 @@ export const SearchResult = ({
       </div>
       <div>
         <div className={styles.userPostsList}>
-          {(currentPosts || postList).map((post) => {
+          {postList.map((post, index) => {
             const imageWidth =
-              Number(post.id) % 2 === 0
-                ? 804
-                : Number(post.id) % 3 === 0
-                ? 402
-                : 600;
+              Number(post.id) % 2 === 0 ? 804 : Number(post.id) % 3 === 0 ? 402 : 600;
 
             // 動的に "wide" または "tall" クラスを設定
             const imageClass = imageWidth > 600 ? styles.wide : styles.tall;
 
             return (
               <div
-                key={post.id}
+                key={`${post.id}-${index}`}
                 className={`${styles.userPostsItemImageContainer} ${imageClass}`}
                 onClick={() => handleToPostDetail(post.id.toString())}
               >
@@ -162,10 +174,7 @@ export const SearchResult = ({
 
       {/* ページネーションUI */}
       <div className={styles.pagination}>
-        <button
-          className={styles.paginationButton}
-          onClick={() => handlePageChange(0)}
-        >
+        <button className={styles.paginationButton} onClick={() => handlePageChange(0)}>
           <MdOutlineFirstPage className={styles.paginationButtonIcon} />
         </button>
         {Array.from({ length: totalPages }, (_, i) => (
@@ -173,9 +182,7 @@ export const SearchResult = ({
             key={i}
             onClick={() => handlePageChange(i)}
             className={
-              currentPage === i
-                ? styles.paginationSelectedButton
-                : styles.paginationButton
+              changedCurrentPage === i ? styles.paginationSelectedButton : styles.paginationButton
             }
           >
             {i + 1}

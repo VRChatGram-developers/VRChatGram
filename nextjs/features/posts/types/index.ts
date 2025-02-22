@@ -3,8 +3,13 @@ export type Post = {
   title: string;
   is_sensitive: boolean;
   images: Image[];
+};
+
+export type PostList = {
   totalPages: number;
   currentPage: number;
+  posts: Post[];
+  postCount: number;
 };
 
 export type UserOtherPost = {

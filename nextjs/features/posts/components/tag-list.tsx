@@ -6,29 +6,25 @@ import { Tag } from "@/features/posts/types/index";
 export const TagList = ({
   popularTags,
   selectedTag,
-  setSelectedTag,
+  handleSelectTag,
 }: {
   popularTags: Tag[];
   selectedTag: string;
-  setSelectedTag: (tag: string) => void;
+  handleSelectTag: (tag: string) => void;
 }) => {
-  const handleTagClick = (tag: string) => {
-    setSelectedTag(tag);
-  };
-
   return (
     <div className={styles.tagList}>
       {popularTags.map((tag) => (
         <button
           key={tag.id}
           className={
-            selectedTag === tag.name
+            selectedTag === `#${tag.name}`
               ? `${styles.tagItem} ${styles.selectedTagItem}`
               : styles.tagItem
           }
-          onClick={() => handleTagClick(tag.name)}
+          onClick={() => handleSelectTag(tag.name)}
         >
-          {tag.name}
+          #{tag.name}
         </button>
       ))}
     </div>
