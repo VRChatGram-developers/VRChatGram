@@ -1,13 +1,16 @@
 "use client";
 
 import styles from "../styles/search-result.module.scss";
-import { Post } from "@/features/posts/types/post";
+import { Post } from "@/features/posts/types/index";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
 import { fetchPosts } from "@/features/posts/endpoint";
-import { useRouter } from "next/navigation";
+import { createQueryParams } from "@/utils/queryParams";
+import { useSearchStore } from "@/libs/store/search-store";
+import { FluidPostCard } from "@/components/fluid-post-card";
+import useLikePost from "@/features/posts/hooks/use-like-post";
 
 const breakpoints = {
   large: 1280, // 1280px以上
@@ -52,25 +55,69 @@ const adjustGridLayout = (items: NodeListOf<Element>, columns: number) => {
 export const SearchResult = ({
   posts,
   selectedTag,
+  postCount,
+  currentPage,
+  totalPages,
 }: {
-  posts: Post[][];
+  posts: Post[];
   selectedTag: string;
+  postCount: number;
+  currentPage: number;
+  totalPages: number;
 }) => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [postList, setPostList] = useState<Post[][]>([]);
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
-  const router = useRouter();
+  const [changedCurrentPage, setChangedCurrentPage] = useState(currentPage - 1);
 
-  const totalPages = posts.length;
-  const currentPosts = posts[currentPage] || [];
+  const [postList, setPostList] = useState<Post[]>(posts);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
+  const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>({});
+  const { handleLikeOrUnlike } = useLikePost();
+
+  const { searchQuery } = useSearchStore();
+
+  const searchSortOptions = [
+    { label: "新着順", value: "newest" },
+    { label: "人気順", value: "popular" },
+    { label: "今週の人気順", value: "this_week_popular" },
+  ];
+
+  useEffect(() => {
+    setPostList(posts);
+    const updatedLikedPosts = Object.fromEntries(posts.map((post) => [post.id, post.is_liked]));
+    setLikedPosts(updatedLikedPosts);
+  }, [posts, changedCurrentPage]);
 
   const handlePageChange = async (page: number) => {
-    setCurrentPage(page);
-    setPostList(await fetchPosts(page));
+    setChangedCurrentPage(page);
+    const query = searchQuery.includes("#")
+      ? createQueryParams({ tag: searchQuery, page: page + 1 })
+      : createQueryParams({ title: searchQuery, page: page + 1 });
+
+    const postsList = await fetchPosts(query);
+    setPostList(postsList.posts);
   };
 
-  const handleToPostDetail = (id: string) => {
-    router.push(`/posts/${id}`);
+  const handleLike = async (postId: string) => {
+    const currentLiked = likedPosts[postId];
+
+    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
+
+    setPostList((prevList) =>
+      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+    );
+    await handleLikeOrUnlike(postId, currentLiked);
+  };
+
+  const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setChangedCurrentPage(0);
+    const query = searchQuery.includes("#")
+      ? createQueryParams({ tag: searchQuery, page: 1, sort: e.target.value })
+      : createQueryParams({ title: searchQuery, page: 1, sort: e.target.value });
+
+    setSelectedSortOption(e.target.value);
+
+    const postsList = await fetchPosts(query);
+    setPostList(postsList.posts);
   };
 
   // 画面幅が変更されるたびに再計算
@@ -94,7 +141,7 @@ export const SearchResult = ({
     if (items.length > 0) {
       adjustGridLayout(items, columns); // アイテムの配置を調整
     }
-  }, [windowWidth, posts]); // 画面幅やpostsが変わった時にレイアウトを再調整
+  }, [windowWidth, posts]);
 
   return (
     <div className={styles.userPostsContainer}>
@@ -109,13 +156,19 @@ export const SearchResult = ({
         <div className={styles.searchDetailContainer}>
           <p className={styles.searchDetailTitle}>{selectedTag}</p>
           <div className={styles.searchDetailContent}>
-            <p className={styles.searchPostCount}>投稿数: 100</p>
+            <p className={styles.searchPostCount}>投稿数: {postCount}</p>
             <div className={styles.searchSortContainer}>
               <label className={styles.searchSortLabel}>
-                <select className={styles.searchSortSelect}>
-                  <option>新着順</option>
-                  <option>人気順</option>
-                  <option>今週の人気順</option>
+                <select
+                  className={styles.searchSortSelect}
+                  value={selectedSortOption}
+                  onChange={handleSortChange}
+                >
+                  {searchSortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </label>
             </div>
@@ -124,37 +177,26 @@ export const SearchResult = ({
       </div>
       <div>
         <div className={styles.userPostsList}>
-          {(currentPosts || postList).map((post) => {
+          {postList.map((post, index) => {
             const imageWidth =
-              Number(post.id) % 2 === 0
-                ? 804
-                : Number(post.id) % 3 === 0
-                ? 402
-                : 600;
-
-            // 動的に "wide" または "tall" クラスを設定
-            const imageClass = imageWidth > 600 ? styles.wide : styles.tall;
+              Number(post.id) % 2 === 0 ? 804 : Number(post.id) % 3 === 0 ? 402 : 600;
 
             return (
-              <div
-                key={post.id}
-                className={`${styles.userPostsItemImageContainer} ${imageClass}`}
-                onClick={() => handleToPostDetail(post.id.toString())}
-              >
-                <Image
-                  src={
-                    Number(post.id) % 2 === 0
-                      ? "/users/post-sample-image.png"
-                      : Number(post.id) % 3 === 0
-                      ? "/users/post-sample-image3.png"
-                      : "/users/post-sample-image2.png"
-                  }
-                  alt={`ピックアップ画像`}
-                  width={imageWidth}
-                  height={402}
-                  className={styles.userPostsItemImage}
-                />
-              </div>
+              <FluidPostCard
+                key={`${post.id}-${index}`}
+                postCardProps={{
+                  postId: post.id,
+                  userId: post.user.id,
+                  postName: post.title,
+                  postImageUrl: post.images[0].url,
+                  postImageCount: post.images.length,
+                  userName: post.user.name,
+                  userImageUrl: post.user.profile_url,
+                  isLiked: likedPosts[post.id.toString()],
+                  imageWidth: imageWidth,
+                  handleLikeOrUnlike: () => handleLike(post.id.toString()),
+                }}
+              />
             );
           })}
         </div>
@@ -162,10 +204,7 @@ export const SearchResult = ({
 
       {/* ページネーションUI */}
       <div className={styles.pagination}>
-        <button
-          className={styles.paginationButton}
-          onClick={() => handlePageChange(0)}
-        >
+        <button className={styles.paginationButton} onClick={() => handlePageChange(0)}>
           <MdOutlineFirstPage className={styles.paginationButtonIcon} />
         </button>
         {Array.from({ length: totalPages }, (_, i) => (
@@ -173,9 +212,7 @@ export const SearchResult = ({
             key={i}
             onClick={() => handlePageChange(i)}
             className={
-              currentPage === i
-                ? styles.paginationSelectedButton
-                : styles.paginationButton
+              changedCurrentPage === i ? styles.paginationSelectedButton : styles.paginationButton
             }
           >
             {i + 1}

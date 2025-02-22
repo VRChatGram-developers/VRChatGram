@@ -11,17 +11,24 @@ import { useState } from "react";
 import { useModal } from "@/provider/modal-provider";
 import { PostForm } from "@/features/posts/components/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
+import { useSearchStore } from "@/libs/store/search-store";
+import { createQueryParams } from "@/utils/queryParams";
 
 export const Header = () => {
   const router = useRouter();
   const { openModal, closeModal } = useModal();
 
   const { status } = useSession();
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery } = useSearchStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSearch = () => {
-    router.push(`/posts?query=${searchQuery}`);
+    const query = searchQuery.includes("#")
+      ? createQueryParams({ tag: searchQuery, page: 1 })
+      : createQueryParams({ title: searchQuery, page: 1 });
+    setSearchQuery(searchQuery);
+
+    router.push(`/posts?${query}`);
   };
   return (
     <header className={styles.header}>
@@ -68,7 +75,9 @@ export const Header = () => {
             <div className={styles.userIcon}>
               <Image src="/header/user-sample-icon.png" alt="User Icon" width={40} height={40} />
               <RiArrowDownSLine onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
-              {isDropdownOpen && <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} />}
+              {isDropdownOpen && (
+                <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} />
+              )}
             </div>
           </>
         )}

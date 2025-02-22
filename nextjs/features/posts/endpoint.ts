@@ -1,16 +1,13 @@
-import { Post, Tag, PostDetail } from "./types/index";
+import { Tag, PostDetail } from "./types/index";
 
-export const fetchPosts = async (params: { page?: number; query?: string }): Promise<Post[][]> => {
-  const response = await fetch(
-    `http://localhost:3000/api/v1/posts/search?${
-      params ? `page=${params.page}&query=${params.query}` : ""
-    }`
-  );
+export const fetchPosts = async (params: string) => {
+  const response = await fetch(`http://localhost:3000/api/v1/posts/search?${params}`);
+
   if (!response.ok) {
     throw new Error("Failed to fetch posts");
   }
-  const data = await response.json();
-  return data.posts;
+
+  return response.json();
 };
 
 export const fetchPopularTags = async (): Promise<Tag[]> => {
