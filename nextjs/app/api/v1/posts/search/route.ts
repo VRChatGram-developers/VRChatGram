@@ -21,62 +21,61 @@ export const connect = async () => {
 };
 
 export async function GET(request: Request) {
-  const session = await getServerSession(authOptions);
-  const user = await prisma.users.findFirst({
-    where: {
-      uid: session?.user.uid,
-    },
-  });
-
-  // タグ名、投稿名でlike検索
-  const tagName = request.nextUrl.searchParams.get("tag")
-    ? decodeURIComponent(request.nextUrl.searchParams.get("tag") as string)
-    : undefined;
-  const title = request.nextUrl.searchParams.get("title")
-    ? decodeURIComponent(request.nextUrl.searchParams.get("title") as string)
-    : undefined;
-  const sort = request.nextUrl.searchParams.get("sort")
-    ? decodeURIComponent(request.nextUrl.searchParams.get("sort") as string)
-    : undefined;
-
-  //クエリパラメータからページ番号を取得し、整数に変換（デフォルトは1）
-  const url = new URL(request.url);
-  const page = parseInt(url.searchParams.get("page") || "1", 10);
-  //クエリパラメータからページごとの表示数を取得し、整数に変換（デフォルトは10）
-  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
-  //検索の開始位置を取得。
-  const offset = (page - 1) * limit;
-
-  const where: Prisma.postsWhereInput = {};
-  if (title) {
-    where.title = { contains: title };
-  }
-
-  if (tagName) {
-    const tagNameWithoutHash = tagName.replace("#", "");
-    where.tags = {
-      some: { tag: { name: { contains: tagNameWithoutHash } } },
-    };
-  }
-
-  let orderBy: Prisma.postsOrderByWithRelationInput = {};
-  if (sort) {
-    if (sort === "newest") {
-      orderBy = { created_at: "desc" };
-    } else if (sort === "popular") {
-      orderBy = { likes: { _count: "desc" } };
-    } else if (sort === "this_week_popular") {
-      const startOfWeek = getStartOfWeek();
-      where.created_at = {
-        gte: startOfWeek,
-        lte: new Date(),
-      };
-      orderBy = { likes: { _count: "desc" } };
-    }
-  }
-
   try {
     await connect();
+    const session = await getServerSession(authOptions);
+    const user = await prisma.users.findFirst({
+      where: {
+        uid: session?.user.uid,
+      },
+    });
+    // タグ名、投稿名でlike検索
+    const tagName = request.nextUrl.searchParams.get("tag")
+      ? decodeURIComponent(request.nextUrl.searchParams.get("tag") as string)
+      : undefined;
+    const title = request.nextUrl.searchParams.get("title")
+      ? decodeURIComponent(request.nextUrl.searchParams.get("title") as string)
+      : undefined;
+    const sort = request.nextUrl.searchParams.get("sort")
+      ? decodeURIComponent(request.nextUrl.searchParams.get("sort") as string)
+      : undefined;
+
+    //クエリパラメータからページ番号を取得し、整数に変換（デフォルトは1）
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    //クエリパラメータからページごとの表示数を取得し、整数に変換（デフォルトは10）
+    const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+    //検索の開始位置を取得。
+    const offset = (page - 1) * limit;
+
+    const where: Prisma.postsWhereInput = {};
+    if (title) {
+      where.title = { contains: title };
+    }
+
+    if (tagName) {
+      const tagNameWithoutHash = tagName.replace("#", "");
+      where.tags = {
+        some: { tag: { name: { contains: tagNameWithoutHash } } },
+      };
+    }
+
+    let orderBy: Prisma.postsOrderByWithRelationInput = {};
+    if (sort) {
+      if (sort === "newest") {
+        orderBy = { created_at: "desc" };
+      } else if (sort === "popular") {
+        orderBy = { likes: { _count: "desc" } };
+      } else if (sort === "this_week_popular") {
+        const startOfWeek = getStartOfWeek();
+        where.created_at = {
+          gte: startOfWeek,
+          lte: new Date(),
+        };
+        orderBy = { likes: { _count: "desc" } };
+      }
+    }
+
     const posts = await prisma.posts.findMany({
       where: where,
       orderBy: orderBy,
