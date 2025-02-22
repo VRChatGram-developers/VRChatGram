@@ -14,11 +14,18 @@ export const PostList = ({ posts, popularTags }: { posts: PostListType; popularT
   const [displayPosts, setDisplayPosts] = useState<PostListType>(posts);
   const { setSearchQuery } = useSearchStore();
   const router = useRouter();
+
   const handleSelectTag = async (tag: string) => {
     const tagName = tag === "#ALL" ? tag : `#${tag}`;
     setSelectedTag(tagName);
-    setSearchQuery(tagName);
-    router.push(`/posts?${createQueryParams({ tag: tagName, page: 1 })}`);
+  
+    if (tagName === "#ALL") {
+      setSearchQuery("");
+      router.push(`/posts?${createQueryParams({ tag: "", page: 1 })}`);
+    } else {
+      setSearchQuery(tagName);
+      router.push(`/posts?${createQueryParams({ tag: tagName, page: 1 })}`);
+    }
   };
 
   useEffect(() => {
