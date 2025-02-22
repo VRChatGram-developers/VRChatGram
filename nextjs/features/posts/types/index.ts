@@ -1,8 +1,10 @@
 export type Post = {
-  id: bigint;
+  id: bigint | string;
   title: string;
   is_sensitive: boolean;
   images: Image[];
+  is_liked: boolean;
+  user: User;
 };
 
 export type PostList = {
@@ -55,8 +57,8 @@ export type Booth = {
 export type User = {
   id: bigint;
   name: string;
-  profile_url: string;
-  my_id: string;
+  profile_url?: string;
+  my_id?: string;
 };
 
 export type Tag = {
