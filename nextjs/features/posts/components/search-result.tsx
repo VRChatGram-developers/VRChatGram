@@ -7,9 +7,10 @@ import { useState, useEffect } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
 import { fetchPosts } from "@/features/posts/endpoint";
-import { useRouter } from "next/navigation";
 import { createQueryParams } from "@/utils/queryParams";
 import { useSearchStore } from "@/libs/store/search-store";
+import { FluidPostCard } from "@/components/fluid-post-card";
+import useLikePost from "@/features/posts/hooks/use-like-post";
 
 const breakpoints = {
   large: 1280, // 1280px以上
@@ -69,8 +70,9 @@ export const SearchResult = ({
   const [postList, setPostList] = useState<Post[]>(posts);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>({});
+  const { handleLikeOrUnlike } = useLikePost();
 
-  const router = useRouter();
   const { searchQuery } = useSearchStore();
 
   const searchSortOptions = [
@@ -81,6 +83,8 @@ export const SearchResult = ({
 
   useEffect(() => {
     setPostList(posts);
+    const updatedLikedPosts = Object.fromEntries(posts.map((post) => [post.id, post.is_liked]));
+    setLikedPosts(updatedLikedPosts);
   }, [posts, changedCurrentPage]);
 
   const handlePageChange = async (page: number) => {
@@ -93,8 +97,15 @@ export const SearchResult = ({
     setPostList(postsList.posts);
   };
 
-  const handleToPostDetail = (id: string) => {
-    router.push(`/posts/${id}`);
+  const handleLike = async (postId: string) => {
+    const currentLiked = likedPosts[postId];
+
+    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
+
+    setPostList((prevList) =>
+      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+    );
+    await handleLikeOrUnlike(postId, currentLiked);
   };
 
   const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -170,29 +181,22 @@ export const SearchResult = ({
             const imageWidth =
               Number(post.id) % 2 === 0 ? 804 : Number(post.id) % 3 === 0 ? 402 : 600;
 
-            // 動的に "wide" または "tall" クラスを設定
-            const imageClass = imageWidth > 600 ? styles.wide : styles.tall;
-
             return (
-              <div
+              <FluidPostCard
                 key={`${post.id}-${index}`}
-                className={`${styles.userPostsItemImageContainer} ${imageClass}`}
-                onClick={() => handleToPostDetail(post.id.toString())}
-              >
-                <Image
-                  src={
-                    Number(post.id) % 2 === 0
-                      ? post.images[0].url
-                      : Number(post.id) % 3 === 0
-                      ? post.images[0].url
-                      : post.images[0].url
-                  }
-                  alt={`ピックアップ画像`}
-                  width={imageWidth}
-                  height={402}
-                  className={styles.userPostsItemImage}
-                />
-              </div>
+                postCardProps={{
+                  postId: post.id,
+                  userId: post.user.id,
+                  postName: post.title,
+                  postImageUrl: post.images[0].url,
+                  postImageCount: post.images.length,
+                  userName: post.user.name,
+                  userImageUrl: post.user.profile_url,
+                  isLiked: likedPosts[post.id.toString()],
+                  imageWidth: imageWidth,
+                  handleLikeOrUnlike: () => handleLike(post.id.toString()),
+                }}
+              />
             );
           })}
         </div>
