@@ -68,8 +68,16 @@ export const SearchResult = ({
 
   const [postList, setPostList] = useState<Post[]>(posts);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
+  const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
+
   const router = useRouter();
   const { searchQuery } = useSearchStore();
+
+  const searchSortOptions = [
+    { label: "新着順", value: "newest" },
+    { label: "人気順", value: "popular" },
+    { label: "今週の人気順", value: "this_week_popular" },
+  ];
 
   useEffect(() => {
     setPostList(posts);
@@ -87,6 +95,18 @@ export const SearchResult = ({
 
   const handleToPostDetail = (id: string) => {
     router.push(`/posts/${id}`);
+  };
+
+  const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setChangedCurrentPage(0);
+    const query = searchQuery.includes("#")
+      ? createQueryParams({ tag: searchQuery, page: 1, sort: e.target.value })
+      : createQueryParams({ title: searchQuery, page: 1, sort: e.target.value });
+
+    setSelectedSortOption(e.target.value);
+
+    const postsList = await fetchPosts(query);
+    setPostList(postsList.posts);
   };
 
   // 画面幅が変更されるたびに再計算
@@ -110,7 +130,7 @@ export const SearchResult = ({
     if (items.length > 0) {
       adjustGridLayout(items, columns); // アイテムの配置を調整
     }
-  }, [windowWidth, posts]); // 画面幅やpostsが変わった時にレイアウトを再調整
+  }, [windowWidth, posts]);
 
   return (
     <div className={styles.userPostsContainer}>
@@ -128,10 +148,16 @@ export const SearchResult = ({
             <p className={styles.searchPostCount}>投稿数: {postCount}</p>
             <div className={styles.searchSortContainer}>
               <label className={styles.searchSortLabel}>
-                <select className={styles.searchSortSelect}>
-                  <option>新着順</option>
-                  <option>人気順</option>
-                  <option>今週の人気順</option>
+                <select
+                  className={styles.searchSortSelect}
+                  value={selectedSortOption}
+                  onChange={handleSortChange}
+                >
+                  {searchSortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </label>
             </div>

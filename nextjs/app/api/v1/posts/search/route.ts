@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { bigIntToStringMap } from "../../../../../utils/bigIntToStringMapper";
+import { getStartOfWeek } from "../../../../../utils/date";
+
 //インスタンスを作成
 const prisma = new PrismaClient();
 
@@ -23,6 +25,9 @@ export async function GET(request: Request) {
     : undefined;
   const title = request.nextUrl.searchParams.get("title")
     ? decodeURIComponent(request.nextUrl.searchParams.get("title") as string)
+    : undefined;
+  const sort = request.nextUrl.searchParams.get("sort")
+    ? decodeURIComponent(request.nextUrl.searchParams.get("sort") as string)
     : undefined;
 
   //クエリパラメータからページ番号を取得し、整数に変換（デフォルトは1）
@@ -45,11 +50,27 @@ export async function GET(request: Request) {
     };
   }
 
+  let orderBy: Prisma.postsOrderByWithRelationInput = {};
+  if (sort) {
+    if (sort === "newest") {
+      orderBy = { created_at: "desc" };
+    } else if (sort === "popular") {
+      orderBy = { likes: { _count: "desc" } };
+    } else if (sort === "this_week_popular") {
+      const startOfWeek = getStartOfWeek();
+      where.created_at = {
+        gte: startOfWeek,
+        lte: new Date(),
+      };
+      orderBy = { likes: { _count: "desc" } };
+    }
+  }
+
   try {
     await connect();
     const posts = await prisma.posts.findMany({
       where: where,
-      orderBy: { created_at: "desc" },
+      orderBy: orderBy,
       take: Number(limit),
       skip: offset,
       select: {
