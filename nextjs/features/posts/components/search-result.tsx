@@ -11,7 +11,7 @@ import { createQueryParams } from "@/utils/queryParams";
 import { useSearchStore } from "@/libs/store/search-store";
 import { FluidPostCard } from "@/components/fluid-post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
-
+import { useRouter } from "next/navigation";
 const breakpoints = {
   large: 1280, // 1280px以上
   medium: 1040, // 1040px以上1280px未満
@@ -70,11 +70,11 @@ export const SearchResult = ({
   const [postList, setPostList] = useState<Post[]>(posts);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
-  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>({});
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(Object.fromEntries(posts.map((post) => [post.id, post.is_liked])));
   const { handleLikeOrUnlike } = useLikePost();
 
   const { searchQuery } = useSearchStore();
-
+  const router = useRouter();
   const searchSortOptions = [
     { label: "新着順", value: "newest" },
     { label: "人気順", value: "popular" },
@@ -92,9 +92,7 @@ export const SearchResult = ({
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: page + 1 })
       : createQueryParams({ title: searchQuery, page: page + 1 });
-
-    const postsList = await fetchPosts(query);
-    setPostList(postsList.posts);
+    router.push(`/posts?${query}`);
   };
 
   const handleLike = async (postId: string) => {
