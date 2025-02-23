@@ -1,9 +1,9 @@
 name: Deploy
 on:
   push:
-    branches: master
+    branches: deno-deploy-sample-vrcss
   pull_request:
-    branches: master
+    branches: deno-deploy-sample-vrcss
 
 jobs:
   deploy:
@@ -32,13 +32,13 @@ jobs:
         run: "npm install"
 
       - name: Build step
-        run: "npm run build"
+        run: "npm run build && (cp -r public .next/standalone/public; cp -r .next/static .next/standalone/.next/static; mv .next/standalone/server.js .next/standalone/server.cjs)"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "vrcss-production"
-          entrypoint: "jsr:@deno/nextjs-start"
-          root: "."
-          include: .next, public
+          project: "koheikureba-vrchatgram-67"
+          entrypoint: "./server.cjs"
+          root: ".next/standalone"
+          
           
