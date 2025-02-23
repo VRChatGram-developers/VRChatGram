@@ -39,6 +39,6 @@ jobs:
         with:
           project: "koheikureba-vrchatgram-67"
           entrypoint: "jsr:@deno/nextjs-start"
-          root: "."
+          root: "./nextjs"
           include: .next, public
           
