@@ -78,17 +78,16 @@ export async function POST(request: Request) {
       take: Number(4),
     });
 
-    const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>(
-      Prisma.sql`SELECT tag_id FROM post_tags pt
-      JOIN posts p ON pt.post_id = p.id 
-      JOIN likes i ON p.id = i.post_id
-      GROUP BY pt.tag_id
+    const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>`
+      SELECT tag_id FROM post_tags pt
+        JOIN posts p ON pt.post_id = p.id 
+        JOIN likes i ON p.id = i.post_id
+        GROUP BY pt.tag_id
       ORDER BY COUNT(i.id) DESC
       LIMIT ${10}`
-    );
 
     const popularTagList = await prisma.tags.findMany({
-      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id) } },
+      where: { id: { in: popularTagIdList.map((tag: { tag_id: bigint }) => tag.tag_id) } },
       select: {
         id: true,
         name: true,
@@ -122,19 +121,19 @@ export async function POST(request: Request) {
       take: Number(4),
     });
 
-    const latestPostListWithIsLiked = latestPostList.map((post) => ({
+    const latestPostListWithIsLiked = latestPostList.map((post: { likes: { user_id: bigint }[] }) => ({
       ...post,
-      is_liked: post.likes.some((like) => like.user_id == user?.id),
+      is_liked: post.likes.some((like: { user_id: bigint }) => like.user_id == user?.id),
     }));
 
-    const popularPostListWithIsLiked = popularPostList.map((post) => ({
+    const popularPostListWithIsLiked = popularPostList.map((post: { likes: { user_id: bigint }[] }) => ({
       ...post,
-      is_liked: post.likes.some((like) => like.user_id == user?.id),
+      is_liked: post.likes.some((like: { user_id: bigint }) => like.user_id == user?.id),
     }));
 
-    const latestPostListWithXWithIsLiked = latestPostListWithX.map((post) => ({
+    const latestPostListWithXWithIsLiked = latestPostListWithX.map((post: { likes: { user_id: bigint }[] }) => ({
       ...post,
-      is_liked: post.likes.some((like) => like.user_id == user?.id),
+      is_liked: post.likes.some((like: { user_id: bigint }) => like.user_id == user?.id),
     }));
 
     return NextResponse.json({

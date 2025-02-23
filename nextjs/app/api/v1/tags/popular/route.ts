@@ -15,16 +15,16 @@ const connect = async () => {
 export async function GET() {
   try {
     await connect();
-    const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>(
-      Prisma.sql`SELECT tag_id FROM post_tags pt
+    const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>`
+      SELECT tag_id FROM post_tags pt
         JOIN posts p ON pt.post_id = p.id 
         JOIN likes i ON p.id = i.post_id
         GROUP BY pt.tag_id
         ORDER BY COUNT(i.id) DESC
-        LIMIT ${10}`
-    );
+        LIMIT ${10}
+    `;
     const popularTagList = await prisma.tags.findMany({
-      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id) } },
+      where: { id: { in: popularTagIdList.map((tag: { tag_id: bigint }) => tag.tag_id) } },
       select: {
         id: true,
         name: true,

@@ -17,10 +17,10 @@ const connect = async () => {
   }
 };
 
-export async function GET(request: Request) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     await connect();
-    const { id } = await request.json();
+    const { id } = params;
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }

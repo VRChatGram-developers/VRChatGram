@@ -15,10 +15,10 @@ const connect = async () => {
   }
 };
 
-export async function GET(request: Request) {
+export async function GET(request: Request, { params }: { params: { postId: string } }) {
   try {
     await connect();
-    const { postId } = await request.json();
+    const { postId } = params;
     if (!postId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }

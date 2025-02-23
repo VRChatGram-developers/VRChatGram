@@ -17,15 +17,16 @@ const connect = async () => {
   }
 };
 
-export async function POST(request: Request) {
+export async function POST(request: Request, { params }: { params: { postId: string } }) {
   try {
     await connect();
 
     const session = await getServerSession(authOptions);
+
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
-    const { postId } = await request.json();
+    const { postId } = params;
     if (!postId) {
       return NextResponse.json({ error: "postIdが指定されていません" }, { status: 400 });
     }
@@ -64,14 +65,14 @@ export async function POST(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: Request, { params }: { params: { postId: string } }) {
   try {
     await connect();
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
-    const { postId } = await request.json();
+    const { postId } = params;
     if (!postId) {
       return NextResponse.json({ error: "postIdが指定されていません" }, { status: 400 });
     }

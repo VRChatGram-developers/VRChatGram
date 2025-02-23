@@ -1,0 +1,271 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 基本的なenumの定義
+enum genders {
+  male
+  female
+  others
+}
+
+enum user_statuses {
+  active
+  inactive
+  deleted
+}
+
+enum notification_types {
+  release
+  bug
+  important
+}
+
+enum report_statuses {
+  unresolved
+  in_progress
+  resolved
+}
+
+enum inquiry_statuses {
+  unresolved
+  in_progress
+  resolved
+}
+
+// 独立したマスターテーブル
+model tags {
+  id                BigInt      @id @default(autoincrement())
+  name              String      @db.VarChar(50)
+  created_at        DateTime    @default(now())
+  updated_at        DateTime    @updatedAt
+  top_post_image_url String?    @db.VarChar(50)
+  posts             post_tags[]
+}
+
+model booth_items {
+  id          BigInt           @id @default(autoincrement())
+  image       String           @db.VarChar(255)
+  title       String           @db.VarChar(255)
+  detail      String           @db.VarChar(255)
+  url         String           @db.VarChar(255)
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+  posts       post_booth_items[]
+}
+
+model inquiry_categories {
+  id         BigInt     @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  inquiries  inquiries[]
+}
+
+model report_reasons {
+  id         BigInt    @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  reports    reports[]
+}
+
+// メインとなるユーザーモデル
+model users {
+  id            BigInt    @id @default(autoincrement())
+  uid           String    @unique @db.VarChar(255)
+  name          String    @db.VarChar(50)
+  password      String    @db.VarChar(30)
+  email         String    @db.VarChar(30)
+  introduce     String?   @db.Text
+  gender        genders
+  profile_url   String?    @db.VarChar(255)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+  status        user_statuses
+  birthday      DateTime  @db.Date
+  header_url    String?   @db.VarChar(255)
+  my_id         String    @db.VarChar(255)
+  show_sensitive Boolean  @default(false)
+  is_admin      Boolean   @default(false)
+  // リレーション
+  posts         posts[]
+  likes_given   likes[]    @relation("likedBy")
+  likes_received likes[]    @relation("postedBy")
+  followers     follows[]  @relation("followers")
+  following     follows[]  @relation("following")
+  notifications notifications[]
+  reports       reports[]
+  social_links  social_links[]
+  views         views[]
+  inquiries     inquiries[]
+}
+
+// 投稿関連のモデル
+model posts {
+  id            BigInt      @id @default(autoincrement())
+  user_id       BigInt
+  title         String      @db.VarChar(50)
+  view_count    Int         @default(0)
+  description   String?     @db.Text
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  deleted_at    DateTime?
+  is_sensitive  Boolean     @default(false)
+  is_posted_x   Boolean     @default(false)
+  
+  // リレーション
+  user          users        @relation(fields: [user_id], references: [id])
+  images        post_images[]
+  likes         likes[]
+  tags          post_tags[]
+  reports       reports[]
+  views         views[]
+  booth_items   post_booth_items[]
+}
+
+// 中間テーブルと関連テーブル
+model post_images {
+  id          BigInt    @id @default(autoincrement())
+  post_id     BigInt
+  url         String    @db.VarChar(255)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  width       String?   @db.VarChar(255)
+  height      String?   @db.VarChar(255)
+  post        posts      @relation(fields: [post_id], references: [id])
+}
+
+model post_tags {
+  id        BigInt    @id @default(autoincrement())
+  post_id   BigInt
+  tag_id    BigInt
+  post      posts      @relation(fields: [post_id], references: [id])
+  tag       tags       @relation(fields: [tag_id], references: [id])
+
+  @@index([post_id])
+  @@index([tag_id])
+}
+
+model post_booth_items {
+  id        BigInt     @id @default(autoincrement())
+  booth_id  BigInt
+  post_id   BigInt
+  booth     booth_items  @relation(fields: [booth_id], references: [id])
+  post      posts       @relation(fields: [post_id], references: [id])
+
+  @@index([booth_id])
+  @@index([post_id])
+}
+
+model likes {
+  id              BigInt    @id @default(autoincrement())
+  post_id         BigInt
+  user_id         BigInt
+  posted_user_id  BigInt
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  post            posts      @relation(fields: [post_id], references: [id])
+  user            users      @relation("likedBy", fields: [user_id], references: [id], map: "likes_given_fkey")
+  posted_user     users      @relation("postedBy", fields: [posted_user_id], references: [id], map: "likes_received_fkey")
+}
+
+model follows {
+  id            BigInt    @id @default(autoincrement())
+  follower_id   BigInt
+  following_id  BigInt
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  follower      users      @relation("followers", fields: [follower_id], references: [id])
+  following     users      @relation("following", fields: [following_id], references: [id])
+
+  @@index([follower_id])
+  @@index([following_id])
+}
+
+// 機能関連のモデル
+model views {
+  id          BigInt    @id @default(autoincrement())
+  user_id     BigInt
+  post_id     BigInt
+  created_at  DateTime  @default(now())
+  user        users      @relation(fields: [user_id], references: [id])
+  post        posts      @relation(fields: [post_id], references: [id])
+
+  @@index([user_id])
+  @@index([post_id])
+}
+
+model notifications {
+  id                BigInt          @id @default(autoincrement())
+  title             String          @db.VarChar(255)
+  content           String?         @db.Text
+  notification_type notification_types
+  published_at      DateTime
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+  deleted_at        DateTime?
+  user_id           BigInt
+  user              users            @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+}
+
+model reports {
+  id               BigInt       @id @default(autoincrement())
+  post_id          BigInt
+  report_reason_id BigInt
+  status           report_statuses
+  title            String       @db.Text
+  created_at       DateTime     @default(now())
+  updated_at       DateTime     @updatedAt
+  reported_user_id BigInt
+  detail           String?      @db.VarChar(255)
+  post             posts         @relation(fields: [post_id], references: [id])
+  report_reason    report_reasons @relation(fields: [report_reason_id], references: [id])
+  reported_user    users         @relation(fields: [reported_user_id], references: [id])
+
+  @@index([post_id])
+  @@index([report_reason_id])
+  @@index([reported_user_id])
+}
+
+model social_links {
+  id            BigInt    @id @default(autoincrement())
+  user_id       BigInt
+  platform_name String?   @db.VarChar(255)
+  platform_url  String?   @db.VarChar(255)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  user          users      @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+}
+
+model inquiries {
+  id                  BigInt           @id @default(autoincrement())
+  user_id             BigInt
+  inquiry_category_id BigInt
+  email               String           @db.VarChar(255)
+  content             String           @db.Text
+  status              inquiry_statuses
+  created_at          DateTime         @default(now())
+  updated_at          DateTime         @updatedAt
+  user                users             @relation(fields: [user_id], references: [id])
+  category            inquiry_categories  @relation(fields: [inquiry_category_id], references: [id])
+
+  @@index([user_id])
+  @@index([inquiry_category_id])
+}

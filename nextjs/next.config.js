@@ -1,10 +1,12 @@
-import type { NextConfig } from "next";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const nextConfig: NextConfig = {
+// Define __dirname in ESM mode
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const nextConfig = {
   webpack: (config) => {
-    config.resolve.alias["@"] = path.resolve(__dirname); // プロジェクトルートを "@" にマッピング
-
+    config.resolve.alias["@"] = path.resolve(__dirname);
     config.module.rules.push({
       test: /\.(woff|woff2|ttf|eot)$/,
       type: "asset/resource",
@@ -15,7 +17,7 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  output: "standalone", // Next.js 15 では experimental.outputStandalone は不要
+  // output: "standalone", // Next.js 15 では experimental.outputStandalone は不要
   reactStrictMode: false,
   images: {
     domains: ["example.com", "images.vrcpic.com"],

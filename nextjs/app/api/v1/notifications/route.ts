@@ -31,7 +31,7 @@ export async function GET() {
       },
     });
     // BigIntをnumberに変換
-    const serializedNotifications = notifications.map((notification) => ({
+    const serializedNotifications = notifications.map((notification: { id: bigint; published_at: Date }) => ({
       ...notification,
       id: notification.id.toString(),
       published_at: notification.published_at.toISOString(),
