@@ -1,10 +1,11 @@
-.latestPostContainer {
+.latestPostWithXContainer {
   width: 100%;
   height: auto;
   padding: 3rem 1.5rem;
   display: flex;
   flex-direction: column;
-  .latestPostTitle {
+  background-color: #fff;
+  .latestPostWithXTitle {
     color: #151c4b;
     text-align: center;
     font-size: 2.25rem;
@@ -12,7 +13,7 @@
     font-family: "Noto Sans JP";
     margin-bottom: 2rem;
   }
-  .latestPostListConatiner {
+  .latestPostWithXListConatiner {
     display: grid;
     gap: 1rem;
     width: 100%;
@@ -21,14 +22,14 @@
 
 // 1,280px以上（デスクトップ）
 @media (min-width: 1280px) {
-  .latestPostListConatiner {
+  .latestPostWithXListConatiner {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
 // 1040px以上1,279px未満（デスクトップ中）
 @media (max-width: 1279px) {
-  .latestPostListConatiner {
+  .latestPostWithXListConatiner {
     overflow-x: auto;
     grid-auto-flow: column;
   }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createPost } from "../endpoint";
 import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
@@ -10,7 +10,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [tagInput, setTagInput] = useState<string>("");
   const [isSensitive, setIsSensitive] = useState(false);
   const [description, setDescription] = useState<string>("");
-  const [boothItems, setBoothItems] = useState<string[]>([]);
+  const [boothItems, setBoothItems] = useState<string[]>([""]);
   const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
   const [errorTitle, setErrorTitle] = useState("");
   const [mainImage, setMainImage] = useState<ImageData | null>(null);
@@ -29,9 +29,9 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
         }
         const reader = new FileReader();
         reader.onload = (e) => {
-          const img = new Image() as HTMLImageElement;
+          const img = new Image();
           img.onload = () => {
-            const imageData: ImageData = {
+            const imageData = {
               file: file,
               file_data: e.target?.result as string,
               width: img.width,
@@ -77,7 +77,10 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleBoothItemChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const newBoothItems = [...boothItems];
     newBoothItems[index] = e.target.value;
     setBoothItems(newBoothItems);
@@ -110,6 +113,14 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     return true;
   };
 
+  const addBoothItem = () => {
+    setBoothItems([...boothItems, ""]);
+  };
+
+  const removeBoothItem = (index: number) => {
+    setBoothItems(boothItems.filter((_, i) => i !== index));
+  };
+
   const handleImageRemove = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
   };
@@ -120,12 +131,21 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     }
 
     try {
-      await createPost({ title, description, boothItems, images, tags, isSensitive });
+      await createPost({
+        title,
+        description,
+        boothItems,
+        images,
+        tags,
+        isSensitive,
+      });
       onClose();
     } catch (error) {
       console.error(error);
     }
   };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className={styles.container}>
@@ -136,120 +156,209 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
         ) : (
-          <>
-            <div className="w-1/2 p-10">
-              <div>新規投稿</div>
-              <div>タイトル</div>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="画像の情報を入力してください"
-              />
-              {errorTitle && <div className={styles.error_message}>{errorTitle}</div>}
-              <div>タグ</div>
-              <div className="tag-input-container">
-                <div className="tags">
-                  {tags.map((tag, index) => (
-                    <span key={index} className="tag">
-                      {tag}
-                      <button onClick={() => handleTagRemove(index)}>x</button>
-                    </span>
-                  ))}
+          <div className={styles.postContainer}>
+            <div className={styles.postTitleContent}>
+              <p className={styles.postTitle}>新規投稿</p>
+            </div>
+            <div className={styles.postDetailContainer}>
+              <div className={styles.postDetailContent}>
+                <div className={styles.postDetailTitleContainer}>
+                  <p className={styles.postDetailTitleText}>タイトル</p>
                   <input
                     type="text"
-                    value={tagInput}
-                    onChange={handleTagInputChange}
-                    onKeyDown={handleTagInputKeyDown}
-                    placeholder="タグを入力してEnterを押してください"
-                    className="tag-input"
+                    value={title}
+                    className={styles.postDetailTitleInput}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="タイトルを入力して下さい"
                   />
-                </div>
-              </div>
-              <div>
-                <div>年齢制限</div>
-                <div>
-                  {ageRestrictionOptions.map((option) => (
-                    <label key={option.value} style={{ display: "block", margin: "5px 0" }}>
-                      <input
-                        type="checkbox"
-                        name="ageRestriction"
-                        value={option.value}
-                        checked={option.isSensitive === isSensitive}
-                        onChange={() => handleCheckboxChange(option.value)}
-                      />
-                      {option.label}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div>作品説明</div>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="作品の説明を入力してください"
-                />
-              </div>
-              <div>
-                <div>使用した素材</div>
-                {boothItems.map((boothItem, index) => (
-                  <div key={index}>
-                    <form>
-                      <input
-                        type="text"
-                        value={boothItem}
-                        onChange={(e) => handleBoothItemChange(e, index)}
-                        placeholder={`フォーム ${index + 1}`}
-                      />
-                      {errorBoothItems[index] && (
-                        <div className={styles.error_message}>{errorBoothItems[index]}</div>
-                      )}
-                    </form>
-                  </div>
-                ))}
-                <button onClick={() => setBoothItems([...boothItems, ""])}>+</button>
-                <button
-                  className="pl-2"
-                  onClick={() =>
-                    setBoothItems(boothItems.filter((_, i) => i !== boothItems.length - 1))
-                  }
-                >
-                  -
-                </button>
-              </div>
-            </div>
-            <div className="w-1/2">
-              <div>投稿画像 {images.length}/4</div>
-              <div className="flex flex-wrap gap-4">
-                <div className={styles.image_container}>
-                  {mainImage && (
-                    <img
-                      src={URL.createObjectURL(mainImage.file)}
-                      alt="Uploaded"
-                      width={500}
-                      height={500}
-                    />
+                  {errorTitle && (
+                    <div className={styles.error_message}>{errorTitle}</div>
                   )}
                 </div>
-                {images.map((image, index) => (
-                  <div key={index} onClick={() => handleChangeMainImage(index)}>
-                    <img
-                      src={URL.createObjectURL(image.file)}
-                      alt="Uploaded"
-                      width={100}
-                      height={100}
+
+                <div className={styles.postDetailTagContainer}>
+                  <p className={styles.postDetailTitleText}>タグ</p>
+                  <div className={styles.postDetailTagContent}>
+                    <input
+                      type="text"
+                      value={tagInput}
+                      onChange={handleTagInputChange}
+                      onKeyDown={handleTagInputKeyDown}
+                      placeholder="タグを入力してEnterを押してください"
+                      className={styles.postDetailTagInput}
                     />
-                    {index !== 0 && <button onClick={() => handleImageRemove(index)}>x</button>}
+                    <div className={styles.postDetailTagArea}>
+                      {tags.map((tag, index) => (
+                        <div key={index} className={styles.postDetailTag}>
+                          <p className={styles.postDetailTagText}>
+                            #<span>{tag}</span>
+                          </p>
+                          <button
+                            onClick={() => handleTagRemove(index)}
+                            className={styles.postDetailTagClear}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-                <input type="file" accept="image/*" onChange={handleImageChange} />
+                </div>
+
+                <div className={styles.postDetailAgeLimitContainer}>
+                  <p className={styles.postDetailTitleText}>年齢制限</p>
+                  <div className={styles.postDetailAgeLimitContent}>
+                    {ageRestrictionOptions.map((option) => (
+                      <label
+                        key={option.value}
+                        className={styles.postDetailAgeLimitLabel}
+                      >
+                        <input
+                          type="checkbox"
+                          name="ageRestriction"
+                          className={styles.postDetailAgeLimitInput}
+                          value={option.value}
+                          checked={option.isSensitive === isSensitive}
+                          onChange={() => handleCheckboxChange(option.value)}
+                        />
+                        {option.label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.postDetailTextAreaContainer}>
+                  <p className={styles.postDetailTitleText}>作品説明</p>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className={styles.postDetailTextArea}
+                    placeholder="作品の説明を入力してください"
+                  />
+                </div>
+                <div className={styles.postDetailMaterialContainer}>
+                  <p className={styles.postDetailTitleText}>使用した素材</p>
+                  <div className={styles.postDetailMaterialContent}>
+                    {boothItems.map((boothItem, index) => (
+                      <div
+                        key={index}
+                        className={styles.postDetailMaterialFormContainer}
+                      >
+                        <form className={styles.postDetailMaterialForm}>
+                          <input
+                            type="text"
+                            value={boothItem}
+                            onChange={(e) => handleBoothItemChange(e, index)}
+                            className={styles.postDetailMaterialFormInput}
+                            placeholder={`BoothのURLを貼って下さい`}
+                          />
+                          {errorBoothItems[index] && (
+                            <div className={styles.error_message}>
+                              {errorBoothItems[index]}
+                            </div>
+                          )}
+                        </form>
+                        <div
+                          className={
+                            styles.postDetailMaterialFormButtonContainer
+                          }
+                        >
+                          {index !== boothItems.length - 1 && (
+                            <button
+                              className={styles.postDetailMaterialFormButton}
+                              onClick={() => removeBoothItem(index)}
+                              type="button"
+                            >
+                              -
+                            </button>
+                          )}
+                          {index === boothItems.length - 1 && (
+                            <button
+                              className={styles.postDetailMaterialFormButton}
+                              onClick={addBoothItem}
+                              type="button"
+                            >
+                              +
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.postImageContainer}>
+                <div className={styles.postImageQuanityLimitContainer}>
+                  <p className={styles.postImageQuanityLimitText}>
+                    投稿画像 {images.length}/4
+                  </p>
+                </div>
+
+                <div className={styles.postImageContentContainer}>
+                  <div className={styles.postImageContentContent}>
+                    {mainImage && (
+                      <img
+                        src={URL.createObjectURL(mainImage.file)}
+                        className={styles.postMainImage}
+                        alt="Uploaded"
+                        width={500}
+                        height={500}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className={styles.postImageInputContainer}>
+                  {images.map((image, index) => (
+                    <div
+                      key={index}
+                      className={styles.postImageContent}
+                      onClick={() => handleChangeMainImage(index)}
+                    >
+                      <img
+                        src={URL.createObjectURL(image.file)}
+                        alt="Uploaded"
+                        width={500}
+                        height={500}
+                        className={styles.postImage}
+                      />
+                      {index !== 0 && (
+                        <button
+                          className={styles.postImageClearButton}
+                          onClick={() => handleImageRemove(index)}
+                        >
+                          x
+                        </button>
+                      )}
+                    </div>
+                  ))}
+
+                  {images.length < 4 && (
+                    <div className={styles.postImageAddComtainer}>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        ref={fileInputRef}
+                        hidden
+                      />
+                      <button
+                        className={styles.postImageAddButton}
+                        onClick={() => fileInputRef.current?.click()}
+                        type="button"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            <div>
-              <button onClick={handleSubmit}>投稿する</button>
+
+            <div className={styles.submitContainer}>
+              <button onClick={handleSubmit}>
+                <p className={styles.postButtonText}>投稿する</p>
+              </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
