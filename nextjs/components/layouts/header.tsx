@@ -11,6 +11,8 @@ import { useState } from "react";
 import { useModal } from "@/provider/modal-provider";
 import { PostForm } from "@/features/posts/components/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
+import { useSearchStore } from "@/libs/store/search-store";
+import { createQueryParams } from "@/utils/queryParams";
 
 export const Header = () => {
   const router = useRouter();
@@ -21,11 +23,16 @@ export const Header = () => {
   };
 
   const { status } = useSession();
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery } = useSearchStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSearch = () => {
-    router.push(`/posts?query=${searchQuery}`);
+    const query = searchQuery.includes("#")
+      ? createQueryParams({ tag: searchQuery, page: 1 })
+      : createQueryParams({ title: searchQuery, page: 1 });
+    setSearchQuery(searchQuery);
+
+    router.push(`/posts?${query}`);
   };
   return (
     <>

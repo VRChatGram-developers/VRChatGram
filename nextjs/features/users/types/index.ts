@@ -6,6 +6,7 @@ export type User = {
     totalViews: number;
     posts: Post[][];
     top4Posts: Post[];
+    isCurrentUser: boolean;
   };
   
   export type Post = {

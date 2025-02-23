@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
 import _ from "lodash";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../auth/[...nextauth]/route";
 
 const prisma = new PrismaClient();
 
@@ -21,6 +23,20 @@ export async function GET(request: Request, { params }: { params: { id: string }
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
+
+    const session = await getServerSession(authOptions);
+    let currentUser;
+    if (session) {
+      currentUser = await prisma.users.findUnique({
+        where: {
+          uid: session.user.uid,
+        },
+        select: {
+          id: true,
+        },
+      });
+    }
+
     const user = await prisma.users.findUnique({
       where: {
         id: BigInt(id),
@@ -29,6 +45,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
         id: true,
         name: true,
         introduce: true,
+        uid: true,
         posts: {
           select: {
             id: true,
@@ -51,6 +68,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
       },
     });
 
+    const isCurrentUser = currentUser?.id === user?.id;
+    console.log(currentUser);
+    console.log(user);
+
     const postsWithLikes =
       user?.posts.map((post) => ({
         ...toJson(post),
@@ -71,6 +92,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       totalLikes: totalLikes,
       top4Posts: top4Posts,
       totalViews: totalViews,
+      isCurrentUser: isCurrentUser,
     };
 
     return NextResponse.json(response);
