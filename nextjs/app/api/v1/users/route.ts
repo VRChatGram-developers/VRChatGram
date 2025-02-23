@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const connect = async () => {
+const connect = async () => {
   try {
     prisma.$connect();
   } catch (error) {
@@ -35,14 +35,15 @@ export async function POST(request: Request) {
     await connect();
     return NextResponse.json({ message: "ユーザー作成しました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: `DB接続失敗しました: ${error}` }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request) {
   try {
     await connect();
-    const { id } = params;
+    const { id } = await request.json();
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -62,7 +63,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     });
     return NextResponse.json({ message: "フォロー解除しました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: `DB接続失敗しました: ${error}` }, { status: 500 });
   }
 }
 

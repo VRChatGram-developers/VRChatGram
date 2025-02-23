@@ -4,11 +4,12 @@ import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
 import _ from "lodash";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+// import { authOptions } from "../../../auth/[...nextauth]/route";
+import { authOptions } from "@/libs/firebase/auth";
 
 const prisma = new PrismaClient();
 
-export const connect = async () => {
+const connect = async () => {
   try {
     prisma.$connect();
   } catch (error) {
@@ -16,10 +17,10 @@ export const connect = async () => {
   }
 };
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request) {
   try {
     await connect();
-    const { id } = params;
+    const { id } = await request.json();
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -97,6 +98,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json(response);
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: `Failed to connect to database ${error}` }, { status: 500 });
   } finally {
     await prisma.$disconnect();

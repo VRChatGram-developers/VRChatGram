@@ -14,17 +14,20 @@
       visibility: visible;
       transition: opacity 0.3s ease, visibility 0.3s ease;
       z-index: 1;
+
       .likesPostsItemLikeContents {
         opacity: 1;
         visibility: visible;
         transition: opacity 0.3s ease, visibility 0.3s ease;
         z-index: 3;
       }
+
       .userInfo {
         opacity: 1;
         visibility: visible;
         transition: opacity 0.3s ease, visibility 0.3s ease;
         z-index: 2;
+
         .likesPostsItemLikeContents {
           opacity: 1;
           visibility: visible;
@@ -39,6 +42,7 @@
       transform: translateY(0); // 元の位置に移動
     }
   }
+
   // 背景を暗くする
   // &::before {
   //   content: "";
@@ -95,6 +99,7 @@
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     border-radius: 0 0 0.5rem 0.5rem;
+
     .userInfo {
       position: absolute;
       bottom: 1rem;

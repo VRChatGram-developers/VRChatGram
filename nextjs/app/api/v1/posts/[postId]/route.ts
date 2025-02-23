@@ -2,12 +2,11 @@ import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
-import { OtherPostList } from '../../../../../features/posts/components/other-post-list';
 //インスタンスを作成
 const prisma = new PrismaClient();
 
 // データベースに接続する関数
-export const connect = async () => {
+const connect = async () => {
   try {
     //prismaでデータベースに接続
     prisma.$connect();
@@ -16,10 +15,10 @@ export const connect = async () => {
   }
 };
 
-export async function GET(request: Request, { params }: { params: { postId: string } }) {
+export async function GET(request: Request) {
   try {
     await connect();
-    const { postId } = params;
+    const { postId } = await request.json();
     if (!postId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -87,6 +86,7 @@ export async function GET(request: Request, { params }: { params: { postId: stri
       otherPostList: serializedOtherPostList,
     });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
   }
 }

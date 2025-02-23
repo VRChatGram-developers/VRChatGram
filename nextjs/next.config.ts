@@ -1,16 +1,24 @@
 import type { NextConfig } from "next";
-import path from "path";
+import * as path from "node:path";
 
 const nextConfig: NextConfig = {
   webpack: (config) => {
     config.resolve.alias["@"] = path.resolve(__dirname); // プロジェクトルートを "@" にマッピング
+
+    config.module.rules.push({
+      test: /\.(woff|woff2|ttf|eot)$/,
+      type: "asset/resource",
+      generator: {
+        filename: "static/fonts/[name].[hash][ext]",
+      },
+    });
+
     return config;
   },
-};
-
-module.exports = {
+  output: "standalone", // Next.js 15 では experimental.outputStandalone は不要
+  reactStrictMode: false,
   images: {
-    domains: ["example.com"],
+    domains: ["example.com", "images.vrcpic.com"],
   },
 };
 

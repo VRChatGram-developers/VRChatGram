@@ -4,14 +4,17 @@
   align-items: center;
   justify-content: center;
   overflow: scroll;
+
   .registerContent {
     max-width: 31rem;
     border-radius: 1rem;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
     .registerTitleContent {
       text-align: center;
       background-color: #f1f1f1;
       padding: 2rem 0;
+
       .registerTitle {
         font-size: 24px;
         font-weight: bold;
@@ -34,6 +37,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 1.5rem;
+
     .nameLabel {
       font-size: 20px;
       font-weight: bold;
@@ -43,6 +47,7 @@
       font-size: 16px;
       font-weight: bold;
       height: 32px;
+
       .nameFormInput {
         width: 100%;
         padding: 8px 10px;
@@ -50,6 +55,7 @@
         border-radius: 3px;
         font-size: 1em;
         line-height: 1.5;
+
         &::placeholder {
           color: #999;
         }
@@ -66,20 +72,24 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 1.5rem;
+
     .genderLabel {
       font-size: 20px;
       font-weight: bold;
     }
+
     .genderSelectSection {
       display: flex;
       flex-wrap: wrap;
       border: none;
+
       .genderSelectLabel {
         display: flex;
         align-items: center;
         margin-right: 1rem;
         position: relative;
         cursor: pointer;
+
         &::before {
           width: 1.5rem;
           height: 1.5rem;
@@ -87,6 +97,7 @@
           border: 2px solid #d6dde3;
           content: "";
         }
+
         &:has(:checked)::after {
           position: absolute;
           top: 5px;
@@ -98,10 +109,12 @@
           border-width: 0 3px 3px 0;
           content: "";
         }
+
         .genderSelectInput {
           display: none;
           margin-left: 0.5rem;
         }
+
         &:not(:first-child) {
           margin-left: 0.5rem;
         }
@@ -113,16 +126,20 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 1.5rem;
+
     .birthdayLabel {
       font-size: 20px;
       font-weight: bold;
     }
+
     .birthdayContent {
       width: 100%;
+
       .birthdaySelectContent {
         display: inline-flex;
         align-items: center;
         position: relative;
+
         &::after {
           position: absolute;
           right: 15px;
@@ -133,6 +150,7 @@
           content: "";
           pointer-events: none;
         }
+
         .birthdaySelect {
           appearance: none;
           min-width: 86px;
@@ -146,6 +164,7 @@
           font-size: 1em;
           cursor: pointer;
         }
+
         &:not(:first-child) {
           margin-left: 0.5rem;
         }
@@ -155,6 +174,7 @@
 
   .confirmationContainer {
     margin-bottom: 3rem;
+
     .confirmationLabel {
       display: flex;
       align-items: center;
@@ -163,6 +183,7 @@
       gap: 0 0.5em;
       position: relative;
       cursor: pointer;
+
       &::before {
         width: 1.5rem;
         height: 1.5rem;
@@ -170,6 +191,7 @@
         border: 2px solid #d6dde3;
         content: "";
       }
+
       &:has(:checked)::after {
         position: absolute;
         left: 9px;
@@ -180,6 +202,7 @@
         border-width: 0 3px 3px 0;
         content: "";
       }
+
       .confirmationCheckbox {
         display: none;
       }
@@ -188,6 +211,7 @@
 
   .signupContent {
     width: 100%;
+
     .userCreateButton {
       width: 100%;
       background-color: #69beef;
@@ -228,6 +252,7 @@
     grid-template-columns: 1fr 1fr;
     height: calc(100vh - 50px);
   }
+
   .registerContent {
     width: 80%;
   }
@@ -235,6 +260,7 @@
 
 // 1024px未満（タブレット）
 @media (min-width: 768px) AND (max-width: 1023px) {
+
   // .signinContainer {
   //   grid-auto-flow: row;
   //   grid-template-rows: auto 1fr;
@@ -248,9 +274,11 @@
   .signinContainer {
     height: calc(100vh - 50px);
   }
+
   .registerImageContainer {
     display: none;
   }
+
   .registerContent {
     width: 80%;
   }
@@ -258,6 +286,7 @@
 
 // 1024px未満（タブレット）
 @media (max-width: 767px) {
+
   // .signinContainer {
   //   grid-auto-flow: row;
   //   grid-template-rows: auto 1fr;
@@ -271,9 +300,11 @@
   .signinContainer {
     height: calc(100vh - 50px);
   }
+
   .registerImageContainer {
     display: none;
   }
+
   .registerContent {
     width: 100%;
   }

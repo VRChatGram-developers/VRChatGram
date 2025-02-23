@@ -5,7 +5,7 @@ import { toJson } from "@/utils/json";
 
 const prisma = new PrismaClient();
 
-export const connect = async () => {
+const connect = async () => {
   try {
     prisma.$connect();
   } catch (error) {
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const session = body.session;
 
     if (session) {
-      user = await prisma.users.findUniqueOrThrow({
+      user = await prisma.users.findUnique({
         where: { uid: session.user.uid },
       });
     }

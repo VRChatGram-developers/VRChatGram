@@ -2,12 +2,9 @@
 
 import styles from "../styles/user-home.module.scss";
 import { User } from "@/features/users/types/index";
-import { useState } from "react";
 import { PostCard } from "@/components/post-card";
 
 export const UserHome = ({ user }: { user: User }) => {
-  const [isLiked, setIsLiked] = useState(false);
-
   return (
     <div className={styles.profileContentWrapper}>
       <div className={styles.profileContent}>
@@ -25,13 +22,14 @@ export const UserHome = ({ user }: { user: User }) => {
             <PostCard
               key={post.id}
               postCardProps={{
+                postId: post.id,
+                userId: user.id,
                 postName: post.title,
                 postImageUrl: "/home/new-post-image.png",
                 postImageCount: Number(post.images.length),
                 userName: user.name,
                 userImageUrl: "/users/post-sample-image2.png",
-                isLiked: isLiked,
-                setIsLiked: setIsLiked,
+                isLiked: false,
               }}
             />
           ))}

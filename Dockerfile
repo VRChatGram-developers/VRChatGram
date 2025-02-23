@@ -12,6 +12,6 @@ USER node
 # Install dependencies
 WORKDIR /app
 COPY --chown=node:node /nextjs ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 RUN chmod -R 755 ./node_modules

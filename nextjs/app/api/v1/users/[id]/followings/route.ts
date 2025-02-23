@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const connect = async () => {
+const connect = async () => {
   try {
     prisma.$connect();
   } catch (error) {
@@ -11,10 +11,10 @@ export const connect = async () => {
   }
 };
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request) {
   try {
     await connect();
-    const { id } = params;
+    const { id } = await request.json();
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -30,14 +30,15 @@ export async function POST(request: Request, { params }: { params: { id: string 
     await connect();
     return NextResponse.json({ message: "フォローしました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request) {
   try {
     await connect();
-    const { id } = params;
+    const { id } = await request.json();
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -57,6 +58,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     });
     return NextResponse.json({ message: "フォロー解除しました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
   }
 }

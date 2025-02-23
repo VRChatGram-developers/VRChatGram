@@ -7,7 +7,7 @@ export default async function Page({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const params = await searchParams;
-  const queryParamsString = new URLSearchParams(params).toString();
+  const queryParamsString = new URLSearchParams(params as Record<string, string>).toString();
 
   const postsList = await fetchPosts(queryParamsString, await headers());
   const popularTags = await fetchPopularTags();

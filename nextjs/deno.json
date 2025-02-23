@@ -1,0 +1,28 @@
+{
+  "deploy": {
+    "project": "vrcss-deploy",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [
+      ".next",
+      "public"
+    ],
+    "entrypoint": "./.next/standalone/server.cjs" 
+  },
+  "tasks": {
+    "start": "deno run --allow-net --allow-read --unstable --node-compat main.ts"
+  },
+  "compilerOptions": {
+    "types": [
+      "https://deno.land/x/nextjs@0.1.0/next.d.ts",
+      "https://deno.land/std@0.115.0/http/server.ts"
+    ]
+  },
+  "imports": {
+    "next": "https://deno.land/x/nextjs@0.1.0/next.ts",
+    "react": "https://deno.land/x/react@19.0.0/mod.ts",
+    "react-dom": "https://deno.land/x/react@19.0.0/server.tsx",
+    "http": "https://deno.land/std@0.115.0/http/server.ts"
+  }
+}

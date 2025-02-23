@@ -54,11 +54,11 @@
         background-color: rgba(0, 0, 0, 0); // 初期状態は透明
         transition: background-color 0.3s ease;
         z-index: 1; // 他の要素の背面に配置
-    }
+      }
 
       &:hover {
         &::before {
-          background-color: rgba(0, 0, 0, 0.5); 
+          background-color: rgba(0, 0, 0, 0.5);
         }
 
         .userInfo,
@@ -66,14 +66,14 @@
           opacity: 1;
           visibility: visible;
           transition: opacity 0.3s ease, visibility 0.3s ease;
-          z-index: 2; 
+          z-index: 2;
         }
       }
 
       .userInfo,
       .likesPostsItemLikeContents {
-      opacity: 0;
-      visibility: hidden;
+        opacity: 0;
+        visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
       }
 
@@ -112,12 +112,12 @@
         }
       }
 
-      .userInfo { 
+      .userInfo {
         position: absolute;
         bottom: 1rem;
         left: 1rem;
-        width: 100%;      
-        
+        width: 100%;
+
         .userInfoTitle {
           color: #ffffff;
           font-size: 16px;
@@ -129,7 +129,7 @@
           padding-top: 0.5rem;
           display: flex;
           align-items: center;
-          gap :0.5rem;
+          gap: 0.5rem;
 
           .userInfoName {
             color: #ffffff;

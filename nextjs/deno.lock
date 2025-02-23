@@ -1,0 +1,40 @@
+{
+  "version": "4",
+  "remote": {
+    "https://deno.land/std@0.224.0/async/delay.ts": "f90dd685b97c2f142b8069082993e437b1602b8e2561134827eeb7c12b95c499",
+    "https://deno.land/std@0.224.0/http/server.ts": "f9313804bf6467a1704f45f76cb6cd0a3396a3b31c316035e6a4c2035d1ea514"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@emotion/react@^11.14.0",
+        "npm:@emotion/styled@^11.14.0",
+        "npm:@eslint/eslintrc@3",
+        "npm:@mui/material@^6.4.2",
+        "npm:@prisma/client@^6.2.1",
+        "npm:@types/lodash@^4.17.15",
+        "npm:@types/node@^20.17.16",
+        "npm:@types/react-dom@19",
+        "npm:@types/react@19",
+        "npm:eslint-config-next@15.1.4",
+        "npm:eslint@9",
+        "npm:firebase-admin@^13.0.2",
+        "npm:firebase@^11.2.0",
+        "npm:lodash@^4.17.21",
+        "npm:next-auth@^4.24.11",
+        "npm:next@^15.2.0-canary.70",
+        "npm:postcss@8",
+        "npm:prisma@^6.2.1",
+        "npm:react-dom@19",
+        "npm:react-icons@^5.4.0",
+        "npm:react-spinners@0.15",
+        "npm:react@19",
+        "npm:sass@^1.84.0",
+        "npm:tailwindcss@^3.4.1",
+        "npm:ts-node@^10.9.2",
+        "npm:typescript@5",
+        "npm:zustand@^5.0.3"
+      ]
+    }
+  }
+}

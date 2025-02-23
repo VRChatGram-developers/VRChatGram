@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
-import { toJson } from "@/utils/json";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
 
 // データベースに接続する関数
-export const connect = async () => {
+const connect = async () => {
   try {
     //prismaでデータベースに接続
     prisma.$connect();

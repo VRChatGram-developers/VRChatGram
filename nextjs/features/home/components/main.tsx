@@ -179,13 +179,11 @@ export const Main = ({
 
       <PopularPostList
         popularPostList={popularPosts}
-        setIsLiked={setIsLiked}
         setPopularPostList={setPopularPosts}
       />
       <PopularTag popularTagList={popularTagList} />
       <LatestPost
         latestPostList={latestPosts}
-        setIsLiked={setIsLiked}
         setLatestPostList={setLatestPosts}
       />
       <XPost

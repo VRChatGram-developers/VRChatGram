@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../api/auth/[...nextauth]/route";
+// import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { authOptions } from "@/libs/firebase/auth";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
 
 // データベースに接続する関数
-export const connect = async () => {
+const connect = async () => {
   try {
     //prismaでデータベースに接続
     prisma.$connect();
@@ -37,8 +38,8 @@ export async function POST(request: Request) {
     }
 
     // TODO　S3保存後、発行されや画像のurlを取得する
-    const serializedImages = images.map((image: any) => ({
-      url: "https://example.com/image.jpg",
+    const serializedImages = images.map((image: { url: string; width: number; height: number }) => ({
+      url: image.url || "",
       width: image.width.toString(),
       height: image.height.toString(),
     }));
@@ -80,7 +81,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ status: 200, message: "投稿に成功しました" });
   } catch (error) {
-    console.log(error.stack);
+    console.log(error);
     return NextResponse.json({ error: "投稿に失敗しました" }, { status: 500 });
   }
 }

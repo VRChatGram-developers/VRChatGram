@@ -13,7 +13,6 @@ import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
-  console.log(post);
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);
@@ -33,7 +32,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     setSelectedImage(post.images[currentIndex - 1].url);
   };
 
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked] = useState(false);
   return (
     <>
       <div className={styles.postDetailContainerFirst}>
@@ -47,16 +46,10 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               className={styles.postImage}
             />
             {currentIndex !== post.images.length - 1 && (
-              <MdOutlineNavigateNext
-                className={styles.nextIcon}
-                onClick={handleNextImage}
-              />
+              <MdOutlineNavigateNext className={styles.nextIcon} onClick={handleNextImage} />
             )}
             {currentIndex !== 0 && (
-              <MdOutlineNavigateBefore
-                className={styles.beforeIcon}
-                onClick={handleBeforeImage}
-              />
+              <MdOutlineNavigateBefore className={styles.beforeIcon} onClick={handleBeforeImage} />
             )}
           </div>
         </div>
@@ -161,7 +154,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
         </div>
       </div>
 
-      <OtherPostList post={post} setIsLiked={setIsLiked} isLiked={isLiked} />
+      <OtherPostList post={post} isLiked={isLiked} />
     </>
   );
 };

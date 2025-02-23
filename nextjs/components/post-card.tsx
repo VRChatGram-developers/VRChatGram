@@ -14,8 +14,7 @@ interface PostCardProps {
   userName: string;
   userImageUrl: string;
   isLiked: boolean;
-  setIsLiked: (isLiked: boolean) => void;
-  handleLikeOrUnlike: () => void;
+  handleLikeOrUnlike?: () => void;
 }
 
 export const PostCard = ({
@@ -34,12 +33,10 @@ export const PostCard = ({
     userName,
     userImageUrl,
     isLiked,
-    setIsLiked,
     handleLikeOrUnlike,
   } = postCardProps;
 
   const handleForwardToPostDetail = (postId: string | bigint) => {
-    console.log(postId);
     const postIdString =
       typeof postId === "bigint" ? postId.toString() : postId;
     router.push(`/posts/${postIdString}`);
@@ -88,7 +85,7 @@ export const PostCard = ({
         <div className={styles.likesPostsItemLikeContents}>
           <div
             className={styles.likesPostsItemLikeItem}
-            onClick={() => handleLikeOrUnlike()}
+            onClick={() => handleLikeOrUnlike?.()}
           >
             {isLiked ? (
               <Image

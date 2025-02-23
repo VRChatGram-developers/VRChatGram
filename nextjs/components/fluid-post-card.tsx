@@ -72,7 +72,12 @@ export const FluidPostCard = ({ postCardProps }: { postCardProps: FluidPostCardP
         <div className={styles.userInfo}>
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
-            <Image src={userImageUrl} alt="new-post-image" className={styles.userInfoIcon} fill />
+            <Image
+              src={userImageUrl || ""}
+              alt="new-post-image"
+              className={styles.userInfoIcon}
+              fill
+            />
             <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(userId)}>
               {userName}
             </p>

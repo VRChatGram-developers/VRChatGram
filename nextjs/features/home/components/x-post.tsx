@@ -11,8 +11,6 @@ export const XPost = ({
   latestPostListWithX: XPostType[];
   setLatestPostListWithX: React.Dispatch<React.SetStateAction<XPostType[]>>;
 }) => {
-  console.log(latestPostListWithX);
-
   const { handleLikeOrUnlike } = useLikePost();
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
     Object.fromEntries(latestPostListWithX.map((post) => [post.id, post.is_liked]))

@@ -104,6 +104,7 @@ export const AccountInfoInput = ({
         gender: selectedSex,
       });
     } catch (error) {
+      console.error(error);
       setIsLoading(false);
       setIsSignUp(false);
     }

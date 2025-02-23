@@ -6,12 +6,12 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
-import { fetchPosts } from "@/features/posts/endpoint";
 import { createQueryParams } from "@/utils/queryParams";
 import { useSearchStore } from "@/libs/store/search-store";
 import { FluidPostCard } from "@/components/fluid-post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useRouter } from "next/navigation";
+
 const breakpoints = {
   large: 1280, // 1280px以上
   medium: 1040, // 1040px以上1280px未満
@@ -43,8 +43,8 @@ const adjustGridLayout = (items: NodeListOf<Element>, columns: number) => {
     if (rowItems.length === columns || index === itemsArr.length - 1) {
       // 行に配置できる数に達したら次の行へ
       rowItems.forEach((type, i) => {
-        item.style.gridRowStart = rowIndex.toString();
-        item.style.gridColumnStart = (i + 1).toString(); // 順番にカラムを設定
+        (item as HTMLElement).style.gridRowStart = rowIndex.toString();
+        (item as HTMLElement).style.gridColumnStart = (i + 1).toString(); // 順番にカラムを設定
       });
       rowIndex += 1;
       rowItems = []; // 次の行のためにリセット
@@ -70,11 +70,13 @@ export const SearchResult = ({
   const [postList, setPostList] = useState<Post[]>(posts);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
-  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(Object.fromEntries(posts.map((post) => [post.id, post.is_liked])));
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
+    Object.fromEntries(posts.map((post) => [post.id, post.is_liked]))
+  );
   const { handleLikeOrUnlike } = useLikePost();
+  const router = useRouter();
 
   const { searchQuery } = useSearchStore();
-  const router = useRouter();
   const searchSortOptions = [
     { label: "新着順", value: "newest" },
     { label: "人気順", value: "popular" },
@@ -113,9 +115,7 @@ export const SearchResult = ({
       : createQueryParams({ title: searchQuery, page: 1, sort: e.target.value });
 
     setSelectedSortOption(e.target.value);
-
-    const postsList = await fetchPosts(query);
-    setPostList(postsList.posts);
+    router.push(`/posts?${query}`);
   };
 
   // 画面幅が変更されるたびに再計算

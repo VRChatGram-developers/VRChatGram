@@ -1,17 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { bigIntToStringMap } from "../../../../../utils/bigIntToStringMapper";
 import { getStartOfWeek } from "../../../../../utils/date";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+// import { authOptions } from "../../../auth/[...nextauth]/route";
+import { authOptions } from "@/libs/firebase/auth";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
 
 // データベースに接続する関数
-export const connect = async () => {
+const connect = async () => {
   try {
     //prismaでデータベースに接続
     prisma.$connect();
@@ -20,7 +21,7 @@ export const connect = async () => {
   }
 };
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     await connect();
     const session = await getServerSession(authOptions);

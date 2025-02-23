@@ -81,6 +81,7 @@
       grid-auto-flow: column;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
+
       .mainSecondContainerFirstImage {
         width: 100%;
         height: 100%;
@@ -106,11 +107,13 @@
         font-weight: 600;
         margin-bottom: 1rem;
       }
+
       .notificationContainer {
         display: grid;
         gap: 1rem;
         grid-template-rows: 1fr 1fr auto;
         height: 100%;
+
         .notificationsList {
           border-radius: 0.5rem;
           transition-duration: 200ms;
@@ -156,6 +159,7 @@
                   font-weight: bold;
                   color: #000000;
                 }
+
                 .notificationContent {
                   font-size: 12px;
                   font-family: "Noto Sans JP";

@@ -49,7 +49,7 @@ export const unlikePost = async (postId: string) => {
 export const createPost = async <T>(post: T) => {
 
   // booth_itemsを取得
-  const { boothItems, ...rest } = post;
+  const { boothItems, ...rest } = post as { boothItems: string[]; };
 
     const boothItemsResponse = await Promise.all(boothItems.map(async (link: string) => {
       if (link.includes("https://")) {

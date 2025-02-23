@@ -5,11 +5,9 @@ import { PostDetail as PostDetailType } from "@/features/posts/types/index";
 import { PostCard } from "@/components/post-card";
 export const OtherPostList = ({
   post,
-  setIsLiked,
   isLiked,
 }: {
   post: PostDetailType;
-  setIsLiked: (isLiked: boolean) => void;
   isLiked: boolean;
 }) => {
   if (post.otherPostList.length === 0) {
@@ -26,13 +24,14 @@ export const OtherPostList = ({
           <PostCard
             key={post.id}
             postCardProps={{
+              postId: post.id,
+              userId: post.user?.id,
               postName: post.title,
               postImageUrl: "/users/post-sample-image3.png",
               postImageCount: post.images.length,
               userName: post.user?.name,
               userImageUrl: "/users/post-sample-image.png",
               isLiked: isLiked,
-              setIsLiked: setIsLiked,
             }}
           />
         ))}

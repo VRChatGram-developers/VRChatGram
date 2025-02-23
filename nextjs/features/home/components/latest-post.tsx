@@ -8,11 +8,9 @@ import { useState } from "react";
 
 export const LatestPost = ({
   latestPostList,
-  setIsLiked,
   setLatestPostList,
 }: {
   latestPostList: LatestPostType[];
-  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
   setLatestPostList: React.Dispatch<React.SetStateAction<LatestPostType[]>>;
 }) => {
   const { handleLikeOrUnlike } = useLikePost();
@@ -28,9 +26,7 @@ export const LatestPost = ({
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
 
     setLatestPostList((prevList) =>
-      prevList.map((post) =>
-        post.id === postId ? { ...post, is_liked: !currentLiked } : post
-      )
+      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
     );
   };
 
@@ -62,7 +58,6 @@ export const LatestPost = ({
                     userName: post.user.name,
                     userImageUrl: "/posts/sample-user-icon.png",
                     isLiked: likedPosts[post.id],
-                    setIsLiked: setIsLiked,
                     handleLikeOrUnlike: () => handleLike(post.id),
                   }}
                 />
