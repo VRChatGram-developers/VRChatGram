@@ -30,11 +30,9 @@ export default function RootLayout({
     <SessionProvider>
       <ModalProvider>
         <html lang="en">
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <Header />
-            <main> {children}</main>
+            <main className="pt-[50px]"> {children}</main>
             <Footer />
           </body>
         </html>

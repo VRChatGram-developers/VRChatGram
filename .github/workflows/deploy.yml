@@ -29,16 +29,16 @@ jobs:
           node-version: lts/*
 
       - name: Install step
-        run: "cd nextjs && npm install"
+        run: "npm install"
 
       - name: Build step
-        run: "cd nextjs && npm run build"
+        run: "npm run build"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "koheikureba-vrchatgram-35"
+          project: "vrcss-production"
           entrypoint: "jsr:@deno/nextjs-start"
           root: "."
-          
+          include: .next, public
           

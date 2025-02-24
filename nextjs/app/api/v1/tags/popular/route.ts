@@ -2,9 +2,6 @@ import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
-
-export const runtime = "edge";
-
 const prisma = new PrismaClient();
 
 export const connect = async () => {
