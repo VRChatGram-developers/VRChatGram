@@ -1,6 +1,9 @@
 import { PostList } from "@/features/posts/components";
 import { fetchPosts, fetchPopularTags } from "@/features/posts/endpoint";
 import { headers } from "next/headers";
+
+export const runtime = "edge";
+
 export default async function Page({
   searchParams,
 }: {
