@@ -1,12 +1,34 @@
-.latestPostConatiner {
-  display: grid;
-  gap: 1rem;
+.latestPostContainer {
   width: 100%;
+  height: auto;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  .latestPostTitle {
+    color: #151c4b;
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: bold;
+    font-family: "Noto Sans JP";
+    margin-bottom: 2rem;
+  }
+  .latestPostListConatiner {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+  }
 }
 
-// 768px以上1,280px未満（タブレット）
-@media (max-width: 1039px) {
-  .latestPostConatiner {
+// 1,280px以上（デスクトップ）
+@media (min-width: 1280px) {
+  .latestPostListConatiner {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// 1040px以上1,279px未満（デスクトップ中）
+@media (max-width: 1279px) {
+  .latestPostListConatiner {
     overflow-x: auto;
     grid-auto-flow: column;
   }

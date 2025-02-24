@@ -15,7 +15,9 @@ export const XPost = ({
 
   const { handleLikeOrUnlike } = useLikePost();
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
-    Object.fromEntries(latestPostListWithX.map((post) => [post.id, post.is_liked]))
+    Object.fromEntries(
+      latestPostListWithX.map((post) => [post.id, post.is_liked])
+    )
   );
 
   const handleLike = async (postId: string) => {
@@ -26,7 +28,9 @@ export const XPost = ({
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
 
     setLatestPostListWithX((prevList) =>
-      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+      prevList.map((post) =>
+        post.id === postId ? { ...post, is_liked: !currentLiked } : post
+      )
     );
   };
 
@@ -38,7 +42,11 @@ export const XPost = ({
         <div className="max-w-full mx-auto">
           <h2
             className="text-[#151C4B] font-medium text-center"
-            style={{ fontWeight: "bold", fontSize: "40px", fontFamily: "Noto Sans JP" }}
+            style={{
+              fontWeight: "bold",
+              fontSize: "40px",
+              fontFamily: "Noto Sans JP",
+            }}
           >
             Xからの投稿
           </h2>
@@ -63,14 +71,29 @@ export const XPost = ({
                     onClick={() => handleLike(post.id)}
                   >
                     {likedPosts[post.id] ? (
-                      <Image src="/heart-outline.png" alt="heart" width={64} height={64} />
+                      <Image
+                        src="/heart-outline.png"
+                        alt="heart"
+                        width={64}
+                        height={64}
+                      />
                     ) : (
-                      <Image src="/heart.png" alt="heart" width={64} height={64} />
+                      <Image
+                        src="/heart.png"
+                        alt="heart"
+                        width={64}
+                        height={64}
+                      />
                     )}
                   </div>
                 </div>
                 <div className="absolute" style={{ top: "8px", left: "8px" }}>
-                  <Image src="/home/x-icon.png" alt="Xからの投稿" width={80} height={80} />
+                  <Image
+                    src="/home/x-icon.png"
+                    alt="Xからの投稿"
+                    width={80}
+                    height={80}
+                  />
                 </div>
               </div>
             ))}
