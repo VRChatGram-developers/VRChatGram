@@ -29,15 +29,15 @@ jobs:
           node-version: lts/*
 
       - name: Install step
-        run: "cd nextjs && npm install --legacy-peer-deps"
+        run: "cd nextjs && npm install"
 
       - name: Build step
-        run: "npm run build"
+        run: "cd nextjs && npm run build"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "koheikureba-vrchatgram-67"
+          project: "koheikureba-vrchatgram-35"
           entrypoint: "jsr:@deno/nextjs-start"
           root: "."
           
