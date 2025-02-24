@@ -3,6 +3,9 @@ import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
 
+export const runtime = "edge";
+
+
 //インスタンスを作成
 const prisma = new PrismaClient();
 
