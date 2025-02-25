@@ -1,9 +1,6 @@
 import { TestDetail } from "@/features/sample/components/TestDetail";
 import { findTest } from "@/features/sample/endpoint";
 
-export const runtime = "edge";
-
-
 type BreadDetailProps = {
   params: {
     id: string; // URL の breed パラメータを受け取る

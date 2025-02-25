@@ -17,9 +17,11 @@ export const OtherPostList = ({
   }
 
   return (
-    <div className={styles.otherPostsContainer}>
-      <p className={styles.otherPostsTitle}>「{post.user?.name}」他の投稿</p>
-      <div className={styles.otherPostsListContainer}>
+    <div className={styles.otherPosts}>
+      <div className={styles.otherPostsTitle}>
+        <p>「{post.user?.name}」他の投稿</p>
+      </div>
+      <div className={styles.otherPostsList}>
         {post.otherPostList.map((post) => (
           <PostCard
             key={post.id}

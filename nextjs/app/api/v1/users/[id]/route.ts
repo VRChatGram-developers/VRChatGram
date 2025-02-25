@@ -5,8 +5,6 @@ import { toJson } from "@/utils/json";
 import _ from "lodash";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
-export const runtime = "edge";
-
 
 const prisma = new PrismaClient();
 

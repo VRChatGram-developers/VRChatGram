@@ -3,9 +3,6 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import { OtherPostList } from '../../../../../features/posts/components/other-post-list';
-
-export const runtime = "edge";
-
 //インスタンスを作成
 const prisma = new PrismaClient();
 

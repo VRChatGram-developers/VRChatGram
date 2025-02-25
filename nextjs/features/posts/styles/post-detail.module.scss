@@ -1,290 +1,297 @@
-.postDetailContainer {
-  display: grid;
+.postDetailContainerFirst {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 1.5rem 1.5rem;
   gap: 1.5rem;
+  align-items: stretch;
 
-  padding: 6rem 1.5rem 1.5rem 1.5rem;
   .postImageContainer {
+    width: 100%;
+
+    .postImage {
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      border-radius: 1rem;
+      aspect-ratio: 1 / 1;
+      position: relative;
+
+      .nextIcon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        border-radius: 50%;
+        padding: 0.5rem;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .beforeIcon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        border-radius: 50%;
+        padding: 0.5rem;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    .postImage:hover .nextIcon,
+    .postImage:hover .beforeIcon {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .postContentContainer {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    .postMainImage {
-      width: 100%;
-      aspect-ratio: 1;
-      border-radius: 1rem;
+
+    .postContentLabel {
+      background-color: #69beef;
+      color: #ffffff;
+      border-radius: 0.5rem;
+      font-size: 24px;
+      font-weight: bold;
+      font-family: "Noto Sans JP", sans-serif;
+      width: 260px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .postImageSubContainer {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4等分のグリッド */
-      grid-auto-rows: 1fr; /* 行の高さを均等にする */
-      gap: 10px;
-      .postImageSub {
-        width: 100%;
-        aspect-ratio: 1; /* 正方形のボックスを維持 */
-        display: flex; /* 画像を中央配置する */
-        justify-content: center;
+
+    .postContentTitle {
+      font-size: 40px;
+      font-weight: bold;
+      font-family: "Noto Sans JP", sans-serif;
+      width: 100%;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      color: #000000;
+      margin: 1.5rem 0;
+    }
+
+    .postContentIcons {
+      display: flex;
+      width: 100%;
+      gap: 2rem;
+      color: #5d5d5d;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: "Noto Sans JP", sans-serif;
+
+      .iconItem {
+        display: flex;
         align-items: center;
-        border-radius: 1rem;
-        .postImageSubSelected {
+        justify-content: center;
+        gap: 0.5rem;
+
+        .eyeIcon {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .iconHeart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+
+        .heartIcon {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+
+    .userInfoContainer {
+      display: flex;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 1rem 1rem;
+      margin: 1.5rem 0;
+      height: 150px;
+      align-items: center;
+      gap: 2rem;
+
+      .userInfoImage {
+        width: 100px;
+        height: 100px;
+      }
+
+      .userInfoContent {
+        height: 100px;
+
+        .userId {
+          font-size: 16px;
+          font-family: "Noto Sans JP", sans-serif;
+        }
+
+        .userInfoName {
+          padding: 0.5rem 0;
+          font-size: 24px;
+          font-family: "Noto Sans JP", sans-serif;
+          font-weight: bold;
+        }
+
+        .userInfoIcons {
+          display: flex;
+          gap: 1rem;
+        }
+      }
+    }
+
+    .postContentDescription {
+      font-size: 16px;
+      font-family: "Noto Sans JP", sans-serif;
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 1rem;
+      height: 100%;
+
+      .postContentDescriptionText {
+        font-size: 24px;
+        font-weight: bold;
+        color: #000000;
+      }
+    }
+
+    .BoothItemList {
+      display: flex;
+      background-color: #ffffff;
+    }
+  }
+}
+
+.postDetailContainerSecond {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 0 1.5rem;
+  gap: 1.5rem;
+  align-items: stretch;
+
+  .postImageListContainer {
+    width: 100%;
+    height: 100%;
+
+    .postImageList {
+      display: flex;
+      width: 100%;
+      gap: 1.5rem;
+
+      .postImageItem {
+        width: 25%;
+
+        .postImage {
           width: 100%;
           height: 100%;
-          border: 2px solid #69beef;
+          object-fit: cover;
+          aspect-ratio: 1 / 1;
+          border-radius: 1rem;
         }
-      }
-    }
-    .postImageTagContainer {
-      margin-top: 0.5rem;
-      display: flex;
-      flex-direction: row;
-      row-gap: 0.5rem;
-      column-gap: 0.5rem;
-      flex-wrap: wrap;
-      width: 100%;
-      .postImageTag {
-        display: flex;
-        padding: 0.5rem;
-        border: 1px solid #000;
-        border-radius: 0.5rem;
-        align-items: center;
-        .postImageTagText {
-          margin-right: 0.5rem;
-          font-weight: bold;
-        }
-      }
-    }
-  }
-  .postDetailContent {
-    .postDetailInfoContainer {
-      display: grid;
-      gap: 1rem;
-      .postDetailTextContaienr {
-        display: flex;
-        align-content: center;
-        .postDetailText {
-          color: #fff;
-          font-weight: bold;
-          background-color: #69beef;
-          padding: 1rem 2rem;
-          border-radius: 0.5rem;
-        }
-      }
-      .postDetailTitleContainer {
-        .postDetailTitle {
-          font-size: 4rem;
-          font-weight: bold;
-        }
-      }
-      .postDetailInformationContainer {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 1.5rem;
-        .postDetailInfomationViewContainer {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 0.5rem;
 
-          .postDetailInfomationView {
-            font-size: 1rem;
-          }
-        }
-        .postDetailInfomationLikeCountContainer {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 0.5rem;
-          .postDetailInfomationLikeCount {
-            font-size: 1rem;
-          }
-        }
-      }
-      .postDetailProfileContainer {
-        display: flex;
-        align-items: center;
-        background-color: #fff;
-        padding: 1rem;
-        gap: 1rem;
-        border-radius: 1rem;
-        .postDetailProfileIconContainer {
-          .postDetailProfileIcon {
-            max-width: 7rem;
-            max-height: 7rem;
-            border-radius: 50%;
-          }
-        }
-        .postDetailProfileContent {
+        .postImageSelected {
+          width: 100%;
           height: 100%;
-          display: grid;
-          gap: 0.5rem;
-          .postDetailProfileUserIdContainer {
-            .postDetailProfileUserId {
-              font-size: 1.5rem;
-            }
-          }
-          .postDetailProfileUserNameContainer {
-            .postDetailProfileUserName {
-              font-weight: bold;
-              font-size: 1.5rem;
-            }
-          }
-          .postDetailProfileSNSContainer {
-            display: flex;
-            gap: 1rem;
-          }
-        }
-      }
-      .postDetailProfileDescriptionContainer {
-        background-color: #fff;
-        padding: 1rem;
-        border-radius: 1rem;
-
-        .postDetailProfileDescriptionContent {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-
-          .postDetailProfileDescriptionTitle {
-            font-weight: bold;
-            font-size: 1.5rem;
-          }
-
-          .postDetailProfileDescription {
-            position: relative;
-
-            .postDetailProfileDescriptionInput {
-              display: none;
-            }
-
-            .postDetailProfileDescriptionText {
-              position: relative;
-              max-height: 21.5rem; // 初期表示時の高さ
-              margin-bottom: 0;
-              padding-bottom: 1rem;
-              overflow: hidden;
-              transition: max-height 0.5s ease-in-out;
-
-              &::after {
-                content: "";
-                display: block;
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 1rem;
-                background: linear-gradient(
-                  180deg,
-                  hsla(0, 0%, 100%, 0) 0,
-                  hsla(0, 0%, 100%, 0.9) 50%,
-                  hsla(0, 0%, 100%, 0.9) 100%,
-                  #fff
-                );
-              }
-            }
-
-            .expanded {
-              max-height: 100vh;
-
-              &::after {
-                content: none;
-              }
-            }
-
-            .postDetailProfileDescriptionLabel {
-              display: flex;
-              align-items: center;
-              gap: 4px;
-              position: absolute;
-              bottom: 0;
-              left: 50%;
-              transform: translateX(-50%);
-              color: #4f96f6;
-              font-size: 0.8em;
-              cursor: pointer;
-
-              &:hover {
-                color: #c7511f;
-                text-decoration: underline;
-              }
-
-              &::after {
-                content: "";
-                display: inline-block;
-                width: 10px;
-                height: 5px;
-                background-color: #b6bdc3;
-                clip-path: polygon(0 0, 100% 0, 50% 100%);
-              }
-            }
-          }
-        }
-      }
-
-      .postDetailProfileBoothContainer {
-        background-color: #fff;
-        padding: 1rem;
-        border-radius: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        .postDetailProfileBoothTitleContainer {
-          .postDetailProfileBoothTitle {
-            font-weight: bold;
-            font-size: 1.5rem;
-          }
-        }
-        .postDetailProfileBoothContent {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          .postDetailProfileBoothItem {
-            display: grid;
-            grid-template-columns: 7rem 1fr;
-            gap: 1rem;
-            width: 100%;
-            .postDetailProfileBoothImage {
-              width: 100%;
-              aspect-ratio: 1;
-              border-radius: 0.5rem;
-            }
-            .postDetailProfileBoothInfomationContainer {
-              width: 100%;
-              overflow: hidden;
-              display: flex;
-              flex-direction: column;
-              gap: 0.5rem;
-              .postDetailProfileBoothInfomationTitle {
-                font-size: 1.1rem;
-                font-weight: bold;
-              }
-              .postDetailProfileBoothInfomation {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3; // 3行まで表示
-                line-height: 1.6rem; // 行の高さを適切に設定
-                max-height: calc(1.6rem * 3); // 3行分の高さを計算して設定
-                word-break: break-word; // 単語の途中でも折り返し可能に
-              }
-            }
-          }
+          object-fit: cover;
+          aspect-ratio: 1 / 1;
+          border-radius: 1rem;
+          border: 3px solid #69beef;
         }
       }
     }
-  }
-}
 
-// 1,280px以上（デスクトップ）
-@media (min-width: 1040px) {
-  .postDetailContainer {
-    grid-template-columns: 1fr 1fr;
-  }
-}
+    .tagList {
+      width: 100%;
+      display: flex;
+      padding: 1.5rem 0;
+      gap: 8px;
+      flex-wrap: wrap;
 
-// 1040px以上1,279px未満（デスクトップ中）
-@media (max-width: 1039px) {
-  .postDetailContainer {
-    grid-auto-flow: row;
-    gap: 5rem !important;
+      .tagItem {
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        width: 64px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .selectedTagItem {
+        background-color: #111111;
+        border-radius: 1rem;
+        width: 64px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .postBoothItemContainer {
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+
+    .postBoothDescription {
+      font-size: 24px;
+      font-weight: bold;
+      color: #000000;
+      padding-left: 1rem;
+      padding-top: 1rem;
+    }
+
+    .postBoothList {
+      padding-left: 1rem;
+
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+
+      .postBoothItem {
+        display: flex;
+        gap: 1rem;
+        padding-top: 1rem;
+      }
+    }
   }
 }
