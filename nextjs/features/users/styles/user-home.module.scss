@@ -1,159 +1,107 @@
-.profileContent {
-  width: 100%;
-  height: 100%;
-  padding: 1.5rem 1.5rem;
-  display: flex;
-  gap: 1.5rem;
+.profileContentContaienr {
+  .profileContent {
+    display: grid;
+    gap: 1.5rem;
 
-  .profileContentIntroduction {
-    width: 65%;
-    height: 400px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    font-size: 24px;
-    color: #000000;
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem 1.5rem;
+    min-height: 400px;
+
+    .profileContentIntroduction {
+      width: 100%;
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 1rem;
+      font-size: 24px;
+      color: #000000;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      .profileIntroduceTitle {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .profileIntroduce {
+        font-size: 1rem;
+        font-weight: lighter;
+        word-break: break-all;
+      }
+    }
+
+    .profileSocialLinksContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      width: 100%;
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 1rem;
+      .profileSocialLinksTitle {
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+      .profileIntroduceContent {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        .profileIntroduceLink {
+          font-weight: lighter;
+        }
+      }
+    }
   }
 
-  .profileSocialLinks {
-    width: 40%;
-    height: 400px;
-    background-color: #ffffff;
-    border-radius: 10px;
+  .userPostPopularContainer {
+    width: 100%;
+    height: auto;
+    padding: 3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    .userPostPopularTitle {
+      color: #151c4b;
+      font-size: 2.25rem;
+      font-weight: bold;
+      font-family: "Noto Sans JP";
+      margin-bottom: 2rem;
+    }
+    .userPostPopularListConatiner {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+    }
   }
 }
 
-.likesPosts {
-  width: 100%;
-  height: 100%;
-  padding: 1.5rem 1.5rem;
-
-  .likesPostsTitle {
-    font-size: 24px;
-    font-weight: bold;
-    color: #151c4b;
-    padding: 0 0 1.5rem 0;
+@media (min-width: 1280px) {
+  .userPostPopularListConatiner {
+    grid-template-columns: repeat(4, 1fr);
   }
+}
 
-  .likesPostsList {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
+@media (max-width: 1279px) {
+  .userPostPopularListConatiner {
+    overflow-x: auto;
+    grid-auto-flow: column;
+  }
+}
 
-    .likesPostsItem {
-      width: 25%;
-      position: relative;
+@media (min-width: 1040px) {
+  .profileContent {
+    grid-auto-flow: column;
+    grid-template-columns: 3fr 2fr;
+  }
+  .profileIntroduceLink {
+    font-size: 1.5rem;
+  }
+}
 
-      // 背景を暗くする
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0); // 初期状態は透明
-        transition: background-color 0.3s ease;
-        z-index: 1; // 他の要素の背面に配置
-    }
-
-      &:hover {
-        &::before {
-          background-color: rgba(0, 0, 0, 0.5); 
-        }
-
-        .userInfo,
-        .likesPostsItemLikeContents {
-          opacity: 1;
-          visibility: visible;
-          transition: opacity 0.3s ease, visibility 0.3s ease;
-          z-index: 2; 
-        }
-      }
-
-      .userInfo,
-      .likesPostsItemLikeContents {
-      opacity: 0;
-      visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-      }
-
-      .likesPostsItemImage {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 0.5rem;
-      }
-
-      .likesPostsItemImageContents {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        width: 64px;
-        height: 32px;
-        background-color: rgba(0, 0, 0, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 40px;
-
-        .MdOutlinePhoto {
-          color: white;
-          font-size: 1.5rem;
-          width: 18px;
-          height: 18px;
-        }
-
-        .likesPostsItemImageContentsText {
-          color: white;
-          margin-left: 15px;
-          font-size: 14px;
-          font-family: "Noto Sans JP", sans-serif;
-          font-weight: bold;
-        }
-      }
-
-      .userInfo { 
-        position: absolute;
-        bottom: 1rem;
-        left: 1rem;
-        width: 100%;      
-        
-        .userInfoTitle {
-          color: #ffffff;
-          font-size: 16px;
-          font-family: "Noto Sans JP", sans-serif;
-          font-weight: bold;
-        }
-
-        .userInfoContainer {
-          padding-top: 0.5rem;
-          display: flex;
-          align-items: center;
-          gap :0.5rem;
-
-          .userInfoName {
-            color: #ffffff;
-            font-size: 13px;
-            font-family: "Noto Sans JP", sans-serif;
-            font-weight: bold;
-          }
-        }
-      }
-
-      .likesPostsItemLikeContents {
-        position: absolute;
-        bottom: 0.5rem;
-        right: 0.5rem;
-
-        .likesPostsItemLikeItem {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 64px;
-          height: 64px;
-          cursor: pointer;
-        }
-      }
-    }
+@media (max-width: 1039px) {
+  .profileContent {
+    grid-auto-flow: row;
+    grid-template-rows: 1fr 1fr;
+  }
+  .profileIntroduceLink {
+    font-size: 1rem;
   }
 }

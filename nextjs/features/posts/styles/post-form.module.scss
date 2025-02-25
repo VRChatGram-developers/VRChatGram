@@ -1,5 +1,410 @@
 .container {
-    display: flex;
+  display: flex;
+  background-color: #fff;
+  width: 100%;
+  max-width: 90rem;
+  .postFormContainer {
+    width: 100%;
+    .postFormInputArea {
+      .postTitleContent {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid;
+        padding: 2rem;
+        .postTitle {
+          font-size: 2rem;
+          font-weight: bold;
+        }
+      }
+
+      .postFormInputContent {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 4rem 2rem;
+        gap: 2rem;
+        .postFormInputContentBorder {
+          border: 2px dotted #000;
+          .postFormLogoContainer {
+            max-width: 20rem;
+          }
+          .postFormInputTextContainer {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .postFormInputText {
+              font-weight: bold;
+              font-size: 1.2rem;
+            }
+            .postFormInputButtonContainer {
+              margin-top: 1rem;
+              display: flex;
+              gap: 0.5rem;
+              padding: 1rem 2rem;
+              border: 2px solid;
+              border-radius: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+
+    .postTitleContent {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid;
+      padding: 0 2rem;
+      .postTitle {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+    }
+    .postContainer {
+      display: grid;
+      grid-template-rows: 5rem auto 5rem;
+
+      .postDetailContainer {
+        display: grid;
+
+        height: 40rem;
+
+        .postDetailContent {
+          padding: 2rem 2rem 0 0;
+          overflow-y: scroll;
+          height: 40rem;
+          border-right: 2px solid;
+          padding: 2rem 2rem;
+          .postDetailTitleContainer {
+            margin-bottom: 2rem;
+
+            .postDetailTitleInput {
+              width: 100%;
+              padding: 8px 10px;
+              border: 1px solid #969da3;
+              border-radius: 3px;
+              font-size: 1em;
+              line-height: 1.5;
+              background-color: #f2f8f8;
+            }
+          }
+          .postDetailTagContainer {
+            margin-bottom: 2rem;
+            .postDetailTagContent {
+              display: flex;
+              flex-direction: column;
+              .postDetailTagInput {
+                width: 100%;
+                max-width: 20rem;
+                padding: 8px 10px;
+                border: 1px solid #969da3;
+                border-radius: 3px;
+                font-size: 1em;
+                line-height: 1.5;
+                background-color: #f2f8f8;
+              }
+            }
+            .postDetailTagArea {
+              margin-top: 0.5rem;
+              display: flex;
+              flex-direction: row;
+              row-gap: 0.5rem;
+              column-gap: 0.5rem;
+              flex-wrap: wrap;
+              width: 100%;
+
+              .postDetailTag {
+                display: flex;
+                padding: 0.5rem;
+                border: 1px solid #000;
+                border-radius: 0.5rem;
+                align-items: center;
+                .postDetailTagText {
+                  margin-right: 0.5rem;
+                  font-weight: bold;
+                  span {
+                    margin-left: 0.1rem;
+                  }
+                }
+                .postDetailTagClear {
+                  font-weight: bold;
+                  font-size: 1.5rem;
+                  height: 1rem;
+                  display: flex;
+                  align-items: center;
+                }
+              }
+            }
+          }
+
+          .postDetailAgeLimitContainer {
+            margin-bottom: 2rem;
+            .postDetailAgeLimitContent {
+              display: flex;
+              flex-wrap: wrap;
+              border: none;
+              .postDetailAgeLimitLabel {
+                display: flex;
+                align-items: center;
+                margin-right: 1rem;
+                position: relative;
+                cursor: pointer;
+                &::before {
+                  width: 1.5rem;
+                  height: 1.5rem;
+                  border-radius: 3px;
+                  border: 2px solid #d6dde3;
+                  content: "";
+                }
+                &:has(:checked)::after {
+                  position: absolute;
+                  top: 5px;
+                  left: 9px;
+                  transform: rotate(45deg);
+                  width: 7px;
+                  height: 12px;
+                  border: solid #2589d0;
+                  border-width: 0 3px 3px 0;
+                  content: "";
+                }
+                .postDetailAgeLimitInput {
+                  display: none;
+                  margin-left: 0.5rem;
+                }
+                &:not(:first-child) {
+                  margin-left: 0.5rem;
+                }
+              }
+            }
+          }
+          .postDetailTextAreaContainer {
+            margin-bottom: 2rem;
+            .postDetailTextArea {
+              field-sizing: content;
+              width: 100%;
+              min-height: 5rem;
+              border: 1px solid #969da3;
+              padding: 8px 10px;
+              background-color: #f2f8f8;
+            }
+          }
+
+          .postDetailMaterialContainer {
+            display: flex;
+            flex-direction: column;
+            .postDetailMaterialContent {
+              display: flex;
+              flex-direction: column;
+              row-gap: 0.5rem;
+              .postDetailMaterialFormContainer {
+                display: grid;
+                grid-auto-flow: column;
+                gap: 1rem;
+                grid-template-columns: auto 3rem;
+                align-items: center;
+                width: 100%;
+                .postDetailMaterialForm {
+                  width: 100%;
+                  .postDetailMaterialFormInput {
+                    width: 100%;
+                    padding: 8px 10px;
+                    border: 1px solid #969da3;
+                    border-radius: 3px;
+                    font-size: 1em;
+                    line-height: 1.5;
+                  }
+                }
+                .postDetailMaterialFormButtonContainer {
+                  .postDetailMaterialFormButton {
+                    border: 1px solid;
+                    width: 2rem;
+                    height: 2rem;
+                    border-radius: 50%;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  }
+                }
+              }
+            }
+          }
+
+          .postDetailTitleText {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+          }
+        }
+        .postImageContainer {
+          display: grid;
+          grid-template-rows: 4rem 25rem 1fr;
+          max-height: 40rem;
+          padding: 2rem 2rem 0 2rem;
+          background-color: #f2f8f8;
+          .postImageQuanityLimitContainer {
+            display: flex;
+            align-items: center;
+            .postImageQuanityLimitText {
+            }
+          }
+          .postImageContentContainer {
+            height: 100%;
+            width: 100%;
+            background-color: #fff;
+            .postImageContentContent {
+              height: 100%;
+              width: 100%;
+              .postMainImage {
+                height: 100%;
+                width: 100%;
+                object-fit: contain;
+              }
+            }
+          }
+          .postImageInputContainer {
+            display: grid;
+            gap: 2rem;
+            grid-auto-flow: column;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            align-items: center;
+            padding: 1.5rem 0px;
+            .postImageContent {
+              position: relative;
+              height: 6rem;
+              background-color: #fff;
+              .postImage {
+                height: 100%;
+                width: 100%;
+                object-fit: contain;
+              }
+              .postImageClearButton {
+                position: absolute;
+                top: -10px;
+                left: 0px;
+                border: 1px solid;
+                padding: 0.5rem;
+                width: 2rem;
+                height: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                background-color: #fff;
+              }
+            }
+            .postImageAddComtainer {
+              input {
+                display: none;
+              }
+              .postImageAddButton {
+                border: 1px solid;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                font-weight: bold;
+                font-size: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+    .submitContainer {
+      width: 100%;
+      height: 100%;
+      border-top: 1px solid;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      justify-content: end;
+      button {
+        background-color: #69beef;
+        color: white;
+        text-align: center;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 3rem;
+        .postButtonText {
+          font-size: 1rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+// 768px以上1,280px未満（タブレット）
+@media (min-width: 1040px) {
+  .container {
+    width: 90vw;
+  }
+
+  .postFormInputContentBorder {
+    padding: 4rem 14rem;
+  }
+  .postDetailContainer {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// 768px以上1,280px未満（タブレット）
+@media (max-width: 1039px) {
+  .container {
+    width: 90vw;
+    // height: 100vh;
+    // margin-top: 10rem;
+    padding-top: 32rem;
+    overflow-y: scroll;
+  }
+
+  .postFormInputContentBorder {
+    padding: 2rem 7rem;
+  }
+  .postImageContentContainer {
+    width: 100% !important;
+  }
+  .postDetailContainer {
+    grid-auto-flow: row;
+    grid-template-rows: 1fr 1fr;
+  }
+  .postDetailContent {
+    order: 1;
+    border-right: none !important;
+  }
+  .postDetailContent {
+    order: 2;
+  }
+  .postDetailContainer {
+    height: 100% !important;
+  }
+  .submitContainer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: 100% !important;
+  }
+
+  .postFormInputContentBorder {
+    padding: 1rem;
+  }
+  .postFormInputContent {
+    padding: 2rem;
+  }
 }
 
 .error_message {
