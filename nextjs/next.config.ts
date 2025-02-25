@@ -6,11 +6,8 @@ const nextConfig: NextConfig = {
     config.resolve.alias["@"] = path.resolve(__dirname); // プロジェクトルートを "@" にマッピング
     return config;
   },
-};
-
-module.exports = {
   images: {
-    domains: ["example.com"],
+    domains: ["example.com", "pbs.twimg.com"], // 既存の "example.com" に加えて "pbs.twimg.com" を追加
   },
 };
 

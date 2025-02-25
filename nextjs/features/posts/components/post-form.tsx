@@ -1,7 +1,9 @@
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { createPost } from "../endpoint";
 import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
+import { FaImage } from "react-icons/fa6";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -29,7 +31,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
         }
         const reader = new FileReader();
         reader.onload = (e) => {
-          const img = new Image();
+          const img = new (globalThis.Image as any)();
           img.onload = () => {
             const imageData = {
               file: file,
@@ -149,11 +151,47 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className={styles.container}>
-      <div className="flex">
+      <div className={styles.postFormContainer}>
         {images.length === 0 ? (
-          <div className="w-full p-24">
-            <div>ここにドロップ&ドロップまたは</div>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
+          <div className={styles.postFormInputArea}>
+            <div className={styles.postTitleContent}>
+              <p className={styles.postTitle}>新規投稿</p>
+            </div>
+            <div className={styles.postFormInputContent}>
+              <div className={styles.postFormInputContentBorder}>
+                <div className={styles.postFormLogoContainer}>
+                  <Image
+                    src="/header/vrcss_icon.svg"
+                    alt="Logo"
+                    width={840}
+                    height={548}
+                    className={styles.logo}
+                  />
+                </div>
+                <div className={styles.postFormInputTextContainer}>
+                  <p className={styles.postFormInputText}>
+                    ここにドロップ&ドロップまたは
+                  </p>
+                  <div className={styles.postFormInputButtonContainer}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={handleImageChange}
+                      hidden
+                    />
+                    <FaImage size={32} />
+                    <button
+                      className={styles.postImageAddButton}
+                      onClick={() => fileInputRef.current?.click()}
+                      type="button"
+                    >
+                      ファイルを選択
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
           <div className={styles.postContainer}>

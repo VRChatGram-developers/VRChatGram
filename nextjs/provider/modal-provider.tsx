@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, PropsWithChildren } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  PropsWithChildren,
+} from "react";
 import { createPortal } from "react-dom";
 import { Modal } from "../components/layouts/modal";
 type ModalContextType = {
@@ -21,6 +27,7 @@ export const ModalProvider = ({ children }: PropsWithChildren) => {
   };
 
   const closeModal = () => {
+    console.log("close");
     setContent(null);
     setIsOpen(false);
   };
@@ -28,10 +35,13 @@ export const ModalProvider = ({ children }: PropsWithChildren) => {
   return (
     <ModalContext.Provider value={{ isOpen, openModal, closeModal }}>
       {children}
-      {isOpen && createPortal(<Modal onClose={closeModal}>{content}</Modal>, document.body)}
+      {isOpen &&
+        createPortal(
+          <Modal onClose={closeModal}>{content}</Modal>,
+          document.body
+        )}
     </ModalContext.Provider>
   );
 };
 
 export const useModal = () => useContext(ModalContext);
-

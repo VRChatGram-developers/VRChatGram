@@ -1,122 +1,194 @@
-.profileHeader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.profileHeaderContainer {
   width: 100%;
-  height: 560px;
-  background-color: #d9d9d9;
-  position: relative;
+  min-height: 30rem;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  padding: 2rem;
+  .profileHeaderContent {
+    display: grid;
 
-  .profileHeaderIcon {
-    position: absolute;
-    top: 276px;
-    left: 24px;
-  }
+    gap: 2rem;
+    min-height: 13rem;
+    height: 100%;
+    width: 100%;
+    align-items: center;
 
-  .profileUserName {
-    position: absolute;
-    top: 326px;
-    left: 308px;
-
-    .profileUserNameText {
-      font-size: 48px;
-      font-weight: bold;
-      color: #ffffff;
+    .profileHeaderUserIconContainer {
+      width: 100%;
+      height: 100%;
+      .profileHeaderUserIcon {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+      }
     }
-  }
-
-  .profileUserStatus {
-    position: absolute;
-    top: 400px;
-    left: 308px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #ffffff;
-    display: flex;
-
-    .profileLikeCount {
-      padding: 0 1.5rem;
-      border-right: 2px solid #ffffff;
-    }
-
-    .profilePostCount {
-      padding: 0 1.5rem;
-      border-right: 2px solid #ffffff;
-    }
-
-    .profileViewCount {
-      padding: 0 1.5rem 0 0;
-      border-right: 2px solid #ffffff;
-    }
-
-    .profileUserStatusItem:last-child {
-      border-right: none;
+    .profuleHeaderInfomationContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      .profileUserNameContainer {
+        .profileUserNameText {
+          font-weight: bold;
+          font-size: 4rem;
+        }
+      }
+      .profuleUserStatusContainer {
+        display: flex;
+        font-size: 1.5rem;
+        gap: 1rem;
+        font-weight: lighter;
+        .profileUserNameContainer {
+          .profileUserNameText {
+          }
+        }
+      }
     }
   }
 }
 
-.tabNavivation {
-  height: 120px;
-  width: 100%;
-  background-color: #303030;
+.tabNavigationConatiner {
+  background-color: #000;
   display: flex;
-  align-items: center;
-  padding-left: 1.5rem;
-  gap: 1.5rem;
-  position: relative;
-
-  .followButton {
-    position: absolute;
-    right: 7rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #69beef;
-    width: 260px;
-    height: 80px;
-    border-radius: 16px;
+  justify-content: space-between;
+  color: #fff;
+  padding: 0 1.5rem;
+  height: 4rem;
+  .tabNavigationContent {
     display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .followButtonText {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffffff;
+    flex-direction: row;
+    cursor: pointer;
+    .tabNavigationItem {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      min-width: 8rem;
+      box-sizing: border-box;
+      .tabNavigationItemText {
+        font-weight: bold;
+        font-size: 1rem;
+      }
     }
   }
-  .threeDots {
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 64px;
-    height: 64px;
-    background-color: #ffffff;
-    border-radius: 50%;
+  .tabNavigationButtonContainer {
     display: flex;
     align-items: center;
-    justify-content: center;
-  }
-  .tabNavivationItem {
-    font-size: 32px;
-    font-weight: bold;
-    color: #ffffff;
-    justify-content: center;
-    padding: 0 82px;
-    position: relative;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
+    gap: 2rem;
+    .editProfileButtonContainer {
+      color: #151c4b;
+      background-color: #fff;
+      border: #151c4b;
+      border-radius: 1rem;
+      padding: 0.5rem 2rem;
+      .threeDots {
+        background-color: #fff;
+        color: #000;
+        height: 2.5rem;
+        width: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+      }
+      .editProfileButton {
+      }
+    }
+    .unFollowButtonContainer {
+      color: #69beef;
+      background-color: #fff;
+      border: #69beef;
+      border-radius: 1rem;
+      padding: 0.5rem 2rem;
+      .threeDots {
+        background-color: #fff;
+        color: #000;
+        height: 2.5rem;
+        width: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+      }
+      .unFollowButton {
+      }
+    }
+    .followButtonContainer {
+      color: #fff;
+      background-color: #69beef;
+      border-radius: 1rem;
+      padding: 0.5rem 2rem;
 
-  .tabNavivationItem.active::after {
+      .threeDots {
+        background-color: #fff;
+        color: #000;
+        height: 2.5rem;
+        width: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+      }
+      .followButton {
+      }
+    }
+  }
+}
+
+.active {
+  position: relative;
+  &::after {
     content: "";
     position: absolute;
-    bottom: -30px;
-    left: 50%;
-    width: 60%;
-    height: 6px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px; // 下線の高さ
     background-color: #69beef;
-    transform: translateX(-50%);
-    transition: all 0.3s ease-in-out;
+  }
+}
+
+@media (min-width: 1040px) {
+  .profileHeaderContainer {
+    margin-top: 5rem;
+  }
+
+  .profileHeaderContent {
+    grid-auto-flow: column;
+    grid-template-columns: 13rem auto;
+  }
+}
+
+@media (max-width: 1039px) {
+  .profileHeaderContent {
+    grid-auto-flow: row;
+    grid-template-rows: 1fr auto;
+  }
+  .profuleHeaderInfomationContainer {
+    align-items: center;
+  }
+  .profileHeaderUserIconContainer {
+    display: flex;
+    justify-content: center;
+    aspect-ratio: 1;
+
+    .profileHeaderUserIcon {
+    }
+  }
+
+  .tabNavigationConatiner {
+    display: None;
+  }
+
+  .profileHeaderContainer {
+    padding: 12rem 2rem 2rem 2rem !important;
+  }
+
+  .profileUserNameText {
+    font-size: 3rem !important;
   }
 }
