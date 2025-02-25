@@ -1,9 +1,12 @@
+
+export const runtime = 'edge';
+
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const connect = async () => {
+const connect = async () => {
   try {
     prisma.$connect();
   } catch (error) {

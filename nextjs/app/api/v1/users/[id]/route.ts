@@ -1,14 +1,15 @@
+
+export const runtime = 'edge';
+
+
 import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
-import { toJson } from "@/utils/json";
 import _ from "lodash";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
-
+import { auth } from "@/libs/firebase/auth5";
 const prisma = new PrismaClient();
 
-export const connect = async () => {
+const connect = async () => {
   try {
     prisma.$connect();
   } catch (error) {
@@ -16,17 +17,17 @@ export const connect = async () => {
   }
 };
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request) {
   try {
     await connect();
-    const { id } = params;
+    const { id } = await request.json();
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     let currentUser;
-    if (session) {
+    if (session && session.user) {
       currentUser = await prisma.users.findUnique({
         where: {
           uid: session.user.uid,
@@ -69,14 +70,15 @@ export async function GET(request: Request, { params }: { params: { id: string }
     });
 
     const isCurrentUser = currentUser?.id === user?.id;
-    console.log(currentUser);
-    console.log(user);
 
     const postsWithLikes =
       user?.posts.map((post) => ({
-        ...toJson(post),
+        ...post,
         likesCount: post.likes.length,
-        images: post.images.map(toJson),
+        images: post.images.map((image) => ({
+          ...image,
+          url: image.url,
+        })),
       })) || [];
 
     const totalLikes = postsWithLikes.reduce((total, post) => total + post.likesCount, 0);
@@ -85,7 +87,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const chunkedPostsWithLikes = _.chunk(postsWithLikes, 20);
 
     const response = {
-      id: toJson(user?.id),
+      id: user?.id,
       name: user?.name,
       introduce: user?.introduce,
       posts: chunkedPostsWithLikes,

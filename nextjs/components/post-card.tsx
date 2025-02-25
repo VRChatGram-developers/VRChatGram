@@ -34,7 +34,6 @@ export const PostCard = ({
     userName,
     userImageUrl,
     isLiked,
-    setIsLiked,
     handleLikeOrUnlike,
   } = postCardProps;
 

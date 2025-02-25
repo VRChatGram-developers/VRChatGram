@@ -1,17 +1,18 @@
+export const runtime = "edge";
+
 import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
 import { Prisma } from "@prisma/client";
-import { bigIntToStringMap } from "../../../../../utils/bigIntToStringMapper";
-import { getStartOfWeek } from "../../../../../utils/date";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
+import { getStartOfWeek } from "@/utils/date";
+import { auth } from "@/libs/firebase/auth5";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
 
 // データベースに接続する関数
-export const connect = async () => {
+const connect = async () => {
   try {
     //prismaでデータベースに接続
     prisma.$connect();
@@ -23,21 +24,24 @@ export const connect = async () => {
 export async function GET(request: Request) {
   try {
     await connect();
-    const session = await getServerSession(authOptions);
+    const session = await auth();
+    if (!session || !session.user) {
+      return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
+    }
     const user = await prisma.users.findFirst({
       where: {
-        uid: session?.user.uid,
+        uid: session.user.uid,
       },
     });
     // タグ名、投稿名でlike検索
-    const tagName = request.nextUrl.searchParams.get("tag")
-      ? decodeURIComponent(request.nextUrl.searchParams.get("tag") as string)
+    const tagName = new URL(request.url).searchParams.get("tag")
+      ? decodeURIComponent(new URL(request.url).searchParams.get("tag") as string)
       : undefined;
-    const title = request.nextUrl.searchParams.get("title")
-      ? decodeURIComponent(request.nextUrl.searchParams.get("title") as string)
+    const title = new URL(request.url).searchParams.get("title")
+      ? decodeURIComponent(new URL(request.url).searchParams.get("title") as string)
       : undefined;
-    const sort = request.nextUrl.searchParams.get("sort")
-      ? decodeURIComponent(request.nextUrl.searchParams.get("sort") as string)
+    const sort = new URL(request.url).searchParams.get("sort")
+      ? decodeURIComponent(new URL(request.url).searchParams.get("sort") as string)
       : undefined;
 
     //クエリパラメータからページ番号を取得し、整数に変換（デフォルトは1）

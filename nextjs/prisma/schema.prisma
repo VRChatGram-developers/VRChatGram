@@ -10,7 +10,8 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNGUwY2E4NGUtMDAyMi00MjRkLThhNmYtMWFhZmIxNTNkMGJmIiwidGVuYW50X2lkIjoiZGRkN2IyOGNhNGY5NjI3NDhlNWM5Y2RjNTk2MjQ0YzczYTg4YTlkZmI1MWY5OTMzOWQ5NTI3NjY0OWZlZmVlNCIsImludGVybmFsX3NlY3JldCI6IjE5NDI0ZWNkLTJiOTUtNDZiYy05ZTZjLTJjM2MyYjY1YjgxZSJ9.AqFY1YaEQSZT7BTEr2J0rydTLDmIIsfPZLACiNfmUyo"
+  directUrl = "mysql://bcaMvwfNrPfivyf.root:U1yNDTjudGkVPQ33@gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/test?sslaccept=strict"
 }
 
 // 基本的なenumの定義

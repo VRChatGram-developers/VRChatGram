@@ -1,13 +1,14 @@
+export const runtime = "edge";
+
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../auth/[...nextauth]/route";
+import { auth } from "@/libs/firebase/auth5";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
 
 // データベースに接続する関数
-export const connect = async () => {
+const connect = async () => {
   try {
     //prismaでデータベースに接続
     prisma.$connect();
@@ -16,15 +17,15 @@ export const connect = async () => {
   }
 };
 
-export async function POST(request: Request, { params }: { params: { postId: string } }) {
+export async function POST(request: Request) {
   try {
     await connect();
 
-    const session = await getServerSession(authOptions);
-    if (!session) {
+    const session = await auth();
+    if (!session || !session.user) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
-    const { postId } = params;
+    const { postId } = await request.json();
     if (!postId) {
       return NextResponse.json({ error: "postIdが指定されていません" }, { status: 400 });
     }
@@ -63,14 +64,14 @@ export async function POST(request: Request, { params }: { params: { postId: str
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { postId: string } }) {
+export async function DELETE(request: Request) {
   try {
     await connect();
-    const session = await getServerSession(authOptions);
-    if (!session) {
+    const session = await auth();
+    if (!session || !session.user) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
-    const { postId } = params;
+    const { postId } = await request.json();
     if (!postId) {
       return NextResponse.json({ error: "postIdが指定されていません" }, { status: 400 });
     }

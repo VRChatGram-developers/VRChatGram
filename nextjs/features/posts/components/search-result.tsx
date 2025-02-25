@@ -43,8 +43,8 @@ const adjustGridLayout = (items: NodeListOf<Element>, columns: number) => {
     if (rowItems.length === columns || index === itemsArr.length - 1) {
       // 行に配置できる数に達したら次の行へ
       rowItems.forEach((type, i) => {
-        item.style.gridRowStart = rowIndex.toString();
-        item.style.gridColumnStart = (i + 1).toString(); // 順番にカラムを設定
+        (item as HTMLElement).style.gridRowStart = rowIndex.toString();
+        (item as HTMLElement).style.gridColumnStart = (i + 1).toString(); // 順番にカラムを設定
       });
       rowIndex += 1;
       rowItems = []; // 次の行のためにリセット
@@ -114,8 +114,7 @@ export const SearchResult = ({
 
     setSelectedSortOption(e.target.value);
 
-    const postsList = await fetchPosts(query);
-    setPostList(postsList.posts);
+    router.push(`/posts?${query}`);
   };
 
   // 画面幅が変更されるたびに再計算

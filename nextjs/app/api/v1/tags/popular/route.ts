@@ -1,10 +1,13 @@
+export const runtime = 'edge';
+
+
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
 const prisma = new PrismaClient();
 
-export const connect = async () => {
+const connect = async () => {
   try {
     prisma.$connect();
   } catch (error) {
@@ -12,7 +15,7 @@ export const connect = async () => {
   }
 };
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     await connect();
     const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>(

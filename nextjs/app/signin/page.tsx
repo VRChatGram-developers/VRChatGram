@@ -1,10 +1,12 @@
+export const runtime = 'edge';
+
+
 import { SignInForm } from "@/features/auth/components/sign-in-form";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { auth } from "@/libs/firebase/auth5";
 
 export default async function Page() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (session) {
     redirect("/");
   }

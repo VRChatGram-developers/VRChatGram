@@ -1,12 +1,17 @@
+export const runtime = 'edge';
+
 import { Main } from "@/features/home/components/main";
 import { fetchNotifications, fetchHomeFeed } from "@/features/home/endpoint";
 import { Tag } from "@/features/home/types/tag";
 import { PopularPost as PopularPostType, LatestPost as LatestPostType, XPost as XPostType } from "@/features/home/types/index";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { auth } from "@/libs/firebase/auth5";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
+  if (!session || !session.user) {
+    return <div>ログインしてください</div>;
+  }
+
   const notifications = await fetchNotifications();
   const serializedNotifications = notifications.notifications.map((notification) => {
     const year = new Date(notification.published_at).getFullYear();
@@ -18,6 +23,7 @@ export default async function Home() {
       published_at: formattedDate,
     };
   });
+
   const homeData = await fetchHomeFeed<{
     popularPostList: PopularPostType[];
     latestPostList: LatestPostType[];
