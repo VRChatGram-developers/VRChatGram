@@ -5,9 +5,6 @@ import { PopularPost as PopularPostType, LatestPost as LatestPostType, XPost as 
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 
-export const runtime = "edge";
-
-
 export default async function Home() {
   const session = await getServerSession(authOptions);
   const notifications = await fetchNotifications();

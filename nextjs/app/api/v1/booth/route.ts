@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-export const runtime = "edge";
-
 export async function GET(req, res) {
     // 外部APIのURL
     const url = req.nextUrl.searchParams.get('url');

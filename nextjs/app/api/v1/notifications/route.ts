@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
-export const runtime = "edge";
+import { toJson } from "@/utils/json";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
