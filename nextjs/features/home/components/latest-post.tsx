@@ -36,39 +36,26 @@ export const LatestPost = ({
 
   return (
     <>
-      <div className="max-w-full h-full" style={{ padding: "3rem 1.5rem" }}>
-        <div>
-          <div className="max-w-full mx-auto">
-            <h2
-              className="text-[#151C4B] font-medium text-center"
-              style={{
-                fontWeight: "bold",
-                fontSize: "40px",
-                fontFamily: "Noto Sans JP",
+      <div className={styles.latestPostContainer}>
+        <p className={styles.latestPostTitle}>新着</p>
+        <div className={styles.latestPostListConatiner}>
+          {latestPostList.map((post) => (
+            <PostCard
+              key={post.id}
+              postCardProps={{
+                postId: post.id,
+                userId: post.user.id,
+                postName: post.title,
+                postImageUrl: "/home/new-post-image.png",
+                postImageCount: post.images.length,
+                userName: post.user.name,
+                userImageUrl: "/posts/sample-user-icon.png",
+                isLiked: likedPosts[post.id],
+                setIsLiked: setIsLiked,
+                handleLikeOrUnlike: () => handleLike(post.id),
               }}
-            >
-              新着
-            </h2>
-            <div className={styles.latestPostConatiner}>
-              {latestPostList.map((post) => (
-                <PostCard
-                  key={post.id}
-                  postCardProps={{
-                    postId: post.id,
-                    userId: post.user.id,
-                    postName: post.title,
-                    postImageUrl: "/home/new-post-image.png",
-                    postImageCount: post.images.length,
-                    userName: post.user.name,
-                    userImageUrl: "/posts/sample-user-icon.png",
-                    isLiked: likedPosts[post.id],
-                    setIsLiked: setIsLiked,
-                    handleLikeOrUnlike: () => handleLike(post.id),
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+            />
+          ))}
         </div>
       </div>
     </>

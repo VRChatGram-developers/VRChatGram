@@ -1,129 +1,335 @@
-.header {
+.headerContainer {
   position: fixed;
-  top: 0;
   width: 100%;
-  height: 50px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md に相当 */
-  display: flex;
-  align-items: center;
-  z-index: 50;
-  padding: 0 1.5rem;
+  box-sizing: border-box;
+  z-index: 999;
+  display: grid;
+  gap: 4rem;
+  grid-auto-flow: column;
+  grid-template-columns: 120px 1fr auto;
+  padding: 0.5rem 1.5rem;
+  background-color: #fff;
+  min-height: 4rem;
+  box-shadow: hsla(0 0% 0% / 0.1) 0 0.5rem 1rem;
 
-  .logo {
-    padding-left: 1.5rem;
+  .headerImageContainer {
+    height: 4rem;
+    position: relative;
+    min-width: 7.5rem;
+    .logo {
+      width: auto !important;
+    }
   }
 
-  .searchInput {
-    flex: 1;
-    margin-left: 165px;
-    margin-right: 165px;
+  .searchInputContainer {
     position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0.5rem 0;
+    input {
+      height: 100%;
+      width: 100%;
+      padding: 0.5rem 0 0.5rem 3.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      color: #5d5d5d;
+    }
 
-    div {
-      position: relative;
-
-      input {
-        width: 100%;
-        max-width: 970px;
-        height: 32px;
-        padding-left: 35px;
-        border: 1px solid #D1D5DB;
-        border-radius: 4px;
-        color: #5D5D5D;
-      }
-
-      .FaSearch {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #5D5D5D;
-        pointer-events: none;
-      }
+    .FaSearch {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5d5d5d;
+      pointer-events: none;
     }
   }
 
   .headerButtonsContainer {
-    display: flex;
-    flex-shrink: 0;
-    position: relative;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    gap: 2rem;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    place-content: center;
   }
 
   .signInButton {
-    width: 118px;
-    height: 32px;
-    background-color: white;
-    border: 1px solid #69beef;
+    background-color: #fff;
     color: #69beef;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 15px;
-    letter-spacing: 0.21666669845581055px;
+    border: 1px solid #69beef;
     text-align: center;
-    border-radius: 16px;
+    border-radius: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 1rem 2rem;
+    .signInButtonText {
+      font-size: 1rem;
+      font-weight: bold;
+    }
   }
 
   .signUpButton {
-    width: 118px;
-    height: 32px;
     background-color: #69beef;
     color: white;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 15px;
-    letter-spacing: 0.21666669845581055px;
     text-align: center;
-    border-radius: 16px;
+    border-radius: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 1.5rem;
+    padding: 1rem 2rem;
+    .signUpButtonText {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-right: 1rem;
+    }
   }
 
-  .postButton {
+  .postButtonContainer {
     display: flex;
-    padding-right: 1.5rem;
 
     button {
-      width: 118px;
-      height: 32px;
       background-color: #69beef;
-      border: 1px solid #69beef;
       color: white;
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 0.2167px;
       text-align: center;
-      border-radius: 16px;
+      border-radius: 2rem;
       display: flex;
       align-items: center;
       justify-content: center;
-
-      .FaCamera {
-        margin-left: 8px;
-        width: 20px;
-        height: 18px;
+      padding: 1rem 2rem;
+      .postButtonText {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-right: 1rem;
       }
     }
   }
 
-  .userIcon {
+  .userIconContainer {
     display: flex;
     align-items: center;
 
     img {
-      padding-right: 8px;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .headerMobileContainer {
+    display: none;
+    height: 3rem;
+    width: 3rem;
+    background: #8acbf2;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    .headerMobileHumburger {
+      transition: all 0.4s;
+      span {
+        position: absolute;
+        background: #fff;
+        display: inline-block;
+        border-radius: 3px;
+        left: 13px;
+        height: 3px;
+        transition: all 0.4s;
+        width: 50%;
+        &:nth-of-type(1) {
+          top: 16px;
+        }
+        &:nth-of-type(2) {
+          top: 24px;
+        }
+        &:nth-of-type(3) {
+          top: 32px;
+        }
+      }
     }
 
-    .RiArrowDownSLine {
-      width: 30px;
-      height: 24px;
+    .headerMobileHumburgerOpen {
+      transform: rotatex(360deg);
+      span {
+        &:nth-of-type(1) {
+          width: 45%;
+          top: 18px;
+          left: 14px;
+          transform: translateY(6px) rotate(-135deg);
+        }
+        &:nth-of-type(2) {
+          opacity: 0;
+        }
+        &:nth-of-type(3) {
+          width: 45%;
+          top: 30px;
+          left: 14px;
+          transform: translateY(-6px) rotate(135deg);
+        }
+      }
     }
+  }
+}
+
+.headerMobileDrawerMenu {
+  width: 0;
+  color: #000;
+  // background-color: rgb(34, 35, 36);
+  background-color: #fff;
+  height: 0;
+  opacity: 0;
+  .headerMobileDraweContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0 1.5rem;
+    .searchInputMobileContainer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding: 0.5rem 0;
+      height: 4rem;
+      input {
+        height: 100%;
+        width: 100%;
+        padding: 0.5rem 0 0.5rem 3.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        color: #5d5d5d;
+      }
+
+      .FaSearch {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #5d5d5d;
+        pointer-events: none;
+      }
+    }
+    .headerMobileButtonsContainer {
+      padding: 0.5rem 0;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      .signInButton {
+        background-color: #fff;
+        color: #69beef;
+        border: 1px solid #69beef;
+        text-align: center;
+        border-radius: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2rem;
+        width: 100%;
+        margin-bottom: 1rem;
+        .signInButtonText {
+          font-size: 1rem;
+          font-weight: bold;
+        }
+      }
+
+      .signUpButton {
+        background-color: #69beef;
+        color: white;
+        text-align: center;
+        border-radius: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2rem;
+        width: 100%;
+        .signUpButtonText {
+          font-size: 1rem;
+          font-weight: bold;
+          margin-right: 1rem;
+        }
+      }
+
+      .postButtonContainer {
+        display: flex;
+
+        button {
+          background-color: #69beef;
+          color: white;
+          text-align: center;
+          border-radius: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1rem 2rem;
+          width: 100%;
+          margin-bottom: 1rem;
+          .postButtonText {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-right: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .userIconContainer {
+    display: flex;
+    flex-direction: column;
+    .userProfileContainer {
+      display: flex;
+      flex-direction: column;
+      margin: 3rem 0;
+      color: #000;
+      .userProfileIcon {
+        margin-bottom: 1rem;
+      }
+      .userNameText {
+        font-size: 2rem;
+        font-weight: bold;
+        line-height: 2.5rem;
+      }
+      .userIdText {
+        font-size: 1rem;
+      }
+    }
+    .moduleDrawerMenuContent {
+      display: grid;
+      grid-auto-flow: row;
+      gap: 2rem;
+      .moduleDrawerMenutext {
+        font-size: 1.5rem;
+        font-family: "Noto Sans JP", sans-serif;
+      }
+    }
+  }
+}
+
+.headerMobileDrawerMenuOpen {
+  width: 100%;
+  height: 100vh;
+  opacity: 1;
+  z-index: 5;
+  position: fixed;
+  padding: 6rem 0;
+}
+
+// 1,039px未満（タブレット）
+@media (max-width: 1039px) {
+  .headerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .searchInputContainer {
+    display: none !important;
+  }
+  .headerButtonsContainer {
+    display: none !important;
+  }
+
+  .headerMobileContainer {
+    display: block !important;
   }
 }
