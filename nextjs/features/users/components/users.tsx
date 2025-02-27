@@ -34,12 +34,12 @@ export const Users = ({ user }: { user: User }) => {
     <>
       <div
         className={styles.profileHeaderContainer}
-        style={{ backgroundImage: `url(${BackgeoundImageURL})` }}
+        style={{ backgroundImage: `url(${user.header_url || BackgeoundImageURL})` }}
       >
         <div className={styles.profileHeaderContent}>
           <div className={styles.profileHeaderUserIconContainer}>
             <Image
-              src={IconImageURL}
+              src={user.profile_url || IconImageURL}
               alt="profile"
               width={260}
               height={260}
@@ -68,17 +68,13 @@ export const Users = ({ user }: { user: User }) => {
       <div className={styles.tabNavigationConatiner}>
         <div className={styles.tabNavigationContent}>
           <div
-            className={`${styles.tabNavigationItem} ${
-              activeTab === 0 ? styles.active : ""
-            }`}
+            className={`${styles.tabNavigationItem} ${activeTab === 0 ? styles.active : ""}`}
             onClick={() => setActiveTab(0)}
           >
             <p className={styles.tabNavigationItemText}>ホーム</p>
           </div>
           <div
-            className={`${styles.tabNavigationItem} ${
-              activeTab === 1 ? styles.active : ""
-            }`}
+            className={`${styles.tabNavigationItem} ${activeTab === 1 ? styles.active : ""}`}
             onClick={() => setActiveTab(1)}
           >
             <p className={styles.tabNavigationItemText}>投稿一覧</p>
@@ -87,12 +83,7 @@ export const Users = ({ user }: { user: User }) => {
 
         <div className={styles.tabNavigationButtonContainer}>
           {session?.user &&
-            renderFollowOrprofileEditButton(
-              user,
-              isFollowing,
-              handleUnfollow,
-              handleFollow
-            )}
+            renderFollowOrprofileEditButton(user, isFollowing, handleUnfollow, handleFollow)}
         </div>
       </div>
       {activeTab === 0 && <UserHome user={user} />}

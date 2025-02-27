@@ -6,6 +6,38 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
 import { useState } from "react";
 import { PostCard } from "@/components/post-card";
+import { SocialLink } from "@/features/users/types/index";
+
+const renderSocialLink = (socialLink: SocialLink) => {
+  if (!socialLink) {
+    return null;
+  }
+
+  if (socialLink.platform_name === "twitter") {
+    return (
+      <div key={socialLink.platform_name} className={styles.profileIntroduceContent}>
+        <FaXTwitter size={36} />
+        <p className={styles.profileIntroduceLink}>{socialLink.platform_url}</p>
+      </div>
+    );
+  }
+
+  if (socialLink.platform_name === "discord") {
+    return (
+      <div key={socialLink.platform_name} className={styles.profileIntroduceContent}>
+        <FaDiscord size={36} />
+        <p className={styles.profileIntroduceLink}>{socialLink.platform_url}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div key={socialLink.platform_name} className={styles.profileIntroduceContent}>
+      <FaDiscord size={36} />
+      <p className={styles.profileIntroduceLink}>{socialLink.platform_url}</p>
+    </div>
+  );
+};
 
 export const UserHome = ({ user }: { user: User }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -19,16 +51,7 @@ export const UserHome = ({ user }: { user: User }) => {
         </div>
         <div className={styles.profileSocialLinksContainer}>
           <p className={styles.profileSocialLinksTitle}>SNSリンク</p>
-          <div className={styles.profileIntroduceContent}>
-            <FaXTwitter size={36} />
-            <p className={styles.profileIntroduceLink}>
-              http://x.com/user/hogehoge
-            </p>
-          </div>
-          <div className={styles.profileIntroduceContent}>
-            <FaDiscord size={36} />
-            <p className={styles.profileIntroduceLink}>hogefuga_piyo</p>
-          </div>
+          {user.social_links.map((socialLink) => renderSocialLink(socialLink))}
         </div>
       </div>
 
