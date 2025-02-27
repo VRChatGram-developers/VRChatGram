@@ -14,12 +14,11 @@ export const connect = async () => {
 export async function POST(request: Request) {
   try {
     await connect();
-    const { name, password, email, introduce, gender, profile_url, uid } = await request.json();
+    const { name, email, introduce, gender, profile_url, uid } = await request.json();
 
     await prisma.users.create({
       data: {
         name: name,
-        password: password,
         email: email,
         introduce: introduce,
         gender: gender,
