@@ -11,7 +11,6 @@ async function main() {
       data: {
         uid: "test1",
         name: "テストユーザー1",
-        password: "password123",
         email: "test1@example.com",
         gender: "male",
         profile_url: "https://example.com/profile1.jpg",
@@ -31,7 +30,6 @@ async function main() {
       data: {
         uid: "test2",
         name: "テストユーザー2",
-        password: "password123",
         email: "test2@example.com",
         gender: "female",
         profile_url: "https://example.com/profile2.jpg",
