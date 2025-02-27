@@ -7,6 +7,7 @@ export type User = {
     posts: Post[][];
     top4Posts: Post[];
     isCurrentUser: boolean;
+    social_links: SocialLink[];
   };
   
   export type Post = {
@@ -28,4 +29,9 @@ export type User = {
     gender: string;
     email: string;
     password: string;
+  };
+
+  export type SocialLink = {
+    platform_name: string;
+    platform_url: string;
   };
