@@ -65,6 +65,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
             },
           },
         },
+        social_links: {
+          select: {
+            platform_name: true,
+            platform_url: true,
+          },
+        },
       },
     });
 
@@ -93,6 +99,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       top4Posts: top4Posts,
       totalViews: totalViews,
       isCurrentUser: isCurrentUser,
+      social_links: user?.social_links.map(toJson),
     };
 
     return NextResponse.json(response);
