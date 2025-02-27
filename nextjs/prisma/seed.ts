@@ -40,10 +40,16 @@ async function main() {
         my_id: "user2",
         introduce: "テストユーザー2の自己紹介です。",
         social_links: {
-          create: {
-            platform_name: "twitter",
-            platform_url: "https://twitter.com/user2",
-          },
+          create: [
+            {
+              platform_name: "twitter",
+              platform_url: "https://twitter.com/user2",
+            },
+            {
+              platform_name: "discord",
+              platform_url: "https://discord.com/user2",
+            },
+          ],
         },
       },
     }),
