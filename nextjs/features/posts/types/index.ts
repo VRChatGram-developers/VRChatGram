@@ -35,9 +35,10 @@ export type PostDetail = {
   tags: Tag[];
   booth_items: BoothItem[];
   user: User;
-  likeCount: number;
   view_count: number;
   otherPostList: UserOtherPost[];
+  likes: Like[];
+  is_liked: boolean;
 };
 
 export type BoothItem = {
@@ -71,4 +72,11 @@ export type ImageData = {
   file_data: string;
   width: number;
   height: number;
+};
+
+export type Like = {
+  id: bigint;
+  post_id: bigint;
+  user_id: bigint;
+  posted_user_id: bigint;
 };

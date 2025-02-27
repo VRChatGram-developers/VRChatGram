@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 
 import { PrismaClient } from "@prisma/client";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
-import { OtherPostList } from '../../../../../features/posts/components/other-post-list';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 //インスタンスを作成
 const prisma = new PrismaClient();
 
@@ -23,6 +25,15 @@ export async function GET(request: Request, { params }: { params: { postId: stri
     if (!postId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
+
+    const session = await getServerSession(authOptions);
+    const currentUser = await prisma.users.findFirst({
+      where: {
+        uid: session?.user.uid,
+      },
+    });
+    console.log(currentUser, "currentUser");
+
     const post = await prisma.posts.findUniqueOrThrow({
       where: { id: BigInt(postId) },
       select: {
@@ -32,7 +43,14 @@ export async function GET(request: Request, { params }: { params: { postId: stri
         description: true,
         images: true,
         tags: true,
-        likes: true,
+        likes: {
+          select: {
+            id: true,
+            post_id: true,
+            user_id: true,
+            posted_user_id: true,
+          },
+        },
         booth_items: {
           include: {
             booth: {
@@ -76,15 +94,17 @@ export async function GET(request: Request, { params }: { params: { postId: stri
       take: 4,
     });
 
-    const { likes, ...postData } = post;
-    const serializedPost = bigIntToStringMap(postData);
-    const likeCount = likes?.length ?? 0;
+    const serializedPost = bigIntToStringMap(post);
     const serializedOtherPostList = bigIntToStringMap(otherPostList);
+    const is_liked = post.likes.some((like) => like.user_id == currentUser?.id);
+    console.log(post.likes, "post.likes");
+    console.log(currentUser?.id, "currentUser?.id");
+    console.log(is_liked, "is_liked");
 
     return NextResponse.json({
       ...serializedPost,
-      likeCount,
       otherPostList: serializedOtherPostList,
+      is_liked: is_liked,
     });
   } catch (error) {
     return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
