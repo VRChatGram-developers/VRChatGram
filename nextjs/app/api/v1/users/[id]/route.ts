@@ -46,6 +46,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
         name: true,
         introduce: true,
         uid: true,
+        profile_url: true,
+        header_url: true,
         posts: {
           select: {
             id: true,
@@ -75,9 +77,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
     });
 
     const isCurrentUser = currentUser?.id === user?.id;
-    console.log(currentUser);
-    console.log(user);
-
     const postsWithLikes =
       user?.posts.map((post) => ({
         ...toJson(post),
@@ -94,6 +93,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
       id: toJson(user?.id),
       name: user?.name,
       introduce: user?.introduce,
+      profile_url: user?.profile_url,
+      header_url: user?.header_url,
       posts: chunkedPostsWithLikes,
       totalLikes: totalLikes,
       top4Posts: top4Posts,
