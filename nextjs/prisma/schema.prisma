@@ -38,16 +38,35 @@ enum report_statuses {
   resolved
 }
 
-enum inquiry_statuses {
-  unresolved
-  in_progress
-  resolved
+enum show_sensitive_types {
+  default
+  all
+  safe
 }
+
+enum platform_types {
+  twitter
+  discord
+  vrchat
+  other
+}
+
+enum Plan {
+  basic
+  pro
+  god
+}
+
+enum Status {
+  active
+  stop
+}
+
 
 // 独立したマスターテーブル
 model tags {
   id                BigInt      @id @default(autoincrement())
-  name              String      @db.VarChar(50)
+  name              String      @unique @db.VarChar(50)
   created_at        DateTime    @default(now())
   updated_at        DateTime    @updatedAt
   top_post_image_url String?    @db.VarChar(50)
@@ -65,15 +84,7 @@ model booth_items {
   posts       post_booth_items[]
 }
 
-model inquiry_categories {
-  id         BigInt     @id @default(autoincrement())
-  name       String     @db.VarChar(255)
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  inquiries  inquiries[]
-}
-
-model report_reasons {
+model report_reason_categories {
   id         BigInt    @id @default(autoincrement())
   name       String    @db.VarChar(255)
   created_at DateTime  @default(now())
@@ -86,7 +97,6 @@ model users {
   id            BigInt    @id @default(autoincrement())
   uid           String    @unique @db.VarChar(255)
   name          String    @db.VarChar(50)
-  password      String    @db.VarChar(30)
   email         String    @db.VarChar(30)
   introduce     String?   @db.Text
   gender        genders
@@ -97,20 +107,19 @@ model users {
   status        user_statuses
   birthday      DateTime  @db.Date
   header_url    String?   @db.VarChar(255)
-  my_id         String    @db.VarChar(255)
-  show_sensitive Boolean  @default(false)
+  my_id         String    @unique @db.VarChar(255)
+  show_sensitive_type show_sensitive_types @default(default)
   is_admin      Boolean   @default(false)
   // リレーション
   posts         posts[]
   likes_given   likes[]    @relation("likedBy")
-  likes_received likes[]    @relation("postedBy")
   followers     follows[]  @relation("followers")
   following     follows[]  @relation("following")
   notifications notifications[]
   reports       reports[]
   social_links  social_links[]
   views         views[]
-  inquiries     inquiries[]
+  subscriptions Subscription[]
 }
 
 // 投稿関連のモデル
@@ -123,15 +132,15 @@ model posts {
   created_at    DateTime    @default(now())
   updated_at    DateTime    @updatedAt
   deleted_at    DateTime?
-  is_sensitive  Boolean     @default(false)
+  show_sensitive_type show_sensitive_types @default(default)
   is_posted_x   Boolean     @default(false)
+  is_publish  Boolean     @default(false)
   
   // リレーション
   user          users        @relation(fields: [user_id], references: [id])
   images        post_images[]
   likes         likes[]
   tags          post_tags[]
-  reports       reports[]
   views         views[]
   booth_items   post_booth_items[]
 }
@@ -143,8 +152,8 @@ model post_images {
   url         String    @db.VarChar(255)
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
-  width       String?   @db.VarChar(255)
-  height      String?   @db.VarChar(255)
+  width       Int?
+  height      Int?
   post        posts      @relation(fields: [post_id], references: [id])
 }
 
@@ -179,7 +188,6 @@ model likes {
   updated_at      DateTime  @updatedAt
   post            posts      @relation(fields: [post_id], references: [id])
   user            users      @relation("likedBy", fields: [user_id], references: [id], map: "likes_given_fkey")
-  posted_user     users      @relation("postedBy", fields: [posted_user_id], references: [id], map: "likes_received_fkey")
 }
 
 model follows {
@@ -226,26 +234,25 @@ model notifications {
 model reports {
   id               BigInt       @id @default(autoincrement())
   post_id          BigInt
-  report_reason_id BigInt
+  user_id          BigInt
+  report_category_id BigInt
   status           report_statuses
   title            String       @db.Text
   created_at       DateTime     @default(now())
   updated_at       DateTime     @updatedAt
-  reported_user_id BigInt
+  reported_user_id users        @relation(fields: [user_id], references: [id])
   detail           String?      @db.VarChar(255)
-  post             posts         @relation(fields: [post_id], references: [id])
-  report_reason    report_reasons @relation(fields: [report_reason_id], references: [id])
-  reported_user    users         @relation(fields: [reported_user_id], references: [id])
+  report_category    report_reason_categories @relation(fields: [report_category_id], references: [id])
 
   @@index([post_id])
-  @@index([report_reason_id])
-  @@index([reported_user_id])
+  @@index([report_category_id])
+  @@index([user_id])
 }
 
 model social_links {
   id            BigInt    @id @default(autoincrement())
   user_id       BigInt
-  platform_name String?   @db.VarChar(255)
+  platform_types platform_types
   platform_url  String?   @db.VarChar(255)
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
@@ -254,18 +261,15 @@ model social_links {
   @@index([user_id])
 }
 
-model inquiries {
-  id                  BigInt           @id @default(autoincrement())
-  user_id             BigInt
-  inquiry_category_id BigInt
-  email               String           @db.VarChar(255)
-  content             String           @db.Text
-  status              inquiry_statuses
-  created_at          DateTime         @default(now())
-  updated_at          DateTime         @updatedAt
-  user                users             @relation(fields: [user_id], references: [id])
-  category            inquiry_categories  @relation(fields: [inquiry_category_id], references: [id])
-
-  @@index([user_id])
-  @@index([inquiry_category_id])
+model Subscription {
+  id         BigInt   @id @default(autoincrement())
+  userId     BigInt   @map("user_id")
+  plan       Plan     @default(basic)
+  status     Status   @default(active)
+  start      DateTime @default(now())
+  end        DateTime
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  user       users     @relation(fields: [userId], references: [id])
+  @@index([userId])
 }
