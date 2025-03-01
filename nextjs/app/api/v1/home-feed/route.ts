@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const session = body.session;
 
     if (session) {
-      user = await prisma.users.findUniqueOrThrow({
+      user = await prisma.users.findFirst({
         where: { uid: session.user.uid },
       });
     }

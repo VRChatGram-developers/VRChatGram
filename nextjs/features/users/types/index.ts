@@ -1,13 +1,16 @@
 export type User = {
-    id: bigint;
-    name: string;
-    introduce: string;
-    totalLikes: number;
-    totalViews: number;
-    posts: Post[][];
-    top4Posts: Post[];
-    isCurrentUser: boolean;
-  };
+  id: bigint;
+  name: string;
+  introduce: string;
+  profile_url?: string;
+  header_url?: string;
+  totalLikes: number;
+  totalViews: number;
+  posts: Post[][];
+  top4Posts: Post[];
+  isCurrentUser: boolean;
+  social_links: SocialLink[];
+};
   
   export type Post = {
     id: bigint;
@@ -28,4 +31,9 @@ export type User = {
     gender: string;
     email: string;
     password: string;
+  };
+
+  export type SocialLink = {
+    platform_name: string;
+    platform_url: string;
   };

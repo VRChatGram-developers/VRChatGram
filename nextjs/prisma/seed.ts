@@ -14,16 +14,24 @@ async function main() {
         password: "password123",
         email: "test1@example.com",
         gender: "male",
-        profile_url: "https://example.com/profile1.jpg",
+        profile_url: "https://pbs.twimg.com/media/GijziWvbYAAfm3D?format=jpg&name=4096x4096",
+        header_url:
+          "https://i0.wp.com/bussan-b.info/wp-content/uploads/2021/03/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%AC%E3%83%BC%E3%83%88.jpg?resize=1024%2C576&ssl=1",
         status: "active",
         birthday: new Date("1990-01-01"),
         my_id: "user1",
         introduce: "テストユーザー1の自己紹介です。",
         social_links: {
-          create: {
-            platform_name: "twitter",
-            platform_url: "https://twitter.com/user1",
-          },
+          create: [
+            {
+              platform_name: "twitter",
+              platform_url: "https://twitter.com/user2",
+            },
+            {
+              platform_name: "discord",
+              platform_url: "https://discord.com/user2",
+            },
+          ],
         },
       },
     }),
@@ -34,16 +42,24 @@ async function main() {
         password: "password123",
         email: "test2@example.com",
         gender: "female",
-        profile_url: "https://example.com/profile2.jpg",
+        profile_url: "https://pbs.twimg.com/media/GijziWvbYAAfm3D?format=jpg&name=4096x4096",
+        header_url:
+          "https://i0.wp.com/bussan-b.info/wp-content/uploads/2021/03/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%AC%E3%83%BC%E3%83%88.jpg?resize=1024%2C576&ssl=1",
         status: "active",
         birthday: new Date("1995-02-15"),
         my_id: "user2",
         introduce: "テストユーザー2の自己紹介です。",
         social_links: {
-          create: {
-            platform_name: "twitter",
-            platform_url: "https://twitter.com/user2",
-          },
+          create: [
+            {
+              platform_name: "twitter",
+              platform_url: "https://twitter.com/user2",
+            },
+            {
+              platform_name: "discord",
+              platform_url: "https://discord.com/user2",
+            },
+          ],
         },
       },
     }),

@@ -6,13 +6,15 @@ import { signIn } from "next-auth/react";
 const API_URL = "http://localhost:3000";
 
 export const fetchUserById = async (id: bigint, headers: Headers): Promise<User> => {
+
   const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
-    headers: headers
+    headers: headers,
   });
   if (!response.ok) {
     throw new Error("Failed to fetch users");
   }
-  return response.json();
+  const data = await response.json();
+  return data;
 };
 
 export const followUser = async (id: bigint) => {
