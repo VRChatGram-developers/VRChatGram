@@ -38,43 +38,53 @@ enum report_statuses {
   resolved
 }
 
-enum inquiry_statuses {
-  unresolved
-  in_progress
-  resolved
+enum show_sensitive_types {
+  default
+  all
+  safe
+}
+
+enum platform_types {
+  twitter
+  discord
+  vrchat
+  other
+}
+
+enum Plan {
+  basic
+  pro
+  god
+}
+
+enum Status {
+  active
+  stop
 }
 
 // 独立したマスターテーブル
 model tags {
-  id                BigInt      @id @default(autoincrement())
-  name              String      @db.VarChar(50)
-  created_at        DateTime    @default(now())
-  updated_at        DateTime    @updatedAt
-  top_post_image_url String?    @db.VarChar(50)
-  posts             post_tags[]
+  id                 String      @id @default(uuid())
+  name               String      @unique @db.VarChar(50)
+  created_at         DateTime    @default(now())
+  updated_at         DateTime    @updatedAt
+  top_post_image_url String?     @db.VarChar(50)
+  posts              post_tags[]
 }
 
 model booth_items {
-  id          BigInt           @id @default(autoincrement())
-  image       String           @db.VarChar(255)
-  title       String           @db.VarChar(255)
-  detail      String           @db.VarChar(255)
-  url         String           @db.VarChar(255)
-  created_at  DateTime         @default(now())
-  updated_at  DateTime         @updatedAt
-  posts       post_booth_items[]
+  id         String             @id @default(uuid())
+  image      String             @db.VarChar(255)
+  title      String             @db.VarChar(255)
+  detail     String             @db.VarChar(255)
+  url        String             @db.VarChar(255)
+  created_at DateTime           @default(now())
+  updated_at DateTime           @updatedAt
+  posts      post_booth_items[]
 }
 
-model inquiry_categories {
-  id         BigInt     @id @default(autoincrement())
-  name       String     @db.VarChar(255)
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  inquiries  inquiries[]
-}
-
-model report_reasons {
-  id         BigInt    @id @default(autoincrement())
+model report_reason_categories {
+  id         String    @id @default(uuid())
   name       String    @db.VarChar(255)
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
@@ -83,113 +93,114 @@ model report_reasons {
 
 // メインとなるユーザーモデル
 model users {
-  id            BigInt    @id @default(autoincrement())
-  uid           String    @unique @db.VarChar(255)
-  name          String    @db.VarChar(50)
-  password      String    @db.VarChar(30)
-  email         String    @db.VarChar(30)
-  introduce     String?   @db.Text
-  gender        genders
-  profile_url   String?    @db.VarChar(255)
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
-  deleted_at    DateTime?
-  status        user_statuses
-  birthday      DateTime  @db.Date
-  header_url    String?   @db.VarChar(255)
-  my_id         String    @db.VarChar(255)
-  show_sensitive Boolean  @default(false)
-  is_admin      Boolean   @default(false)
+  id                  String               @id @default(uuid())
+  uid                 String               @unique @db.VarChar(255)
+  name                String               @db.VarChar(50)
+  email               String               @db.VarChar(30)
+  introduce           String?              @db.Text
+  gender              genders
+  profile_url         String?              @db.VarChar(255)
+  created_at          DateTime             @default(now())
+  updated_at          DateTime             @updatedAt
+  deleted_at          DateTime?
+  status              user_statuses
+  birthday            DateTime             @db.Date
+  header_url          String?              @db.VarChar(255)
+  my_id               String               @unique @db.VarChar(255)
+  show_sensitive_type show_sensitive_types @default(default)
+  is_admin            Boolean              @default(false)
   // リレーション
-  posts         posts[]
-  likes_given   likes[]    @relation("likedBy")
-  likes_received likes[]    @relation("postedBy")
-  followers     follows[]  @relation("followers")
-  following     follows[]  @relation("following")
-  notifications notifications[]
-  reports       reports[]
-  social_links  social_links[]
-  views         views[]
-  inquiries     inquiries[]
+  posts               posts[]
+  likes_given         likes[]              @relation("likedBy")
+  followers           follows[]            @relation("followers")
+  following           follows[]            @relation("following")
+  notifications       notifications[]
+  reports             reports[]
+  social_links        social_links[]
+  views               views[]
+  subscriptions       Subscription[]
 }
 
 // 投稿関連のモデル
 model posts {
-  id            BigInt      @id @default(autoincrement())
-  user_id       BigInt
-  title         String      @db.VarChar(50)
-  view_count    Int         @default(0)
-  description   String?     @db.Text
-  created_at    DateTime    @default(now())
-  updated_at    DateTime    @updatedAt
-  deleted_at    DateTime?
-  is_sensitive  Boolean     @default(false)
-  is_posted_x   Boolean     @default(false)
-  
+  id                  String               @id @default(uuid())
+  user_id             String
+  title               String               @db.VarChar(50)
+  view_count          Int                  @default(0)
+  description         String?              @db.Text
+  created_at          DateTime             @default(now())
+  updated_at          DateTime             @updatedAt
+  deleted_at          DateTime?
+  show_sensitive_type show_sensitive_types @default(default)
+  is_posted_x         Boolean              @default(false)
+  is_publish          Boolean              @default(false)
+
   // リレーション
-  user          users        @relation(fields: [user_id], references: [id])
-  images        post_images[]
-  likes         likes[]
-  tags          post_tags[]
-  reports       reports[]
-  views         views[]
-  booth_items   post_booth_items[]
+  user        users              @relation(fields: [user_id], references: [id])
+  images      post_images[]
+  likes       likes[]
+  tags        post_tags[]
+  views       views[]
+  booth_items post_booth_items[]
 }
 
 // 中間テーブルと関連テーブル
 model post_images {
-  id          BigInt    @id @default(autoincrement())
-  post_id     BigInt
-  url         String    @db.VarChar(255)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  width       String?   @db.VarChar(255)
-  height      String?   @db.VarChar(255)
-  post        posts      @relation(fields: [post_id], references: [id])
+  id         String   @id @default(uuid())
+  post_id    String
+  url        String   @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  width      Int?
+  height     Int?
+  post       posts    @relation(fields: [post_id], references: [id])
 }
 
 model post_tags {
-  id        BigInt    @id @default(autoincrement())
-  post_id   BigInt
-  tag_id    BigInt
-  post      posts      @relation(fields: [post_id], references: [id])
-  tag       tags       @relation(fields: [tag_id], references: [id])
+  id      String @id @default(uuid())
+  post_id String
+  tag_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+  post    posts  @relation(fields: [post_id], references: [id])
+  tag     tags   @relation(fields: [tag_id], references: [id])
 
   @@index([post_id])
   @@index([tag_id])
 }
 
 model post_booth_items {
-  id        BigInt     @id @default(autoincrement())
-  booth_id  BigInt
-  post_id   BigInt
-  booth     booth_items  @relation(fields: [booth_id], references: [id])
-  post      posts       @relation(fields: [post_id], references: [id])
+  id       String      @id @default(uuid())
+  booth_id String
+  post_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+  booth    booth_items @relation(fields: [booth_id], references: [id])
+  post     posts       @relation(fields: [post_id], references: [id])
 
   @@index([booth_id])
   @@index([post_id])
 }
 
 model likes {
-  id              BigInt    @id @default(autoincrement())
-  post_id         BigInt
-  user_id         BigInt
-  posted_user_id  BigInt
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @updatedAt
-  post            posts      @relation(fields: [post_id], references: [id])
-  user            users      @relation("likedBy", fields: [user_id], references: [id], map: "likes_given_fkey")
-  posted_user     users      @relation("postedBy", fields: [posted_user_id], references: [id], map: "likes_received_fkey")
+  id             String   @id @default(uuid())
+  post_id        String
+  user_id        String
+  posted_user_id BigInt
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  post           posts    @relation(fields: [post_id], references: [id])
+  user           users    @relation("likedBy", fields: [user_id], references: [id], map: "likes_given_fkey")
 }
 
 model follows {
-  id            BigInt    @id @default(autoincrement())
-  follower_id   BigInt
-  following_id  BigInt
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
-  follower      users      @relation("followers", fields: [follower_id], references: [id])
-  following     users      @relation("following", fields: [following_id], references: [id])
+  id           String   @id @default(uuid())
+  follower_id  String
+  following_id String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  follower     users    @relation("followers", fields: [follower_id], references: [id])
+  following    users    @relation("following", fields: [following_id], references: [id])
 
   @@index([follower_id])
   @@index([following_id])
@@ -197,75 +208,73 @@ model follows {
 
 // 機能関連のモデル
 model views {
-  id          BigInt    @id @default(autoincrement())
-  user_id     BigInt
-  post_id     BigInt
-  created_at  DateTime  @default(now())
-  user        users      @relation(fields: [user_id], references: [id])
-  post        posts      @relation(fields: [post_id], references: [id])
+  id         String   @id @default(uuid())
+  user_id    String
+  post_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+  user       users    @relation(fields: [user_id], references: [id])
+  post       posts    @relation(fields: [post_id], references: [id])
 
   @@index([user_id])
   @@index([post_id])
 }
 
 model notifications {
-  id                BigInt          @id @default(autoincrement())
-  title             String          @db.VarChar(255)
-  content           String?         @db.Text
+  id                String             @id @default(uuid())
+  title             String             @db.VarChar(255)
+  content           String?            @db.Text
   notification_type notification_types
   published_at      DateTime
-  created_at        DateTime        @default(now())
-  updated_at        DateTime        @updatedAt
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @updatedAt
   deleted_at        DateTime?
-  user_id           BigInt
-  user              users            @relation(fields: [user_id], references: [id])
+  user_id           String
+  user              users              @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
 }
 
 model reports {
-  id               BigInt       @id @default(autoincrement())
-  post_id          BigInt
-  report_reason_id BigInt
-  status           report_statuses
-  title            String       @db.Text
-  created_at       DateTime     @default(now())
-  updated_at       DateTime     @updatedAt
-  reported_user_id BigInt
-  detail           String?      @db.VarChar(255)
-  post             posts         @relation(fields: [post_id], references: [id])
-  report_reason    report_reasons @relation(fields: [report_reason_id], references: [id])
-  reported_user    users         @relation(fields: [reported_user_id], references: [id])
+  id                 String                   @id @default(uuid())
+  post_id            String
+  user_id            String
+  report_category_id String
+  status             report_statuses
+  title              String                   @db.Text
+  created_at         DateTime                 @default(now())
+  updated_at         DateTime                 @updatedAt
+  reported_user_id   users                    @relation(fields: [user_id], references: [id])
+  detail             String?                  @db.VarChar(255)
+  report_category    report_reason_categories @relation(fields: [report_category_id], references: [id])
 
   @@index([post_id])
-  @@index([report_reason_id])
-  @@index([reported_user_id])
+  @@index([report_category_id])
+  @@index([user_id])
 }
 
 model social_links {
-  id            BigInt    @id @default(autoincrement())
-  user_id       BigInt
-  platform_name String?   @db.VarChar(255)
-  platform_url  String?   @db.VarChar(255)
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
-  user          users      @relation(fields: [user_id], references: [id])
+  id             String         @id @default(uuid())
+  user_id        String
+  platform_types platform_types
+  platform_url   String?        @db.VarChar(255)
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+  user           users          @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
 }
 
-model inquiries {
-  id                  BigInt           @id @default(autoincrement())
-  user_id             BigInt
-  inquiry_category_id BigInt
-  email               String           @db.VarChar(255)
-  content             String           @db.Text
-  status              inquiry_statuses
-  created_at          DateTime         @default(now())
-  updated_at          DateTime         @updatedAt
-  user                users             @relation(fields: [user_id], references: [id])
-  category            inquiry_categories  @relation(fields: [inquiry_category_id], references: [id])
+model Subscription {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  plan      Plan     @default(basic)
+  status    Status   @default(active)
+  start     DateTime @default(now())
+  end       DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      users    @relation(fields: [userId], references: [id])
 
-  @@index([user_id])
-  @@index([inquiry_category_id])
+  @@index([userId])
 }
