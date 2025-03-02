@@ -15,7 +15,7 @@ export type User = {
   export type Post = {
     id: bigint;
     title: string;
-    is_sensitive: boolean;
+    show_sensitive_type: string;
     likesCount: number;
     images: Image[];
   };
