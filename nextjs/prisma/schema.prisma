@@ -45,7 +45,7 @@ enum show_sensitive_types {
 }
 
 enum platform_types {
-  twitter
+  x
   discord
   vrchat
   other
