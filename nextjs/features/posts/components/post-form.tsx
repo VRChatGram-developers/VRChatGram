@@ -36,6 +36,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             const imageData = {
               file: file,
               file_data: e.target?.result as string,
+              file_name: file.name,
               width: img.width,
               height: img.height,
             };
@@ -79,10 +80,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const handleBoothItemChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
+  const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newBoothItems = [...boothItems];
     newBoothItems[index] = e.target.value;
     setBoothItems(newBoothItems);
