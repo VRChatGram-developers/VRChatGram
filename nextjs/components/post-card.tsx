@@ -34,20 +34,16 @@ export const PostCard = ({
     userName,
     userImageUrl,
     isLiked,
-    setIsLiked,
     handleLikeOrUnlike,
   } = postCardProps;
 
   const handleForwardToPostDetail = (postId: string | bigint) => {
-    console.log(postId);
-    const postIdString =
-      typeof postId === "bigint" ? postId.toString() : postId;
+    const postIdString = typeof postId === "bigint" ? postId.toString() : postId;
     router.push(`/posts/${postIdString}`);
   };
 
   const handleForwardToUserDetail = (userId: string | bigint) => {
-    const userIdString =
-      typeof userId === "bigint" ? userId.toString() : userId;
+    const userIdString = typeof userId === "bigint" ? userId.toString() : userId;
     router.push(`/users/${userIdString}`);
   };
 
@@ -61,49 +57,28 @@ export const PostCard = ({
         className={styles.likesPostsItemImage}
         onClick={() => handleForwardToPostDetail(postId)}
       />
-      <div className={styles.likesPostsItemImageContents}>
-        <MdOutlinePhoto className={styles.MdOutlinePhoto} />
-        <p className={styles.likesPostsItemImageContentsText}>
-          {postImageCount ?? 0}
-        </p>
-      </div>
+      {postImageCount > 1 && (
+        <div className={styles.likesPostsItemImageContents}>
+          <MdOutlinePhoto className={styles.MdOutlinePhoto} />
+          <p className={styles.likesPostsItemImageContentsText}>{postImageCount}</p>
+        </div>
+      )}
       <div className={styles.userInfoLikeContainer}>
         <div className={styles.userInfo}>
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
-            <Image
-              src={userImageUrl}
-              alt="new-post-image"
-              className={styles.userInfoIcon}
-              fill
-            />
-            <p
-              className={styles.userInfoName}
-              onClick={() => handleForwardToUserDetail(userId)}
-            >
+            <Image src={userImageUrl} alt="new-post-image" className={styles.userInfoIcon} fill />
+            <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(userId)}>
               {userName}
             </p>
           </div>
         </div>
         <div className={styles.likesPostsItemLikeContents}>
-          <div
-            className={styles.likesPostsItemLikeItem}
-            onClick={() => handleLikeOrUnlike()}
-          >
+          <div className={styles.likesPostsItemLikeItem} onClick={() => handleLikeOrUnlike()}>
             {isLiked ? (
-              <Image
-                src="/heart-outline.png"
-                alt="heart"
-                className={styles.likesIcon}
-                fill
-              />
+              <Image src="/heart-outline.png" alt="heart" className={styles.likesIcon} fill />
             ) : (
-              <Image
-                src="/heart.png"
-                alt="heart"
-                className={styles.likesIcon}
-                fill
-              />
+              <Image src="/heart.png" alt="heart" className={styles.likesIcon} fill />
             )}
           </div>
         </div>
