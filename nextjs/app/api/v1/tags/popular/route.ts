@@ -12,7 +12,7 @@ export const connect = async () => {
   }
 };
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     await connect();
     const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>(
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
         LIMIT ${10}`
     );
     const popularTagList = await prisma.tags.findMany({
-      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id) } },
+      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id.toString()) } },
       select: {
         id: true,
         name: true,

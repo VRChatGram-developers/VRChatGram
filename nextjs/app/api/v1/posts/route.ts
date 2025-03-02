@@ -25,7 +25,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
-    const { title, description, boothItems, images, tags, isSensitive } = await request.json();
+    const { title, description, boothItems, images, tags, show_sensitive_type } =
+      await request.json();
 
     const user = await prisma.users.findUnique({
       where: {
@@ -39,9 +40,13 @@ export async function POST(request: Request) {
     // TODO　S3保存後、発行されや画像のurlを取得する
     const serializedImages = images.map((image: any) => ({
       url: "https://example.com/image.jpg",
-      width: image.width.toString(),
-      height: image.height.toString(),
+      width: image.width,
+      height: image.height,
     }));
+
+    const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
+    console.log(`boothItems`);
+    console.log(boothItems);
 
     await prisma.posts.create({
       data: {
@@ -65,7 +70,7 @@ export async function POST(request: Request) {
           create: serializedImages,
         },
         tags: {
-          create: tags.map((tag: string) => ({
+          create: filteredTags.map((tag: string) => ({
             tag: {
               create: {
                 name: tag,
@@ -73,7 +78,7 @@ export async function POST(request: Request) {
             },
           })),
         },
-        is_sensitive: isSensitive,
+        show_sensitive_type: show_sensitive_type,
         user_id: user.id,
       },
     });

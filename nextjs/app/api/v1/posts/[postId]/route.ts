@@ -24,7 +24,7 @@ export async function GET(request: Request, { params }: { params: { postId: stri
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
     const post = await prisma.posts.findUniqueOrThrow({
-      where: { id: BigInt(postId) },
+      where: { id: postId },
       select: {
         id: true,
         title: true,

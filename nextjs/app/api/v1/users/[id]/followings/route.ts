@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../auth/[...nextauth]/route";
 
 const prisma = new PrismaClient();
 
@@ -15,15 +17,32 @@ export async function POST(request: Request, { params }: { params: { id: string 
   try {
     await connect();
     const { id } = params;
+
+    const session = await getServerSession(authOptions);
+    let currentUser;
+    if (session) {
+      currentUser = await prisma.users.findUnique({
+        where: {
+          uid: session.user.uid,
+        },
+        select: {
+          id: true,
+        },
+      });
+    }
+
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
+
+    if (!currentUser) {
+      return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
+    }
+
     await prisma.follows.create({
       data: {
-        following_id: BigInt(id),
-        follower_id: BigInt(1),
-        created_at: new Date(),
-        updated_at: new Date(),
+        following_id: id,
+        follower_id: currentUser.id,
       },
     });
 
@@ -41,10 +60,28 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
+
+    const session = await getServerSession(authOptions);
+    let currentUser;
+    if (session) {
+      currentUser = await prisma.users.findUnique({
+        where: {
+          uid: session.user.uid,
+        },
+        select: {
+          id: true,
+        },
+      });
+    }
+
+    if (!currentUser) {
+      return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
+    }
+
     const followUser = await prisma.follows.findFirst({
       where: {
-        following_id: BigInt(Number(id)),
-        follower_id: 1,
+        following_id: id,
+        follower_id: currentUser.id,
       },
     });
     if (!followUser) {

@@ -39,7 +39,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     const user = await prisma.users.findUnique({
       where: {
-        id: BigInt(id),
+        id: id,
       },
       select: {
         id: true,
@@ -52,7 +52,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
           select: {
             id: true,
             title: true,
-            is_sensitive: true,
+            show_sensitive_type: true,
             view_count: true,
             images: {
               select: {
@@ -69,7 +69,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
         },
         social_links: {
           select: {
-            platform_name: true,
+            platform_types: true,
             platform_url: true,
           },
         },

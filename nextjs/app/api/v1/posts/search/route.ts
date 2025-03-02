@@ -84,13 +84,12 @@ export async function GET(request: Request) {
       select: {
         id: true,
         title: true,
-        is_sensitive: true,
+        show_sensitive_type: true,
         likes: {
           select: {
             id: true,
             post_id: true,
             user_id: true,
-            posted_user_id: true,
           },
         },
         user: {
@@ -108,6 +107,11 @@ export async function GET(request: Request) {
         },
       },
     });
+
+    console.log(`posts`)
+    console.log(posts)
+    console.log(`posts`)
+
 
     const postsWithIsLiked = posts.map((post) => ({
       ...post,
