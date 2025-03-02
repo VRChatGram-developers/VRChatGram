@@ -4,14 +4,19 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: vrchatgram
+      MYSQL_USER: vrchatgram
+      MYSQL_PASSWORD: vrcss
     ports:
-      - 3306:3306
+      - 3300:3306
     volumes:
-    - mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     networks:
       - mynetwork
+    command: --default-authentication-plugin=mysql_native_password
   nextjs:
     container_name: nextjs
+    depends_on:
+      - mysql
     build:
       context: .
       dockerfile: Dockerfile
@@ -26,7 +31,7 @@ services:
         target: /app/node_modules
     environment:
       - WATCHPACK_POLLING=true
-    command: sh -c "npm i && npm run dev"
+    command: sh -c "npm i && npx prisma db push --force-reset && npm run seed && npm run dev"
     restart: always
     tty: true
     stdin_open: true
