@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { S3Service } from "../../services/s3-service";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
@@ -14,6 +15,37 @@ export const connect = async () => {
   } catch (error) {
     return new Error(`DB接続失敗しました: ${error}`);
   }
+};
+
+const uploadImages = async (
+  images: { file_data: string; file_name: string; width: number; height: number }[]
+) => {
+  const s3Service = new S3Service();
+  return await Promise.all(
+    images.map(
+      async (image: { file_data: string; file_name: string; width: number; height: number }) => {
+        const url = await s3Service.uploadFileToS3(image.file_data, image.file_name);
+        return { url: url, width: image.width, height: image.height };
+      }
+    )
+  );
+};
+
+const formatBoothItems = (
+  boothItems: { url: string; name: string; detail: string; image: string }[]
+) => {
+  return boothItems
+    .filter((item) => item !== undefined && item !== null)
+    .map((item) => ({
+      booth: {
+        create: {
+          title: item.name,
+          url: item.url,
+          detail: item.detail,
+          image: item.image,
+        },
+      },
+    }));
 };
 
 export async function POST(request: Request) {
@@ -37,34 +69,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
 
-    // TODO　S3保存後、発行されや画像のurlを取得する
-    const serializedImages = images.map((image: any) => ({
-      url: "https://example.com/image.jpg",
-      width: image.width,
-      height: image.height,
-    }));
-
+    const serializedImages = await uploadImages(images);
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
-    console.log(`boothItems`);
-    console.log(boothItems);
 
     await prisma.posts.create({
       data: {
         title: title,
         description: description,
         booth_items: {
-          create: boothItems.map(
-            (item: { url: string; name: string; detail: string; image: string }) => ({
-              booth: {
-                create: {
-                  title: item.name,
-                  url: item.url,
-                  detail: item.detail,
-                  image: item.image,
-                },
-              },
-            })
-          ),
+          create: formatBoothItems(boothItems),
         },
         images: {
           create: serializedImages,
