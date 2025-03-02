@@ -7,7 +7,9 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ["example.com", "pbs.twimg.com", "i0.wp.com"], // 既存の "example.com" に加えて "pbs.twimg.com" を追加
+    domains: [
+      "vrcss-development.s3.ap-southeast-2.amazonaws.com",
+    ],
   },
 };
 
