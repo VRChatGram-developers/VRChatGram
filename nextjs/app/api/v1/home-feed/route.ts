@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       select: {
         id: true,
         title: true,
-        is_sensitive: true,
+        show_sensitive_type: true,
         images: true,
         user: {
           select: {
@@ -46,7 +46,6 @@ export async function POST(request: Request) {
             id: true,
             post_id: true,
             user_id: true,
-            posted_user_id: true,
           },
         },
       },
@@ -57,7 +56,7 @@ export async function POST(request: Request) {
       orderBy: { created_at: "desc" },
       select: {
         id: true,
-        is_sensitive: true,
+        show_sensitive_type: true,
         images: true,
         user: {
           select: {
@@ -71,7 +70,6 @@ export async function POST(request: Request) {
             id: true,
             post_id: true,
             user_id: true,
-            posted_user_id: true,
           },
         },
       },
@@ -88,7 +86,7 @@ export async function POST(request: Request) {
     );
 
     const popularTagList = await prisma.tags.findMany({
-      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id) } },
+      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id.toString()) } },
       select: {
         id: true,
         name: true,
@@ -101,7 +99,7 @@ export async function POST(request: Request) {
       where: { is_posted_x: true },
       select: {
         id: true,
-        is_sensitive: true,
+        show_sensitive_type: true,
         images: true,
         user: {
           select: {
@@ -115,7 +113,6 @@ export async function POST(request: Request) {
             id: true,
             post_id: true,
             user_id: true,
-            posted_user_id: true,
           },
         },
       },

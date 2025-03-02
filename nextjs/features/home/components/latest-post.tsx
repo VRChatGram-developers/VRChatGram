@@ -46,7 +46,7 @@ export const LatestPost = ({
                 postId: post.id,
                 userId: post.user.id,
                 postName: post.title,
-                postImageUrl: "/home/new-post-image.png",
+                postImageUrl: post.images[0].url,
                 postImageCount: post.images.length,
                 userName: post.user.name,
                 userImageUrl: "/posts/sample-user-icon.png",

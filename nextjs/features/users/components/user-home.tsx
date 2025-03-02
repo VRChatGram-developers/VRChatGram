@@ -13,7 +13,7 @@ const renderSocialLink = (socialLink: SocialLink) => {
     return null;
   }
 
-  if (socialLink.platform_name === "twitter") {
+  if (socialLink.platform_name === "x") {
     return (
       <div key={socialLink.platform_name} className={styles.profileIntroduceContent}>
         <FaXTwitter size={36} />

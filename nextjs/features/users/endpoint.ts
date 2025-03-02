@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 
 const API_URL = "http://localhost:3000";
 
-export const fetchUserById = async (id: bigint, headers: Headers): Promise<User> => {
+export const fetchUserById = async (id: string, headers: Headers): Promise<User> => {
 
   const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
     headers: headers,
@@ -51,14 +51,17 @@ export const unfollowUser = async (id: bigint) => {
 
 export const createUser = async (user: requestCreateUser) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
+    const { password, email, ...userData } = user;
+
+    const userCredential = await createUserWithEmailAndPassword(auth, email,password);
 
     const response = await fetch(`${API_URL}/api/v1/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...user, uid: userCredential.user.uid }),
+
+      body: JSON.stringify({ ...userData, uid: userCredential.user.uid, email: email }),
     });
 
     const token = await userCredential.user.getIdToken();

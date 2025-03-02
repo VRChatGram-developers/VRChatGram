@@ -1,6 +1,6 @@
 import { Tag, PostDetail } from "./types/index";
 
-export const fetchPosts = async (params: string, headers: Headers) => {
+export const fetchPosts = async (params: string, headers?: Headers) => {
   const response = await fetch(`http://localhost:3000/api/v1/posts/search?${params}`, {
     headers: headers
   });

@@ -30,7 +30,7 @@ export async function POST(request: Request, { params }: { params: { postId: str
     }
 
     const post = await prisma.posts.findUniqueOrThrow({
-      where: { id: BigInt(postId) },
+      where: { id: postId },
     });
 
     const user = await prisma.users.findUniqueOrThrow({
@@ -52,7 +52,6 @@ export async function POST(request: Request, { params }: { params: { postId: str
       data: {
         post_id: post.id,
         user_id: user.id,
-        posted_user_id: post.user_id,
       },
     });
 
@@ -76,7 +75,7 @@ export async function DELETE(request: Request, { params }: { params: { postId: s
     }
 
     const post = await prisma.posts.findUniqueOrThrow({
-      where: { id: BigInt(postId) },
+      where: { id: postId },
     });
 
     const user = await prisma.users.findUniqueOrThrow({
