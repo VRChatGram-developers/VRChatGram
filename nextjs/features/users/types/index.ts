@@ -37,3 +37,19 @@ export type User = {
     platform_name: string;
     platform_url: string;
   };
+
+  export type AccountSetting = {
+    email: string;
+    show_sensitive_type: string;
+    gender: string;
+    currentPassword: string;
+    newPassword: string;
+  };
+
+  export type requestUpdateUser = {
+    email: string;
+    show_sensitive_type: string;
+    gender: string;
+    currentPassword: string;
+    newPassword: string;
+  };
