@@ -69,6 +69,7 @@ export type Tag = {
 export type ImageData = {
   file: File;
   file_data: string;
+  file_name: string;
   width: number;
   height: number;
 };
