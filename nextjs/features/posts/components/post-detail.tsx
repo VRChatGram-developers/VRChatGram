@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import { OtherPostList } from "./other-post-list";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
+import { GrPersonalComputer } from "react-icons/gr";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
@@ -50,9 +51,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             {currentIndex !== post.images.length - 1 && (
               <MdOutlineNavigateNext onClick={handleNextImage} />
             )}
-            {currentIndex !== 0 && (
-              <MdOutlineNavigateBefore onClick={handleBeforeImage} />
-            )}
+            {currentIndex !== 0 && <MdOutlineNavigateBefore onClick={handleBeforeImage} />}
           </div>
           <div className={styles.postImageSubContainer}>
             {post.images.map((image, index) => (
@@ -75,7 +74,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             ))}
           </div>
           <div className={styles.postImageTagContainer}>
-            {post.tags.map((tag) => (
+            {post.tags.map(({ tag }) => (
               <div key={tag.id} className={styles.postImageTag}>
                 <button className={styles.postImageTagText}>#{tag.name}</button>
               </div>
@@ -94,15 +93,11 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             <div className={styles.postDetailInformationContainer}>
               <div className={styles.postDetailInfomationViewContainer}>
                 <FaRegEye size={24} />
-                <p className={styles.postDetailInfomationView}>
-                  {post.view_count}View
-                </p>
+                <p className={styles.postDetailInfomationView}>{post.view_count}View</p>
               </div>
               <div className={styles.postDetailInfomationLikeCountContainer}>
                 <FaHeart size={24} />
-                <p className={styles.postDetailInfomationLikeCount}>
-                  {post.likeCount}
-                </p>
+                <p className={styles.postDetailInfomationLikeCount}>{post.likeCount}</p>
               </div>
             </div>
             <div className={styles.postDetailProfileContainer}>
@@ -117,26 +112,27 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               </div>
               <div className={styles.postDetailProfileContent}>
                 <div className={styles.postDetailProfileUserIdContainer}>
-                  <p className={styles.postDetailProfileUserId}>
-                    ID: {post.user?.my_id}
-                  </p>
+                  <p className={styles.postDetailProfileUserId}>ID: {post.user?.my_id}</p>
                 </div>
                 <div className={styles.postDetailProfileUserNameContainer}>
-                  <p className={styles.postDetailProfileUserName}>
-                    {post.user?.name}
-                  </p>
+                  <p className={styles.postDetailProfileUserName}>{post.user?.name}</p>
                 </div>
                 <div className={styles.postDetailProfileSNSContainer}>
-                  <FaXTwitter size={32} />
-                  <FaDiscord size={32} />
+                  {post.user?.social_links.map((socialLink, index) => (
+                    <div key={index} className={styles.postDetailProfileSNSItem}>
+                      <a href={socialLink.platform_url} target="_blank" rel="noopener noreferrer">
+                        {socialLink.platform_types === "x" && <FaXTwitter size={32} />}
+                        {socialLink.platform_types === "discord" && <FaDiscord size={32} />}
+                        {socialLink.platform_types === "other" && <GrPersonalComputer size={32} />}
+                      </a>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
             <div className={styles.postDetailProfileDescriptionContainer}>
               <div className={styles.postDetailProfileDescriptionContent}>
-                <p className={styles.postDetailProfileDescriptionTitle}>
-                  作品説明
-                </p>
+                <p className={styles.postDetailProfileDescriptionTitle}>作品説明</p>
                 <div className={styles.postDetailProfileDescription}>
                   <input
                     id="readMoreToggle"
@@ -166,31 +162,20 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             </div>
             <div className={styles.postDetailProfileBoothContainer}>
               <div className={styles.postDetailProfileBoothTitleContainer}>
-                <p className={styles.postDetailProfileBoothTitle}>
-                  Booth購入リスト
-                </p>
+                <p className={styles.postDetailProfileBoothTitle}>Booth購入リスト</p>
               </div>
               <div className={styles.postDetailProfileBoothContent}>
                 {post.booth_items.map((boothItem) => (
-                  <div
-                    className={styles.postDetailProfileBoothItem}
-                    key={boothItem.id}
-                  >
+                  <div className={styles.postDetailProfileBoothItem} key={boothItem.id}>
                     <Image
-                      src={boothItem.booth.image.url}
+                      src={boothItem.booth.image.toString()}
                       alt="avatar"
                       width={200}
                       height={200}
                       className={styles.postDetailProfileBoothImage}
                     />
-                    <div
-                      className={
-                        styles.postDetailProfileBoothInfomationContainer
-                      }
-                    >
-                      <p
-                        className={styles.postDetailProfileBoothInfomationTitle}
-                      >
+                    <div className={styles.postDetailProfileBoothInfomationContainer}>
+                      <p className={styles.postDetailProfileBoothInfomationTitle}>
                         {boothItem.booth.title}
                       </p>
                       <p className={styles.postDetailProfileBoothInfomation}>
