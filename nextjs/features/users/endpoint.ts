@@ -117,3 +117,18 @@ export const updateUser = async (user: requestUpdateUser) => {
   const data = await response.json();
   return data;
 };
+
+export const checkAuth = async (email: string, currentPassword: string) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, currentPassword }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
+};

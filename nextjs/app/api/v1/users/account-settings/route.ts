@@ -51,6 +51,26 @@ const changeEmail = async (newEmail: string, currentPassword: string) => {
   }
 };
 
+export async function POST(request: Request) {
+  try {
+    await connect();
+    const { email, currentPassword } = await request.json();
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+      return NextResponse.json({ error: "ユーザーがログインしていません" }, { status: 401 });
+    }
+    const credential = EmailAuthProvider.credential(email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    return NextResponse.json({ isAuthenticated: true }, { status: 200 });
+  } catch (error) {
+    console.error("パスワードの再認証に失敗しました:", error);
+    return NextResponse.json({ isAuthenticated: false }, { status: 401 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 const reauthenticateAndChangePassword = async (
   email: string,
   currentPassword: string,
