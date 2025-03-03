@@ -44,7 +44,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
       select: {
         id: true,
         name: true,
-        introduce: true,
+        introduction_title: true,
+        introduction_detail: true,
         uid: true,
         profile_url: true,
         header_url: true,
@@ -69,6 +70,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
         },
         social_links: {
           select: {
+            id: true,
             platform_types: true,
             platform_url: true,
           },
@@ -92,7 +94,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const response = {
       id: toJson(user?.id),
       name: user?.name,
-      introduce: user?.introduce,
+      introduction_title: user?.introduction_title,
+      introduction_detail: user?.introduction_detail,
       profile_url: user?.profile_url,
       header_url: user?.header_url,
       posts: chunkedPostsWithLikes,

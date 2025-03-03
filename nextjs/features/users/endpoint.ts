@@ -1,4 +1,4 @@
-import { User, requestCreateUser } from "./types/index";
+import { User, requestCreateUser, requestUpdateUserProfile } from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
@@ -6,7 +6,6 @@ import { signIn } from "next-auth/react";
 const API_URL = "http://localhost:3000";
 
 export const fetchUserById = async (id: string, headers: Headers): Promise<User> => {
-
   const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
     headers: headers,
   });
@@ -53,7 +52,7 @@ export const createUser = async (user: requestCreateUser) => {
   try {
     const { password, email, ...userData } = user;
 
-    const userCredential = await createUserWithEmailAndPassword(auth, email,password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
     const response = await fetch(`${API_URL}/api/v1/users`, {
       method: "POST",
@@ -78,7 +77,6 @@ export const createUser = async (user: requestCreateUser) => {
   }
 };
 
-
 export const checkEmail = async (email: string) => {
   const response = await fetch(`${API_URL}/api/v1/users/check`, {
     method: "POST",
@@ -92,4 +90,19 @@ export const checkEmail = async (email: string) => {
   }
   const data = await response.json();
   return data.isRegisteredEnail;
+};
+
+export const updateUserProfile = async (requestUpdateUserProfile: requestUpdateUserProfile) => {
+  const response = await fetch(`${API_URL}/api/v1/users/${requestUpdateUserProfile.id}/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestUpdateUserProfile),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user introduction");
+  }
+  const data = await response.json();
+  return data;
 };
