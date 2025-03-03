@@ -1,4 +1,4 @@
-import { User, requestCreateUser } from "./types/index";
+import { User, requestCreateUser, requestUpdateUser } from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
@@ -6,7 +6,6 @@ import { signIn } from "next-auth/react";
 const API_URL = "http://localhost:3000";
 
 export const fetchUserById = async (id: string, headers: Headers): Promise<User> => {
-
   const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
     headers: headers,
   });
@@ -53,7 +52,7 @@ export const createUser = async (user: requestCreateUser) => {
   try {
     const { password, email, ...userData } = user;
 
-    const userCredential = await createUserWithEmailAndPassword(auth, email,password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
     const response = await fetch(`${API_URL}/api/v1/users`, {
       method: "POST",
@@ -78,7 +77,6 @@ export const createUser = async (user: requestCreateUser) => {
   }
 };
 
-
 export const checkEmail = async (email: string) => {
   const response = await fetch(`${API_URL}/api/v1/users/check`, {
     method: "POST",
@@ -92,4 +90,30 @@ export const checkEmail = async (email: string) => {
   }
   const data = await response.json();
   return data.isRegisteredEnail;
+};
+
+export const fetchByAccountSettings = async (headers: Headers) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
+    headers: headers,
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch account settings");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const updateUser = async (user: requestUpdateUser) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
 };
