@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { AccountSetting } from "../types";
 import { useModal } from "@/provider/modal-provider";
 import { AccountDeleteModal } from "./account-delete-modal";
-
+import { checkAuth } from "../endpoint";
 export const AccountEdit = ({ accountSetting }: { accountSetting: AccountSetting }) => {
   const [email, setEmail] = useState(accountSetting.email);
   const { openModal, closeModal } = useModal();
@@ -14,6 +14,10 @@ export const AccountEdit = ({ accountSetting }: { accountSetting: AccountSetting
   const [gender, setGender] = useState(accountSetting.gender);
   const [currentPassword, setCurrentPassword] = useState(accountSetting.currentPassword);
   const [newPassword, setNewPassword] = useState(accountSetting.newPassword);
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorCurrentPassword, setErrorCurrentPassword] = useState("");
+  const [errorNewPassword, setErrorNewPassword] = useState("");
+  const router = useRouter();
 
   const genderList = [
     {
@@ -30,14 +34,62 @@ export const AccountEdit = ({ accountSetting }: { accountSetting: AccountSetting
     },
   ];
 
-  const router = useRouter();
 
   const handleShowSensitiveType = () => {
     const newValue = showSensitiveType === "all" ? "safe" : "all";
     setShowSensitiveType(newValue);
   };
 
+  const isValidEmail = () => {
+    setErrorEmail("");
+    if (email === "") {
+      setErrorEmail("メールアドレスを入力してください");
+      return false;
+    }
+    return true;
+  };
+
+  const isValidCurrentPassword = () => {
+    setErrorCurrentPassword("");
+    if (currentPassword === "") {
+      setErrorCurrentPassword("現在のパスワードを入力してください");
+      return false;
+    }
+    return true;
+  };
+
+  const isValidNewPassword = () => {
+    setErrorNewPassword("");
+    if (newPassword === "") {
+      setErrorNewPassword("新しいパスワードを入力してください");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!isValidEmail()) return;
+    if (!isValidCurrentPassword()) return;
+    if (!isValidNewPassword()) return;
+
+    try {
+      await checkAuth(email, currentPassword);
+    } catch (error) {
+      console.error(error);
+    }
+    
+    const data = {
+      email,
+      show_sensitive_type: showSensitiveType,
+      gender,
+      currentPassword,
+      newPassword,
+    };
+
+    console.log(`console.log(data);`);
+    console.log(data);
+    return;
+
     try {
       await updateUser({
         email,
@@ -108,7 +160,9 @@ export const AccountEdit = ({ accountSetting }: { accountSetting: AccountSetting
               </label>
             </div>
           </div>
-          <button type="submit">設定を保存する</button>
+          <button type="submit" className="bg-[#9BEA4D] text-white px-4 py-2 rounded">
+            設定を保存する
+          </button>
         </div>
       </form>
 
