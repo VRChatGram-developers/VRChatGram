@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../auth/[...nextauth]/route";
+import { auth } from "../../../../auth/[...nextauth]/route";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
@@ -20,7 +19,7 @@ export async function POST(request: Request, { params }: { params: { postId: str
   try {
     await connect();
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
@@ -65,7 +64,7 @@ export async function POST(request: Request, { params }: { params: { postId: str
 export async function DELETE(request: Request, { params }: { params: { postId: string } }) {
   try {
     await connect();
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }

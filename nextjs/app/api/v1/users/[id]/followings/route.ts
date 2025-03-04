@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../auth/[...nextauth]/route";
+import { auth } from "../../../../auth/[...nextauth]/route";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +17,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     await connect();
     const { id } = params;
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     let currentUser;
     if (session) {
       currentUser = await prisma.users.findUnique({
@@ -61,7 +60,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     let currentUser;
     if (session) {
       currentUser = await prisma.users.findUnique({

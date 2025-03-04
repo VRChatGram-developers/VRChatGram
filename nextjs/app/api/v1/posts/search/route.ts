@@ -4,8 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { bigIntToStringMap } from "../../../../../utils/bigIntToStringMapper";
 import { getStartOfWeek } from "../../../../../utils/date";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+import { auth } from "../../../auth/[...nextauth]/route";
 
 //インスタンスを作成
 const prisma = new PrismaClient();
@@ -23,7 +22,7 @@ export const connect = async () => {
 export async function GET(request: Request) {
   try {
     await connect();
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     const user = await prisma.users.findFirst({
       where: {
         uid: session?.user.uid,
