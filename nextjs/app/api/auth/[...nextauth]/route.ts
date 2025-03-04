@@ -1,9 +1,12 @@
-import NextAuth from "next-auth";
-import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { auth } from "@/libs/firebase/admin";
+import type { NextAuthConfig } from "next-auth";
+// import { auth as adminAuth } from "@/libs/firebase/admin";
+import { verifyIdToken } from "@/libs/firebase/test";
+import NextAuth from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+export const runtime = "edge";
+
+export const authOptions: NextAuthConfig = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
@@ -14,7 +17,7 @@ export const authOptions: NextAuthOptions = {
         const { idToken } = credentials ?? {};
         if (idToken) {
           try {
-            const decoded = await auth.verifyIdToken(idToken);
+            const decoded = await verifyIdToken(idToken as string);
             return {
               id: decoded.uid,
               uid: decoded.uid,
@@ -33,7 +36,6 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/sign-in",
-    error: "/sign-in",
   },
   session: { strategy: "jwt" },
   callbacks: {
@@ -44,15 +46,17 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
-        session.user.emailVerified = token.emailVerified;
-        session.user.uid = token.uid;
+        session.user.emailVerified = token.emailVerified as boolean;
+        session.user.uid = token.uid as string;
       }
       return session;
     },
   },
 };
 
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+export const { handlers, auth } = NextAuth(authOptions);
+
+// API ルートで利用できるように設定
+export const { GET, POST } = handlers;
