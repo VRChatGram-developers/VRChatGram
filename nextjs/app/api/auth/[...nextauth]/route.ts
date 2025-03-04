@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 // import { auth as adminAuth } from "@/libs/firebase/admin";
-import { verifyIdToken } from "@/libs/firebase/test";
+import { verifyIdToken } from "@/libs/firebase/firebase-auth-for-edge";
 import NextAuth from "next-auth";
 
 export const runtime = "edge";
