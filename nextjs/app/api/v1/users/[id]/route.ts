@@ -59,6 +59,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
               select: {
                 id: true,
                 url: true,
+                width: true,
+                height: true,
               },
             },
             likes: {

@@ -24,6 +24,8 @@ export type User = {
   export type Image = {
     id: bigint;
     url: string;
+    width: number;
+    height: number;
   };
   
   export type requestCreateUser = {

@@ -27,10 +27,10 @@ export const UserPostList = ({ user }: { user: User }) => {
                 <Image
                   src={
                     Number(post.id) % 2 === 0
-                      ? "/users/post-sample-image.png"
+                      ? post.images[0].url
                       : Number(post.id) % 3 === 0
-                      ? "/users/post-sample-image3.png"
-                      : "/users/post-sample-image2.png"
+                      ? post.images[0].url
+                      : post.images[0].url
                   }
                   alt={`ピックアップ画像`}
                   width={Number(post.id) % 2 === 0 ? 804 : Number(post.id) % 3 === 0 ? 402 : 600}
