@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: [
       "vrcss-development.s3.ap-southeast-2.amazonaws.com",
+      "pbs.twimg.com"
     ],
   },
 };

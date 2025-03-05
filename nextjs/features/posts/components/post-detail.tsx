@@ -45,8 +45,14 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     <>
       <div className={styles.postDetailContainer}>
         <div className={styles.postImageContainer}>
-          <div className={styles.postMainImage}>
-            <Image src={selectedImage} alt="avatar" width={100} height={100} />
+          <div className={styles.postMainImageContainer}>
+            <Image
+              src={selectedImage}
+              alt="avatar"
+              width={500}
+              height={500}
+              className={styles.postMainImage}
+            />
             {currentIndex !== post.images.length - 1 && (
               <MdOutlineNavigateNext onClick={handleNextImage} />
             )}
@@ -63,11 +69,11 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                     alt="avatar"
                     width={400}
                     height={400}
-                    className={
+                    className={`${styles.postImage} ${
                       selectedImage == image.url
                         ? styles.postImageSubSelected
                         : styles.postImageSubNotSelected
-                    }
+                    }`}
                     onClick={() => setSelectedImage(image.url)}
                   />
                 )}
