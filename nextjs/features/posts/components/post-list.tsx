@@ -33,7 +33,10 @@ export const PostList = ({ posts, popularTags }: { posts: PostListType; popularT
   }, [posts]);
 
   const addAllToPopularTags = useMemo(
-    () => [{ id: 0, name: "ALL" }, ...popularTags],
+    () => [
+      { tag: { id: 0, name: "ALL" } },
+      ...popularTags,
+    ],
     [popularTags]
   );
 
