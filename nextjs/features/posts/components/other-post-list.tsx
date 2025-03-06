@@ -27,10 +27,10 @@ export const OtherPostList = ({
               postId: post.id,
               userId: post.user?.id,
               postName: post.title,
-              postImageUrl: "/users/post-sample-image3.png",
+              postImageUrl: post.images[0].url,
               postImageCount: post.images.length,
               userName: post.user?.name,
-              userImageUrl: "/users/post-sample-image.png",
+              userImageUrl: post.user?.profile_url ?? "",
               isLiked: isLiked,
               setIsLiked: setIsLiked,
               handleLikeOrUnlike: () => {
