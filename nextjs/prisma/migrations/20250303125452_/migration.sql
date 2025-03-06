@@ -39,7 +39,8 @@ CREATE TABLE `users` (
     `uid` VARCHAR(255) NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `email` VARCHAR(30) NOT NULL,
-    `introduce` TEXT NULL,
+    `introduction_title` VARCHAR(255) NULL,
+    `introduction_detail` TEXT NULL,
     `gender` ENUM('male', 'female', 'others') NOT NULL,
     `profile_url` VARCHAR(255) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -188,7 +189,7 @@ CREATE TABLE `reports` (
 CREATE TABLE `social_links` (
     `id` VARCHAR(191) NOT NULL,
     `user_id` VARCHAR(191) NOT NULL,
-    `platform_types` ENUM('twitter', 'discord', 'vrchat', 'other') NOT NULL,
+    `platform_types` ENUM('x', 'discord', 'vrchat', 'other') NOT NULL,
     `platform_url` VARCHAR(255) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
