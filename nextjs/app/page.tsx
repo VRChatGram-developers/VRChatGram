@@ -1,7 +1,11 @@
 import { Main } from "@/features/home/components/main";
 import { fetchNotifications, fetchHomeFeed } from "@/features/home/endpoint";
-import { Tag } from "@/features/home/types/tag";
-import { PopularPost as PopularPostType, LatestPost as LatestPostType, XPost as XPostType } from "@/features/home/types/index";
+import {
+  PopularPost as PopularPostType,
+  LatestPost as LatestPostType,
+  XPost as XPostType,
+  Tag,
+} from "@/features/home/types/index";
 import { auth } from "@/libs/firebase/auth";
 
 export default async function Home() {
@@ -41,4 +45,3 @@ export default async function Home() {
     />
   );
 }
-

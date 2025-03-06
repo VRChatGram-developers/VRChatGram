@@ -150,7 +150,7 @@ export const SearchResult = ({
     <div className={styles.userPostsContainer}>
       <div className={styles.searchContainer}>
         <Image
-          src="/posts/sample-icon.png"
+          src="https://vrcss-development.s3.ap-southeast-2.amazonaws.com/GhuNddiboAEbt0B.jpeg"
           alt="logo"
           className={styles.searchThumbnail}
           width={260}
