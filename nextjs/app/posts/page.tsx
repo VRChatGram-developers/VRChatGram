@@ -9,7 +9,7 @@ export default async function Page({
   const params = await searchParams;
   const queryParamsString = new URLSearchParams(params as Record<string, string>).toString();
 
-  const postsList = await fetchPosts(queryParamsString, await headers());
+  const postsList = await fetchPosts(queryParamsString, new Headers(await headers()));
   const popularTags = await fetchPopularTags();
   if (typeof postsList === "string") {
     return <div>{postsList}</div>;
