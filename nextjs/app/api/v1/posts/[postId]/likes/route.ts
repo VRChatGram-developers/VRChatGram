@@ -6,7 +6,6 @@ export const runtime = "edge";
 
 export async function POST(request: Request, { params }: { params: Promise<{ postId: string }> }) {
   try {
-    console.log("POST");
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });

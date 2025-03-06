@@ -95,10 +95,6 @@ export async function GET(request: Request) {
       },
     });
 
-    console.log(`posts`);
-    console.log(posts);
-    console.log(`posts`);
-
     const postsWithIsLiked = posts.map((post) => ({
       ...post,
       is_liked: post.likes.some((like) => like.user_id == user?.id),
