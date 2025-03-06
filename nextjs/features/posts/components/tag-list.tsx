@@ -14,7 +14,7 @@ export const TagList = ({
 }) => {
   return (
     <div className={styles.tagList}>
-      {popularTags.map((tag) => (
+      {popularTags.map(({ tag }) => (
         <button
           key={tag.id}
           className={

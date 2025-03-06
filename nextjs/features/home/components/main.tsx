@@ -3,19 +3,18 @@
 import Image from "next/image";
 import { Notification } from "../types/index";
 import { useState, useEffect, Key } from "react";
-import { Tag } from "../types/tag";
 import { PopularTag } from "./popular-tag";
 import {
   LatestPost as LatestPostType,
   PopularPost as PopularPostType,
   XPost as XPostType,
+  Tag,
 } from "../types/index";
 import { PopularPostList } from "./popular-post-list";
 import { LatestPost } from "./latest-post";
 import { XPost } from "./x-post";
 import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
-import { UrlObject } from "url";
 
 export const Main = ({
   popularPostList,

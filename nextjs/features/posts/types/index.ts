@@ -69,7 +69,7 @@ export type SocialLink = {
 
 export type Tag = {
   tag: {
-    id: bigint;
+    id: string;
     name: string;
   };
 };
