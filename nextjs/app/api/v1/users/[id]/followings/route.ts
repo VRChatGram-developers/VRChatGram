@@ -1,21 +1,12 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { auth } from "../../../../auth/[...nextauth]/route";
+import { auth } from "@/libs/firebase/auth";
+import prisma from "@/prisma/client";
 
-const prisma = new PrismaClient();
+export const runtime = "edge";
 
-export const connect = async () => {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
-
-export async function POST(request: Request, { params }: { params: { id: string } }) {
-  try {
-    await connect();
-    const { id } = params;
+    const { id } = await params;
 
     const session = await auth();
     let currentUser;
@@ -45,17 +36,16 @@ export async function POST(request: Request, { params }: { params: { id: string 
       },
     });
 
-    await connect();
     return NextResponse.json({ message: "フォローしました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connect();
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -93,6 +83,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     });
     return NextResponse.json({ message: "フォロー解除しました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
   }
 }
