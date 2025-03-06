@@ -58,3 +58,9 @@ export type User = {
     social_links: SocialLink[];
     name: string;
   };
+
+  export type UserForHeader = {
+    id: string;
+    name: string;
+    header_url: string;
+  };
