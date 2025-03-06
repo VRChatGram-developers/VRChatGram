@@ -62,6 +62,8 @@ export const UserHome = ({ user }: { user: User }) => {
             <PostCard
               key={post.id}
               postCardProps={{
+                postId: post.id,
+                userId: user.id,
                 postName: post.title,
                 postImageUrl: "/home/new-post-image.png",
                 postImageCount: Number(post.images.length),
@@ -69,6 +71,9 @@ export const UserHome = ({ user }: { user: User }) => {
                 userImageUrl: "/users/post-sample-image2.png",
                 isLiked: isLiked,
                 setIsLiked: setIsLiked,
+                handleLikeOrUnlike: () => {
+                  setIsLiked(!isLiked);
+                },
               }}
             />
           ))}
