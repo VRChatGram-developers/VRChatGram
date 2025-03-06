@@ -3,15 +3,16 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
 
-const API_URL = "http://localhost:3000";
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export const fetchUserById = async (id: string, headers: Headers): Promise<User> => {
+export const fetchUserById = async (id: string, headers: Headers): Promise<User | string> => {
 
   const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
     headers: headers,
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch users");
+    console.error(response);
+    return "Failed to fetch users";
   }
   const data = await response.json();
   return data;
@@ -79,7 +80,7 @@ export const createUser = async (user: requestCreateUser) => {
 };
 
 
-export const checkEmail = async (email: string) => {
+export const checkEmail = async (email: string): Promise<boolean | string> => {
   const response = await fetch(`${API_URL}/api/v1/users/check`, {
     method: "POST",
     headers: {
@@ -88,7 +89,8 @@ export const checkEmail = async (email: string) => {
     body: JSON.stringify({ email }),
   });
   if (!response.ok) {
-    throw new Error("Failed to check email");
+    console.error(response);
+    return "Failed to check email";
   }
   const data = await response.json();
   return data.isRegisteredEnail;
