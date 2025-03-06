@@ -1,22 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { platform_types, PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { platform_types } from "@prisma/client";
 import { S3Service } from "@/app/api/services/s3-service";
 import { SocialLink } from "@/features/users/types";
+import prisma from "@/prisma/client";
+import { auth } from "@/libs/firebase/auth";
 
-const prisma = new PrismaClient();
-
-export const connect = async () => {
-  try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
-
-export const formatUpdateSocialLink = (social_links: SocialLink[]) => {
+const formatUpdateSocialLink = (social_links: SocialLink[]) => {
   return social_links.map((social_link) => {
     return {
       id: social_link.id,
@@ -26,15 +16,14 @@ export const formatUpdateSocialLink = (social_links: SocialLink[]) => {
   });
 };
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connect();
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしていません" }, { status: 401 });
     }
@@ -88,8 +77,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json({ message: "更新しました" }, { status: 200 });
   } catch (error) {
-    console.log(`error`);
-    console.log(error.stack);
+    console.error(error);
     return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
   }
 }

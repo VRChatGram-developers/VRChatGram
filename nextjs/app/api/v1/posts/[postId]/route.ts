@@ -64,7 +64,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
       select: {
         id: true,
         title: true,
-        images: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            width: true,
+            height: true,
+          },
+        },
         user: {
           select: {
             id: true,
