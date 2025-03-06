@@ -19,7 +19,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
         view_count: true,
         description: true,
         images: true,
-        tags: true,
+        tags: {
+          select: {
+            tag: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         likes: true,
         booth_items: {
           include: {
@@ -39,6 +48,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
             name: true,
             my_id: true,
             profile_url: true,
+            social_links: {
+              select: {
+                platform_types: true,
+                platform_url: true,
+              },
+            },
           },
         },
       },

@@ -1,7 +1,8 @@
 export type User = {
-  id: bigint;
+  id: string;
   name: string;
-  introduce: string;
+  introduction_title: string;
+  introduction_detail: string;
   profile_url?: string;
   header_url?: string;
   totalLikes: number;
@@ -23,6 +24,8 @@ export type User = {
   export type Image = {
     id: bigint;
     url: string;
+    width: number;
+    height: number;
   };
   
   export type requestCreateUser = {
@@ -34,6 +37,24 @@ export type User = {
   };
 
   export type SocialLink = {
-    platform_name: string;
+    id: string;
+    platform_types: string;
     platform_url: string;
+  };
+
+
+  export type requestUpdateUserProfile = {
+    id: string;
+    introduction_title: string;
+    introduction_detail: string;
+    profile_image?: {
+      file_data: string;
+      file_name: string;
+    }
+    header_image?: {
+      file_data: string;
+      file_name: string;
+    }
+    social_links: SocialLink[];
+    name: string;
   };
