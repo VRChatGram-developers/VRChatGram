@@ -7,7 +7,7 @@ export const fetchPosts = async (
   headers?: Headers
 ): Promise<PostList | string> => {
   const response = await fetch(`${API_URL}/api/v1/posts/search?${params}`, {
-    headers: headers,
+    headers: new Headers(headers),
   });
 
   if (!response.ok) {

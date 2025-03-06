@@ -1,4 +1,4 @@
-import { User, requestCreateUser } from "./types/index";
+import { User, UserForHeader, requestCreateUser, requestUpdateUserProfile } from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
@@ -6,9 +6,8 @@ import { signIn } from "next-auth/react";
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const fetchUserById = async (id: string, headers: Headers): Promise<User | string> => {
-
   const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
-    headers: headers,
+    headers: new Headers(headers),
   });
   if (!response.ok) {
     console.error(response);
@@ -18,7 +17,7 @@ export const fetchUserById = async (id: string, headers: Headers): Promise<User 
   return data;
 };
 
-export const followUser = async (id: bigint) => {
+export const followUser = async (id: string) => {
   try {
     const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
       method: "POST",
@@ -34,7 +33,7 @@ export const followUser = async (id: bigint) => {
   }
 };
 
-export const unfollowUser = async (id: bigint) => {
+export const unfollowUser = async (id: string) => {
   try {
     const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
       method: "DELETE",
@@ -54,7 +53,7 @@ export const createUser = async (user: requestCreateUser) => {
   try {
     const { password, email, ...userData } = user;
 
-    const userCredential = await createUserWithEmailAndPassword(auth, email,password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
     const response = await fetch(`${API_URL}/api/v1/users`, {
       method: "POST",
@@ -78,8 +77,6 @@ export const createUser = async (user: requestCreateUser) => {
     throw new Error("Failed to create user");
   }
 };
-
-
 export const checkEmail = async (email: string): Promise<boolean | string> => {
   const response = await fetch(`${API_URL}/api/v1/users/check`, {
     method: "POST",
@@ -94,4 +91,30 @@ export const checkEmail = async (email: string): Promise<boolean | string> => {
   }
   const data = await response.json();
   return data.isRegisteredEnail;
+};
+
+export const updateUserProfile = async (
+  requestUpdateUserProfile: requestUpdateUserProfile
+): Promise<string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/${requestUpdateUserProfile.id}/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestUpdateUserProfile),
+  });
+  if (!response.ok) {
+    return "Failed to update user introduction";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const fetchUserForHeader = async (): Promise<UserForHeader | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/header`);
+  if (!response.ok) {
+    return "Failed to fetch user for header";
+  }
+  const data = await response.json();
+  return data;
 };
