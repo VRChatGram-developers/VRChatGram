@@ -94,7 +94,7 @@ export const PrivacyPodivcy = () => {
             </div>
           </div>
 
-          <div className={styles.privacyPolicySection}>制定日：2025年XX月XX日</div>
+          <div className={styles.privacyPolicySection}>制定日：2025年3月9日</div>
 
           <div>株式会社かなう</div>
         </div>
