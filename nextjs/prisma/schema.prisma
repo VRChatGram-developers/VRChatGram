@@ -97,7 +97,7 @@ model users {
   id                  String               @id @default(uuid())
   uid                 String               @unique @db.VarChar(255)
   name                String               @db.VarChar(50)
-  email               String               @db.VarChar(30)
+  email               String               @db.VarChar(255)
   introduction_title  String?              @db.VarChar(255)
   introduction_detail String?              @db.Text
   gender              genders
