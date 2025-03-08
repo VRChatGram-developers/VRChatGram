@@ -1,0 +1,23 @@
+.privacyPolicyContainer {
+  display: grid;
+  gap: 1.5rem;
+  padding: 6rem 1.5rem 1.5rem 1.5rem;
+
+  .privacyPolicyTitle {
+    justify-self: center;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: "Noto Sans JP";
+  }
+
+  .privacyPolicyContentContainer {
+    display: grid;
+    background-color: #fff;
+    padding: 1.5rem 10rem 1.5rem 10rem;
+    border-radius: 1rem;
+  }
+
+  .privacyPolicySection {
+    padding-top: 1.5rem;
+  }
+}
