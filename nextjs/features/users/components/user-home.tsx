@@ -170,6 +170,9 @@ export const UserHome = ({
                 userImageUrl: "/users/post-sample-image2.png",
                 isLiked: isLiked,
                 setIsLiked: setIsLiked,
+                handleLikeOrUnlike: () => {
+                  setIsLiked(!isLiked);
+                },
               }}
             />
           ))}

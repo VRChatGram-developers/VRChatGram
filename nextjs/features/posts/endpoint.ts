@@ -1,37 +1,45 @@
-import { Tag, PostDetail } from "./types/index";
+import { Tag, PostDetail, PostList } from "./types/index";
 
-export const fetchPosts = async (params: string, headers?: Headers) => {
-  const response = await fetch(`http://localhost:3000/api/v1/posts/search?${params}`, {
-    headers: headers
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+export const fetchPosts = async (
+  params: string,
+  headers?: Headers
+): Promise<PostList | string> => {
+  const response = await fetch(`${API_URL}/api/v1/posts/search?${params}`, {
+    headers: new Headers(headers),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch posts");
+    console.error(response);
+    return "Failed to fetch posts";
   }
 
   return response.json();
 };
 
-export const fetchPopularTags = async (): Promise<Tag[]> => {
-  const response = await fetch(`http://localhost:3000/api/v1/tags/popular`);
+export const fetchPopularTags = async (): Promise<Tag[] | string> => {
+  const response = await fetch(`${API_URL}/api/v1/tags/popular`);
   if (!response.ok) {
-    throw new Error("Failed to fetch popular tags");
+    console.error(response);
+    return "Failed to fetch popular tags";
   }
   const data = await response.json();
   return data;
 };
 
-export const fetchPostById = async (postId: string): Promise<PostDetail> => {
-  const response = await fetch(`http://localhost:3000/api/v1/posts/${postId}`);
+export const fetchPostById = async (postId: string): Promise<PostDetail | string> => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}`);
   if (!response.ok) {
-    throw new Error("Failed to fetch post");
+    console.error(response);
+    return "Failed to fetch post";
   }
   const data = await response.json();
   return data;
 };
 
-export const likePost = async (postId: string) => {
-  const response = await fetch(`http://localhost:3000/api/v1/posts/${postId}/likes`, {
+export const likePost = async (postId: string): Promise<string> => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}/likes`, {
     method: "POST",
   });
   const data = await response.json();
@@ -39,7 +47,7 @@ export const likePost = async (postId: string) => {
 };
 
 export const unlikePost = async (postId: string) => {
-  const response = await fetch(`http://localhost:3000/api/v1/posts/${postId}/likes`, {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}/likes`, {
     method: "DELETE",
   });
   const data = await response.json();
@@ -47,27 +55,30 @@ export const unlikePost = async (postId: string) => {
 };
 
 export const createPost = async <T>(post: T) => {
-
-  // booth_itemsを取得
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const { boothItems, ...rest } = post;
 
-    const boothItemsResponse = await Promise.all(boothItems.map(async (link: string) => {
+  const boothItemsResponse = await Promise.all(
+    boothItems.map(async (link: string) => {
       if (link.includes("https://")) {
-        const response = await fetch(`http://localhost:3000/api/v1/booth?url=${link}.json`);
-      if (response.ok) {
-        const data = await response.json();
-        const { description, name, images } = await data;
-        return { detail: description, name: name, image:images[0].resized, url: link };
+        const response = await fetch(`${API_URL}/api/v1/booth?url=${link}.json`);
+        if (response.ok) {
+          const data = await response.json();
+          const { description, name, images } = await data;
+          return { detail: description, name: name, image: images[0].resized, url: link };
+        }
       }
-    }
-  }));
+    })
+  );
 
-  const response = await fetch(`http://localhost:3000/api/v1/posts`, {
+  const response = await fetch(`${API_URL}/api/v1/posts`, {
     method: "POST",
     body: JSON.stringify({ ...rest, boothItems: boothItemsResponse }),
   });
   if (!response.ok) {
-    throw new Error("Failed to create post");
+    console.error(response);
+    return "Failed to create post";
   }
   const data = await response.json();
   return data;

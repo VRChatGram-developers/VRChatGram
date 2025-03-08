@@ -43,8 +43,8 @@ const adjustGridLayout = (items: NodeListOf<Element>, columns: number) => {
     if (rowItems.length === columns || index === itemsArr.length - 1) {
       // 行に配置できる数に達したら次の行へ
       rowItems.forEach((type, i) => {
-        item.style.gridRowStart = rowIndex.toString();
-        item.style.gridColumnStart = (i + 1).toString(); // 順番にカラムを設定
+        (item as HTMLElement).style.gridRowStart = rowIndex.toString();
+        (item as HTMLElement).style.gridColumnStart = (i + 1).toString(); // 順番にカラムを設定
       });
       rowIndex += 1;
       rowItems = []; // 次の行のためにリセット
@@ -70,7 +70,9 @@ export const SearchResult = ({
   const [postList, setPostList] = useState<Post[]>(posts);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
-  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(Object.fromEntries(posts.map((post) => [post.id, post.is_liked])));
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
+    Object.fromEntries(posts.map((post) => [post.id, post.is_liked]))
+  );
   const { handleLikeOrUnlike } = useLikePost();
 
   const { searchQuery } = useSearchStore();
@@ -115,6 +117,9 @@ export const SearchResult = ({
     setSelectedSortOption(e.target.value);
 
     const postsList = await fetchPosts(query);
+    if (typeof postsList === "string") {
+      return <div>{postsList}</div>;
+    }
     setPostList(postsList.posts);
   };
 
@@ -145,7 +150,7 @@ export const SearchResult = ({
     <div className={styles.userPostsContainer}>
       <div className={styles.searchContainer}>
         <Image
-          src="/posts/sample-icon.png"
+          src="https://vrcss-development.s3.ap-southeast-2.amazonaws.com/GhuNddiboAEbt0B.jpeg"
           alt="logo"
           className={styles.searchThumbnail}
           width={260}

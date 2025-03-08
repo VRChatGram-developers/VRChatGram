@@ -1,7 +1,6 @@
 "use client";
 
 import { PopularPost } from "../types/index";
-import _ from "lodash";
 import { PostCard } from "@/components/post-card";
 import styles from "../styles/popular-post-list.module.scss";
 import useLikePost from "@/features/posts/hooks/use-like-post";

@@ -1,25 +1,13 @@
 import { NextResponse } from "next/server";
 
-import { PrismaClient } from "@prisma/client";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
-import { OtherPostList } from '../../../../../features/posts/components/other-post-list';
-//インスタンスを作成
-const prisma = new PrismaClient();
+import prisma from "@/prisma/client";
 
-// データベースに接続する関数
-export const connect = async () => {
-  try {
-    //prismaでデータベースに接続
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
+export const runtime = "edge";
 
-export async function GET(request: Request, { params }: { params: { postId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ postId: string }> }) {
   try {
-    await connect();
-    const { postId } = params;
+    const { postId } = await params;
     if (!postId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -31,7 +19,16 @@ export async function GET(request: Request, { params }: { params: { postId: stri
         view_count: true,
         description: true,
         images: true,
-        tags: true,
+        tags: {
+          select: {
+            tag: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         likes: true,
         booth_items: {
           include: {
@@ -51,6 +48,12 @@ export async function GET(request: Request, { params }: { params: { postId: stri
             name: true,
             my_id: true,
             profile_url: true,
+            social_links: {
+              select: {
+                platform_types: true,
+                platform_url: true,
+              },
+            },
           },
         },
       },
@@ -61,7 +64,14 @@ export async function GET(request: Request, { params }: { params: { postId: stri
       select: {
         id: true,
         title: true,
-        images: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            width: true,
+            height: true,
+          },
+        },
         user: {
           select: {
             id: true,
@@ -87,6 +97,7 @@ export async function GET(request: Request, { params }: { params: { postId: stri
       otherPostList: serializedOtherPostList,
     });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
   }
 }

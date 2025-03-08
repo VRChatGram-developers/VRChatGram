@@ -1,19 +1,10 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/prisma/client";
 
-const prisma = new PrismaClient();
-
-export const connect = async () => {
-  try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
+export const runtime = "edge";
 
 export async function POST(request: Request) {
   try {
-    await connect();
     const { name, email, gender, profile_url, uid } = await request.json();
 
     await prisma.users.create({
@@ -30,11 +21,9 @@ export async function POST(request: Request) {
       },
     });
 
-    await connect();
     return NextResponse.json({ message: "ユーザー作成しました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
   }
 }
-
-

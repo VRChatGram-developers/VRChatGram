@@ -1,21 +1,9 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { auth } from "@/libs/firebase/auth";
 import { S3Service } from "../../services/s3-service";
+import prisma from "@/prisma/client";
 
-//インスタンスを作成
-const prisma = new PrismaClient();
-
-// データベースに接続する関数
-export const connect = async () => {
-  try {
-    //prismaでデータベースに接続
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
+export const runtime = "edge";
 
 const uploadImages = async (
   images: { file_data: string; file_name: string; width: number; height: number }[]
@@ -50,9 +38,7 @@ const formatBoothItems = (
 
 export async function POST(request: Request) {
   try {
-    await connect();
-
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
@@ -98,7 +84,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ status: 200, message: "投稿に成功しました" });
   } catch (error) {
-    console.log(error.stack);
+    console.error(error);
     return NextResponse.json({ error: "投稿に失敗しました" }, { status: 500 });
   }
 }

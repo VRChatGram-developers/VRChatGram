@@ -54,3 +54,9 @@ export type Notification = {
   content: string | null;
 };
 
+export type Tag = {
+  id: bigint;
+  name: string;
+  top_post_image_url: string;
+};
+

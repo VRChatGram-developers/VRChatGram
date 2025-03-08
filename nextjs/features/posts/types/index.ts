@@ -59,11 +59,19 @@ export type User = {
   name: string;
   profile_url?: string;
   my_id?: string;
+  social_links: SocialLink[];
+};
+
+export type SocialLink = {
+  platform_types: string;
+  platform_url: string;
 };
 
 export type Tag = {
-  id: bigint;
-  name: string;
+  tag: {
+    id: string;
+    name: string;
+  };
 };
 
 export type ImageData = {
