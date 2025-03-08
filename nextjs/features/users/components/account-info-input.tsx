@@ -7,6 +7,7 @@ import { createUser } from "../endpoint";
 import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 import { useSession } from "next-auth/react";
+import { createYears, createMonths, createDays } from "@/utils/date";
 
 export const AccountInfoInput = ({
   email,
@@ -18,9 +19,6 @@ export const AccountInfoInput = ({
   setIsSignUp: (isSignUp: boolean) => void;
 }) => {
   const router = useRouter();
-  const years = Array.from({ length: 100 }, (_, index) => 2025 - index); // 2025年から遡る
-  const months = Array.from({ length: 12 }, (_, index) => index + 1); // 1月から12月
-  const days = Array.from({ length: 31 }, (_, index) => index + 1);
   const sexOptions = [
     { label: "男", value: "male" },
     { label: "女", value: "female" },
@@ -85,12 +83,7 @@ export const AccountInfoInput = ({
 
   const handleCreateAccount = async () => {
     try {
-      if (
-        !isValidNickName() ||
-        !isValidBirthday() ||
-        !isValidSex() ||
-        !isValidTerms()
-      ) {
+      if (!isValidNickName() || !isValidBirthday() || !isValidSex() || !isValidTerms()) {
         return;
       }
 
@@ -134,21 +127,14 @@ export const AccountInfoInput = ({
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <p className={styles.warningLabel}>
-                    あなたの名前として表示されます
-                  </p>
-                  {errorName && (
-                    <p className={styles.errorNameMessage}>{errorName}</p>
-                  )}
+                  <p className={styles.warningLabel}>あなたの名前として表示されます</p>
+                  {errorName && <p className={styles.errorNameMessage}>{errorName}</p>}
                 </div>
                 <div className={styles.genderContainer}>
                   <p className={styles.genderLabel}>性別</p>
                   <div className={styles.genderSelectSection}>
                     {sexOptions.map((option) => (
-                      <label
-                        key={option.value}
-                        className={styles.genderSelectLabel}
-                      >
+                      <label key={option.value} className={styles.genderSelectLabel}>
                         <input
                           type="radio"
                           name="gender"
@@ -162,9 +148,7 @@ export const AccountInfoInput = ({
                     ))}
                   </div>
 
-                  {errorSex && (
-                    <p className={styles.errorSexMessage}>{errorSex}</p>
-                  )}
+                  {errorSex && <p className={styles.errorSexMessage}>{errorSex}</p>}
                 </div>
                 <div className={styles.birthdayContainer}>
                   <p className={styles.birthdayLabel}>生年月日</p>
@@ -174,10 +158,10 @@ export const AccountInfoInput = ({
                         id="year"
                         className={styles.birthdaySelect}
                         value={year}
-                        onChange={(e) => setYear(e.target.value)}
+                        onChange={(e) => setYear(Number(e.target.value))}
                       >
                         <option value="">年</option>
-                        {years.map((y) => (
+                        {createYears().map((y) => (
                           <option key={y} value={y}>
                             {y}
                           </option>
@@ -189,10 +173,10 @@ export const AccountInfoInput = ({
                         id="month"
                         className={styles.birthdaySelect}
                         value={month}
-                        onChange={(e) => setMonth(e.target.value)}
+                        onChange={(e) => setMonth(Number(e.target.value))}
                       >
                         <option value="">月</option>
-                        {months.map((m) => (
+                        {createMonths().map((m) => (
                           <option key={m} value={m}>
                             {m}
                           </option>
@@ -207,16 +191,14 @@ export const AccountInfoInput = ({
                         onChange={(e) => setDay(e.target.value)}
                       >
                         <option value="">日</option>
-                        {days.map((d) => (
+                        {createDays(year, month).map((d) => (
                           <option key={d} value={d}>
                             {d}
                           </option>
                         ))}
                       </select>
                       {errorBirthday && (
-                        <p className={styles.errorBirthdayMessage}>
-                          {errorBirthday}
-                        </p>
+                        <p className={styles.errorBirthdayMessage}>{errorBirthday}</p>
                       )}
                     </div>
                   </div>
@@ -230,33 +212,20 @@ export const AccountInfoInput = ({
                       onChange={(e) => setTermsChecked(e.target.checked)}
                     />
                     <span>
-                      <a
-                        href="/terms"
-                        target="_blank"
-                        className={styles.linkText}
-                      >
+                      <a href="/terms" target="_blank" className={styles.linkText}>
                         利用規約
                       </a>{" "}
                       と
-                      <a
-                        href="/privacy"
-                        target="_blank"
-                        className={styles.linkText}
-                      >
+                      <a href="/privacy" target="_blank" className={styles.linkText}>
                         プライバシーポリシー
                       </a>{" "}
                       に同意する
                     </span>
                   </label>
-                  {errorTerms && (
-                    <p className={styles.errorTermsMessage}>{errorTerms}</p>
-                  )}
+                  {errorTerms && <p className={styles.errorTermsMessage}>{errorTerms}</p>}
                 </div>
                 <div className={styles.signupContent}>
-                  <button
-                    onClick={handleCreateAccount}
-                    className={styles.userCreateButton}
-                  >
+                  <button onClick={handleCreateAccount} className={styles.userCreateButton}>
                     アカウント作成
                   </button>
                 </div>
