@@ -53,7 +53,7 @@ export const AccountInfoInput = ({
   const isValidBirthday = () => {
     setErrorBirthday("");
     if (year === "" || month === "" || day === "") {
-      setErrorBirthday("誕生日を選択してください");
+      setErrorBirthday("生年月日を選択してください");
       return false;
     }
     return true;
@@ -167,7 +167,7 @@ export const AccountInfoInput = ({
                   )}
                 </div>
                 <div className={styles.birthdayContainer}>
-                  <p className={styles.birthdayLabel}>誕生日</p>
+                  <p className={styles.birthdayLabel}>生年月日</p>
                   <div className={styles.birthdayContent}>
                     <div className={styles.birthdaySelectContent}>
                       <select
