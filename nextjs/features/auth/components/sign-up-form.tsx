@@ -28,7 +28,7 @@ export const SignUpForm = ({
       return false;
     }
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[^@.]+\.[^@]+$/;
     if (!emailRegex.test(email)) {
       setErrorMail("正しいメールアドレスを入力してください");
       return false;
