@@ -186,7 +186,7 @@ export const SignInForm = () => {
                 </button>
                 <p className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px] text-center">
                   アカウントをお持ちではありませんか？{" "}
-                  <Link href="/sign-up" className="underline">
+                  <Link href="/signup" className="underline">
                     アカウント作成
                   </Link>
                 </p>
