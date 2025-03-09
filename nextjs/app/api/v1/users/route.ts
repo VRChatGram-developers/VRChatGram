@@ -3,6 +3,25 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
+function generateRandomId(): string {
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+}
+
+async function generateUniqueMyId(): Promise<string> {
+  while (true) {
+    const myId = generateRandomId();
+    const existingUser = await prisma.users.findUnique({
+      where: { my_id: myId },
+    });
+
+    if (!existingUser) {
+      const secondTryId = generateRandomId(); 
+      return secondTryId;
+    }
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { name, email, gender, profile_url, uid } = await request.json();
@@ -15,7 +34,7 @@ export async function POST(request: Request) {
         profile_url: profile_url,
         status: "active",
         birthday: new Date(),
-        my_id: "my_id",
+        my_id: await generateUniqueMyId(),
         show_sensitive_type: "default",
         uid: uid,
       },
