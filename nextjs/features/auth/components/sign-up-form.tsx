@@ -27,6 +27,12 @@ export const SignUpForm = ({
       setErrorMail("メールアドレスを入力してください");
       return false;
     }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[^@.]+\.[^@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMail("正しいメールアドレスを入力してください");
+      return false;
+    }
     setErrorMail("");
     return true;
   };
@@ -39,6 +45,16 @@ export const SignUpForm = ({
 
     if (password.length < 6) {
       setErrorPassword("パスワードは6文字以上で入力してください");
+      return false;
+    }
+
+    // 半角英字、数字、記号をすべて含むかチェック
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSymbol = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
+
+    if (!(hasLetter && hasNumber && hasSymbol)) {
+      setErrorPassword("パスワードは半角英字、数字、記号を含めてください");
       return false;
     }
 
@@ -101,9 +117,7 @@ export const SignUpForm = ({
                   },
                 }}
               />
-              {errorMail && (
-                <p className={styles.errorMailMessage}>{errorMail}</p>
-              )}
+              {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
             </div>
 
             <div className={styles.textForm}>
@@ -136,9 +150,7 @@ export const SignUpForm = ({
               <p className={styles.warningLabel}>
                 パスワードは半角英字、数字、記号を合わせた6文字以上で入力してください
               </p>
-              {errorPassword && (
-                <p className={styles.errorPasswordMessage}>{errorPassword}</p>
-              )}
+              {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
             </div>
             <div className={styles.createButtonContainer}>
               <button onClick={handleSignUp} className={styles.createButton}>
@@ -148,7 +160,7 @@ export const SignUpForm = ({
             <div className={styles.separateLoginContainer}>
               <p className={styles.separateLoginText}>
                 既にアカウントをお持ちですか？{" "}
-                <Link href="/sign-in" className="underline">
+                <Link href="/signin" className="underline">
                   ログイン
                 </Link>
               </p>
@@ -173,12 +185,7 @@ export const SignUpForm = ({
 
             <div className={styles.googleLoginContainer}>
               <button className={styles.googleLoginButton}>
-                <Image
-                  src="/google-icon.png"
-                  alt="Google Icon"
-                  width={24}
-                  height={24}
-                />
+                <Image src="/google-icon.png" alt="Google Icon" width={24} height={24} />
                 <p className={styles.googleLoginText}>Googleで続行</p>
               </button>
             </div>
