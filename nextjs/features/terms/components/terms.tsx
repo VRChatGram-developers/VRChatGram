@@ -1,20 +1,20 @@
 "use cdivent";
 
 import styles from "../style/terms.module.scss";
-export const TermOfUse = () => {
+export const Terms = () => {
   return (
-    <div className={styles.termOfUseContainer}>
-      <div className={styles.termOfUseTitle}>利用規約</div>
-      <div className={styles.termOfUseContentContainer}>
-        <div className={styles.termOfUseSection}>
-          <div>第1条（適用）</div>
+    <div className={styles.termsContainer}>
+      <div className={styles.termsTitle}>利用規約</div>
+      <div className={styles.termsContentContainer}>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第1条（適用）</div>
           <div>
             本規約は、株式会社かなう（以下、「当社」といいます。）が提供する写真共有サービス「VRCSS」（以下、「本サービス」といいます。）の利用条件を定めるものです。本サービスを利用する全てのユーザー（以下、「ユーザー」といいます。）に適用されます。
           </div>
         </div>
 
-        <div className={styles.termOfUseSection}>
-          <div>第2条（利用登録）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第2条（利用登録）</div>
           <div>
             1. ユーザーは、本サービスの利用に際し、当社の定める方法で利用登録を行うものとします。
           </div>
@@ -24,8 +24,8 @@ export const TermOfUse = () => {
           <div>・その他、当社が利用登録を適当でないと判断した場合</div>
         </div>
 
-        <div className={styles.termOfUseSection}>
-          <div>第3条（ユーザーIDおよびパスワードの管理）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第3条（ユーザーIDおよびパスワードの管理）</div>
           <div>
             1.
             ユーザーは、自己の責任において、本サービスのユーザーIDおよびパスワードを適切に管理するものとします。
@@ -40,8 +40,8 @@ export const TermOfUse = () => {
           </div>
         </div>
 
-        <div className={styles.termOfUseSection}>
-          <div>第4条（禁止事項）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第4条（禁止事項）</div>
           <div>ユーザーは、本サービスの利用にあたり、以下の行為をしてはなりません。</div>
           <div>法令または公序良俗に違反する行為</div>
           <div>犯罪行為に関連する行為</div>
@@ -66,8 +66,8 @@ export const TermOfUse = () => {
           <div>その他、当社が不適切と判断する行為</div>
         </div>
 
-        <div className={styles.termOfUseSection}>
-          <div>第5条（本サービスの提供の停止等）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第5条（本サービスの提供の停止等）</div>
           <div>
             1.
             当社は、以下のいずれかの事由があると判断した場合、ユーザーに事前に通知することなく本サービスの全部または一部の提供を停止または中断することができます。
@@ -82,10 +82,10 @@ export const TermOfUse = () => {
             2.
             当社は、本サービスの提供の停止または中断により、ユーザーまたは第三者が被ったいかなる不利益または損害についても、一切の責任を負わないものとします。
           </div>
-        </div>
+        </div>  
 
-        <div className={styles.termOfUseSection}>
-          <div>第6条（著作権）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第6条（著作権）</div>
           <div>
             1.
             ユーザーは、自ら著作権その他の必要な権利を有するか、または適法な権利者の許諾を得た文章、画像、動画等の情報のみ、本サービスを利用して投稿またはアップロードすることができるものとします。
@@ -104,8 +104,8 @@ export const TermOfUse = () => {
           </div>
         </div>
 
-        <div className={styles.termOfUseSection}>
-          <div>第7条（免責事項）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第7条（免責事項）</div>
           <div>
             1. 当社は、本サービスに関して、明示または黙示を問わず、いかなる保証も行いません。
           </div>
@@ -117,17 +117,20 @@ export const TermOfUse = () => {
             3.
             当社は、ユーザー間または第三者との間で生じたトラブルについて、一切関与せず、責任を負いません。
           </div>
+        </div>
 
-          <div>第8条（本規約の変更）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第8条（本規約の変更）</div>
           <div>1. 当社は、必要と判断した場合、本規約を変更することができます。</div>
           <div>
             2.
             本規約の変更後、本サービスの利用を継続した場合、ユーザーは変更後の規約に同意したものとみなされます。
           </div>
         </div>
+        
 
-        <div className={styles.termOfUseSection}>
-          <div>第9条（準拠法・裁判管轄）</div>
+        <div className={styles.termsSection}>
+          <div className={styles.termsSectionTitle}>第9条（準拠法・裁判管轄）</div>
           <div>1. 本規約の解釈にあたっては、日本法を準拠法とします。</div>
           <div>
             2.
