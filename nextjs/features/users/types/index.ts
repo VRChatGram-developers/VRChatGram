@@ -30,7 +30,12 @@ export type User = {
   
   export type requestCreateUser = {
     name: string;
-    birthday: string;
+    my_id: string;
+    birthday: {
+      year: number;
+      month: number;
+      day: number;
+    };
     gender: string;
     email: string;
     password: string;

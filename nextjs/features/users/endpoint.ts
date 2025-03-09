@@ -61,7 +61,16 @@ export const createUser = async (user: requestCreateUser) => {
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({ ...userData, uid: userCredential.user.uid, email: email }),
+      body: JSON.stringify({
+        ...userData,
+        uid: userCredential.user.uid,
+        email: email,
+        birthday: {
+          year: userData.birthday.year,
+          month: userData.birthday.month,
+          day: userData.birthday.day,
+        },
+      }),
     });
 
     const token = await userCredential.user.getIdToken();
@@ -91,6 +100,22 @@ export const checkEmail = async (email: string): Promise<boolean | string> => {
   }
   const data = await response.json();
   return data.isRegisteredEnail;
+};
+
+export const checkDuplicateMyId = async (myId: string): Promise<boolean | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/check_duplicate_my_id`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ my_id: myId }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to check duplicate my_id";
+  }
+  const data = await response.json();
+  return data.isRegisteredMyId;
 };
 
 export const updateUserProfile = async (

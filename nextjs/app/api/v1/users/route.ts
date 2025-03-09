@@ -3,9 +3,24 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
+const formatBirthdayToJST = (year: number, month: number, day: number): Date => {
+  const jstDate = new Date(Date.UTC(year, month - 1, day, 9, 0, 0));
+  return jstDate;
+};
+
 export async function POST(request: Request) {
   try {
-    const { name, email, gender, profile_url, uid } = await request.json();
+    const {
+      name,
+      email,
+      gender,
+      profile_url,
+      uid,
+      my_id,
+      birthday: { year, month, day },
+    } = await request.json();
+
+    const formattedBirthday = formatBirthdayToJST(year, month, day);
 
     await prisma.users.create({
       data: {
@@ -14,8 +29,8 @@ export async function POST(request: Request) {
         gender: gender,
         profile_url: profile_url,
         status: "active",
-        birthday: new Date(),
-        my_id: "my_id",
+        birthday: formattedBirthday,
+        my_id: my_id,
         show_sensitive_type: "default",
         uid: uid,
       },

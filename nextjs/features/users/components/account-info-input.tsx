@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 import { useSession } from "next-auth/react";
 import { createYears, createMonths, createDays } from "@/utils/date";
-
+import { checkDuplicateMyId } from "../endpoint";
 export const AccountInfoInput = ({
   email,
   password,
@@ -26,6 +26,7 @@ export const AccountInfoInput = ({
   ];
 
   const [name, setName] = useState<string>("");
+  const [myId, setMyId] = useState<string>("");
   const [year, setYear] = useState<number | string>("");
   const [month, setMonth] = useState<number | string>("");
   const [day, setDay] = useState<number | string>("");
@@ -33,6 +34,7 @@ export const AccountInfoInput = ({
   const [termsChecked, setTermsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorName, setErrorName] = useState("");
+  const [errorMyId, setErrorMyId] = useState("");
   const [errorBirthday, setErrorBirthday] = useState("");
   const [errorSex, setErrorSex] = useState("");
   const [errorTerms, setErrorTerms] = useState("");
@@ -45,6 +47,24 @@ export const AccountInfoInput = ({
       setErrorName("ニックネームを入力してください");
       return false;
     }
+    return true;
+  };
+
+  const isRegisteredMyId = async () => {
+    if (await checkDuplicateMyId(myId)) {
+      setErrorMyId("このmy_idは既に使用されています");
+      return false;
+    }
+    return true;
+  };
+
+  const isValidMyId = async () => {
+    setErrorMyId("");
+    if (myId === "") {
+      setErrorMyId("my_idを入力してください");
+      return false;
+    }
+
     return true;
   };
 
@@ -83,7 +103,17 @@ export const AccountInfoInput = ({
 
   const handleCreateAccount = async () => {
     try {
-      if (!isValidNickName() || !isValidBirthday() || !isValidSex() || !isValidTerms()) {
+      if (
+        !isValidNickName() ||
+        !isValidMyId() ||
+        !isValidBirthday() ||
+        !isValidSex() ||
+        !isValidTerms()
+      ) {
+        return;
+      }
+
+      if (!(await isRegisteredMyId())) {
         return;
       }
 
@@ -93,7 +123,12 @@ export const AccountInfoInput = ({
         email: email,
         password: password,
         name: name,
-        birthday: `${year}-${month}-${day}`,
+        my_id: myId,
+        birthday: {
+          year: Number(year),
+          month: Number(month),
+          day: Number(day),
+        },
         gender: selectedSex,
       });
     } catch (error) {
@@ -129,6 +164,19 @@ export const AccountInfoInput = ({
                   </div>
                   <p className={styles.warningLabel}>あなたの名前として表示されます</p>
                   {errorName && <p className={styles.errorNameMessage}>{errorName}</p>}
+                </div>
+                <div className={styles.myIdContainer}>
+                  <p className={styles.myIdLabel}>my_id</p>
+                  <div className={styles.myIdForm}>
+                    <input
+                      type="text"
+                      placeholder="my_id"
+                      value={myId}
+                      className={styles.myIdFormInput}
+                      onChange={(e) => setMyId(e.target.value)}
+                    />
+                  </div>
+                  {errorMyId && <p className={styles.errorMyIdMessage}>{errorMyId}</p>}
                 </div>
                 <div className={styles.genderContainer}>
                   <p className={styles.genderLabel}>性別</p>
@@ -191,7 +239,7 @@ export const AccountInfoInput = ({
                         onChange={(e) => setDay(e.target.value)}
                       >
                         <option value="">日</option>
-                        {createDays(year, month).map((d) => (
+                        {createDays(Number(year), Number(month)).map((d) => (
                           <option key={d} value={d}>
                             {d}
                           </option>
