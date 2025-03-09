@@ -1,5 +1,5 @@
-import { TermOfUse } from "@/features/terms/components/terms";
+import { Terms } from "@/features/terms/components/terms";
 
 export default async function Page() {
-  return <TermOfUse />;
+  return <Terms />;
 }
