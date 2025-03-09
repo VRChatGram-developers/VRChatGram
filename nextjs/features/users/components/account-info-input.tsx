@@ -191,7 +191,7 @@ export const AccountInfoInput = ({
                         onChange={(e) => setDay(e.target.value)}
                       >
                         <option value="">日</option>
-                        {createDays(year, month).map((d) => (
+                        {createDays(Number(year), Number(month)).map((d) => (
                           <option key={d} value={d}>
                             {d}
                           </option>
