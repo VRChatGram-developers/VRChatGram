@@ -1,0 +1,23 @@
+.termOfUseContainer {
+  display: grid;
+  gap: 1.5rem;
+  padding: 6rem 1.5rem 1.5rem 1.5rem;
+
+  .termOfUseTitle {
+    justify-self: center;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: "Noto Sans JP";
+  }
+
+  .termOfUseContentContainer {
+    display: grid;
+    background-color: #fff;
+    padding: 1.5rem 10rem 1.5rem 10rem;
+    border-radius: 1rem;
+  }
+
+  .termOfUseSection {
+    padding-top: 1.5rem;
+  }
+  }
