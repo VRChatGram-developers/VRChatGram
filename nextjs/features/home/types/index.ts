@@ -10,7 +10,7 @@ export type LatestPost = {
 export type PopularPost = {
   id: string;
   title: string;
-  is_sensitive: boolean;
+  show_sensitive_type: string;
   images: Image[];
   user: User;
   likes: Like[];
@@ -52,5 +52,11 @@ export type Notification = {
   published_at: string;
   notification_type: NotificationType;
   content: string | null;
+};
+
+export type Tag = {
+  id: bigint;
+  name: string;
+  top_post_image_url: string;
 };
 

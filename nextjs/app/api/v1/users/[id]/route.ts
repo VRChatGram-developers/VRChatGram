@@ -1,30 +1,20 @@
 import { NextResponse } from "next/server";
 
-import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
 import _ from "lodash";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+import { auth } from "@/libs/firebase/auth";
+import prisma from "@/prisma/client";
 
-const prisma = new PrismaClient();
+export const runtime = "edge";
 
-export const connect = async () => {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
-
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  try {
-    await connect();
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     let currentUser;
     if (session) {
       currentUser = await prisma.users.findUnique({
@@ -39,23 +29,28 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     const user = await prisma.users.findUnique({
       where: {
-        id: BigInt(id),
+        id: id,
       },
       select: {
         id: true,
         name: true,
-        introduce: true,
+        introduction_title: true,
+        introduction_detail: true,
         uid: true,
+        profile_url: true,
+        header_url: true,
         posts: {
           select: {
             id: true,
             title: true,
-            is_sensitive: true,
+            show_sensitive_type: true,
             view_count: true,
             images: {
               select: {
                 id: true,
                 url: true,
+                width: true,
+                height: true,
               },
             },
             likes: {
@@ -65,13 +60,17 @@ export async function GET(request: Request, { params }: { params: { id: string }
             },
           },
         },
+        social_links: {
+          select: {
+            id: true,
+            platform_types: true,
+            platform_url: true,
+          },
+        },
       },
     });
 
     const isCurrentUser = currentUser?.id === user?.id;
-    console.log(currentUser);
-    console.log(user);
-
     const postsWithLikes =
       user?.posts.map((post) => ({
         ...toJson(post),
@@ -87,12 +86,16 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const response = {
       id: toJson(user?.id),
       name: user?.name,
-      introduce: user?.introduce,
+      introduction_title: user?.introduction_title,
+      introduction_detail: user?.introduction_detail,
+      profile_url: user?.profile_url,
+      header_url: user?.header_url,
       posts: chunkedPostsWithLikes,
       totalLikes: totalLikes,
       top4Posts: top4Posts,
       totalViews: totalViews,
       isCurrentUser: isCurrentUser,
+      social_links: user?.social_links.map(toJson),
     };
 
     return NextResponse.json(response);

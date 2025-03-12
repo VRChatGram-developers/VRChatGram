@@ -1,36 +1,22 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../auth/[...nextauth]/route";
+import { auth } from "@/libs/firebase/auth";
+import prisma from "@/prisma/client";
 
-//インスタンスを作成
-const prisma = new PrismaClient();
+export const runtime = "edge";
 
-// データベースに接続する関数
-export const connect = async () => {
+export async function POST(request: Request, { params }: { params: Promise<{ postId: string }> }) {
   try {
-    //prismaでデータベースに接続
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
-
-export async function POST(request: Request, { params }: { params: { postId: string } }) {
-  try {
-    await connect();
-
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
-    const { postId } = params;
+    const { postId } = await params;
     if (!postId) {
       return NextResponse.json({ error: "postIdが指定されていません" }, { status: 400 });
     }
 
     const post = await prisma.posts.findUniqueOrThrow({
-      where: { id: BigInt(postId) },
+      where: { id: postId },
     });
 
     const user = await prisma.users.findUniqueOrThrow({
@@ -52,7 +38,6 @@ export async function POST(request: Request, { params }: { params: { postId: str
       data: {
         post_id: post.id,
         user_id: user.id,
-        posted_user_id: post.user_id,
       },
     });
 
@@ -63,20 +48,19 @@ export async function POST(request: Request, { params }: { params: { postId: str
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { postId: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ postId: string }> }) {
   try {
-    await connect();
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
-    const { postId } = params;
+    const { postId } = await params;
     if (!postId) {
       return NextResponse.json({ error: "postIdが指定されていません" }, { status: 400 });
     }
 
     const post = await prisma.posts.findUniqueOrThrow({
-      where: { id: BigInt(postId) },
+      where: { id: postId },
     });
 
     const user = await prisma.users.findUniqueOrThrow({

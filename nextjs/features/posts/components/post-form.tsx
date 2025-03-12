@@ -10,7 +10,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [title, setTitle] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
-  const [isSensitive, setIsSensitive] = useState(false);
+  const [selectedAgeRestriction, setSelectedAgeRestriction] = useState<string>("all");
   const [description, setDescription] = useState<string>("");
   const [boothItems, setBoothItems] = useState<string[]>([""]);
   const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
@@ -19,7 +19,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
-    { label: "18歳以上", isSensitive: true, value: "18" },
+    { label: "18歳以上", isSensitive: true, value: "safe" },
   ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +36,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             const imageData = {
               file: file,
               file_data: e.target?.result as string,
+              file_name: file.name,
               width: img.width,
               height: img.height,
             };
@@ -73,16 +74,13 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
 
   const handleCheckboxChange = (value: string) => {
     if (value === "all") {
-      setIsSensitive(false);
+      setSelectedAgeRestriction(value);
     } else {
-      setIsSensitive(true);
+      setSelectedAgeRestriction(value);
     }
   };
 
-  const handleBoothItemChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
+  const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newBoothItems = [...boothItems];
     newBoothItems[index] = e.target.value;
     setBoothItems(newBoothItems);
@@ -139,7 +137,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
         boothItems,
         images,
         tags,
-        isSensitive,
+        show_sensitive_type: selectedAgeRestriction,
       });
       onClose();
     } catch (error) {
@@ -169,9 +167,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                   />
                 </div>
                 <div className={styles.postFormInputTextContainer}>
-                  <p className={styles.postFormInputText}>
-                    ここにドロップ&ドロップまたは
-                  </p>
+                  <p className={styles.postFormInputText}>ここにドロップ&ドロップまたは</p>
                   <div className={styles.postFormInputButtonContainer}>
                     <input
                       type="file"
@@ -209,9 +205,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="タイトルを入力して下さい"
                   />
-                  {errorTitle && (
-                    <div className={styles.error_message}>{errorTitle}</div>
-                  )}
+                  {errorTitle && <div className={styles.error_message}>{errorTitle}</div>}
                 </div>
 
                 <div className={styles.postDetailTagContainer}>
@@ -247,16 +241,13 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                   <p className={styles.postDetailTitleText}>年齢制限</p>
                   <div className={styles.postDetailAgeLimitContent}>
                     {ageRestrictionOptions.map((option) => (
-                      <label
-                        key={option.value}
-                        className={styles.postDetailAgeLimitLabel}
-                      >
+                      <label key={option.value} className={styles.postDetailAgeLimitLabel}>
                         <input
                           type="checkbox"
                           name="ageRestriction"
                           className={styles.postDetailAgeLimitInput}
                           value={option.value}
-                          checked={option.isSensitive === isSensitive}
+                          checked={selectedAgeRestriction === option.value}
                           onChange={() => handleCheckboxChange(option.value)}
                         />
                         {option.label}
@@ -277,10 +268,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                   <p className={styles.postDetailTitleText}>使用した素材</p>
                   <div className={styles.postDetailMaterialContent}>
                     {boothItems.map((boothItem, index) => (
-                      <div
-                        key={index}
-                        className={styles.postDetailMaterialFormContainer}
-                      >
+                      <div key={index} className={styles.postDetailMaterialFormContainer}>
                         <form className={styles.postDetailMaterialForm}>
                           <input
                             type="text"
@@ -290,16 +278,10 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                             placeholder={`BoothのURLを貼って下さい`}
                           />
                           {errorBoothItems[index] && (
-                            <div className={styles.error_message}>
-                              {errorBoothItems[index]}
-                            </div>
+                            <div className={styles.error_message}>{errorBoothItems[index]}</div>
                           )}
                         </form>
-                        <div
-                          className={
-                            styles.postDetailMaterialFormButtonContainer
-                          }
-                        >
+                        <div className={styles.postDetailMaterialFormButtonContainer}>
                           {index !== boothItems.length - 1 && (
                             <button
                               className={styles.postDetailMaterialFormButton}
@@ -326,9 +308,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
               </div>
               <div className={styles.postImageContainer}>
                 <div className={styles.postImageQuanityLimitContainer}>
-                  <p className={styles.postImageQuanityLimitText}>
-                    投稿画像 {images.length}/4
-                  </p>
+                  <p className={styles.postImageQuanityLimitText}>投稿画像 {images.length}/4</p>
                 </div>
 
                 <div className={styles.postImageContentContainer}>
