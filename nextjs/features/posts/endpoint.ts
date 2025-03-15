@@ -28,8 +28,10 @@ export const fetchPopularTags = async (): Promise<Tag[] | string> => {
   return data;
 };
 
-export const fetchPostById = async (postId: string): Promise<PostDetail | string> => {
-  const response = await fetch(`${API_URL}/api/v1/posts/${postId}`);
+export const fetchPostById = async (postId: string, headers?: Headers): Promise<PostDetail | string> => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
+    headers: new Headers(headers),
+  });
   if (!response.ok) {
     console.error(response);
     return "Failed to fetch post";

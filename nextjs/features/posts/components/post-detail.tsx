@@ -2,7 +2,6 @@
 
 import styles from "../styles/post-detail.module.scss";
 import { FaRegEye } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
 import Image from "next/image";
@@ -12,15 +11,22 @@ import { OtherPostList } from "./other-post-list";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
 import { GrPersonalComputer } from "react-icons/gr";
-
+import useLikePost from "../hooks/use-like-post";
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(post.likeCount ?? 0);
+  const { handleLikeOrUnlike } = useLikePost();
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);
-  }, [post]);
+    console.log(post.isLiked);
+    console.log(`post.isLiked`);
+    setIsLiked(post.isLiked);
+    setLikeCount(post.likeCount);
+  }, [post, setIsLiked, setLikeCount]);
 
   useEffect(() => {
     if (textRef.current) {
@@ -41,7 +47,12 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     setSelectedImage(post.images[currentIndex - 1].url);
   };
 
-  const [isLiked, setIsLiked] = useState(false);
+  const handleLike = async () => {
+    setIsLiked(!isLiked);
+    setLikeCount(likeCount + (isLiked ? -1 : 1));
+    await handleLikeOrUnlike(post.id.toString(), isLiked);
+  };
+
   return (
     <>
       <div className={styles.postDetailContainer}>
@@ -102,8 +113,12 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                 <p className={styles.postDetailInfomationView}>{post.view_count}View</p>
               </div>
               <div className={styles.postDetailInfomationLikeCountContainer}>
-                <FaHeart size={24} />
-                <p className={styles.postDetailInfomationLikeCount}>{post.likeCount}</p>
+                {isLiked ? (
+                  <Image src="/heart-outline.png" alt="heart" width={24} height={24} onClick={handleLike} />
+                ) : (
+                  <Image src="/before-good-for-post-detail.png" alt="heart" width={24} height={24} onClick={handleLike} />
+                )}
+                <p className={styles.postDetailInfomationLikeCount}>{likeCount}</p>
               </div>
             </div>
             <div className={styles.postDetailProfileContainer}>
