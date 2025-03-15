@@ -38,6 +38,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
                 title: true,
                 detail: true,
                 image: true,
+                url: true,
               },
             },
           },
