@@ -189,7 +189,7 @@ export const SearchResult = ({
                 key={`${post.id}-${index}`}
                 postCardProps={{
                   postId: post.id,
-                  userId: post.user.id,
+                  myId: post.user.my_id,
                   postName: post.title,
                   postImageUrl: post.images[0].url,
                   postImageCount: post.images.length,

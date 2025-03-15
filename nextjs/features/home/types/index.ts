@@ -35,6 +35,7 @@ export type User = {
   id: string;
   name: string;
   profile_url: string;
+  my_id: string;
 };
 
 export type Like = {

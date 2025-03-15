@@ -84,6 +84,7 @@ export async function GET(request: Request) {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         images: {

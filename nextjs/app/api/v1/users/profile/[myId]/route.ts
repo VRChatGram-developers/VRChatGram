@@ -7,10 +7,10 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ myId: string }> }) {
   try {
-    const { id } = await params;
-    if (!id) {
+    const { myId } = await params;
+    if (!myId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
@@ -29,7 +29,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     const user = await prisma.users.findUnique({
       where: {
-        id: id,
+        my_id: myId,
       },
       select: {
         id: true,
@@ -87,6 +87,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     const response = {
       id: toJson(user?.id),
       name: user?.name,
+      my_id: user?.my_id,
       introduction_title: user?.introduction_title,
       introduction_detail: user?.introduction_detail,
       profile_url: user?.profile_url,

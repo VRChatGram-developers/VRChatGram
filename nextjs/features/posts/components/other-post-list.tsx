@@ -25,7 +25,7 @@ export const OtherPostList = ({
             key={post.id}
             postCardProps={{
               postId: post.id,
-              userId: post.user?.id,
+              myId: post.user?.my_id,
               postName: post.title,
               postImageUrl: post.images[0].url,
               postImageCount: post.images.length,

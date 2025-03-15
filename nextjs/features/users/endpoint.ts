@@ -5,8 +5,8 @@ import { signIn } from "next-auth/react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export const fetchUserById = async (id: string, headers: Headers): Promise<User | string> => {
-  const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
+export const fetchUserById = async (myId: string, headers: Headers): Promise<User | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/profile/${myId}`, {
     headers: new Headers(headers),
   });
   if (!response.ok) {

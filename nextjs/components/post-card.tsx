@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 interface PostCardProps {
   postId: string | bigint;
-  userId: string | bigint;
+  myId: string | bigint;
   postName: string;
   postImageUrl: string;
   postImageCount: number;
@@ -27,7 +27,7 @@ export const PostCard = ({
 
   const {
     postId,
-    userId,
+    myId,
     postName,
     postImageUrl,
     postImageCount,
@@ -42,9 +42,9 @@ export const PostCard = ({
     router.push(`/posts/${postIdString}`);
   };
 
-  const handleForwardToUserDetail = (userId: string | bigint) => {
-    const userIdString = typeof userId === "bigint" ? userId.toString() : userId;
-    router.push(`/users/${userIdString}`);
+  const handleForwardToUserDetail = (myId: string | bigint) => {
+    const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
+    router.push(`/users/${myIdString}`);
   };
 
   return (
@@ -68,7 +68,7 @@ export const PostCard = ({
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
             <Image src={userImageUrl} alt="new-post-image" className={styles.userInfoIcon} fill />
-            <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(userId)}>
+            <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(myId)}>
               {userName}
             </p>
           </div>
