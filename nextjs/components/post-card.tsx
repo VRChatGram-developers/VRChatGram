@@ -44,8 +44,6 @@ export const PostCard = ({
 
   const handleForwardToUserDetail = (myId: string | bigint) => {
     const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
-    console.log(`myIdString`);
-    console.log(myIdString);
     router.push(`/users/${myIdString}`);
   };
 
