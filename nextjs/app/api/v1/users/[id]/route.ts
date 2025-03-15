@@ -39,6 +39,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         uid: true,
         profile_url: true,
         header_url: true,
+        my_id: true,
         posts: {
           select: {
             id: true,

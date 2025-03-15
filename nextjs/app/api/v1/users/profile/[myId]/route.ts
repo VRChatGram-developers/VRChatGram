@@ -39,6 +39,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
         uid: true,
         profile_url: true,
         header_url: true,
+        my_id: true,
         posts: {
           select: {
             id: true,
@@ -86,6 +87,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
     const response = {
       id: toJson(user?.id),
       name: user?.name,
+      my_id: user?.my_id,
       introduction_title: user?.introduction_title,
       introduction_detail: user?.introduction_detail,
       profile_url: user?.profile_url,
