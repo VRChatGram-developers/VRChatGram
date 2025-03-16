@@ -53,6 +53,7 @@ export type Booth = {
   title: string;
   detail: string;
   image: Image;
+  url: string;
 };
 
 export type User = {

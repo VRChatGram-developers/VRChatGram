@@ -187,7 +187,13 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               </div>
               <div className={styles.postDetailProfileBoothContent}>
                 {post.booth_items.map((boothItem) => (
-                  <div className={styles.postDetailProfileBoothItem} key={boothItem.id}>
+                  <div
+                    className={styles.postDetailProfileBoothItem}
+                    key={boothItem.id}
+                    onClick={() => {
+                      window.open(boothItem.booth.url, "_blank");
+                    }}
+                  >
                     <Image
                       src={boothItem.booth.image.toString()}
                       alt="avatar"
