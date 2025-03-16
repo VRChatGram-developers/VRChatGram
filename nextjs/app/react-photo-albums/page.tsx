@@ -6,5 +6,5 @@ export default async function Home() {
   if (typeof posts === "string") {
     return <div>{posts}</div>;
   }
-  return <ReactPhotoAlbum photos={posts.posts.map((post) => post.images).flat()} />;
+  return <ReactPhotoAlbum posts={posts.posts} />;
 }

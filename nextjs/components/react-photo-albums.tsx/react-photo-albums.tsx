@@ -6,7 +6,7 @@
 "use client";
 
 import "react-photo-album/rows.css";
-import { Image as ImageType } from "@/features/posts/types";
+import { Image as ImageType, Post } from "@/features/posts/types";
 import { SelectIcon } from "@/components/react-photo-albums.tsx/SelectIcon";
 import { useState } from "react";
 import { Photo, RowsPhotoAlbum } from "react-photo-album";
@@ -16,12 +16,12 @@ type SelectablePhoto = Photo & {
   selected?: boolean;
 };
 
-export default function PhotoGallery({ photos }: { photos: ImageType[] }) {
-  const photoList = photos.map((photo) => ({
-    src: photo.url,
+export default function PhotoGallery({ posts }: { posts: Post[] }) {
+  const photoList = posts.map((post) => ({
+    src: post.images[0].url,
     alt: "test",
-    width: photo.width,
-    height: photo.height,
+    width: post.images[0].width,
+    height: post.images[0].height,
   }));
 
   const [photoObjects, setPhotoObjects] = useState<SelectablePhoto[]>(() =>
