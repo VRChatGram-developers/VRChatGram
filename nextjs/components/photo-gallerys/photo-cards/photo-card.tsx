@@ -14,14 +14,14 @@ export const PhotoCard = ({
 }: React.ComponentProps<"div"> & {
   postId: string;
   postName: string;
-  postImageUrl: string;
   postImageCount: number;
   userName: string;
+  userImageUrl: string;
   isLiked: boolean;
   handleLikeOrUnlike: () => void;
 }) => {
   const router = useRouter();
-  const { postName, postImageUrl, postImageCount, postId, userName, isLiked, handleLikeOrUnlike } =
+  const { postName, postImageCount, postId, userName, userImageUrl, isLiked, handleLikeOrUnlike } =
     rest;
 
   const handleForwardToPostDetail = (postId: string | bigint) => {
@@ -29,12 +29,11 @@ export const PhotoCard = ({
     router.push(`/posts/${postIdString}`);
   };
 
-  console.log(postImageUrl);
   return (
     <div className={clsx(styles.postLikeContainer, className)} {...rest}>
       <div onClick={() => handleForwardToPostDetail(postId)}>{children}</div>
 
-      {postImageCount > 0 && (
+      {postImageCount > 1 && (
         <div className={styles.likesPostsItemImageContents}>
           <MdOutlinePhoto className={styles.MdOutlinePhoto} />
           <p className={styles.likesPostsItemImageContentsText}>{postImageCount}</p>
@@ -45,7 +44,7 @@ export const PhotoCard = ({
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
             <Image
-              src="/users/profile-icon-sample.png"
+              src={userImageUrl || "/users/profile-icon-sample.png"}
               alt="new-post-image"
               className={styles.userInfoIcon}
               fill
@@ -56,7 +55,7 @@ export const PhotoCard = ({
         <div className={styles.likesPostsItemLikeContents}>
           <div
             className={styles.likesPostsItemLikeItem}
-            onClick={handleLikeOrUnlike}
+            onClick={() => handleLikeOrUnlike()}
           >
             {isLiked ? (
               <Image src="/heart-outline.png" alt="heart" className={styles.likesIcon} fill />
