@@ -40,6 +40,7 @@ export type PostDetail = {
   likeCount: number;
   view_count: number;
   otherPostList: UserOtherPost[];
+  isLiked: boolean;
 };
 
 export type BoothItem = {
@@ -54,6 +55,7 @@ export type Booth = {
   title: string;
   detail: string;
   image: Image;
+  url: string;
 };
 
 export type User = {

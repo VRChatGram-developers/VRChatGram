@@ -2,12 +2,16 @@ import { NextResponse } from "next/server";
 
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import prisma from "@/prisma/client";
+import { auth } from "@/libs/firebase/auth";
 
 export const runtime = "edge";
 
 export async function GET(request: Request, { params }: { params: Promise<{ postId: string }> }) {
   try {
     const { postId } = await params;
+    const session = await auth();
+    const user = session ? await prisma.users.findFirst({ where: { uid: session?.user.uid } }) : null;
+
     if (!postId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -38,6 +42,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
                 title: true,
                 detail: true,
                 image: true,
+                url: true,
               },
             },
           },
@@ -87,6 +92,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
     });
 
     const { likes, ...postData } = post;
+    const isLiked = likes.some((like) => like.user_id === user?.id);
     const serializedPost = bigIntToStringMap(postData);
     const likeCount = likes?.length ?? 0;
     const serializedOtherPostList = bigIntToStringMap(otherPostList);
@@ -94,6 +100,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
     return NextResponse.json({
       ...serializedPost,
       likeCount,
+      isLiked,
       otherPostList: serializedOtherPostList,
     });
   } catch (error) {

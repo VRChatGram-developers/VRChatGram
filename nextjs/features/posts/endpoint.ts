@@ -28,8 +28,10 @@ export const fetchPopularTags = async (): Promise<Tag[] | string> => {
   return data;
 };
 
-export const fetchPostById = async (postId: string): Promise<PostDetail | string> => {
-  const response = await fetch(`${API_URL}/api/v1/posts/${postId}`);
+export const fetchPostById = async (postId: string, headers?: Headers): Promise<PostDetail | string> => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
+    headers: new Headers(headers),
+  });
   if (!response.ok) {
     console.error(response);
     return "Failed to fetch post";
@@ -79,6 +81,18 @@ export const createPost = async <T>(post: T) => {
   if (!response.ok) {
     console.error(response);
     return "Failed to create post";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const addViewCountToPost = async (postId: string, headers?: Headers) => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}/views`, {
+    headers: new Headers(headers),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to add view count to post";
   }
   const data = await response.json();
   return data;
