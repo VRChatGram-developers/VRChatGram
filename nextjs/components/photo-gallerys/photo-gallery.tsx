@@ -6,7 +6,6 @@
 "use client";
 
 import "react-photo-album/rows.css";
-import { Post } from "@/features/posts/types";
 import { useState } from "react";
 import { Photo, RowsPhotoAlbum } from "react-photo-album";
 import { PhotoCard } from "./photo-cards/photo-card";
@@ -25,7 +24,7 @@ export type PhotoGalleryProps = {
   user: {
     id: string;
     name: string;
-    profile_url: string;
+    profile_url?: string;
   };
   postImageCount: number;
   handleLikeOrUnlike: () => void;
@@ -38,17 +37,15 @@ type SelectablePhoto = Photo & {
   postName: string;
   postImageUrl: string;
   postImageCount: number;
+  show_sensitive_type: string;
   userName: string;
   isLiked: boolean;
+  userImageUrl: string;
   handleLikeOrUnlike: () => void;
 };
 
-export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
-  const handleLikeOrUnlike = () => {};
+export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[]}) => {
 
-  console.log(`posts`);
-  console.log(posts);
-  console.log(`posts`);
   const photoList = posts.map((post) => ({
     src: post.images.url,
     postId: post.postId,
@@ -60,16 +57,16 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
     postImageCount: post.postImageCount,
     userName: post.user.name,
     isLiked: post.is_liked,
-    handleLikeOrUnlike: handleLikeOrUnlike,
+    handleLikeOrUnlike: post.handleLikeOrUnlike,
     userImageUrl: post.user.profile_url,
+    show_sensitive_type: post.show_sensitive_type,
   }));
-
-  console.log(photoList);
 
   const [photoObjects] = useState<SelectablePhoto[]>(() =>
     photoList.map((photo) => ({
       ...photo,
       label: "Open image in a lightbox",
+      show_sensitive_type: photo.show_sensitive_type,
       width: photo.width,
       height: photo.height,
       postId: String(photo.postId), // bigintをstringに変換
@@ -78,7 +75,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
       postImageCount: photo.postImageCount,
       userName: photo.userName,
       isLiked: photo.isLiked,
-      userImageUrl: photo.userImageUrl,
+      userImageUrl: photo.userImageUrl || "",
     }))
   );
 
@@ -90,7 +87,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
       render={{
         wrapper: (
           props,
-          { photo: { postId, postName, postImageCount, userName, isLiked, userImageUrl } }
+          { photo: { postId, postName, postImageCount, userName, isLiked, userImageUrl, handleLikeOrUnlike } }
         ) => (
           <PhotoCard
             {...props}
