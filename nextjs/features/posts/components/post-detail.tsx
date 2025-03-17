@@ -11,11 +11,13 @@ import { OtherPostList } from "./other-post-list";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
 import { GrPersonalComputer } from "react-icons/gr";
+import { useRouter } from "next/navigation";
 import useLikePost from "../hooks/use-like-post";
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likeCount ?? 0);
   const { handleLikeOrUnlike } = useLikePost();
@@ -47,6 +49,11 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     setSelectedImage(post.images[currentIndex - 1].url);
   };
 
+  const handleForwardToUserDetail = (myId: string) => {
+    router.push(`/users/${myId}`);
+  };
+
+  const [isLiked, setIsLiked] = useState(false);
   const handleLike = async () => {
     setIsLiked(!isLiked);
     setLikeCount(likeCount + (isLiked ? -1 : 1));
@@ -133,7 +140,12 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               </div>
               <div className={styles.postDetailProfileContent}>
                 <div className={styles.postDetailProfileUserIdContainer}>
-                  <p className={styles.postDetailProfileUserId}>ID: {post.user?.my_id}</p>
+                  <p
+                    className={styles.postDetailProfileUserId}
+                    onClick={() => handleForwardToUserDetail(post.user.my_id)}
+                  >
+                    ID: {post.user?.my_id}
+                  </p>
                 </div>
                 <div className={styles.postDetailProfileUserNameContainer}>
                   <p className={styles.postDetailProfileUserName}>{post.user?.name}</p>

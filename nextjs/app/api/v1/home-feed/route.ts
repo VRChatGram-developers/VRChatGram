@@ -30,6 +30,7 @@ export async function POST(request: Request) {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
@@ -54,6 +55,7 @@ export async function POST(request: Request) {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
@@ -97,6 +99,7 @@ export async function POST(request: Request) {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
