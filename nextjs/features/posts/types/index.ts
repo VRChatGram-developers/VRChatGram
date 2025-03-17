@@ -60,7 +60,7 @@ export type User = {
   id: bigint;
   name: string;
   profile_url?: string;
-  my_id?: string;
+  my_id: string;
   social_links: SocialLink[];
 };
 

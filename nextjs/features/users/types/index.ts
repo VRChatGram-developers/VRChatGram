@@ -1,6 +1,7 @@
 export type User = {
   id: string;
   name: string;
+  my_id: string;
   introduction_title: string;
   introduction_detail: string;
   profile_url?: string;

@@ -162,7 +162,7 @@ export const UserHome = ({
               key={post.id}
               postCardProps={{
                 postId: post.id,
-                userId: user.id,
+                myId: user.my_id,
                 postName: post.title,
                 postImageUrl: "/home/new-post-image.png",
                 postImageCount: Number(post.images.length),
