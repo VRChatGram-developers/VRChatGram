@@ -6,12 +6,11 @@
 "use client";
 
 import "react-photo-album/rows.css";
-import { useState } from "react";
-import { Photo, RowsPhotoAlbum } from "react-photo-album";
+import { RowsPhotoAlbum } from "react-photo-album";
 import { PhotoCard } from "./photo-cards/photo-card";
 
 export type PhotoGalleryProps = {
-  postId: bigint | string;
+  postId: string;
   title: string;
   show_sensitive_type: string;
   images: {
@@ -23,6 +22,7 @@ export type PhotoGalleryProps = {
   is_liked: boolean;
   user: {
     id: string;
+    my_id: string;
     name: string;
     profile_url?: string;
   };
@@ -30,22 +30,7 @@ export type PhotoGalleryProps = {
   handleLikeOrUnlike: () => void;
 };
 
-// import photos from "@/components/react-photo-albums.tsx/photos";
-type SelectablePhoto = Photo & {
-  postId: string;
-  userId: string;
-  postName: string;
-  postImageUrl: string;
-  postImageCount: number;
-  show_sensitive_type: string;
-  userName: string;
-  isLiked: boolean;
-  userImageUrl: string;
-  handleLikeOrUnlike: () => void;
-};
-
-export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[]}) => {
-
+export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
   const photoList = posts.map((post) => ({
     src: post.images.url,
     postId: post.postId,
@@ -62,32 +47,40 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[]}) => {
     show_sensitive_type: post.show_sensitive_type,
   }));
 
-  const [photoObjects] = useState<SelectablePhoto[]>(() =>
-    photoList.map((photo) => ({
-      ...photo,
-      label: "Open image in a lightbox",
-      show_sensitive_type: photo.show_sensitive_type,
-      width: photo.width,
-      height: photo.height,
-      postId: String(photo.postId), // bigintをstringに変換
-      userId: String(photo.userId), // bigintをstringに変換
-      postName: photo.postName,
-      postImageCount: photo.postImageCount,
-      userName: photo.userName,
-      isLiked: photo.isLiked,
-      userImageUrl: photo.userImageUrl || "",
-    }))
-  );
+  const photoObjects = photoList.map((photo) => ({
+    ...photo,
+    label: "Open image in a lightbox",
+    show_sensitive_type: photo.show_sensitive_type,
+    width: photo.width,
+    height: photo.height,
+    postId: photo.postId,
+    userId: photo.userId,
+    postName: photo.postName,
+    postImageCount: photo.postImageCount,
+    userName: photo.userName,
+    isLiked: photo.isLiked,
+    userImageUrl: photo.userImageUrl || "",
+    handleLikeOrUnlike: photo.handleLikeOrUnlike,
+  }));
 
   return (
     <RowsPhotoAlbum
       photos={photoObjects}
-      targetRowHeight={350}
-      rowConstraints={{ singleRowMaxHeight: 400, maxPhotos: 3, minPhotos: 1 }}
+      targetRowHeight={200}
       render={{
         wrapper: (
           props,
-          { photo: { postId, postName, postImageCount, userName, isLiked, userImageUrl, handleLikeOrUnlike } }
+          {
+            photo: {
+              postId,
+              postName,
+              postImageCount,
+              userName,
+              isLiked,
+              userImageUrl,
+              handleLikeOrUnlike,
+            },
+          }
         ) => (
           <PhotoCard
             {...props}
@@ -101,12 +94,12 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[]}) => {
           />
         ),
       }}
-      defaultContainerWidth={1200}
       sizes={{
         size: "1200px",
-        sizes: [{ viewport: "(max-width: 1200px)", size: "calc(100vw - 32px)" }],
+        sizes: [{ viewport: "(max-width: 1200px)", size: "calc(100vw - 70px)" }],
       }}
-      breakpoints={[220, 360, 480, 600, 900, 1200, 1500]}
+      breakpoints={[220, 360, 480, 600, 900, 1200, 1500, 1700]}
+      rowConstraints={{ singleRowMaxHeight: 150, maxPhotos: 4, minPhotos: 1 }}
     />
   );
 };

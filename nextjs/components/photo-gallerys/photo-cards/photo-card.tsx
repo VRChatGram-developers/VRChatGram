@@ -10,6 +10,13 @@ import { useRouter } from "next/navigation";
 export const PhotoCard = ({
   className,
   children,
+  postId,
+  postName,
+  postImageCount,
+  userName,
+  userImageUrl,
+  isLiked,
+  handleLikeOrUnlike,
   ...rest
 }: React.ComponentProps<"div"> & {
   postId: string;
@@ -21,8 +28,6 @@ export const PhotoCard = ({
   handleLikeOrUnlike: () => void;
 }) => {
   const router = useRouter();
-  const { postName, postImageCount, postId, userName, userImageUrl, isLiked, handleLikeOrUnlike } =
-    rest;
 
   const handleForwardToPostDetail = (postId: string | bigint) => {
     const postIdString = typeof postId === "bigint" ? postId.toString() : postId;
@@ -32,7 +37,6 @@ export const PhotoCard = ({
   return (
     <div className={clsx(styles.postLikeContainer, className)} {...rest}>
       <div onClick={() => handleForwardToPostDetail(postId)}>{children}</div>
-
       {postImageCount > 1 && (
         <div className={styles.likesPostsItemImageContents}>
           <MdOutlinePhoto className={styles.MdOutlinePhoto} />
