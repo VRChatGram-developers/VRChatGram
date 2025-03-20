@@ -80,7 +80,7 @@ export const SearchResult = ({
 }) => {
   const [changedCurrentPage, setChangedCurrentPage] = useState(currentPage - 1);
 
-  // const [postList, setPostList] = useState<Post[]>(posts);
+  const [postList, setPostList] = useState<Post[]>(posts);
 
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
@@ -110,19 +110,13 @@ export const SearchResult = ({
   ];
 
   useEffect(() => {
-   
-    const updatedLikedPosts = Object.fromEntries(posts.map((post) => [post.id, post.is_liked]));
-
+    const updatedLikedPosts = Object.fromEntries(postList.map((post) => [post.id, post.is_liked]));
     if (JSON.stringify(updatedLikedPosts) !== JSON.stringify(likedPosts)) {
       setLikedPosts(updatedLikedPosts);
     }
-    console.log(`photoGalleryPosts`);
-    console.log(photoGalleryPosts);
-    console.log(`posts`);
-    console.log(posts);
 
     setPhotoGalleryPosts(
-      posts.map((post) => ({
+      postList.map((post) => ({
         postId: post.id,
         show_sensitive_type: post.show_sensitive_type,
         postImageCount: post.images.length,
@@ -133,7 +127,8 @@ export const SearchResult = ({
         handleLikeOrUnlike: () => handleLike(post.id),
       }))
     );
-  }, [posts, changedCurrentPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postList, changedCurrentPage]);
 
   const handlePageChange = async (page: number) => {
     setChangedCurrentPage(page);
@@ -146,24 +141,12 @@ export const SearchResult = ({
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
 
-    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
-    console.log(`currentLiked`);
-    console.log(currentLiked);
-        
-    setPhotoGalleryPosts((prevList) => prevList.map((post) => (post.postId == postId ? { ...post, is_liked: !currentLiked } : post)))
-
-    // setPhotoGalleryPosts(
-    //   updatedPhotoGalleryPosts.map((post) => ({
-    //   postId: post.postId,
-    //   show_sensitive_type: post.show_sensitive_type,
-    //   postImageCount: post.postImageCount,
-    //   images: post.images,
-    //   is_liked: post.is_liked,
-    //   user: post.user,
-    //   title: post.title,
-    //   handleLikeOrUnlike: () => handleLike(post.postId),
-    // })));
     await handleLikeOrUnlike(postId, currentLiked);
+
+    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
+    setPostList(
+      postList.map((post) => (post.id == postId ? { ...post, is_liked: !currentLiked } : post))
+    );
   };
 
   const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -179,19 +162,8 @@ export const SearchResult = ({
     if (typeof postsList === "string") {
       return <div>{postsList}</div>;
     }
-    
-    setPhotoGalleryPosts(
-      postsList.posts.map((post) => ({
-        postId: post.id,
-        show_sensitive_type: post.show_sensitive_type,
-        postImageCount: post.images.length,
-        images: post.images[0],
-        is_liked: likedPosts[post.id.toString()],
-        user: post.user,
-        title: post.title,
-        handleLikeOrUnlike: () => handleLike(post.id.toString()),
-      }))
-    );
+
+    setPostList(postsList.posts);
   };
 
   // 画面幅が変更されるたびに再計算
