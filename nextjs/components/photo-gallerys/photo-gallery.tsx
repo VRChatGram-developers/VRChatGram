@@ -53,7 +53,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
         sizes: [{ viewport: "(max-width: 1200px)", size: "calc(100vw - 70px)" }],
       }}
       breakpoints={[220, 360, 480, 600, 900, 1200, 1500, 1700]}
-      rowConstraints={{ singleRowMaxHeight: 150, maxPhotos: 4, minPhotos: 1 }}
+      rowConstraints={{ singleRowMaxHeight: 200, maxPhotos: 4, minPhotos: 1 }}
     />
   );
 };
