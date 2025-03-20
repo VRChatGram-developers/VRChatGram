@@ -107,6 +107,7 @@ export const SearchResult = ({
     { label: "今週の人気順", value: "this_week_popular" },
   ];
 
+  // タグ選択、検索時にAPIからのデータが変更されたら、postListを更新
   useEffect(() => {
     setPostList(posts);
   }, [posts]);
@@ -220,9 +221,7 @@ export const SearchResult = ({
           </div>
         </div>
       </div>
-      <div>
-        <PhotoGallery posts={photoGalleryPosts} />
-      </div>
+      <PhotoGallery posts={photoGalleryPosts} />
 
       {/* ページネーションUI */}
       <div className={styles.pagination}>
