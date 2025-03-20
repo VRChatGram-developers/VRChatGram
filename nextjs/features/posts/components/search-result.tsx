@@ -79,9 +79,7 @@ export const SearchResult = ({
   totalPages: number;
 }) => {
   const [changedCurrentPage, setChangedCurrentPage] = useState(currentPage - 1);
-
   const [postList, setPostList] = useState<Post[]>(posts);
-
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
@@ -108,6 +106,10 @@ export const SearchResult = ({
     { label: "人気順", value: "popular" },
     { label: "今週の人気順", value: "this_week_popular" },
   ];
+
+  useEffect(() => {
+    setPostList(posts);
+  }, [posts]);
 
   useEffect(() => {
     const updatedLikedPosts = Object.fromEntries(postList.map((post) => [post.id, post.is_liked]));
