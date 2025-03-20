@@ -34,7 +34,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
   const photoList = posts.map((post) => ({
     src: post.images.url,
     postId: post.postId,
-    userId: post.user.id,
+    myId: post.user.my_id,
     postName: post.title,
     postImageUrl: post.images.url,
     width: post.images.width,
@@ -54,12 +54,12 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
     width: photo.width,
     height: photo.height,
     postId: photo.postId,
-    userId: photo.userId,
+    myId: photo.myId,
     postName: photo.postName,
     postImageCount: photo.postImageCount,
     userName: photo.userName,
     isLiked: photo.isLiked,
-    userImageUrl: photo.userImageUrl || "",
+    userImageUrl: photo?.userImageUrl || "",
     handleLikeOrUnlike: photo.handleLikeOrUnlike,
   }));
 
@@ -79,6 +79,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
               isLiked,
               userImageUrl,
               handleLikeOrUnlike,
+              myId,
             },
           }
         ) => (
@@ -91,6 +92,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
             userImageUrl={userImageUrl}
             isLiked={isLiked}
             handleLikeOrUnlike={handleLikeOrUnlike}
+            myId={myId}
           />
         ),
       }}

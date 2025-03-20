@@ -17,6 +17,7 @@ export const PhotoCard = ({
   userImageUrl,
   isLiked,
   handleLikeOrUnlike,
+  myId,
   ...rest
 }: React.ComponentProps<"div"> & {
   postId: string;
@@ -26,12 +27,18 @@ export const PhotoCard = ({
   userImageUrl: string;
   isLiked: boolean;
   handleLikeOrUnlike: () => void;
+  myId: string;
 }) => {
   const router = useRouter();
 
   const handleForwardToPostDetail = (postId: string | bigint) => {
     const postIdString = typeof postId === "bigint" ? postId.toString() : postId;
     router.push(`/posts/${postIdString}`);
+  };
+
+  const handleForwardToUserDetail = (myId: string | bigint) => {
+    const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
+    router.push(`/users/${myIdString}`);
   };
 
   return (
@@ -46,7 +53,7 @@ export const PhotoCard = ({
       <div className={styles.userInfoLikeContainer}>
         <div className={styles.userInfo}>
           <p className={styles.userInfoTitle}>{postName}</p>
-          <div className={styles.userInfoContainer}>
+          <div className={styles.userInfoContainer} onClick={() => handleForwardToUserDetail(myId)}>
             <Image
               src={userImageUrl || "/users/profile-icon-sample.png"}
               alt="new-post-image"
