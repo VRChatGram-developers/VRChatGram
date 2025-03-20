@@ -129,7 +129,7 @@ export const SearchResult = ({
         handleLikeOrUnlike: () => handleLike(post.id),
       }))
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postList, changedCurrentPage]);
 
   const handlePageChange = async (page: number) => {
@@ -142,9 +142,7 @@ export const SearchResult = ({
 
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
-
     await handleLikeOrUnlike(postId, currentLiked);
-
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
     setPostList(
       postList.map((post) => (post.id == postId ? { ...post, is_liked: !currentLiked } : post))
@@ -152,7 +150,6 @@ export const SearchResult = ({
   };
 
   const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(`postsList1`);
     setChangedCurrentPage(0);
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: 1, sort: e.target.value })
