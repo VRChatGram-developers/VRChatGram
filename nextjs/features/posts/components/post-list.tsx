@@ -10,16 +10,16 @@ import { useRouter } from "next/navigation";
 import { createQueryParams } from "@/utils/queryParams";
 
 export const PostList = ({ posts, popularTags }: { posts: PostListType; popularTags: Tag[] }) => {
-  const [selectedTag, setSelectedTag] = useState("");
+  const [selectedTag, setSelectedTag] = useState("ALL");
   const [displayPosts, setDisplayPosts] = useState<PostListType>(posts);
   const { setSearchQuery } = useSearchStore();
   const router = useRouter();
 
   const handleSelectTag = async (tag: string) => {
-    const tagName = tag === "#ALL" ? tag : `#${tag}`;
+    const tagName = tag === "ALL" ? tag : `${tag}`;
     setSelectedTag(tagName);
   
-    if (tagName === "#ALL") {
+    if (tagName === "ALL") {
       setSearchQuery("");
       router.push(`/posts?${createQueryParams({ tag: "", page: 1 })}`);
     } else {
