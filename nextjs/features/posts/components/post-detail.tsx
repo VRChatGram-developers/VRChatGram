@@ -24,8 +24,6 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);
-    console.log(post.isLiked);
-    console.log(`post.isLiked`);
     setIsLiked(post.isLiked);
     setLikeCount(post.likeCount);
   }, [post, setIsLiked, setLikeCount]);
@@ -53,7 +51,6 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     router.push(`/users/${myId}`);
   };
 
-  const [isLiked, setIsLiked] = useState(false);
   const handleLike = async () => {
     setIsLiked(!isLiked);
     setLikeCount(likeCount + (isLiked ? -1 : 1));
