@@ -18,13 +18,13 @@ export const TagList = ({
         <button
           key={tag.id}
           className={
-            selectedTag === `#${tag.name}`
+            selectedTag === `${tag.name}`
               ? `${styles.tagItem} ${styles.selectedTagItem}`
               : styles.tagItem
           }
           onClick={() => handleSelectTag(tag.name)}
         >
-          #{tag.name}
+          {tag.name === "ALL" ? "ALL" : `#${tag.name}`}
         </button>
       ))}
     </div>
