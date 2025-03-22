@@ -53,11 +53,17 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     router.push(`/users/${myId}`);
   };
 
-  const [isLiked, setIsLiked] = useState(false);
   const handleLike = async () => {
     setIsLiked(!isLiked);
     setLikeCount(likeCount + (isLiked ? -1 : 1));
     await handleLikeOrUnlike(post.id.toString(), isLiked);
+  };
+
+  const selectImage = (url: string) => {
+    setSelectedImage(url);
+
+    //画像選択した時にもcurrentIndexを変えるようにしたい
+    setCurrentIndex(currentIndex);
   };
 
   return (
@@ -73,9 +79,19 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               className={styles.postMainImage}
             />
             {currentIndex !== post.images.length - 1 && (
-              <MdOutlineNavigateNext onClick={handleNextImage} />
+              <MdOutlineNavigateNext
+                onClick={handleNextImage}
+                size={48}
+                className={styles.navigateNextStyle}
+              />
             )}
-            {currentIndex !== 0 && <MdOutlineNavigateBefore onClick={handleBeforeImage} />}
+            {currentIndex !== 0 && (
+              <MdOutlineNavigateBefore
+                onClick={handleBeforeImage}
+                size={48}
+                className={styles.navigateBeforeStyle}
+              />
+            )}
           </div>
           <div className={styles.postImageSubContainer}>
             {post.images.map((image, index) => (
@@ -91,7 +107,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                         ? styles.postImageSubSelected
                         : styles.postImageSubNotSelected
                     }`}
-                    onClick={() => setSelectedImage(image.url)}
+                    onClick={() => selectImage(image.url)}
                   />
                 )}
               </div>
@@ -117,15 +133,31 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             <div className={styles.postDetailInformationContainer}>
               <div className={styles.postDetailInfomationViewContainer}>
                 <FaRegEye size={24} />
-                <p className={styles.postDetailInfomationView}>{post.view_count}View</p>
+                <p className={styles.postDetailInfomationView}>
+                  {post.view_count}View
+                </p>
               </div>
               <div className={styles.postDetailInfomationLikeCountContainer}>
                 {isLiked ? (
-                  <Image src="/heart-outline.png" alt="heart" width={24} height={24} onClick={handleLike} />
+                  <Image
+                    src="/heart-outline.png"
+                    alt="heart"
+                    width={24}
+                    height={24}
+                    onClick={handleLike}
+                  />
                 ) : (
-                  <Image src="/before-good-for-post-detail.png" alt="heart" width={24} height={24} onClick={handleLike} />
+                  <Image
+                    src="/before-good-for-post-detail.png"
+                    alt="heart"
+                    width={24}
+                    height={24}
+                    onClick={handleLike}
+                  />
                 )}
-                <p className={styles.postDetailInfomationLikeCount}>{likeCount}</p>
+                <p className={styles.postDetailInfomationLikeCount}>
+                  {likeCount}
+                </p>
               </div>
             </div>
             <div className={styles.postDetailProfileContainer}>
@@ -148,15 +180,30 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                   </p>
                 </div>
                 <div className={styles.postDetailProfileUserNameContainer}>
-                  <p className={styles.postDetailProfileUserName}>{post.user?.name}</p>
+                  <p className={styles.postDetailProfileUserName}>
+                    {post.user?.name}
+                  </p>
                 </div>
                 <div className={styles.postDetailProfileSNSContainer}>
                   {post.user?.social_links.map((socialLink, index) => (
-                    <div key={index} className={styles.postDetailProfileSNSItem}>
-                      <a href={socialLink.platform_url} target="_blank" rel="noopener noreferrer">
-                        {socialLink.platform_types === "x" && <FaXTwitter size={32} />}
-                        {socialLink.platform_types === "discord" && <FaDiscord size={32} />}
-                        {socialLink.platform_types === "other" && <GrPersonalComputer size={32} />}
+                    <div
+                      key={index}
+                      className={styles.postDetailProfileSNSItem}
+                    >
+                      <a
+                        href={socialLink.platform_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {socialLink.platform_types === "x" && (
+                          <FaXTwitter size={32} />
+                        )}
+                        {socialLink.platform_types === "discord" && (
+                          <FaDiscord size={32} />
+                        )}
+                        {socialLink.platform_types === "other" && (
+                          <GrPersonalComputer size={32} />
+                        )}
                       </a>
                     </div>
                   ))}
@@ -165,7 +212,9 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             </div>
             <div className={styles.postDetailProfileDescriptionContainer}>
               <div className={styles.postDetailProfileDescriptionContent}>
-                <p className={styles.postDetailProfileDescriptionTitle}>作品説明</p>
+                <p className={styles.postDetailProfileDescriptionTitle}>
+                  作品説明
+                </p>
                 <div className={styles.postDetailProfileDescription}>
                   <input
                     id="readMoreToggle"
@@ -195,7 +244,9 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             </div>
             <div className={styles.postDetailProfileBoothContainer}>
               <div className={styles.postDetailProfileBoothTitleContainer}>
-                <p className={styles.postDetailProfileBoothTitle}>Booth購入リスト</p>
+                <p className={styles.postDetailProfileBoothTitle}>
+                  Booth購入リスト
+                </p>
               </div>
               <div className={styles.postDetailProfileBoothContent}>
                 {post.booth_items.map((boothItem) => (
@@ -213,8 +264,14 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                       height={200}
                       className={styles.postDetailProfileBoothImage}
                     />
-                    <div className={styles.postDetailProfileBoothInfomationContainer}>
-                      <p className={styles.postDetailProfileBoothInfomationTitle}>
+                    <div
+                      className={
+                        styles.postDetailProfileBoothInfomationContainer
+                      }
+                    >
+                      <p
+                        className={styles.postDetailProfileBoothInfomationTitle}
+                      >
                         {boothItem.booth.title}
                       </p>
                       <p className={styles.postDetailProfileBoothInfomation}>

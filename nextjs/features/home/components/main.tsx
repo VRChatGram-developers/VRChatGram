@@ -298,10 +298,10 @@ export const Main = ({
         setIsLiked={setIsLiked}
         setLatestPostList={setLatestPosts}
       />
-      <XPost
+      {/* <XPost
         latestPostListWithX={latestPostListWithX}
         setLatestPostListWithX={setLatestPostsWithX}
-      />
+      /> */}
     </>
   );
 };
