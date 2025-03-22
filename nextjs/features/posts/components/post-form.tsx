@@ -110,6 +110,12 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       setErrorTitle("タイトルを入力してください");
       return false;
     }
+
+    if (title.length > 50) {
+      setErrorTitle("タイトルは50文字以内で入力してください");
+      return false;
+    }
+
     return true;
   };
 
@@ -126,7 +132,10 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleSubmit = async () => {
-    if (!isValidBoothItemsLink() || !isValidTitle()) {
+    const isBoothItemsValid = isValidBoothItemsLink();
+    const isTitleValid = isValidTitle();
+
+    if (!isBoothItemsValid || !isTitleValid) {
       return;
     }
 
