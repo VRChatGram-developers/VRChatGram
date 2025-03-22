@@ -60,7 +60,6 @@ export const createPost = async <T>(post: T) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const { boothItems, ...rest } = post;
-
   const boothItemsResponse = await Promise.all(
     boothItems.map(async (link: string) => {
       if (link.includes("https://")) {
@@ -93,6 +92,24 @@ export const addViewCountToPost = async (postId: string, headers?: Headers) => {
   if (!response.ok) {
     console.error(response);
     return "Failed to add view count to post";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const uploadImage = async (image: {
+  file_data: string;
+  file_name: string;
+  width: number;
+  height: number;
+}) => {
+  const response = await fetch(`${API_URL}/api/v1/images/upload`, {
+    method: "POST",
+    body: JSON.stringify({ image }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to upload images";
   }
   const data = await response.json();
   return data;
