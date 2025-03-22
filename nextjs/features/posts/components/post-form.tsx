@@ -4,6 +4,7 @@ import { createPost } from "../endpoint";
 import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
 import { FaImage } from "react-icons/fa6";
+import { uploadImage } from "../endpoint";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -139,12 +140,19 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       return;
     }
 
+    const postImages = await Promise.all(
+      images.map(async (image) => {
+        const serializedImage = await uploadImage(image);
+        return serializedImage;
+      })
+    );
+
     try {
       await createPost({
         title,
         description,
         boothItems,
-        images,
+        images: postImages,
         tags,
         show_sensitive_type: selectedAgeRestriction,
       });
