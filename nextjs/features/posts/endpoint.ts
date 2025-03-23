@@ -90,6 +90,11 @@ export const addViewCountToPost = async (postId: string, headers?: Headers) => {
   const response = await fetch(`${API_URL}/api/v1/posts/${postId}/views`, {
     headers: new Headers(headers),
   });
+
+  if (response.status === 401) {
+    return "Unauthorized";
+  }
+
   if (!response.ok) {
     console.error(response);
     return "Failed to add view count to post";
