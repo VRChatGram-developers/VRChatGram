@@ -1,6 +1,6 @@
 import { NotificationsList } from "@/features/notifications/components/notifications-list";
 import { createClient } from "microcms-js-sdk";
-import { Notification } from "@/features/home/types/index";
+import { Notification } from "@/features/notifications/type/index";
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ page: string }> }) {
   const params = await searchParams;

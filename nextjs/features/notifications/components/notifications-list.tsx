@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "../styles/notifications-list.module.scss";
-import { Notification } from "@/features/home/types/index";
+import { Notification } from "@/features/notifications/type";
 import { useRouter } from "next/navigation";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
 import { createQueryParams } from "@/utils/queryParams";
