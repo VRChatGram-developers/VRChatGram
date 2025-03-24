@@ -17,6 +17,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
   const [errorTitle, setErrorTitle] = useState("");
   const [mainImage, setMainImage] = useState<ImageData | null>(null);
+  const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -57,6 +58,10 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     setMainImage(images[index]);
   };
 
+  const handleCompositionStart = () => setIsCompositionStart(true);
+
+  const handleCompositionEnd = () => setIsCompositionStart(false);
+
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(e.target.value);
   };
@@ -66,10 +71,14 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && tagInput.trim()) {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
+    if (e.key === "Enter" && !isCompositionStart) {
+      const tag = tagInput.trim();
       e.preventDefault();
+      // 同じタグが入力されたら、タグを追加しない
+      if (!tags.includes(tag)) {
+        setTags([...tags, tag]);
+      }
+      setTagInput("");
     }
   };
 
@@ -235,6 +244,8 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                       onKeyDown={handleTagInputKeyDown}
                       placeholder="タグを入力してEnterを押してください"
                       className={styles.postDetailTagInput}
+                      onCompositionStart={handleCompositionStart}
+                      onCompositionEnd={handleCompositionEnd}
                     />
                     <div className={styles.postDetailTagArea}>
                       {tags.map((tag, index) => (

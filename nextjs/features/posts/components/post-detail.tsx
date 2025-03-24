@@ -57,11 +57,9 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     await handleLikeOrUnlike(post.id.toString(), isLiked);
   };
 
-  const selectImage = (url: string) => {
+  const selectImage = (url: string, index: number) => {
     setSelectedImage(url);
-
-    //画像選択した時にもcurrentIndexを変えるようにしたい
-    setCurrentIndex(currentIndex);
+    setCurrentIndex(index);
   };
 
   return (
@@ -105,7 +103,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                         ? styles.postImageSubSelected
                         : styles.postImageSubNotSelected
                     }`}
-                    onClick={() => selectImage(image.url)}
+                    onClick={() => selectImage(image.url, index)}
                   />
                 )}
               </div>

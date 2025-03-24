@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
-    const { title, description, boothItems, images, tags, show_sensitive_type } =
+    const { title, description, boothItems, serializedImages, tags, show_sensitive_type } =
       await request.json();
 
     const user = await prisma.users.findUnique({
@@ -40,30 +40,60 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
 
+    // 既に存在するタグを取得
+    const fetchRegisteredTags = await prisma.tags.findMany({
+      where: {
+        name: {
+          in: tags,
+        },
+      },
+    });
+
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
 
-    await prisma.posts.create({
-      data: {
-        title: title,
-        description: description,
-        booth_items: {
-          create: formatBoothItems(boothItems),
+    await prisma.$transaction(async (tx) => {
+      const post = await tx.posts.create({
+        data: {
+          title: title,
+          description: description,
+          booth_items: {
+            create: formatBoothItems(boothItems),
+          },
+          images: {
+            create: serializedImages,
+          },
+          show_sensitive_type: show_sensitive_type,
+          user_id: user.id,
         },
-        images: {
-          create: images,
-        },
-        tags: {
-          create: filteredTags.map((tag: string) => ({
-            tag: {
-              create: {
+      });
+
+      const tagsToCreate = await Promise.all(
+        filteredTags.map(async (tag: string) => {
+          const existingTag = fetchRegisteredTags.find((t) => t.name === tag);
+          if (!existingTag) {
+            const newTag = await tx.tags.create({
+              data: {
                 name: tag,
               },
-            },
-          })),
-        },
-        show_sensitive_type: show_sensitive_type,
-        user_id: user.id,
-      },
+            });
+            return newTag;
+          }
+          return existingTag;
+        })
+      );
+
+      await Promise.all(
+        tagsToCreate.map(
+          async (tag: { id: string; name: string; created_at: Date; updated_at: Date }) => {
+            await tx.post_tags.create({
+              data: {
+                post_id: post.id,
+                tag_id: tag.id,
+              },
+            });
+          }
+        )
+      );
     });
 
     return NextResponse.json({ status: 200, message: "投稿に成功しました" });
