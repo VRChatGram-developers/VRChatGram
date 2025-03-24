@@ -41,7 +41,7 @@ export async function POST(request: Request) {
           },
         },
       },
-      take: Number(12),
+      take: Number(16),
     });
 
     const latestPostList = await prisma.posts.findMany({
