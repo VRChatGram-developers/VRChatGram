@@ -5,23 +5,32 @@ import {
   LatestPost as LatestPostType,
   XPost as XPostType,
   Tag,
+  Notification,
 } from "@/features/home/types/index";
 import { auth } from "@/libs/firebase/auth";
+import { createClient } from "microcms-js-sdk";
 
 export default async function Home() {
+  const client = createClient({
+    serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN ?? "",
+    apiKey: process.env.X_MICROCMS_API_KEY ?? "",
+  });
+
+  const response = await client.get({ endpoint: "notifications" });
+  const notifications = response.contents.map((notification: Notification) => {
+    return {
+      ...notification,
+    };
+  });
   const session = await auth();
-  const notifications = await fetchNotifications();
-  if (typeof notifications === "string") {
-    return <div>{notifications}</div>;
-  }
-  const serializedNotifications = notifications.notifications.map((notification) => {
-    const year = new Date(notification.published_at).getFullYear();
-    const month = String(new Date(notification.published_at).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
-    const day = String(new Date(notification.published_at).getDate()).padStart(2, "0");
+  const serializedNotifications = notifications.map((notification: Notification) => {
+    const year = new Date(notification.publishedAt).getFullYear();
+    const month = String(new Date(notification.publishedAt).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
+    const day = String(new Date(notification.publishedAt).getDate()).padStart(2, "0");
     const formattedDate = `${year}.${month}.${day}`;
     return {
       ...notification,
-      published_at: formattedDate,
+      publishedAt: formattedDate,
     };
   });
   const homeData = await fetchHomeFeed<{
