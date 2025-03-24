@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
-    const { title, description, boothItems, serializedImages, tags, show_sensitive_type } =
+    const { title, description, boothItems, images, tags, show_sensitive_type } =
       await request.json();
 
     const user = await prisma.users.findUnique({
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
             create: formatBoothItems(boothItems),
           },
           images: {
-            create: serializedImages,
+            create: images,
           },
           show_sensitive_type: show_sensitive_type,
           user_id: user.id,
