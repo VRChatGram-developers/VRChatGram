@@ -16,7 +16,7 @@ export default async function Home() {
     apiKey: process.env.X_MICROCMS_API_KEY ?? "",
   });
 
-  const response = await client.get({ endpoint: "notifications" });
+  const response = await client.get({ endpoint: "notifications", queries: { limit: 2, orders: "publishedAt" } });
   const notifications = response.contents.map((notification: Notification) => {
     return {
       ...notification,
