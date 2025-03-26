@@ -17,6 +17,7 @@ import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
 import parse from 'html-react-parser';
 import { useRouter } from "next/navigation";
+import { GoArrowRight } from "react-icons/go";
 
 export const Main = ({
   popularPostList,
@@ -53,38 +54,31 @@ export const Main = ({
 
   const testNews = [
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GjOaoOYbgAAJRaD?format=jpg&name=medium",
+      imageURL: "https://pbs.twimg.com/media/GjOaoOYbgAAJRaD?format=jpg&name=medium",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/Gc_EUiKbYAEpQUp?format=jpg&name=4096x4096",
+      imageURL: "https://pbs.twimg.com/media/Gc_EUiKbYAEpQUp?format=jpg&name=4096x4096",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GLpW566bUAAmrmI?format=jpg&name=4096x4096",
+      imageURL: "https://pbs.twimg.com/media/GLpW566bUAAmrmI?format=jpg&name=4096x4096",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/F3PiVIYaAAEaFla?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/F3PiVIYaAAEaFla?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GQWxLH1a8AAeTou?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/GQWxLH1a8AAeTou?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GMoEo5CboAAJNsD?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/GMoEo5CboAAJNsD?format=jpg&name=large",
       linkUrl: "/",
     },
   ];
@@ -174,7 +168,10 @@ export const Main = ({
                         >
                           {notification.notification_type}
                         </span>
-                        <div className={styles.notificationsContainer} onClick={() => redirectToNotificationToDetail(notification.id)}>
+                        <div
+                          className={styles.notificationsContainer}
+                          onClick={() => redirectToNotificationToDetail(notification.id)}
+                        >
                           <time className={styles.notificationTime}>
                             {notification.publishedAt}
                           </time>
@@ -189,7 +186,12 @@ export const Main = ({
                   </div>
                 ))}
               </div>
-              <div onClick={redirectToNotificationList}>お知らせをもっと見る</div>
+              <div onClick={redirectToNotificationList}>
+                <div className={styles.notificationMoreButton}>
+                  <p>お知らせをもっと見る</p>
+                  <GoArrowRight />
+                </div>
+              </div>
             </div>
           </div>
         </div>
