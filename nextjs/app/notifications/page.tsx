@@ -11,28 +11,44 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
   });
 
   const currentPage = parseInt(page) || 1;
-  const totalCount = await client.get({ endpoint: "notifications", queries: { limit: 0 } });
   const perPage = 10;
-  const totalPages = Math.ceil(totalCount.totalCount / perPage);
-  const offset = (currentPage - 1) * perPage;
-  const limit = perPage * currentPage;
 
-  const response = await client.get({ endpoint: "notifications", queries: { offset, limit } });
-  const notifications = response.contents.map((notification: Notification) => {
-    return {
-      ...notification,
-    };
+  // 現在の日付を事前に取得して再利用
+  const currentDateISOString = new Date().toISOString();
+
+  // すべての通知を取得して、公開日が過ぎているものをカウント
+  const totalData = await client.get({ endpoint: "notifications", queries: { limit: 0 } });
+  const totalCount = totalData.contents.filter(
+    (notification: Notification) => notification.publishedAt < currentDateISOString
+  ).length;
+
+  // ページ数の計算（totalCount が 0 の場合でも1ページにする）
+  const totalPages = Math.ceil(totalCount > 0 ? totalCount / perPage : 1);
+
+  // ページのオフセットとリミットを計算
+  const offset = (currentPage - 1) * perPage;
+  const limit = perPage;
+
+  // 次に、現在のページの通知を取得
+  const response = await client.get({
+    endpoint: "notifications",
+    queries: { offset, limit, orders: "publishedAt" },
   });
+
+  // 公開日が過ぎていない通知をフィルタリング
+  const notifications = response.contents.filter(
+    (notification: Notification) => notification.publishedAt > currentDateISOString
+  );
+
+  // 日付のフォーマット
   const serializedNotifications = notifications.map((notification: Notification) => {
-    const year = new Date(notification.publishedAt).getFullYear();
-    const month = String(new Date(notification.publishedAt).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
-    const day = String(new Date(notification.publishedAt).getDate()).padStart(2, "0");
-    const formattedDate = `${year}.${month}.${day}`;
+    const formattedDate = new Date(notification.publishedAt).toISOString().split("T")[0]; // `YYYY-MM-DD`形式に
     return {
       ...notification,
       publishedAt: formattedDate,
     };
   });
+
   return (
     <NotificationsList
       notifications={serializedNotifications}
