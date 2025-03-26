@@ -100,7 +100,6 @@
       .notificationContainer {
         display: grid;
         gap: 1rem;
-        grid-template-rows: 1fr 1fr auto;
         height: 100%;
         .notificationsList {
           border-radius: 0.5rem;
@@ -140,7 +139,6 @@
                 margin-left: 1.75rem;
                 display: flex;
                 flex-direction: column;
-
                 .notificationTime {
                   font-size: 12px;
                   font-family: "Noto Sans JP";
