@@ -15,6 +15,8 @@ import { LatestPost } from "./latest-post";
 import { XPost } from "./x-post";
 import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
+import parse from 'html-react-parser';
+import { useRouter } from "next/navigation";
 
 export const Main = ({
   popularPostList,
@@ -29,10 +31,19 @@ export const Main = ({
   popularPostList: PopularPostType[];
   latestPostListWithX: XPostType[];
 }) => {
+  const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const [latestPosts, setLatestPosts] = useState<LatestPostType[]>([]);
   const [popularPosts, setPopularPosts] = useState<PopularPostType[]>([]);
   const [latestPostsWithX, setLatestPostsWithX] = useState<XPostType[]>([]);
+
+  const redirectToNotificationList = () => {
+    router.push("/notifications");
+  };
+
+  const redirectToNotificationToDetail = (id: string) => {
+    router.push(`/notifications/${id}`);
+  };
 
   useEffect(() => {
     setLatestPosts(latestPostList);
@@ -149,31 +160,28 @@ export const Main = ({
               <p className={styles.mainSecondTitle}>お知らせ</p>
               <div className={styles.notificationContainer}>
                 {notifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className={styles.notificationsList}
-                  >
+                  <div key={notification.id} className={styles.notificationsList}>
                     <div className={styles.notificationsListBox}>
                       <div className={styles.notificationsListBoxText}>
                         <span
                           className={
-                            notification.notification_type === "release"
+                            notification.notification_type[0] === "バグ修正"
                               ? styles.notificationsListBoxTextRelease
-                              : notification.notification_type === "important"
+                              : notification.notification_type[0] === "アップデート"
                               ? styles.notificationsListBoxTextImportant
                               : styles.notificationsListBoxTextCommon
                           }
                         >
                           {notification.notification_type}
                         </span>
-                        <div className={styles.notificationsContainer}>
+                        <div className={styles.notificationsContainer} onClick={() => redirectToNotificationToDetail(notification.id)}>
                           <time className={styles.notificationTime}>
-                            {notification.published_at}
+                            {notification.publishedAt}
                           </time>
                           {notification.content && (
-                            <p className={styles.notificationContent}>
-                              {notification.content}
-                            </p>
+                            <div className={styles.notificationContent}>
+                              <p>{parse(notification.content)}</p>
+                            </div>
                           )}
                         </div>
                       </div>
@@ -181,6 +189,7 @@ export const Main = ({
                   </div>
                 ))}
               </div>
+              <div onClick={redirectToNotificationList}>お知らせをもっと見る</div>
             </div>
           </div>
         </div>
@@ -219,17 +228,14 @@ export const Main = ({
           <p className={styles.mobileMainSecondTitle}>お知らせ</p>
           <div className={styles.mobileNotificationContainer}>
             {notifications.map((notification) => (
-              <div
-                key={notification.id}
-                className={styles.mobileNotificationsList}
-              >
+              <div key={notification.id} className={styles.mobileNotificationsList}>
                 <div className={styles.mobileNotificationsListBox}>
                   <div className={styles.mobileNotificationsListBoxText}>
                     <span
                       className={
-                        notification.notification_type === "release"
+                        notification.notification_type[0] === "バグ修正"
                           ? styles.mobileNotificationsListBoxTextRelease
-                          : notification.notification_type === "important"
+                          : notification.notification_type[0] === "アップデート"
                           ? styles.mobileNotificationsListBoxTextImportant
                           : styles.mobileNotificationsListBoxTextCommon
                       }
@@ -238,12 +244,10 @@ export const Main = ({
                     </span>
                     <div className={styles.mobileNotificationsContainer}>
                       <time className={styles.mobileNotificationTime}>
-                        {notification.published_at}
+                        {notification.publishedAt}
                       </time>
                       {notification.content && (
-                        <p className={styles.mobileNotificationContent}>
-                          {notification.content}
-                        </p>
+                        <p className={styles.mobileNotificationContent}>{notification.content}</p>
                       )}
                     </div>
                   </div>
