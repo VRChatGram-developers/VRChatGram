@@ -1,5 +1,5 @@
 import { Main } from "@/features/home/components/main";
-import { fetchNotifications, fetchHomeFeed } from "@/features/home/endpoint";
+import { fetchHomeFeed } from "@/features/home/endpoint";
 import {
   PopularPost as PopularPostType,
   LatestPost as LatestPostType,
