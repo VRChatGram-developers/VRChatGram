@@ -1,23 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/libs/firebase/auth";
-import { S3Service } from "../../services/s3-service";
 import prisma from "@/prisma/client";
 
 export const runtime = "edge";
-
-const uploadImages = async (
-  images: { file_data: string; file_name: string; width: number; height: number }[]
-) => {
-  const s3Service = new S3Service();
-  return await Promise.all(
-    images.map(
-      async (image: { file_data: string; file_name: string; width: number; height: number }) => {
-        const url = await s3Service.uploadFileToS3(image.file_data, image.file_name);
-        return { url: url, width: image.width, height: image.height };
-      }
-    )
-  );
-};
 
 const formatBoothItems = (
   boothItems: { url: string; name: string; detail: string; image: string }[]
@@ -64,7 +49,6 @@ export async function POST(request: Request) {
       },
     });
 
-    const serializedImages = await uploadImages(images);
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
 
     await prisma.$transaction(async (tx) => {
@@ -76,7 +60,7 @@ export async function POST(request: Request) {
             create: formatBoothItems(boothItems),
           },
           images: {
-            create: serializedImages,
+            create: images,
           },
           show_sensitive_type: show_sensitive_type,
           user_id: user.id,
