@@ -1,50 +1,76 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { auth } from "@/libs/firebase/auth";
+import prisma from "@/prisma/client";
 
-const prisma = new PrismaClient();
+export const runtime = "edge";
 
-export const connect = async () => {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
+    const { id } = await params;
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
-  try {
-    await connect();
-    const { id } = params;
+    const session = await auth();
+    let currentUser;
+    if (session) {
+      currentUser = await prisma.users.findUnique({
+        where: {
+          uid: session.user.uid,
+        },
+        select: {
+          id: true,
+        },
+      });
+    }
+
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
+
+    if (!currentUser) {
+      return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
+    }
+
     await prisma.follows.create({
       data: {
-        following_id: BigInt(id),
-        follower_id: BigInt(1),
-        created_at: new Date(),
-        updated_at: new Date(),
+        following_id: id,
+        follower_id: currentUser.id,
       },
     });
 
-    await connect();
     return NextResponse.json({ message: "フォローしました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await connect();
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
+
+    const session = await auth();
+    let currentUser;
+    if (session) {
+      currentUser = await prisma.users.findUnique({
+        where: {
+          uid: session.user.uid,
+        },
+        select: {
+          id: true,
+        },
+      });
+    }
+
+    if (!currentUser) {
+      return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
+    }
+
     const followUser = await prisma.follows.findFirst({
       where: {
-        following_id: BigInt(Number(id)),
-        follower_id: 1,
+        following_id: id,
+        follower_id: currentUser.id,
       },
     });
     if (!followUser) {
@@ -57,6 +83,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     });
     return NextResponse.json({ message: "フォロー解除しました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
   }
 }

@@ -1,69 +1,44 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/prisma/client";
 
-const prisma = new PrismaClient();
+export const runtime = "edge";
 
-export const connect = async () => {
-  try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
+const formatBirthdayToJST = (year: number, month: number, day: number): Date => {
+  const jstDate = new Date(Date.UTC(year, month - 1, day, 9, 0, 0));
+  return jstDate;
 };
 
 export async function POST(request: Request) {
   try {
-    await connect();
-    const { name, password, email, introduce, gender, profile_url, uid } = await request.json();
+    const {
+      name,
+      email,
+      gender,
+      profile_url,
+      uid,
+      my_id,
+      birthday: { year, month, day },
+    } = await request.json();
+
+    const formattedBirthday = formatBirthdayToJST(year, month, day);
 
     await prisma.users.create({
       data: {
         name: name,
-        password: password,
         email: email,
-        introduce: introduce,
         gender: gender,
         profile_url: profile_url,
         status: "active",
-        birthday: new Date(),
-        my_id: "my_id",
-        show_sensitive: false,
+        birthday: formattedBirthday,
+        my_id: my_id,
+        show_sensitive_type: "default",
         uid: uid,
       },
     });
 
-    await connect();
     return NextResponse.json({ message: "ユーザー作成しました" });
   } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
+    console.error(error);
+    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
   }
 }
-
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  try {
-    await connect();
-    const { id } = params;
-    if (!id) {
-      return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
-    }
-    const followUser = await prisma.follows.findFirst({
-      where: {
-        following_id: BigInt(Number(id)),
-        follower_id: 1,
-      },
-    });
-    if (!followUser) {
-      return NextResponse.json({ message: "フォローユーザー見つかりません" }, { status: 404 });
-    }
-    await prisma.follows.delete({
-      where: {
-        id: followUser.id,
-      },
-    });
-    return NextResponse.json({ message: "フォロー解除しました" });
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-}
-
-

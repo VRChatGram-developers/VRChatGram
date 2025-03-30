@@ -70,7 +70,11 @@ export const SignInForm = () => {
     setIsLoading(true);
 
     try {
-      const credentials = await signInWithEmailAndPassword(auth, email, password);
+      const credentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const token = await credentials.user.getIdToken();
       const result = await signIn("credentials", {
         idToken: token,
@@ -119,7 +123,9 @@ export const SignInForm = () => {
               >
                 今日も素敵な写真をいっぱい投稿しましょう
               </p>
-              {fireBaseError && <p className={styles.errorMailMessage}>{fireBaseError}</p>}
+              {fireBaseError && (
+                <p className={styles.errorMailMessage}>{fireBaseError}</p>
+              )}
               <div className="flex flex-col gap-6 w-[260px] mx-auto">
                 <TextField
                   fullWidth
@@ -146,7 +152,9 @@ export const SignInForm = () => {
                     },
                   }}
                 />
-                {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
+                {errorMail && (
+                  <p className={styles.errorMailMessage}>{errorMail}</p>
+                )}
                 <TextField
                   fullWidth
                   type="password"
@@ -173,7 +181,9 @@ export const SignInForm = () => {
                     },
                   }}
                 />
-                {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
+                {errorPassword && (
+                  <p className={styles.errorPasswordMessage}>{errorPassword}</p>
+                )}
                 <button
                   onClick={handleSignIn}
                   style={{
@@ -186,11 +196,11 @@ export const SignInForm = () => {
                 </button>
                 <p className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px] text-center">
                   アカウントをお持ちではありませんか？{" "}
-                  <Link href="/sign-up" className="underline">
+                  <Link href="/signup" className="underline">
                     アカウント作成
                   </Link>
                 </p>
-                <p
+                {/* <p
                   className="text-center text-[#000000]"
                   style={{ marginTop: "16px", fontSize: "10px" }}
                 >
@@ -208,7 +218,7 @@ export const SignInForm = () => {
                 >
                   <Image src="/google-icon.png" alt="Google Icon" width={24} height={24} />
                   <p style={{ marginLeft: "5px" }}>Googleで続行</p>
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

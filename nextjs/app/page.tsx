@@ -1,21 +1,36 @@
 import { Main } from "@/features/home/components/main";
-import { fetchNotifications, fetchHomeFeed } from "@/features/home/endpoint";
-import { Tag } from "@/features/home/types/tag";
-import { PopularPost as PopularPostType, LatestPost as LatestPostType, XPost as XPostType } from "@/features/home/types/index";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { fetchHomeFeed } from "@/features/home/endpoint";
+import {
+  PopularPost as PopularPostType,
+  LatestPost as LatestPostType,
+  XPost as XPostType,
+  Tag,
+  Notification,
+} from "@/features/home/types/index";
+import { auth } from "@/libs/firebase/auth";
+import { createClient } from "microcms-js-sdk";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
-  const notifications = await fetchNotifications();
-  const serializedNotifications = notifications.notifications.map((notification) => {
-    const year = new Date(notification.published_at).getFullYear();
-    const month = String(new Date(notification.published_at).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
-    const day = String(new Date(notification.published_at).getDate()).padStart(2, "0");
+  const client = createClient({
+    serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN ?? "",
+    apiKey: process.env.X_MICROCMS_API_KEY ?? "",
+  });
+
+  const response = await client.get({ endpoint: "notifications", queries: { limit: 2, orders: "publishedAt" } });
+  const notifications = response.contents.map((notification: Notification) => {
+    return {
+      ...notification,
+    };
+  });
+  const session = await auth();
+  const serializedNotifications = notifications.map((notification: Notification) => {
+    const year = new Date(notification.publishedAt).getFullYear();
+    const month = String(new Date(notification.publishedAt).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
+    const day = String(new Date(notification.publishedAt).getDate()).padStart(2, "0");
     const formattedDate = `${year}.${month}.${day}`;
     return {
       ...notification,
-      published_at: formattedDate,
+      publishedAt: formattedDate,
     };
   });
   const homeData = await fetchHomeFeed<{
@@ -24,6 +39,9 @@ export default async function Home() {
     popularTagList: Tag[];
     latestPostListWithX: XPostType[];
   }>(session);
+  if (typeof homeData === "string") {
+    return <div>{homeData}</div>;
+  }
   const { popularPostList, latestPostList, popularTagList, latestPostListWithX } = homeData;
 
   return (
@@ -36,4 +54,3 @@ export default async function Home() {
     />
   );
 }
-

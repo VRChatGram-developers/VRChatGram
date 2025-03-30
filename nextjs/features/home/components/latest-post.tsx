@@ -44,9 +44,9 @@ export const LatestPost = ({
               key={post.id}
               postCardProps={{
                 postId: post.id,
-                userId: post.user.id,
+                myId: post.user.my_id,
                 postName: post.title,
-                postImageUrl: "/home/new-post-image.png",
+                postImageUrl: post.images[0].url,
                 postImageCount: post.images.length,
                 userName: post.user.name,
                 userImageUrl: "/posts/sample-user-icon.png",

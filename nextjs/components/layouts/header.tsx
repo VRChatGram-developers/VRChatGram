@@ -13,18 +13,37 @@ import { PostForm } from "@/features/posts/components/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";
+import { useEffect } from "react";
+import { fetchUserForHeader } from "@/features/users/endpoint";
+import { UserForHeader } from "@/features/users/types";
 
 export const Header = () => {
   const router = useRouter();
   const { openModal, closeModal } = useModal();
   const [openMenu, setOpenMenu] = useState(false);
+  const [user, setUser] = useState<UserForHeader | null>(null);
+  const { status, data: session } = useSession();
+  const { searchQuery, setSearchQuery } = useSearchStore();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const menuFunction = () => {
     setOpenMenu(!openMenu);
   };
 
-  const { status } = useSession();
-  const { searchQuery, setSearchQuery } = useSearchStore();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await fetchUserForHeader();
+      if (typeof user === "string") {
+        console.error(user);
+      } else {
+        setUser(user);
+      }
+    };
+
+    if (session) {
+      fetchUser();
+    }
+  }, [session]);
 
   const handleSearch = () => {
     const query = searchQuery.includes("#")
@@ -57,11 +76,7 @@ export const Header = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
-          <FaSearch
-            size={24}
-            className={styles.FaSearch}
-            onClick={handleSearch}
-          />
+          <FaSearch size={24} className={styles.FaSearch} onClick={handleSearch} />
         </div>
 
         <div className={styles.headerButtonsContainer}>
@@ -69,45 +84,31 @@ export const Header = () => {
             <></>
           ) : status !== "authenticated" ? (
             <>
-              <button
-                onClick={() => router.push("/signin")}
-                className={styles.signInButton}
-              >
+              <button onClick={() => router.push("/signin")} className={styles.signInButton}>
                 <p className={styles.signInButtonText}>ログイン</p>
               </button>
-              <button
-                onClick={() => router.push("/signup")}
-                className={styles.signUpButton}
-              >
+              <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
                 <p className={styles.signUpButtonText}>新規登録</p>
               </button>
             </>
           ) : (
             <>
               <div className={styles.postButtonContainer}>
-                <button
-                  onClick={() => openModal(<PostForm onClose={closeModal} />)}
-                >
+                <button onClick={() => openModal(<PostForm onClose={closeModal} />)}>
                   <p className={styles.postButtonText}>写真を投稿</p>
                   <FaCamera size={24} />
                 </button>
               </div>
               <div className={styles.userIconContainer}>
                 <Image
-                  src="/header/user-sample-icon.png"
+                  src={user?.header_url || "/posts/sample-user-icon.png"}
                   alt="User Icon"
                   width={60}
                   height={60}
                 />
-                <RiArrowDownSLine
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  size={24}
-                />
+                <RiArrowDownSLine onClick={() => setIsDropdownOpen(!isDropdownOpen)} size={24} />
                 {isDropdownOpen && (
-                  <DropdownMenu
-                    isOpen={isDropdownOpen}
-                    setIsOpen={setIsDropdownOpen}
-                  />
+                  <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} />
                 )}
               </div>
             </>
@@ -115,10 +116,7 @@ export const Header = () => {
         </div>
 
         {/* Mobile Only */}
-        <div
-          className={styles.headerMobileContainer}
-          onClick={() => menuFunction()}
-        >
+        <div className={styles.headerMobileContainer} onClick={() => menuFunction()}>
           <div
             className={`${styles.headerMobileHumburger} ${
               openMenu ? styles.headerMobileHumburgerOpen : undefined
@@ -144,36 +142,24 @@ export const Header = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <FaSearch
-              size={24}
-              className={styles.FaSearch}
-              onClick={handleSearch}
-            />
+            <FaSearch size={24} className={styles.FaSearch} onClick={handleSearch} />
           </div>
           <div className={styles.headerMobileButtonsContainer}>
             {status == "loading" ? (
               <></>
             ) : status !== "authenticated" ? (
               <>
-                <button
-                  onClick={() => router.push("/signin")}
-                  className={styles.signInButton}
-                >
+                <button onClick={() => router.push("/signin")} className={styles.signInButton}>
                   <p className={styles.signInButtonText}>ログイン</p>
                 </button>
-                <button
-                  onClick={() => router.push("/signup")}
-                  className={styles.signUpButton}
-                >
+                <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
                   <p className={styles.signUpButtonText}>新規登録</p>
                 </button>
               </>
             ) : (
               <>
                 <div className={styles.postButtonContainer}>
-                  <button
-                    onClick={() => openModal(<PostForm onClose={closeModal} />)}
-                  >
+                  <button onClick={() => openModal(<PostForm onClose={closeModal} />)}>
                     <p className={styles.postButtonText}>写真を投稿</p>
                     <FaCamera size={24} />
                   </button>
@@ -194,27 +180,17 @@ export const Header = () => {
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p className={`${styles.moduleDrawerMenutext}`}>
-                        ダッシュボード
-                      </p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>
-                        自分の作品
-                      </p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>
-                        閲覧履歴
-                      </p>
+                      <p className={`${styles.moduleDrawerMenutext}`}>ダッシュボード</p>
+                      <p className={`${styles.moduleDrawerMenutext}`}>自分の作品</p>
+                      <p className={`${styles.moduleDrawerMenutext}`}>閲覧履歴</p>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
                       <p>Language</p>
                       <p className={`${styles.moduleDrawerMenutext}`}>日本語</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>
-                        アカウント設定
-                      </p>
+                      <p className={`${styles.moduleDrawerMenutext}`}>アカウント設定</p>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <button className={`${styles.moduleDrawerMenutext}`}>
-                        ログアウト
-                      </button>
+                      <button className={`${styles.moduleDrawerMenutext}`}>ログアウト</button>
                     </div>
                   </div>
                 </div>

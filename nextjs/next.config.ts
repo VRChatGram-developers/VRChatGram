@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ["example.com", "pbs.twimg.com"], // 既存の "example.com" に加えて "pbs.twimg.com" を追加
+    domains: ["example.com", "pbs.twimg.com", "assets.react-photo-album.com"],
   },
 };
 

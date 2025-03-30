@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Tag } from "../types/tag";
+import { Tag } from "../types/index";
 import styles from "../styles/popular-tag.module.scss";
 
 export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
@@ -84,7 +84,7 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
         {popularTagList.map((tag) => (
           <div className={styles.tagListContent} key={tag.id}>
             <Image
-              src="/home/femailtag-icon.png"
+              src={tag.top_post_image_url || "/home/femailtag-icon.png"}
               alt={`#${tag.name}`}
               fill
               className={styles.tagImage}

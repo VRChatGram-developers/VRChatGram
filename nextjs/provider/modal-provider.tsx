@@ -27,7 +27,6 @@ export const ModalProvider = ({ children }: PropsWithChildren) => {
   };
 
   const closeModal = () => {
-    console.log("close");
     setContent(null);
     setIsOpen(false);
   };

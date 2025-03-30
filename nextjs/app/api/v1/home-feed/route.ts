@@ -1,28 +1,19 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
+import prisma from "@/prisma/client";
 
-const prisma = new PrismaClient();
-
-export const connect = async () => {
-  try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
+export const runtime = "edge";
 
 export async function POST(request: Request) {
   try {
-    await connect();
     let user = null;
 
     const body = await request.json();
     const session = body.session;
 
     if (session) {
-      user = await prisma.users.findUniqueOrThrow({
+      user = await prisma.users.findFirst({
         where: { uid: session.user.uid },
       });
     }
@@ -32,13 +23,14 @@ export async function POST(request: Request) {
       select: {
         id: true,
         title: true,
-        is_sensitive: true,
+        show_sensitive_type: true,
         images: true,
         user: {
           select: {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
@@ -46,24 +38,24 @@ export async function POST(request: Request) {
             id: true,
             post_id: true,
             user_id: true,
-            posted_user_id: true,
           },
         },
       },
-      take: Number(12),
+      take: Number(16),
     });
 
     const latestPostList = await prisma.posts.findMany({
       orderBy: { created_at: "desc" },
       select: {
         id: true,
-        is_sensitive: true,
+        show_sensitive_type: true,
         images: true,
         user: {
           select: {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
@@ -71,7 +63,6 @@ export async function POST(request: Request) {
             id: true,
             post_id: true,
             user_id: true,
-            posted_user_id: true,
           },
         },
       },
@@ -88,7 +79,7 @@ export async function POST(request: Request) {
     );
 
     const popularTagList = await prisma.tags.findMany({
-      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id) } },
+      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id.toString()) } },
       select: {
         id: true,
         name: true,
@@ -101,13 +92,14 @@ export async function POST(request: Request) {
       where: { is_posted_x: true },
       select: {
         id: true,
-        is_sensitive: true,
+        show_sensitive_type: true,
         images: true,
         user: {
           select: {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
@@ -115,7 +107,6 @@ export async function POST(request: Request) {
             id: true,
             post_id: true,
             user_id: true,
-            posted_user_id: true,
           },
         },
       },
