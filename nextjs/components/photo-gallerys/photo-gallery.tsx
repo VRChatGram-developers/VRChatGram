@@ -14,7 +14,7 @@ export type PhotoGalleryProps = {
     width: number;
     height: number;
   };
-  is_liked: boolean;
+  isLiked: boolean;
   user: {
     id: string;
     my_id: string;
@@ -35,7 +35,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
     postName: post.title,
     postImageCount: post.postImageCount,
     userName: post.user.name,
-    isLiked: post.is_liked,
+    isLiked: post.isLiked,
     userImageUrl: post.user.profile_url ?? "",
     handleLikeOrUnlike: post.handleLikeOrUnlike,
     show_sensitive_type: post.show_sensitive_type,
