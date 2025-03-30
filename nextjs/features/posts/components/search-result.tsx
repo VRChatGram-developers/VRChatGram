@@ -200,7 +200,7 @@ export const SearchResult = ({
           height={260}
         />
         <div className={styles.searchDetailContainer}>
-          <p className={styles.searchDetailTitle}>{selectedTag}</p>
+          <p className={styles.searchDetailTitle}>{selectedTag === "ALL" ? "ALL" : `#${selectedTag}`}</p>
           <div className={styles.searchDetailContent}>
             <p className={styles.searchPostCount}>投稿数: {postCount}</p>
             <div className={styles.searchSortContainer}>

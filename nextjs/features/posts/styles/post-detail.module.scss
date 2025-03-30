@@ -8,18 +8,33 @@
     flex-direction: column;
     gap: 1.5rem;
     .postMainImageContainer {
+      position: relative;
       width: 100%;
       aspect-ratio: 1;
       border-radius: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      max-height: 90vh;
+      max-height: 75vh;
+      min-height: 30vh;
       .postMainImage {
         width: 100%;
         height: 100%;
         object-fit: contain;
         border-radius: 0.5rem;
+      }
+      .navigateNextStyle {
+        position: absolute;
+        background-color: #fff;
+        border-radius: 2rem;
+        top: 50%;
+        right: 2%;
+        cursor: pointer;
+      }
+      .navigateBeforeStyle {
+        position: absolute;
+        background-color: #fff;
+        border-radius: 2rem;
+        top: 50%;
+        left: 2%;
+        cursor: pointer;
       }
     }
     .postImageSubContainer {
@@ -39,6 +54,7 @@
           height: 100%;
           object-fit: cover;
           border-radius: 0.5rem;
+          cursor: pointer;
         }
         .postImageSubSelected {
           border: 0.2rem solid #69beef;

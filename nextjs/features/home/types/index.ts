@@ -45,19 +45,20 @@ export type Like = {
   posted_user_id: string;
 };
 
-export type NotificationType = "release" | "bug" | "important";
-
-export type Notification = {
-  id: number;
-  title: string;
-  published_at: string;
-  notification_type: NotificationType;
-  content: string | null;
-};
-
 export type Tag = {
   id: bigint;
   name: string;
   top_post_image_url: string;
+};
+
+
+export type Notification = {
+  id: string;
+  title: string;
+  content: string;
+  notification_type: string[];
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
 };
 

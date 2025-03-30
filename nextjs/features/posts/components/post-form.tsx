@@ -4,6 +4,7 @@ import { createPost } from "../endpoint";
 import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
 import { FaImage } from "react-icons/fa6";
+import { uploadImage } from "../endpoint";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -16,6 +17,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
   const [errorTitle, setErrorTitle] = useState("");
   const [mainImage, setMainImage] = useState<ImageData | null>(null);
+  const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -56,6 +58,10 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     setMainImage(images[index]);
   };
 
+  const handleCompositionStart = () => setIsCompositionStart(true);
+
+  const handleCompositionEnd = () => setIsCompositionStart(false);
+
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(e.target.value);
   };
@@ -65,10 +71,14 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && tagInput.trim()) {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
+    if (e.key === "Enter" && !isCompositionStart) {
+      const tag = tagInput.trim();
       e.preventDefault();
+      // 同じタグが入力されたら、タグを追加しない
+      if (!tags.includes(tag)) {
+        setTags([...tags, tag]);
+      }
+      setTagInput("");
     }
   };
 
@@ -110,6 +120,12 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       setErrorTitle("タイトルを入力してください");
       return false;
     }
+
+    if (title.length > 50) {
+      setErrorTitle("タイトルは50文字以内で入力してください");
+      return false;
+    }
+
     return true;
   };
 
@@ -126,16 +142,26 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleSubmit = async () => {
-    if (!isValidBoothItemsLink() || !isValidTitle()) {
+    const isBoothItemsValid = isValidBoothItemsLink();
+    const isTitleValid = isValidTitle();
+
+    if (!isBoothItemsValid || !isTitleValid) {
       return;
     }
+
+    const postImages = await Promise.all(
+      images.map(async (image) => {
+        const serializedImage = await uploadImage(image);
+        return serializedImage;
+      })
+    );
 
     try {
       await createPost({
         title,
         description,
         boothItems,
-        images,
+        images: postImages,
         tags,
         show_sensitive_type: selectedAgeRestriction,
       });
@@ -218,6 +244,8 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                       onKeyDown={handleTagInputKeyDown}
                       placeholder="タグを入力してEnterを押してください"
                       className={styles.postDetailTagInput}
+                      onCompositionStart={handleCompositionStart}
+                      onCompositionEnd={handleCompositionEnd}
                     />
                     <div className={styles.postDetailTagArea}>
                       {tags.map((tag, index) => (

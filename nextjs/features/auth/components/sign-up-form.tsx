@@ -117,7 +117,9 @@ export const SignUpForm = ({
                   },
                 }}
               />
-              {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
+              {errorMail && (
+                <p className={styles.errorMailMessage}>{errorMail}</p>
+              )}
             </div>
 
             <div className={styles.textForm}>
@@ -150,7 +152,9 @@ export const SignUpForm = ({
               <p className={styles.warningLabel}>
                 パスワードは半角英字、数字、記号を合わせた6文字以上で入力してください
               </p>
-              {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
+              {errorPassword && (
+                <p className={styles.errorPasswordMessage}>{errorPassword}</p>
+              )}
             </div>
             <div className={styles.createButtonContainer}>
               <button onClick={handleSignUp} className={styles.createButton}>
@@ -174,7 +178,7 @@ export const SignUpForm = ({
               </p>
             </div>
 
-            <div>
+            {/* <div>
               <p
                 style={{ marginTop: "16px", fontSize: "10px" }}
                 className="text-center text-[#000000] mt-[30px]"
@@ -188,7 +192,7 @@ export const SignUpForm = ({
                 <Image src="/google-icon.png" alt="Google Icon" width={24} height={24} />
                 <p className={styles.googleLoginText}>Googleで続行</p>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

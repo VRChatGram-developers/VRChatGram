@@ -25,18 +25,30 @@
     gap: 2rem;
     color: #ffffff;
     font-size: 14px;
-  }
 
-  a {
-    &:hover {
-      text-decoration: underline;
+    .terms {
+      &:hover {
+        text-decoration: underline;
+      }
     }
-  }
 
-  .contact {
-    color: #ffffff;
-    font-size: 14px;
-    margin-top: 1.5rem;
+    .privacy {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .faq {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .contact {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .copyright {
