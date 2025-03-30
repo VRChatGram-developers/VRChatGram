@@ -61,9 +61,7 @@ export const UserPostList = ({ user }: { user: User }) => {
         <p>投稿一覧</p>
       </div>
 
-      <div className={styles.userPostsList}>
-        <PhotoGallery posts={photoList} />
-      </div>
+      <PhotoGallery posts={photoList} />
 
       <div className={styles.pagination}>
         <button
