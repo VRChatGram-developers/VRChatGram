@@ -15,7 +15,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
     }
 
     const session = await auth();
-    let currentUser;
+    let currentUser = null;
     if (session) {
       currentUser = await prisma.users.findUnique({
         where: {
@@ -57,6 +57,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
             likes: {
               select: {
                 id: true,
+                user_id: true,
               },
             },
           },
@@ -77,6 +78,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
         ...toJson(post),
         likesCount: post.likes.length,
         images: post.images.map(toJson),
+        isLiked: post.likes.some((like) => like.user_id == currentUser?.id),
       })) || [];
 
     const totalLikes = postsWithLikes.reduce((total, post) => total + post.likesCount, 0);
