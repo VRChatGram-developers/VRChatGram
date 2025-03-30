@@ -15,11 +15,13 @@ export type User = {
 };
   
   export type Post = {
-    id: bigint;
+    id: string;
     title: string;
     show_sensitive_type: string;
     likesCount: number;
     images: Image[];
+    isLiked: boolean;
+    user: User;
   };
   
   export type Image = {
