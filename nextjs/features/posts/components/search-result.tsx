@@ -59,7 +59,7 @@ type PhotoGalleryPost = {
   show_sensitive_type: string;
   postImageCount: number;
   images: ImageType;
-  is_liked: boolean;
+  isLiked: boolean;
   user: User;
   title: string;
   handleLikeOrUnlike: () => void;
@@ -91,7 +91,7 @@ export const SearchResult = ({
       show_sensitive_type: post.show_sensitive_type,
       postImageCount: post.images.length,
       images: post.images[0],
-      is_liked: likedPosts[post.id.toString()],
+      isLiked: likedPosts[post.id.toString()],
       user: post.user,
       title: post.title,
       handleLikeOrUnlike: () => handleLike(post.id.toString()),
@@ -124,7 +124,7 @@ export const SearchResult = ({
         show_sensitive_type: post.show_sensitive_type,
         postImageCount: post.images.length,
         images: post.images[0],
-        is_liked: likedPosts[post.id.toString()],
+        isLiked: likedPosts[post.id.toString()],
         user: post.user,
         title: post.title,
         handleLikeOrUnlike: () => handleLike(post.id),
