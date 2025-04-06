@@ -25,7 +25,7 @@ const updatePasswordToFirebase = async (
   newPassword: string
 ) => {
   // 現在のパスワードを比較する
-  const token = signInWithEmailAndPassword(authClient, email, currentPassword);
+  const token = await signInWithEmailAndPassword(authClient, email, currentPassword);
 
   if (!token) {
     return;
