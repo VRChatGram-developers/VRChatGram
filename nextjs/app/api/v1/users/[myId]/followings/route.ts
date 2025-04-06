@@ -4,9 +4,9 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: Request, { params }: { params: Promise<{ myId: string }> }) {
   try {
-    const { id } = await params;
+    const { myId } = await params;
 
     const session = await auth();
     let currentUser;
@@ -21,7 +21,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       });
     }
 
-    if (!id) {
+    if (!myId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
@@ -29,9 +29,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
+    const followingUser = await prisma.users.findUniqueOrThrow({
+      where: {
+        my_id: myId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
     await prisma.follows.create({
       data: {
-        following_id: id,
+        following_id: followingUser?.id,
         follower_id: currentUser.id,
       },
     });
@@ -43,10 +52,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ myId: string }> }) {
   try {
-    const { id } = await params;
-    if (!id) {
+    const { myId } = await params;
+    if (!myId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
@@ -67,12 +76,22 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
+    const unfollowingUser = await prisma.users.findUniqueOrThrow({
+      where: {
+        my_id: myId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
     const followUser = await prisma.follows.findFirst({
       where: {
-        following_id: id,
+        following_id: unfollowingUser.id,
         follower_id: currentUser.id,
       },
     });
+
     if (!followUser) {
       return NextResponse.json({ message: "フォローユーザー見つかりません" }, { status: 404 });
     }

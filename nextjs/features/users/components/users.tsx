@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { updateUserProfile } from "@/features/users/endpoint";
 import { useEffect } from "react";
 import { useSingleImageUpload } from "@/features/users/hooks/use-upload-image";
+
 export const Users = ({ user }: { user: User }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -32,19 +33,20 @@ export const Users = ({ user }: { user: User }) => {
 
   const { data: session } = useSession();
   const handleFollow = async () => {
-    await followUser(user.id);
+    await followUser(user.my_id);
     setIsFollowing(true);
   };
 
   const handleUnfollow = async () => {
-    await unfollowUser(user.id);
+    await unfollowUser(user.my_id);
     setIsFollowing(false);
   };
 
   useEffect(() => {
     const createdSocialLinkList = createSocialLinkList(user.social_links);
     setSocialLinks(createdSocialLinkList);
-  }, [user.social_links]);
+    setIsFollowing(user.isFollowedByAccount);
+  }, [user.social_links, user.isFollowedByAccount]);
 
   const handleEditSocialLink = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const socialLinkList = socialLinks.map((socialLink, i) => {
@@ -145,11 +147,7 @@ export const Users = ({ user }: { user: User }) => {
           <div className={styles.profuleHeaderInfomationContainer}>
             <div className={styles.profileUserNameContainer}>
               {isUserEditing ? (
-                <input
-                  type="text"
-                  defaultValue={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <input type="text" defaultValue={name} onChange={(e) => setName(e.target.value)} />
               ) : (
                 <p className={styles.profileUserNameText}>{user.name}</p>
               )}
