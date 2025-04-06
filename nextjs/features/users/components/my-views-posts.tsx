@@ -12,7 +12,7 @@ export const MyViewsPosts = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
   console.log(viewsPostList);
 
   const { handleLikeOrUnlike } = useLikePost();
-  const totalPages = viewsPostList.posts.length;
+  const totalPages = viewsPostList.totalPages;
 
   const [currentPage, setCurrentPage] = useState(0);
   const [currentPosts, setCurrentPosts] = useState<Post[]>([]);

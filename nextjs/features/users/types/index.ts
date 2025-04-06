@@ -75,7 +75,6 @@ export type UserForHeader = {
 
 export type ViewsPostList = {
   totalPages: number;
-  currentPage: number;
   posts: Post[][];
   postCount: number;
 };
