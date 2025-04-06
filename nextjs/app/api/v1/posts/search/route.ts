@@ -1,34 +1,47 @@
 import { NextResponse } from "next/server";
+
+import { PrismaClient } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { bigIntToStringMap } from "../../../../../utils/bigIntToStringMapper";
 import { getStartOfWeek } from "../../../../../utils/date";
-import { auth } from "@/libs/firebase/auth";
-import prisma from "@/prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../auth/[...nextauth]/route";
 
-export const runtime = "edge";
+//インスタンスを作成
+const prisma = new PrismaClient();
+
+// データベースに接続する関数
+export const connect = async () => {
+  try {
+    //prismaでデータベースに接続
+    prisma.$connect();
+  } catch (error) {
+    return new Error(`DB接続失敗しました: ${error}`);
+  }
+};
 
 export async function GET(request: Request) {
   try {
-    const session = await auth();
+    await connect();
+    const session = await getServerSession(authOptions);
     const user = await prisma.users.findFirst({
       where: {
         uid: session?.user.uid,
       },
     });
     // タグ名、投稿名でlike検索
-    const url = new URL(request.url);
-    const tagName = url.searchParams.get("tag")
-      ? decodeURIComponent(url.searchParams.get("tag") as string)
+    const tagName = request.nextUrl.searchParams.get("tag")
+      ? decodeURIComponent(request.nextUrl.searchParams.get("tag") as string)
       : undefined;
-    const title = url.searchParams.get("title")
-      ? decodeURIComponent(url.searchParams.get("title") as string)
+    const title = request.nextUrl.searchParams.get("title")
+      ? decodeURIComponent(request.nextUrl.searchParams.get("title") as string)
       : undefined;
-    const sort = url.searchParams.get("sort")
-      ? decodeURIComponent(url.searchParams.get("sort") as string)
+    const sort = request.nextUrl.searchParams.get("sort")
+      ? decodeURIComponent(request.nextUrl.searchParams.get("sort") as string)
       : undefined;
 
     //クエリパラメータからページ番号を取得し、整数に変換（デフォルトは1）
-    // const url = new URL(request.url);
+    const url = new URL(request.url);
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     //クエリパラメータからページごとの表示数を取得し、整数に変換（デフォルトは10）
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
@@ -84,19 +97,21 @@ export async function GET(request: Request) {
             id: true,
             name: true,
             profile_url: true,
-            my_id: true,
           },
         },
         images: {
           select: {
             id: true,
             url: true,
-            width: true,
-            height: true,
           },
         },
       },
     });
+
+    console.log(`posts`)
+    console.log(posts)
+    console.log(`posts`)
+
 
     const postsWithIsLiked = posts.map((post) => ({
       ...post,

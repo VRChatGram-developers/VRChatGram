@@ -6,28 +6,31 @@ export class S3Service {
   private region: string;
 
   constructor() {
-    const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, S3_BUCKET_NAME } = process.env;
+    const { ACCESS_KEY_ID, SECRET_ACCESS_KEY, REGION, S3_BUCKET_NAME } = process.env;
 
-    if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY || !AWS_REGION || !S3_BUCKET_NAME) {
+    if (!ACCESS_KEY_ID || !SECRET_ACCESS_KEY || !REGION || !S3_BUCKET_NAME) {
       throw new Error("AWS S3 の環境変数が適切に設定されていません");
     }
-   
+
     this.s3Client = new S3Client({
-      region: AWS_REGION,
+      region: REGION,
       credentials: {
-        accessKeyId: AWS_ACCESS_KEY_ID,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY,
+        accessKeyId: ACCESS_KEY_ID,
+        secretAccessKey: SECRET_ACCESS_KEY,
       },
     });
 
     this.bucketName = S3_BUCKET_NAME;
-    this.region = AWS_REGION;
+    this.region = REGION;
   }
 
   uploadFileToS3 = async (file: string, fileName: string): Promise<string> => {
     try {
       const base64Data = file.split(",")[1];
       const buffer = Buffer.from(base64Data, "base64");
+
+      console.log(`fileName: ${fileName}`);
+
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const uploadParams: any = {

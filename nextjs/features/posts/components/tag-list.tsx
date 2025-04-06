@@ -14,17 +14,17 @@ export const TagList = ({
 }) => {
   return (
     <div className={styles.tagList}>
-      {popularTags.map(({ tag }) => (
+      {popularTags.map((tag) => (
         <button
           key={tag.id}
           className={
-            selectedTag === `${tag.name}`
+            selectedTag === `#${tag.name}`
               ? `${styles.tagItem} ${styles.selectedTagItem}`
               : styles.tagItem
           }
           onClick={() => handleSelectTag(tag.name)}
         >
-          {tag.name === "ALL" ? "ALL" : `#${tag.name}`}
+          #{tag.name}
         </button>
       ))}
     </div>

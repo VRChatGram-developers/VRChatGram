@@ -1,9 +1,7 @@
 export type User = {
-  id: string;
+  id: bigint;
   name: string;
-  my_id: string;
-  introduction_title: string;
-  introduction_detail: string;
+  introduce: string;
   profile_url?: string;
   header_url?: string;
   totalLikes: number;
@@ -15,38 +13,28 @@ export type User = {
 };
   
   export type Post = {
-    id: string;
+    id: bigint;
     title: string;
     show_sensitive_type: string;
     likesCount: number;
     images: Image[];
-    isLiked: boolean;
-    user: User;
   };
   
   export type Image = {
     id: bigint;
     url: string;
-    width: number;
-    height: number;
   };
   
   export type requestCreateUser = {
     name: string;
-    my_id: string;
-    birthday: {
-      year: number;
-      month: number;
-      day: number;
-    };
+    birthday: string;
     gender: string;
     email: string;
     password: string;
   };
 
   export type SocialLink = {
-    id: string;
-    platform_types: string;
+    platform_name: string;
     platform_url: string;
   };
 
@@ -65,26 +53,3 @@ export type User = {
     currentPassword: string;
     newPassword: string;
   };
-
-  export type requestUpdateUserProfile = {
-    id: string;
-    introduction_title: string;
-    introduction_detail: string;
-    profile_image?: {
-      file_data: string;
-      file_name: string;
-    };
-    header_image?: {
-      file_data: string;
-      file_name: string;
-    };
-    social_links: SocialLink[];
-    name: string;
-  };
-
-  export type UserForHeader = {
-    id: string;
-    name: string;
-    header_url: string;
-  };
-

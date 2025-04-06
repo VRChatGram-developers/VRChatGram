@@ -121,8 +121,7 @@
   .popularTagTitle {
     color: #151c4b;
     text-align: center;
-    // font-size: 2.25rem;
-    font-size: 3vw;
+    font-size: 2.25rem;
     font-weight: bold;
     font-family: "Noto Sans JP";
   }
@@ -142,7 +141,6 @@
       width: auto !important;
       min-width: 11rem;
       aspect-ratio: 1;
-      cursor: pointer;
 
       .tagListTextContainer {
         position: absolute;
@@ -200,33 +198,5 @@
     grid-auto-flow: row;
     grid-template-rows: 1fr 1fr;
     min-height: 25rem;
-  }
-}
-
-@media (max-width: 767px) {
-  .avatarSearchTextContainer {
-    clip-path: none;
-    max-width: 12rem !important;
-
-    .avatarSearchTitle {
-      font-size: 1.5rem !important;
-    }
-    .avatarSearchText {
-      max-width: 9rem !important;
-    }
-  }
-  .shortMoiveSearchTextContainer {
-    clip-path: polygon(
-      100% 0,
-      calc(100% - 11rem) 0,
-      calc(100% - 11rem) 100%,
-      100% 100%
-    ) !important;
-    .shortMoiveSearchTitle {
-      font-size: 1.5rem !important;
-    }
-    .shortMoiveSearchText {
-      max-width: 9rem !important;
-    }
   }
 }

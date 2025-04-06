@@ -7,17 +7,6 @@
     margin: 0 auto;
   }
 
-  .topNoticeMainContainer {
-    width: 100%;
-    height: 100%;
-    padding: 2rem 0 0 0;
-    .topNoticeMainImage {
-      width: 100%;
-      height: 70%;
-      object-fit: cover;
-      max-height: 20rem;
-    }
-  }
   .mainImagesContainer {
     display: flex;
     justify-content: center;
@@ -25,19 +14,43 @@
     margin-bottom: 1.5rem;
     gap: 1rem;
 
-    .mainImagesContent {
-      display: grid;
-      gap: 1rem;
-      width: 100%;
-      overflow-x: auto;
-      grid-auto-flow: column;
-      .mainImage {
-        min-width: 14rem;
-        height: 7rem;
-        object-fit: cover;
+    .mainImagesContainerFirst {
+      flex: 1;
+      border-radius: 0.375rem;
+
+      .imageWrapperFirst {
+        display: flex;
+        margin-top: 1rem;
+        overflow: hidden;
+        gap: 1rem;
+
+        .imageFirst {
+          width: 50%;
+        }
+
+        .imageSecond {
+          width: 50%;
+        }
       }
-      &::-webkit-scrollbar {
-        display: none;
+    }
+
+    .mainImagesContainerSecond {
+      flex: 1;
+      border-radius: 0.375rem;
+
+      .imageWrapperSecond {
+        display: flex;
+        margin-top: 1rem;
+        overflow: hidden;
+        gap: 1rem;
+
+        .imageThird {
+          width: 50%;
+        }
+
+        .imageFourth {
+          width: 50%;
+        }
       }
     }
   }
@@ -45,6 +58,7 @@
   .mainSecondContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin-bottom: 1.5rem;
     gap: 1rem;
 
     .mainSecondContainerFirst {
@@ -68,16 +82,12 @@
       grid-auto-flow: column;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
-      .mainSecondContainerImageContainer {
+      .mainSecondContainerFirstImage {
         width: 100%;
         height: 100%;
-        border-radius: 0.5rem;
-        .mainSecondContainerImage {
-          width: 100%;
-        }
       }
 
-      .mainSecondContainerSecondImageContainer {
+      .mainSecondContainerSecondImage {
         width: 100%;
         height: 100%;
       }
@@ -100,6 +110,7 @@
       .notificationContainer {
         display: grid;
         gap: 1rem;
+        grid-template-rows: 1fr 1fr auto;
         height: 100%;
         .notificationsList {
           border-radius: 0.5rem;
@@ -139,6 +150,7 @@
                 margin-left: 1.75rem;
                 display: flex;
                 flex-direction: column;
+
                 .notificationTime {
                   font-size: 12px;
                   font-family: "Noto Sans JP";
@@ -157,180 +169,6 @@
           }
         }
       }
-      .notificationMoreButton {
-        display: flex;
-        align-items: center;
-        font-weight: bold;
-      }
     }
-  }
-}
-
-.mobileMainContainer {
-  display: none;
-  padding-top: 5rem;
-  padding-bottom: 3rem;
-  background-color: #fff;
-  .mobileMainImageContaier {
-    height: 50vh;
-    width: 100%;
-    margin-bottom: 1.5rem;
-    .mobileMainImage {
-      height: 100%;
-      width: 100%;
-    }
-  }
-  .mobileSubImageContainer {
-    display: grid;
-    gap: 1rem;
-    width: 100%;
-    overflow-x: auto;
-    grid-auto-flow: column;
-    margin-bottom: 1.5rem;
-    .mobileSubImage {
-      min-width: 14rem;
-      height: 7rem;
-      object-fit: cover;
-      border-radius: 0.5rem;
-    }
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-  .mobileMainSecondContainerThirdBox {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1.5rem;
-    padding: 0 1.5rem;
-    .mobileMainSecondTitle {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-    .mobileNotificationContainer {
-      display: grid;
-      gap: 1rem;
-      grid-template-rows: 1fr 1fr auto;
-      height: 100%;
-      .mobileNotificationsList {
-        border-radius: 0.5rem;
-        transition-duration: 200ms;
-
-        .mobileNotificationsListBox {
-          display: flex;
-          flex-direction: column;
-
-          .mobileNotificationsListBoxText {
-            display: flex;
-            align-items: center;
-
-            .mobileNotificationsListBoxTextCommon {
-              width: 118px;
-              height: 56px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              border-radius: 16px;
-              color: #000000;
-              font-size: 1rem;
-              font-weight: 500;
-            }
-
-            .mobileNotificationsListBoxTextRelease {
-              @extend .notificationsListBoxTextCommon; // 共通のスタイルを継承
-              background: #69beefcc;
-              width: 7rem;
-              height: 3.5rem;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              border-radius: 1rem;
-            }
-
-            .mobileNotificationsListBoxTextImportant {
-              @extend .notificationsListBoxTextCommon; // 共通のスタイルを継承
-              background: #ebef69cc;
-              width: 7rem;
-              height: 3.5rem;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              border-radius: 1rem;
-            }
-
-            .mobileNotificationsContainer {
-              margin-left: 1.75rem;
-              display: flex;
-              flex-direction: column;
-
-              .mobileNotificationTime {
-                font-size: 12px;
-                font-family: "Noto Sans JP";
-                font-weight: bold;
-                color: #000000;
-              }
-              .mobileNotificationContent {
-                font-size: 12px;
-                font-family: "Noto Sans JP";
-                white-space: pre-wrap;
-                font-weight: bold;
-                color: #000000;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  .mobileMainSecondContainer {
-    padding: 0 1.5rem;
-    .mobileMainSecondContainerFirstBox {
-      display: flex;
-
-      margin-bottom: 1rem;
-      .mobileMainSecondTitle {
-        font-size: 1.25rem;
-        font-weight: 600;
-      }
-    }
-    .mobileMainSecondContainerSecondBox {
-      width: 100%;
-      display: grid;
-      gap: 1rem;
-      .mobileMainSecondContainerImageContent {
-        width: 100%;
-        border-radius: 0.5rem;
-        .mobileMainSecondContainerImage {
-          width: 100%;
-        }
-      }
-    }
-  }
-}
-
-// 1024px未満（タブレット）
-@media (max-width: 1039px) {
-  .mainContainer {
-    display: none !important;
-  }
-  .mobileMainContainer {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-@media (min-width: 768px) AND (max-width: 1039px) {
-  .mobileMainSecondContainerSecondBox {
-    grid-auto-flow: column;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 767px) {
-  .mobileMainSecondContainerSecondBox {
-    grid-auto-flow: row;
-    grid-template-rows: 1fr 1fr;
   }
 }

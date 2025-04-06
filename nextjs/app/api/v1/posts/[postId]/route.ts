@@ -1,17 +1,25 @@
 import { NextResponse } from "next/server";
 
+import { PrismaClient } from "@prisma/client";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
-import prisma from "@/prisma/client";
-import { auth } from "@/libs/firebase/auth";
+import { OtherPostList } from '../../../../../features/posts/components/other-post-list';
+//インスタンスを作成
+const prisma = new PrismaClient();
 
-export const runtime = "edge";
-
-export async function GET(request: Request, { params }: { params: Promise<{ postId: string }> }) {
+// データベースに接続する関数
+export const connect = async () => {
   try {
-    const { postId } = await params;
-    const session = await auth();
-    const user = session ? await prisma.users.findFirst({ where: { uid: session?.user.uid } }) : null;
+    //prismaでデータベースに接続
+    prisma.$connect();
+  } catch (error) {
+    return new Error(`DB接続失敗しました: ${error}`);
+  }
+};
 
+export async function GET(request: Request, { params }: { params: { postId: string } }) {
+  try {
+    await connect();
+    const { postId } = params;
     if (!postId) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
@@ -23,16 +31,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
         view_count: true,
         description: true,
         images: true,
-        tags: {
-          select: {
-            tag: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-          },
-        },
+        tags: true,
         likes: true,
         booth_items: {
           include: {
@@ -42,7 +41,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
                 title: true,
                 detail: true,
                 image: true,
-                url: true,
               },
             },
           },
@@ -53,12 +51,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
             name: true,
             my_id: true,
             profile_url: true,
-            social_links: {
-              select: {
-                platform_types: true,
-                platform_url: true,
-              },
-            },
           },
         },
       },
@@ -69,14 +61,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
       select: {
         id: true,
         title: true,
-        images: {
-          select: {
-            id: true,
-            url: true,
-            width: true,
-            height: true,
-          },
-        },
+        images: true,
         user: {
           select: {
             id: true,
@@ -92,7 +77,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
     });
 
     const { likes, ...postData } = post;
-    const isLiked = likes.some((like) => like.user_id === user?.id);
     const serializedPost = bigIntToStringMap(postData);
     const likeCount = likes?.length ?? 0;
     const serializedOtherPostList = bigIntToStringMap(otherPostList);
@@ -100,11 +84,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
     return NextResponse.json({
       ...serializedPost,
       likeCount,
-      isLiked,
       otherPostList: serializedOtherPostList,
     });
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
   }
 }

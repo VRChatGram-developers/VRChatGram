@@ -1,14 +1,24 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/libs/firebase/auth";
-import prisma from "@/prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../auth/[...nextauth]/route";
 
-export const runtime = "edge";
+const prisma = new PrismaClient();
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export const connect = async () => {
   try {
-    const { id } = await params;
+    prisma.$connect();
+  } catch (error) {
+    return new Error(`DB接続失敗しました: ${error}`);
+  }
+};
 
-    const session = await auth();
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  try {
+    await connect();
+    const { id } = params;
+
+    const session = await getServerSession(authOptions);
     let currentUser;
     if (session) {
       currentUser = await prisma.users.findUnique({
@@ -36,21 +46,22 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       },
     });
 
+    await connect();
     return NextResponse.json({ message: "フォローしました" });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
+    return new Error(`DB接続失敗しました: ${error}`);
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = await params;
+    await connect();
+    const { id } = params;
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const session = await auth();
+    const session = await getServerSession(authOptions);
     let currentUser;
     if (session) {
       currentUser = await prisma.users.findUnique({
@@ -83,7 +94,6 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     });
     return NextResponse.json({ message: "フォロー解除しました" });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "DB接続失敗しました" }, { status: 500 });
+    return new Error(`DB接続失敗しました: ${error}`);
   }
 }

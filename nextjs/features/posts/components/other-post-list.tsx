@@ -24,18 +24,13 @@ export const OtherPostList = ({
           <PostCard
             key={post.id}
             postCardProps={{
-              postId: post.id,
-              myId: post.user?.my_id,
               postName: post.title,
-              postImageUrl: post.images[0].url,
+              postImageUrl: "/users/post-sample-image3.png",
               postImageCount: post.images.length,
               userName: post.user?.name,
-              userImageUrl: post.user?.profile_url ?? "",
+              userImageUrl: "/users/post-sample-image.png",
               isLiked: isLiked,
               setIsLiked: setIsLiked,
-              handleLikeOrUnlike: () => {
-                setIsLiked(!isLiked);
-              },
             }}
           />
         ))}

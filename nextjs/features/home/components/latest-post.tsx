@@ -44,7 +44,7 @@ export const LatestPost = ({
               key={post.id}
               postCardProps={{
                 postId: post.id,
-                myId: post.user.my_id,
+                userId: post.user.id,
                 postName: post.title,
                 postImageUrl: post.images[0].url,
                 postImageCount: post.images.length,

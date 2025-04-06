@@ -1,52 +1,117 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/libs/firebase/auth";
-import prisma from "@/prisma/client";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth as authClient } from "@/libs/firebase/client";
-import { updateUser } from "@/libs/firebase/firebase-auth-for-edge";
 
-export const runtime = "edge";
+import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../auth/[...nextauth]/route";
+import {
+  updatePassword,
+  updateEmail,
+  getAuth,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from "firebase/auth";
 
-const updateEmailToFirebase = async (uid: string, newEmail: string) => {
+const prisma = new PrismaClient();
+
+export const connect = async () => {
   try {
-    await updateUser(uid, {
-      email: newEmail,
-    });
-    console.log("メールアドレスが更新されました:");
+    prisma.$connect();
   } catch (error) {
-    console.error("メールアドレスの更新に失敗しました:", error);
+    return new Error(`DB接続失敗しました: ${error}`);
   }
 };
 
-const updatePasswordToFirebase = async (
-  uid: string,
-  email: string,
-  currentPassword: string,
-  newPassword: string
-) => {
-  // 現在のパスワードを比較する
-  const token = signInWithEmailAndPassword(authClient, email, currentPassword);
+const changeEmail = async (newEmail: string, currentPassword: string) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-  if (!token) {
+  if (!user) {
+    console.error("ユーザーがログインしていません");
     return;
   }
 
   try {
-    await updateUser(uid, {
-      password: newPassword,
-    });
-    console.log("パスワードが更新されました:");
+    // メールアドレスを更新
+    await updateEmail(user, newEmail);
+    console.log("メールアドレスが更新されました:", newEmail);
+  } catch (error: any) {
+    if (error.code === "auth/requires-recent-login") {
+      console.log("再認証が必要です");
+
+      // 現在のパスワードを使って再認証
+      const credential = EmailAuthProvider.credential(user.email!, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+
+      // 再認証後に再度メールアドレス更新
+      await updateEmail(user, newEmail);
+      console.log("メールアドレスが更新されました:", newEmail);
+    } else {
+      console.error("メールアドレスの更新に失敗しました:", error);
+    }
+  }
+};
+
+export async function POST(request: Request) {
+  try {
+    await connect();
+    const { email, currentPassword } = await request.json();
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+      return NextResponse.json({ error: "ユーザーがログインしていません" }, { status: 401 });
+    }
+    const credential = EmailAuthProvider.credential(email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    return NextResponse.json({ isAuthenticated: true }, { status: 200 });
   } catch (error) {
-    console.error("パスワードの更新に失敗しました:", error);
+    console.error("パスワードの再認証に失敗しました:", error);
+    return NextResponse.json({ isAuthenticated: false }, { status: 401 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+const reauthenticateAndChangePassword = async (
+  email: string,
+  currentPassword: string,
+  newPassword: string
+) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error("ユーザーがログインしていません");
+    return;
+  }
+
+  try {
+    // 現在のパスワードで再認証
+    const credential = EmailAuthProvider.credential(email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+
+    // 再認証が成功したらパスワードを変更
+    await updatePassword(user, newPassword);
+    console.log("パスワードを更新しました");
+  } catch (error) {
+    console.error("再認証またはパスワードの更新に失敗:", error);
   }
 };
 
 export async function GET() {
   try {
-    const session = await auth();
+    await connect();
+
+    const session = await getServerSession(authOptions);
+    console.log(session);
+    console.log(`session`);
+    console.log(session);
+
     if (!session) {
       return NextResponse.json({ error: "ユーザーがログインしていません" }, { status: 401 });
     }
+
+    console.log(`session`);
+    console.log(session);
 
     let currentUser;
     if (session) {
@@ -71,34 +136,23 @@ export async function GET() {
   }
 }
 
-export async function PATCH(request: Request) {
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: "ユーザーがログインしていません" }, { status: 401 });
+    await connect();
+    const { id } = params;
+    if (!id) {
+      return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
     const { email, show_sensitive_type, gender, currentPassword, newPassword } =
       await request.json();
 
-    const userByFetchedDb = await prisma.users.findFirst({
-      where: {
-        uid: session.user.uid,
-      },
-    });
-
-    // メールアドレスのパラメーターが存在または、DBとのメールアドレスを比較して変更があった場合、更新する
-    if (email && userByFetchedDb?.email != email) {
-      await updateEmailToFirebase(session.user.uid, email);
-    }
-
-    if (newPassword && currentPassword != newPassword) {
-      await updatePasswordToFirebase(session.user.uid, email, currentPassword, newPassword);
-    }
+    changeEmail(email, currentPassword);
+    reauthenticateAndChangePassword(email, currentPassword, newPassword);
 
     const user = await prisma.users.update({
       where: {
-        uid: session.user.uid,
+        id: id,
       },
       data: {
         email: email,
@@ -109,31 +163,8 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json(user);
   } catch (error) {
-    console.error(error.message);
     return NextResponse.json({ error: `Failed to connect to database ${error}` }, { status: 500 });
   } finally {
     await prisma.$disconnect();
-  }
-}
-
-export async function DELETE(request: Request) {
-  try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: "ユーザーがログインしていません" }, { status: 401 });
-    }
-
-    await prisma.users.update({
-      where: {
-        uid: session.user.uid,
-      },
-      data: {
-        status: "deleted",
-      },
-    });
-
-    return NextResponse.json("アカウントの削除に成功しました");
-  } catch (error) {
-    console.error("アカウントの削除に成功しましたに失敗しました:", error);
   }
 }

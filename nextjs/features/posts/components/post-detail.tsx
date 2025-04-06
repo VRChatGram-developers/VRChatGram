@@ -2,6 +2,7 @@
 
 import styles from "../styles/post-detail.module.scss";
 import { FaRegEye } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
 import Image from "next/image";
@@ -10,23 +11,15 @@ import { useState, useEffect, useRef } from "react";
 import { OtherPostList } from "./other-post-list";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
-import { GrPersonalComputer } from "react-icons/gr";
-import { useRouter } from "next/navigation";
-import useLikePost from "../hooks/use-like-post";
+
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const router = useRouter();
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(post.likeCount ?? 0);
-  const { handleLikeOrUnlike } = useLikePost();
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);
-    setIsLiked(post.isLiked);
-    setLikeCount(post.likeCount);
-  }, [post, setIsLiked, setLikeCount]);
+  }, [post]);
 
   useEffect(() => {
     if (textRef.current) {
@@ -47,46 +40,18 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     setSelectedImage(post.images[currentIndex - 1].url);
   };
 
-  const handleForwardToUserDetail = (myId: string) => {
-    router.push(`/users/${myId}`);
-  };
-
-  const handleLike = async () => {
-    setIsLiked(!isLiked);
-    setLikeCount(likeCount + (isLiked ? -1 : 1));
-    await handleLikeOrUnlike(post.id.toString(), isLiked);
-  };
-
-  const selectImage = (url: string, index: number) => {
-    setSelectedImage(url);
-    setCurrentIndex(index);
-  };
-
+  const [isLiked, setIsLiked] = useState(false);
   return (
     <>
       <div className={styles.postDetailContainer}>
         <div className={styles.postImageContainer}>
-          <div className={styles.postMainImageContainer}>
-            <Image
-              src={selectedImage}
-              alt="avatar"
-              width={500}
-              height={500}
-              className={styles.postMainImage}
-            />
+          <div className={styles.postMainImage}>
+            <Image src={selectedImage} alt="avatar" width={100} height={100} />
             {currentIndex !== post.images.length - 1 && (
-              <MdOutlineNavigateNext
-                onClick={handleNextImage}
-                size={48}
-                className={styles.navigateNextStyle}
-              />
+              <MdOutlineNavigateNext onClick={handleNextImage} />
             )}
             {currentIndex !== 0 && (
-              <MdOutlineNavigateBefore
-                onClick={handleBeforeImage}
-                size={48}
-                className={styles.navigateBeforeStyle}
-              />
+              <MdOutlineNavigateBefore onClick={handleBeforeImage} />
             )}
           </div>
           <div className={styles.postImageSubContainer}>
@@ -98,19 +63,19 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                     alt="avatar"
                     width={400}
                     height={400}
-                    className={`${styles.postImage} ${
+                    className={
                       selectedImage == image.url
                         ? styles.postImageSubSelected
                         : styles.postImageSubNotSelected
-                    }`}
-                    onClick={() => selectImage(image.url, index)}
+                    }
+                    onClick={() => setSelectedImage(image.url)}
                   />
                 )}
               </div>
             ))}
           </div>
           <div className={styles.postImageTagContainer}>
-            {post.tags.map(({ tag }) => (
+            {post.tags.map((tag) => (
               <div key={tag.id} className={styles.postImageTag}>
                 <button className={styles.postImageTagText}>#{tag.name}</button>
               </div>
@@ -134,32 +99,16 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                 </p>
               </div>
               <div className={styles.postDetailInfomationLikeCountContainer}>
-                {isLiked ? (
-                  <Image
-                    src="/heart-outline.png"
-                    alt="heart"
-                    width={24}
-                    height={24}
-                    onClick={handleLike}
-                  />
-                ) : (
-                  <Image
-                    src="/before-good-for-post-detail.png"
-                    alt="heart"
-                    width={24}
-                    height={24}
-                    onClick={handleLike}
-                  />
-                )}
+                <FaHeart size={24} />
                 <p className={styles.postDetailInfomationLikeCount}>
-                  {likeCount}
+                  {post.likeCount}
                 </p>
               </div>
             </div>
             <div className={styles.postDetailProfileContainer}>
               <div className={styles.postDetailProfileIconContainer}>
                 <Image
-                  src={post.user?.profile_url || "/posts/sample-user-icon.png"}
+                  src="/posts/sample-icon.png"
                   alt="avatar"
                   width={200}
                   height={200}
@@ -168,10 +117,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               </div>
               <div className={styles.postDetailProfileContent}>
                 <div className={styles.postDetailProfileUserIdContainer}>
-                  <p
-                    className={styles.postDetailProfileUserId}
-                    onClick={() => handleForwardToUserDetail(post.user.my_id)}
-                  >
+                  <p className={styles.postDetailProfileUserId}>
                     ID: {post.user?.my_id}
                   </p>
                 </div>
@@ -181,28 +127,8 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                   </p>
                 </div>
                 <div className={styles.postDetailProfileSNSContainer}>
-                  {post.user?.social_links.map((socialLink, index) => (
-                    <div
-                      key={index}
-                      className={styles.postDetailProfileSNSItem}
-                    >
-                      <a
-                        href={socialLink.platform_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {socialLink.platform_types === "x" && (
-                          <FaXTwitter size={32} />
-                        )}
-                        {socialLink.platform_types === "discord" && (
-                          <FaDiscord size={32} />
-                        )}
-                        {socialLink.platform_types === "other" && (
-                          <GrPersonalComputer size={32} />
-                        )}
-                      </a>
-                    </div>
-                  ))}
+                  <FaXTwitter size={32} />
+                  <FaDiscord size={32} />
                 </div>
               </div>
             </div>
@@ -249,12 +175,9 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                   <div
                     className={styles.postDetailProfileBoothItem}
                     key={boothItem.id}
-                    onClick={() => {
-                      window.open(boothItem.booth.url, "_blank");
-                    }}
                   >
                     <Image
-                      src={boothItem.booth.image.toString()}
+                      src={boothItem.booth.image.url}
                       alt="avatar"
                       width={200}
                       height={200}

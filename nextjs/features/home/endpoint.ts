@@ -1,26 +1,24 @@
 import { Session } from "next-auth";
-import { Notification } from "@/features/notifications/type/index";
+import { Notifications } from "./types/notification";
 
-const API_GET_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_GET_URL = "http://localhost:3000";
 
-export const fetchNotifications = async (): Promise<Notification[] | string> => {
+export const fetchNotifications = async (): Promise<Notifications> => {
   const response = await fetch(`${API_GET_URL}/api/v1/notifications`);
   if (!response.ok) {
-    console.error(response);
-    return "Failed to fetch notifications";
+    throw new Error("Failed to fetch notifications");
   }
   return response.json();
 };
 
-export const fetchHomeFeed = async <T>(session: Session | null): Promise<T | string> => {
+export const fetchHomeFeed = async <T>(session: Session | null): Promise<T> => {
   const response = await fetch(`${API_GET_URL}/api/v1/home-feed`, {
     method: "POST",
     body: JSON.stringify({ session }),
   });
 
   if (!response.ok) {
-    console.error(response);
-    return "Failed to fetch home feed";
+    throw new Error("Failed to fetch posts");
   }
   return response.json();
 };

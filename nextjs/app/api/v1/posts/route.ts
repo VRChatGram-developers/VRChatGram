@@ -1,8 +1,35 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/libs/firebase/auth";
-import prisma from "@/prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../api/auth/[...nextauth]/route";
+import { S3Service } from "../../services/s3-service";
 
-export const runtime = "edge";
+//インスタンスを作成
+const prisma = new PrismaClient();
+
+// データベースに接続する関数
+export const connect = async () => {
+  try {
+    //prismaでデータベースに接続
+    prisma.$connect();
+  } catch (error) {
+    return new Error(`DB接続失敗しました: ${error}`);
+  }
+};
+
+const uploadImages = async (
+  images: { file_data: string; file_name: string; width: number; height: number }[]
+) => {
+  const s3Service = new S3Service();
+  return await Promise.all(
+    images.map(
+      async (image: { file_data: string; file_name: string; width: number; height: number }) => {
+        const url = await s3Service.uploadFileToS3(image.file_data, image.file_name);
+        return { url: url, width: image.width, height: image.height };
+      }
+    )
+  );
+};
 
 const formatBoothItems = (
   boothItems: { url: string; name: string; detail: string; image: string }[]
@@ -23,7 +50,9 @@ const formatBoothItems = (
 
 export async function POST(request: Request) {
   try {
-    const session = await auth();
+    await connect();
+
+    const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
@@ -40,65 +69,36 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
 
-    // 既に存在するタグを取得
-    const fetchRegisteredTags = await prisma.tags.findMany({
-      where: {
-        name: {
-          in: tags,
-        },
-      },
-    });
-
+    const serializedImages = await uploadImages(images);
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
 
-    await prisma.$transaction(async (tx) => {
-      const post = await tx.posts.create({
-        data: {
-          title: title,
-          description: description,
-          booth_items: {
-            create: formatBoothItems(boothItems),
-          },
-          images: {
-            create: images,
-          },
-          show_sensitive_type: show_sensitive_type,
-          user_id: user.id,
+    await prisma.posts.create({
+      data: {
+        title: title,
+        description: description,
+        booth_items: {
+          create: formatBoothItems(boothItems),
         },
-      });
-
-      const tagsToCreate = await Promise.all(
-        filteredTags.map(async (tag: string) => {
-          const existingTag = fetchRegisteredTags.find((t) => t.name === tag);
-          if (!existingTag) {
-            const newTag = await tx.tags.create({
-              data: {
+        images: {
+          create: serializedImages,
+        },
+        tags: {
+          create: filteredTags.map((tag: string) => ({
+            tag: {
+              create: {
                 name: tag,
               },
-            });
-            return newTag;
-          }
-          return existingTag;
-        })
-      );
-
-      await Promise.all(
-        tagsToCreate.map(
-          async (tag: { id: string; name: string; created_at: Date; updated_at: Date }) => {
-            await tx.post_tags.create({
-              data: {
-                post_id: post.id,
-                tag_id: tag.id,
-              },
-            });
-          }
-        )
-      );
+            },
+          })),
+        },
+        show_sensitive_type: show_sensitive_type,
+        user_id: user.id,
+      },
     });
 
     return NextResponse.json({ status: 200, message: "投稿に成功しました" });
   } catch (error) {
-    console.error(error);
+    console.log(error.stack);
     return NextResponse.json({ error: "投稿に失敗しました" }, { status: 500 });
   }
 }

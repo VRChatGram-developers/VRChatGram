@@ -1,23 +1,22 @@
-import { User, UserForHeader, requestCreateUser, requestUpdateUserProfile, requestUpdateUser } from "./types/index";
+import { User, requestCreateUser, requestUpdateUser } from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_URL = "http://localhost:3000";
 
-export const fetchUserById = async (myId: string, headers: Headers): Promise<User | string> => {
-  const response = await fetch(`${API_URL}/api/v1/users/profile/${myId}`, {
-    headers: new Headers(headers),
+export const fetchUserById = async (id: string, headers: Headers): Promise<User> => {
+  const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
+    headers: headers,
   });
   if (!response.ok) {
-    console.error(response);
-    return "Failed to fetch users";
+    throw new Error("Failed to fetch users");
   }
   const data = await response.json();
   return data;
 };
 
-export const followUser = async (id: string) => {
+export const followUser = async (id: bigint) => {
   try {
     const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
       method: "POST",
@@ -33,7 +32,7 @@ export const followUser = async (id: string) => {
   }
 };
 
-export const unfollowUser = async (id: string) => {
+export const unfollowUser = async (id: bigint) => {
   try {
     const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
       method: "DELETE",
@@ -61,16 +60,7 @@ export const createUser = async (user: requestCreateUser) => {
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({
-        ...userData,
-        uid: userCredential.user.uid,
-        email: email,
-        birthday: {
-          year: userData.birthday.year,
-          month: userData.birthday.month,
-          day: userData.birthday.day,
-        },
-      }),
+      body: JSON.stringify({ ...userData, uid: userCredential.user.uid, email: email }),
     });
 
     const token = await userCredential.user.getIdToken();
@@ -86,7 +76,8 @@ export const createUser = async (user: requestCreateUser) => {
     throw new Error("Failed to create user");
   }
 };
-export const checkEmail = async (email: string): Promise<boolean | string> => {
+
+export const checkEmail = async (email: string) => {
   const response = await fetch(`${API_URL}/api/v1/users/check`, {
     method: "POST",
     headers: {
@@ -95,8 +86,7 @@ export const checkEmail = async (email: string): Promise<boolean | string> => {
     body: JSON.stringify({ email }),
   });
   if (!response.ok) {
-    console.error(response);
-    return "Failed to check email";
+    throw new Error("Failed to check email");
   }
   const data = await response.json();
   return data.isRegisteredEnail;
@@ -128,27 +118,13 @@ export const updateUser = async (user: requestUpdateUser) => {
   return data;
 };
 
-export const checkPassword = async (password: string) => {
-  const response = await fetch(`${API_URL}/api/v1/users/check/password`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ password }),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to update user");
-  }
-  const data = await response.json();
-  return data;
-};
-
-export const deleteAccount = async () => {
+export const checkAuth = async (email: string, currentPassword: string) => {
   const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
-    method: "DELETE",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ email, currentPassword }),
   });
   if (!response.ok) {
     throw new Error("Failed to update user");
@@ -156,47 +132,3 @@ export const deleteAccount = async () => {
   const data = await response.json();
   return data;
 };
-
-export const checkDuplicateMyId = async (myId: string): Promise<boolean | string> => {
-  const response = await fetch(`${API_URL}/api/v1/users/check_duplicate_my_id`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ my_id: myId }),
-  });
-  if (!response.ok) {
-    console.error(response);
-    return "Failed to check duplicate my_id";
-  }
-  const data = await response.json();
-  return data.isRegisteredMyId;
-};
-
-export const updateUserProfile = async (
-  requestUpdateUserProfile: requestUpdateUserProfile
-): Promise<string> => {
-  const response = await fetch(`${API_URL}/api/v1/users/${requestUpdateUserProfile.id}/profile`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestUpdateUserProfile),
-  });
-  if (!response.ok) {
-    return "Failed to update user introduction";
-  }
-  const data = await response.json();
-  return data;
-};
-
-export const fetchUserForHeader = async (): Promise<UserForHeader | string> => {
-  const response = await fetch(`${API_URL}/api/v1/users/header`);
-  if (!response.ok) {
-    return "Failed to fetch user for header";
-  }
-  const data = await response.json();
-  return data;
-};
-
-

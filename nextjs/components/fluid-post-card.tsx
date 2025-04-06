@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 interface FluidPostCardProps {
   postId: string | bigint;
-  myId: string | bigint;
+  userId: string | bigint;
   postName: string;
   postImageUrl: string;
   postImageCount: number;
@@ -23,7 +23,7 @@ export const FluidPostCard = ({ postCardProps }: { postCardProps: FluidPostCardP
 
   const {
     postId,
-    myId,
+    userId,
     postName,
     postImageUrl,
     postImageCount,
@@ -41,9 +41,9 @@ export const FluidPostCard = ({ postCardProps }: { postCardProps: FluidPostCardP
     router.push(`/posts/${postIdString}`);
   };
 
-  const handleForwardToUserDetail = (myId: string | bigint) => {
-    const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
-    router.push(`/users/${myIdString}`);
+  const handleForwardToUserDetail = (userId: string | bigint) => {
+    const userIdString = typeof userId === "bigint" ? userId.toString() : userId;
+    router.push(`/users/${userIdString}`);
   };
 
   return (
@@ -72,8 +72,8 @@ export const FluidPostCard = ({ postCardProps }: { postCardProps: FluidPostCardP
         <div className={styles.userInfo}>
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
-            <Image src={userImageUrl || ""} alt="new-post-image" className={styles.userInfoIcon} fill />
-            <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(myId)}>
+            <Image src={userImageUrl} alt="new-post-image" className={styles.userInfoIcon} fill />
+            <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(userId)}>
               {userName}
             </p>
           </div>

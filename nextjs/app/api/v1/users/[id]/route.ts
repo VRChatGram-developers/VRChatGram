@@ -1,20 +1,30 @@
 import { NextResponse } from "next/server";
 
+import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
 import _ from "lodash";
-import { auth } from "@/libs/firebase/auth";
-import prisma from "@/prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../auth/[...nextauth]/route";
 
-export const runtime = "edge";
+const prisma = new PrismaClient();
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export const connect = async () => {
   try {
-    const { id } = await params;
+    prisma.$connect();
+  } catch (error) {
+    return new Error(`DB接続失敗しました: ${error}`);
+  }
+};
+
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  try {
+    await connect();
+    const { id } = params;
     if (!id) {
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const session = await auth();
+    const session = await getServerSession(authOptions);
     let currentUser;
     if (session) {
       currentUser = await prisma.users.findUnique({
@@ -34,12 +44,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       select: {
         id: true,
         name: true,
-        introduction_title: true,
-        introduction_detail: true,
+        introduce: true,
         uid: true,
         profile_url: true,
         header_url: true,
-        my_id: true,
         posts: {
           select: {
             id: true,
@@ -50,8 +58,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
               select: {
                 id: true,
                 url: true,
-                width: true,
-                height: true,
               },
             },
             likes: {
@@ -63,7 +69,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         },
         social_links: {
           select: {
-            id: true,
             platform_types: true,
             platform_url: true,
           },
@@ -87,8 +92,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     const response = {
       id: toJson(user?.id),
       name: user?.name,
-      introduction_title: user?.introduction_title,
-      introduction_detail: user?.introduction_detail,
+      introduce: user?.introduce,
       profile_url: user?.profile_url,
       header_url: user?.header_url,
       posts: chunkedPostsWithLikes,

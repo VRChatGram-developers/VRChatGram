@@ -1,7 +1,7 @@
 export type Post = {
-  id: string;
+  id: bigint | string;
   title: string;
-  show_sensitive_type: string;
+  is_sensitive: boolean;
   images: Image[];
   is_liked: boolean;
   user: User;
@@ -25,8 +25,6 @@ export type UserOtherPost = {
 export type Image = {
   id: bigint;
   url: string;
-  width: number;
-  height: number;
 };
 
 export type PostDetail = {
@@ -40,7 +38,6 @@ export type PostDetail = {
   likeCount: number;
   view_count: number;
   otherPostList: UserOtherPost[];
-  isLiked: boolean;
 };
 
 export type BoothItem = {
@@ -55,27 +52,18 @@ export type Booth = {
   title: string;
   detail: string;
   image: Image;
-  url: string;
 };
 
 export type User = {
-  id: string;
+  id: bigint;
   name: string;
   profile_url?: string;
-  my_id: string;
-  social_links: SocialLink[];
-};
-
-export type SocialLink = {
-  platform_types: string;
-  platform_url: string;
+  my_id?: string;
 };
 
 export type Tag = {
-  tag: {
-    id: string;
-    name: string;
-  };
+  id: bigint;
+  name: string;
 };
 
 export type ImageData = {
