@@ -1,0 +1,52 @@
+.myViewsPostsContainer {
+    width: 100%;
+    min-height: 30rem;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 2rem;
+
+    .myViewsPostsContainerTitle {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #151c4b;
+        padding: 1rem 0;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        padding: 4rem 1.5rem;
+        gap: 1.5rem;
+    
+        .paginationButton {
+            background-color: #ffffff;
+            color: 000000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    
+            .paginationButtonIcon {
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    
+        .paginationSelectedButton {
+            background-color: #69BEEF;
+            color: #ffffff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+      }
+}
+
+.myViewsPostsContainer {
+    padding: 6rem 2rem 2rem 2rem !important;
+  }
