@@ -89,6 +89,7 @@ export const Users = ({ user }: { user: User }) => {
     try {
       await updateUserProfile({
         id: user.id,
+        myId: user.my_id,
         introduction_title: introductionTitle,
         introduction_detail: introductionDetail,
         profile_image: profileImage || undefined,
@@ -113,8 +114,8 @@ export const Users = ({ user }: { user: User }) => {
         className={styles.profileHeaderContainer}
         style={
           !isUserEditing
-            ? { backgroundImage: `url(${user.header_url || BackgeoundImageURL})` }
-            : undefined
+            ? { backgroundImage: `url(${encodeURI(user.header_url || BackgeoundImageURL)})` }
+            : { backgroundImage: `url(${encodeURI(user.header_url || BackgeoundImageURL)})` }
         }
       >
         {/* ヘッダー画像の編集 */}
@@ -132,6 +133,13 @@ export const Users = ({ user }: { user: User }) => {
           <div className={styles.profileHeaderUserIconContainer}>
             {isUserEditing ? (
               <div className={styles.profileHeaderUserIcon}>
+                <Image
+                  src={user.profile_url || IconImageURL}
+                  alt="profile"
+                  width={260}
+                  height={260}
+                  className={styles.profileHeaderUserIcon}
+                />
                 <input type="file" onChange={handleProfileImageChange} />
               </div>
             ) : (
