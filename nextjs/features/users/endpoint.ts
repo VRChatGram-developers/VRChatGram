@@ -23,9 +23,9 @@ export const fetchUserById = async (myId: string, headers: Headers): Promise<Use
   return data;
 };
 
-export const followUser = async (id: string) => {
+export const followUser = async (myId: string) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/v1/users/${myId}/followings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,9 +39,9 @@ export const followUser = async (id: string) => {
   }
 };
 
-export const unfollowUser = async (id: string) => {
+export const unfollowUser = async (myId: string) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/v1/users/${myId}/followings`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
