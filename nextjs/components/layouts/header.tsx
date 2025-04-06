@@ -45,6 +45,10 @@ export const Header = () => {
     }
   }, [session]);
 
+  const handleToMyViewsPosts = () => {
+    router.push(`/users/${user?.my_id}/views`);
+  };
+
   const handleSearch = () => {
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: 1 })
@@ -182,7 +186,12 @@ export const Header = () => {
                     <div className={styles.moduleDrawerMenuSection}>
                       <p className={`${styles.moduleDrawerMenutext}`}>ダッシュボード</p>
                       <p className={`${styles.moduleDrawerMenutext}`}>自分の作品</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>閲覧履歴</p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={handleToMyViewsPosts}
+                      >
+                        閲覧履歴
+                      </p>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
                       <p>Language</p>
