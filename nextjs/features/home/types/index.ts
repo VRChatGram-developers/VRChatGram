@@ -35,6 +35,7 @@ export type User = {
   id: string;
   name: string;
   profile_url: string;
+  my_id: string;
 };
 
 export type Like = {
@@ -44,13 +45,20 @@ export type Like = {
   posted_user_id: string;
 };
 
-export type NotificationType = "release" | "bug" | "important";
+export type Tag = {
+  id: bigint;
+  name: string;
+  top_post_image_url: string;
+};
+
 
 export type Notification = {
-  id: number;
+  id: string;
   title: string;
-  published_at: string;
-  notification_type: NotificationType;
-  content: string | null;
+  content: string;
+  notification_type: string[];
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
 };
 

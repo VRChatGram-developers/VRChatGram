@@ -7,7 +7,8 @@ import { createUser } from "../endpoint";
 import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 import { useSession } from "next-auth/react";
-
+import { createYears, createMonths, createDays } from "@/utils/date";
+import { checkDuplicateMyId } from "../endpoint";
 export const AccountInfoInput = ({
   email,
   password,
@@ -18,9 +19,6 @@ export const AccountInfoInput = ({
   setIsSignUp: (isSignUp: boolean) => void;
 }) => {
   const router = useRouter();
-  const years = Array.from({ length: 100 }, (_, index) => 2025 - index); // 2025年から遡る
-  const months = Array.from({ length: 12 }, (_, index) => index + 1); // 1月から12月
-  const days = Array.from({ length: 31 }, (_, index) => index + 1);
   const sexOptions = [
     { label: "男", value: "male" },
     { label: "女", value: "female" },
@@ -28,6 +26,7 @@ export const AccountInfoInput = ({
   ];
 
   const [name, setName] = useState<string>("");
+  const [myId, setMyId] = useState<string>("");
   const [year, setYear] = useState<number | string>("");
   const [month, setMonth] = useState<number | string>("");
   const [day, setDay] = useState<number | string>("");
@@ -35,6 +34,7 @@ export const AccountInfoInput = ({
   const [termsChecked, setTermsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorName, setErrorName] = useState("");
+  const [errorMyId, setErrorMyId] = useState("");
   const [errorBirthday, setErrorBirthday] = useState("");
   const [errorSex, setErrorSex] = useState("");
   const [errorTerms, setErrorTerms] = useState("");
@@ -50,10 +50,28 @@ export const AccountInfoInput = ({
     return true;
   };
 
+  const isRegisteredMyId = async () => {
+    if (await checkDuplicateMyId(myId)) {
+      setErrorMyId("このmy_idは既に使用されています");
+      return false;
+    }
+    return true;
+  };
+
+  const isValidMyId = async () => {
+    setErrorMyId("");
+    if (myId === "") {
+      setErrorMyId("my_idを入力してください");
+      return false;
+    }
+
+    return true;
+  };
+
   const isValidBirthday = () => {
     setErrorBirthday("");
     if (year === "" || month === "" || day === "") {
-      setErrorBirthday("誕生日を選択してください");
+      setErrorBirthday("生年月日を選択してください");
       return false;
     }
     return true;
@@ -87,10 +105,15 @@ export const AccountInfoInput = ({
     try {
       if (
         !isValidNickName() ||
+        !isValidMyId() ||
         !isValidBirthday() ||
         !isValidSex() ||
         !isValidTerms()
       ) {
+        return;
+      }
+
+      if (!(await isRegisteredMyId())) {
         return;
       }
 
@@ -100,7 +123,12 @@ export const AccountInfoInput = ({
         email: email,
         password: password,
         name: name,
-        birthday: `${year}-${month}-${day}`,
+        my_id: myId,
+        birthday: {
+          year: Number(year),
+          month: Number(month),
+          day: Number(day),
+        },
         gender: selectedSex,
       });
     } catch (error) {
@@ -134,21 +162,27 @@ export const AccountInfoInput = ({
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <p className={styles.warningLabel}>
-                    あなたの名前として表示されます
-                  </p>
-                  {errorName && (
-                    <p className={styles.errorNameMessage}>{errorName}</p>
-                  )}
+                  <p className={styles.warningLabel}>あなたの名前として表示されます</p>
+                  {errorName && <p className={styles.errorNameMessage}>{errorName}</p>}
+                </div>
+                <div className={styles.myIdContainer}>
+                  <p className={styles.myIdLabel}>my_id</p>
+                  <div className={styles.myIdForm}>
+                    <input
+                      type="text"
+                      placeholder="my_id"
+                      value={myId}
+                      className={styles.myIdFormInput}
+                      onChange={(e) => setMyId(e.target.value)}
+                    />
+                  </div>
+                  {errorMyId && <p className={styles.errorMyIdMessage}>{errorMyId}</p>}
                 </div>
                 <div className={styles.genderContainer}>
                   <p className={styles.genderLabel}>性別</p>
                   <div className={styles.genderSelectSection}>
                     {sexOptions.map((option) => (
-                      <label
-                        key={option.value}
-                        className={styles.genderSelectLabel}
-                      >
+                      <label key={option.value} className={styles.genderSelectLabel}>
                         <input
                           type="radio"
                           name="gender"
@@ -162,22 +196,20 @@ export const AccountInfoInput = ({
                     ))}
                   </div>
 
-                  {errorSex && (
-                    <p className={styles.errorSexMessage}>{errorSex}</p>
-                  )}
+                  {errorSex && <p className={styles.errorSexMessage}>{errorSex}</p>}
                 </div>
                 <div className={styles.birthdayContainer}>
-                  <p className={styles.birthdayLabel}>誕生日</p>
+                  <p className={styles.birthdayLabel}>生年月日</p>
                   <div className={styles.birthdayContent}>
                     <div className={styles.birthdaySelectContent}>
                       <select
                         id="year"
                         className={styles.birthdaySelect}
                         value={year}
-                        onChange={(e) => setYear(e.target.value)}
+                        onChange={(e) => setYear(Number(e.target.value))}
                       >
                         <option value="">年</option>
-                        {years.map((y) => (
+                        {createYears().map((y) => (
                           <option key={y} value={y}>
                             {y}
                           </option>
@@ -189,10 +221,10 @@ export const AccountInfoInput = ({
                         id="month"
                         className={styles.birthdaySelect}
                         value={month}
-                        onChange={(e) => setMonth(e.target.value)}
+                        onChange={(e) => setMonth(Number(e.target.value))}
                       >
                         <option value="">月</option>
-                        {months.map((m) => (
+                        {createMonths().map((m) => (
                           <option key={m} value={m}>
                             {m}
                           </option>
@@ -207,16 +239,14 @@ export const AccountInfoInput = ({
                         onChange={(e) => setDay(e.target.value)}
                       >
                         <option value="">日</option>
-                        {days.map((d) => (
+                        {createDays(Number(year), Number(month)).map((d) => (
                           <option key={d} value={d}>
                             {d}
                           </option>
                         ))}
                       </select>
                       {errorBirthday && (
-                        <p className={styles.errorBirthdayMessage}>
-                          {errorBirthday}
-                        </p>
+                        <p className={styles.errorBirthdayMessage}>{errorBirthday}</p>
                       )}
                     </div>
                   </div>
@@ -230,33 +260,20 @@ export const AccountInfoInput = ({
                       onChange={(e) => setTermsChecked(e.target.checked)}
                     />
                     <span>
-                      <a
-                        href="/terms"
-                        target="_blank"
-                        className={styles.linkText}
-                      >
+                      <a href="/terms" target="_blank" className={styles.linkText}>
                         利用規約
                       </a>{" "}
                       と
-                      <a
-                        href="/privacy"
-                        target="_blank"
-                        className={styles.linkText}
-                      >
+                      <a href="/privacy" target="_blank" className={styles.linkText}>
                         プライバシーポリシー
                       </a>{" "}
                       に同意する
                     </span>
                   </label>
-                  {errorTerms && (
-                    <p className={styles.errorTermsMessage}>{errorTerms}</p>
-                  )}
+                  {errorTerms && <p className={styles.errorTermsMessage}>{errorTerms}</p>}
                 </div>
                 <div className={styles.signupContent}>
-                  <button
-                    onClick={handleCreateAccount}
-                    className={styles.userCreateButton}
-                  >
+                  <button onClick={handleCreateAccount} className={styles.userCreateButton}>
                     アカウント作成
                   </button>
                 </div>

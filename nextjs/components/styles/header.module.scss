@@ -18,6 +18,7 @@
     min-width: 7.5rem;
     .logo {
       width: auto !important;
+      cursor: pointer;
     }
   }
 
@@ -83,7 +84,6 @@
     .signUpButtonText {
       font-size: 1rem;
       font-weight: bold;
-      margin-right: 1rem;
     }
   }
 
@@ -245,7 +245,6 @@
         .signUpButtonText {
           font-size: 1rem;
           font-weight: bold;
-          margin-right: 1rem;
         }
       }
 
