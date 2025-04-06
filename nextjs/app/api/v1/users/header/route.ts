@@ -16,7 +16,7 @@ export async function GET() {
       id: true,
       header_url: true,
       name: true,
-      my_id: true,
+      my_id: true
     },
   });
   return NextResponse.json(user, { status: 200 });

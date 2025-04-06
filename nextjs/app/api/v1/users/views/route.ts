@@ -8,21 +8,13 @@ import _ from "lodash";
 
 export const runtime = "edge";
 
-export async function GET(request: Request
-) {
+export async function GET(request: Request) {
   try {
 
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "ログインしていません" }, { status: 401 });
     }
-
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get("page") || "1", 10);
-    //クエリパラメータからページごとの表示数を取得し、整数に変換（デフォルトは10）
-    const limit = parseInt(url.searchParams.get("limit") || "10", 10);
-    //検索の開始位置を取得。
-    const offset = (page - 1) * limit;
 
     const user = await prisma.users.findUnique({
       where: {
@@ -37,11 +29,9 @@ export async function GET(request: Request
       where: {
         user_id: user?.id,
       },
-      take: Number(limit),
       orderBy: {
-        created_at: "desc"
+        created_at: "desc",
       },
-      skip: offset,
       select: {
         post: {
           select: {
@@ -88,9 +78,8 @@ export async function GET(request: Request
     return NextResponse.json(
       {
         posts: bigIntToStringMap(chunkedPostsWithLikes),
-        totalPages: Math.ceil(viewsPostCount / limit),
-        currentPage: page,
-        viewsPostCount: viewsPostCount,
+        totalPages: Math.ceil(viewsPostCount / 10),
+        postCount: viewsPostCount,
       },
       { status: 200 }
     );
