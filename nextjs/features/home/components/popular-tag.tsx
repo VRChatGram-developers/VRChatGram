@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   const router = useRouter();
 
-  const handleToPostSeacchList = () => {
+  const handleToPostSearchList = () => {
     router.push(`/posts?${new URLSearchParams({ page: "1" })}`);
   };
 
