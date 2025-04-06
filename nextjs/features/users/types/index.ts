@@ -55,6 +55,7 @@ export type requestUpdateUserProfile = {
   id: string;
   introduction_title: string;
   introduction_detail: string;
+  myId: string;
   profile_image?: {
     file_data: string;
     file_name: string;
