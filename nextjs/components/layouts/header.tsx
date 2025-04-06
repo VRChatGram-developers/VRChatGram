@@ -46,7 +46,7 @@ export const Header = () => {
   }, [session]);
 
   const handleToMyViewsPosts = () => {
-    router.push(`/users/${user?.my_id}/views`);
+    router.push(`/users/views`);
   };
 
   const handleSearch = () => {
