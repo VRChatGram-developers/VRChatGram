@@ -143,11 +143,11 @@ export const SearchResult = ({
 
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
-    await handleLikeOrUnlike(postId, currentLiked);
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
     setPostList(
       postList.map((post) => (post.id == postId ? { ...post, is_liked: !currentLiked } : post))
     );
+    handleLikeOrUnlike(postId, currentLiked);
   };
 
   const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {

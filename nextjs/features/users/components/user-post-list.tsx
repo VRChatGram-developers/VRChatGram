@@ -31,9 +31,9 @@ export const UserPostList = ({ user }: { user: User }) => {
   }, [currentPage, updatePostsData]);
 
   const handleLike = async (postId: string) => {
-    const isCurrentlyLiked = likedPosts[postId];
-    await handleLikeOrUnlike(postId, isCurrentlyLiked);
+    const isCurrentlyLiked = likedPosts[postId]; 
     setLikedPosts((prev) => ({ ...prev, [postId]: !isCurrentlyLiked }));
+    handleLikeOrUnlike(postId, isCurrentlyLiked);
   };
 
   const photoList = useMemo(() => {
