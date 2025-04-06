@@ -150,11 +150,8 @@ export const fetchUserForHeader = async (): Promise<UserForHeader | string> => {
   return data;
 };
 
-export const fetchMyViewsPosts = async (
-  myId: string,
-  headers: Headers
-): Promise<ViewsPostList | string> => {
-  const response = await fetch(`${API_URL}/api/v1/users/${myId}/views`, {
+export const fetchMyViewsPosts = async (headers: Headers): Promise<ViewsPostList | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/views`, {
     headers: new Headers(headers),
   });
   if (!response.ok) {

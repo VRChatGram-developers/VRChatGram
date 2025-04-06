@@ -8,12 +8,9 @@ import _ from "lodash";
 
 export const runtime = "edge";
 
-export async function GET(request: Request, { params }: { params: Promise<{ myId: string }> }) {
+export async function GET(request: Request
+) {
   try {
-    const { myId } = await params;
-    if (!myId) {
-      return NextResponse.json({ error: "myIdが指定されていません" }, { status: 400 });
-    }
 
     const session = await auth();
     if (!session) {
@@ -29,7 +26,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
 
     const user = await prisma.users.findUnique({
       where: {
-        my_id: myId,
+        uid: session.user.uid,
       },
       select: {
         id: true,
