@@ -7,9 +7,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: [
-      "vrcss-development.s3.ap-southeast-2.amazonaws.com",
-    ],
+    domains: ["example.com", "pbs.twimg.com", "assets.react-photo-album.com"],
   },
 };
 

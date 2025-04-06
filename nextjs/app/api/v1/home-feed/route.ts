@@ -1,21 +1,12 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
 import { toJson } from "@/utils/json";
+import prisma from "@/prisma/client";
 
-const prisma = new PrismaClient();
-
-export const connect = async () => {
-  try {
-    prisma.$connect();
-  } catch (error) {
-    return new Error(`DB接続失敗しました: ${error}`);
-  }
-};
+export const runtime = "edge";
 
 export async function POST(request: Request) {
   try {
-    await connect();
     let user = null;
 
     const body = await request.json();
@@ -39,6 +30,7 @@ export async function POST(request: Request) {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
@@ -49,7 +41,7 @@ export async function POST(request: Request) {
           },
         },
       },
-      take: Number(12),
+      take: Number(16),
     });
 
     const latestPostList = await prisma.posts.findMany({
@@ -63,6 +55,7 @@ export async function POST(request: Request) {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {
@@ -106,6 +99,7 @@ export async function POST(request: Request) {
             id: true,
             name: true,
             profile_url: true,
+            my_id: true,
           },
         },
         likes: {

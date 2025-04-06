@@ -1,0 +1,103 @@
+.notificationsListContainer {
+  display: grid;
+  gap: 1rem;
+  padding: 6rem 13rem 1.5rem 13rem;
+  max-width: 100%;
+
+  .notificationsElementContainer {
+    display: flex;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #000;
+
+    .notificationMetaContainer {
+      display: grid;
+      grid-template-rows: 1fr 1fr; 
+      font-weight: bold;
+      font-family: "Noto Sans JP";
+
+      .notificationsPublishDate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+      }
+
+      .notificationsNotificationTypeBugFix {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: #EFF287;
+        border-radius: 1rem;
+      }
+
+      .notificationsNotificationTypeUpdate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: #69BEEF;
+        border-radius: 1rem;
+      }
+
+    }
+
+    .notificationsContentContainer {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      font-size: 1rem;
+      font-family: "Noto Sans JP";
+
+      .notificationsTitle {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-family: "Noto Sans JP";
+      }
+
+      .notificationsContentText {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden; // はみ出た部分を隠す
+        white-space: nowrap; // 改行をしない
+        text-overflow: ellipsis; // 省略記号（...）を表示
+        min-width: 0;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    gap: 1.5rem;
+
+    .paginationButton {
+        background-color: #ffffff;
+        color: 000000;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .paginationButtonIcon {
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .paginationSelectedButton {
+        background-color: #69BEEF;
+        color: #ffffff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+  }
+}
