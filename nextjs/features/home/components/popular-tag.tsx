@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   const router = useRouter();
 
-  const handleToPostSeacchList = () => {
+  const handleToPostSeachList = () => {
     router.push(`/posts?${new URLSearchParams({ page: "1" })}`);
   };
 
@@ -21,7 +21,7 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
           <div className={styles.avatarSearchButtonContent}>
             <div className={styles.avatarSearchTextContainer}>
               <p className={styles.avatarSearchTitle}>アバター写真</p>
-              <button className={styles.avatarSearchText} onClick={handleToPostSeacchList}>
+              <button className={styles.avatarSearchText} onClick={handleToPostSeachList}>
                 探す <span>›</span>
               </button>
             </div>
