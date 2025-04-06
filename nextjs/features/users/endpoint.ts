@@ -1,4 +1,10 @@
-import { User, UserForHeader, requestCreateUser, requestUpdateUserProfile } from "./types/index";
+import {
+  User,
+  UserForHeader,
+  ViewsPostList,
+  requestCreateUser,
+  requestUpdateUserProfile,
+} from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
@@ -139,6 +145,21 @@ export const fetchUserForHeader = async (): Promise<UserForHeader | string> => {
   const response = await fetch(`${API_URL}/api/v1/users/header`);
   if (!response.ok) {
     return "Failed to fetch user for header";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const fetchMyViewsPosts = async (
+  myId: string,
+  headers: Headers
+): Promise<ViewsPostList | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/${myId}/views`, {
+    headers: new Headers(headers),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch users";
   }
   const data = await response.json();
   return data;
