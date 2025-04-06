@@ -90,9 +90,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
     const top4Posts = postsWithLikes.sort((a, b) => b.likesCount - a.likesCount).slice(0, 4);
     const totalViews = postsWithLikes.reduce((total, post) => total + post.view_count, 0);
     const chunkedPostsWithLikes = _.chunk(postsWithLikes, 20);
-    const isFollowedByAccount =
-      user?.following.find((follower_user) => follower_user?.follower_id === currentUser?.id) ??
-      false;
+    const isFollowedByAccount = Boolean(
+      user?.following.find((follower_user) => follower_user?.follower_id === currentUser?.id)
+    );
 
     const response = {
       id: toJson(user?.id),
