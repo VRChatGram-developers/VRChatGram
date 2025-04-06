@@ -12,6 +12,7 @@ export type User = {
   top4Posts: Post[];
   isCurrentUser: boolean;
   social_links: SocialLink[];
+  isFollowedByAccount: boolean;
 };
 
 export type Post = {
