@@ -31,11 +31,15 @@
       width: 100%;
       overflow-x: auto;
       grid-auto-flow: column;
-      .mainImage {
-        min-width: 14rem;
-        height: 7rem;
-        object-fit: cover;
+      .mainImageLink {
+        aspect-ratio: 16 / 9;
+        min-height: 10rem;
+        .mainImage {
+          object-fit: cover;
+          border-radius: 0.5rem;
+        }
       }
+
       &::-webkit-scrollbar {
         display: none;
       }
@@ -99,68 +103,57 @@
       }
       .notificationContainer {
         display: grid;
-        gap: 1rem;
         height: 100%;
         .notificationsList {
-          border-radius: 0.5rem;
-          transition-duration: 200ms;
-
-          .notificationsListBox {
-            display: flex;
-            flex-direction: column;
-
-            .notificationsListBoxText {
+          height: 100%;
+          display: grid;
+          grid-template-rows: 1fr 1fr;
+          gap: 1rem;
+          .notificationsListContent {
+            height: 100%;
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: auto 3fr;
+            .notificationsTagContainer {
+              height: 100%;
+              width: 100%;
               display: flex;
+              justify-content: center;
               align-items: center;
-
-              .notificationsListBoxTextCommon {
-                width: 118px;
-                height: 56px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 16px;
-                color: #000000;
-                font-size: 1rem;
-                font-weight: 500;
+              border-radius: 1rem;
+              padding: 1rem 1.5rem;
+              .text {
+                font-weight: bold;
               }
+            }
+            .bugFix {
+              background-color: #ebef69cc;
+            }
+            .update {
+              background-color: #69beefcc;
+            }
+            .release {
+              background-color: #9bea4d;
+            }
 
-              .notificationsListBoxTextRelease {
-                @extend .notificationsListBoxTextCommon; // 共通のスタイルを継承
-                background: #69beefcc;
-              }
-
-              .notificationsListBoxTextImportant {
-                @extend .notificationsListBoxTextCommon; // 共通のスタイルを継承
-                background: #ebef69cc;
-              }
-
-              .notificationsContainer {
-                margin-left: 1.75rem;
-                display: flex;
-                flex-direction: column;
-                .notificationTime {
-                  font-size: 12px;
-                  font-family: "Noto Sans JP";
-                  font-weight: bold;
-                  color: #000000;
-                }
-                .notificationContent {
-                  font-size: 12px;
-                  font-family: "Noto Sans JP";
-                  white-space: pre-wrap;
-                  font-weight: bold;
-                  color: #000000;
-                }
+            .detailContainer {
+              height: 100%;
+              display: grid;
+              grid-template-rows: 1fr 2fr;
+              .postDetailText {
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
               }
             }
           }
         }
-      }
-      .notificationMoreButton {
-        display: flex;
-        align-items: center;
-        font-weight: bold;
+        .notificationsMoreContainer {
+          display: flex;
+          justify-content: end;
+          align-items: end;
+        }
       }
     }
   }
@@ -187,9 +180,10 @@
     overflow-x: auto;
     grid-auto-flow: column;
     margin-bottom: 1.5rem;
+    max-height: 10rem;
     .mobileSubImage {
-      min-width: 14rem;
-      height: 7rem;
+      min-width: 16rem;
+      height: 8rem;
       object-fit: cover;
       border-radius: 0.5rem;
     }
@@ -207,81 +201,55 @@
       font-weight: 600;
       margin-bottom: 1rem;
     }
-    .mobileNotificationContainer {
-      display: grid;
-      gap: 1rem;
-      grid-template-rows: 1fr 1fr auto;
+    .notificationsList {
       height: 100%;
-      .mobileNotificationsList {
-        border-radius: 0.5rem;
-        transition-duration: 200ms;
-
-        .mobileNotificationsListBox {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 1rem;
+      .notificationsListContent {
+        height: 100%;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: auto 3fr;
+        .notificationsTagContainer {
+          height: 100%;
+          width: 100%;
           display: flex;
-          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border-radius: 1rem;
+          padding: 1rem 1.5rem;
+          .text {
+            font-weight: bold;
+          }
+        }
+        .bugFix {
+          background-color: #ebef69cc;
+        }
+        .update {
+          background-color: #69beefcc;
+        }
+        .release {
+          background-color: #9bea4d;
+        }
 
-          .mobileNotificationsListBoxText {
-            display: flex;
-            align-items: center;
-
-            .mobileNotificationsListBoxTextCommon {
-              width: 118px;
-              height: 56px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              border-radius: 16px;
-              color: #000000;
-              font-size: 1rem;
-              font-weight: 500;
-            }
-
-            .mobileNotificationsListBoxTextRelease {
-              @extend .notificationsListBoxTextCommon; // 共通のスタイルを継承
-              background: #69beefcc;
-              width: 7rem;
-              height: 3.5rem;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              border-radius: 1rem;
-            }
-
-            .mobileNotificationsListBoxTextImportant {
-              @extend .notificationsListBoxTextCommon; // 共通のスタイルを継承
-              background: #ebef69cc;
-              width: 7rem;
-              height: 3.5rem;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              border-radius: 1rem;
-            }
-
-            .mobileNotificationsContainer {
-              margin-left: 1.75rem;
-              display: flex;
-              flex-direction: column;
-
-              .mobileNotificationTime {
-                font-size: 12px;
-                font-family: "Noto Sans JP";
-                font-weight: bold;
-                color: #000000;
-              }
-              .mobileNotificationContent {
-                font-size: 12px;
-                font-family: "Noto Sans JP";
-                white-space: pre-wrap;
-                font-weight: bold;
-                color: #000000;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
-            }
+        .detailContainer {
+          height: 100%;
+          display: grid;
+          grid-template-rows: 1fr 2fr;
+          .postDetailText {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
           }
         }
       }
+    }
+    .notificationsMoreContainer {
+      display: flex;
+      justify-content: end;
+      align-items: end;
     }
   }
   .mobileMainSecondContainer {
