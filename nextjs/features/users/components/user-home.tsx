@@ -18,7 +18,9 @@ const renderSocialLink = (socialLink: SocialLink) => {
     return (
       <div key={socialLink.platform_types} className={styles.profileIntroduceContent}>
         <FaXTwitter size={36} />
-        <p className={styles.profileIntroduceLink}>{socialLink.platform_url}</p>
+        <a href={socialLink.platform_url} className={styles.profileIntroduceLink}>
+          {socialLink.platform_url}
+        </a>
       </div>
     );
   }
@@ -27,7 +29,7 @@ const renderSocialLink = (socialLink: SocialLink) => {
     return (
       <div key={socialLink.platform_types} className={styles.profileIntroduceContent}>
         <FaDiscord size={36} />
-        <p className={styles.profileIntroduceLink}>{socialLink.platform_url}</p>
+        <a href={socialLink.platform_url} className={styles.profileIntroduceLink}>{socialLink.platform_url}</a>
       </div>
     );
   }
@@ -35,7 +37,7 @@ const renderSocialLink = (socialLink: SocialLink) => {
   return (
     <div key={socialLink.platform_types} className={styles.profileIntroduceContent}>
       <GrPersonalComputer size={36} />
-      <p className={styles.profileIntroduceLink}>{socialLink.platform_url}</p>
+      <a href={socialLink.platform_url} className={styles.profileIntroduceLink}>{socialLink.platform_url}</a>
     </div>
   );
 };

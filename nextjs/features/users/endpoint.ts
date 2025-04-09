@@ -1,4 +1,10 @@
-import { User, UserForHeader, requestCreateUser, requestUpdateUserProfile } from "./types/index";
+import {
+  User,
+  UserForHeader,
+  ViewsPostList,
+  requestCreateUser,
+  requestUpdateUserProfile,
+} from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
@@ -17,9 +23,9 @@ export const fetchUserById = async (myId: string, headers: Headers): Promise<Use
   return data;
 };
 
-export const followUser = async (id: string) => {
+export const followUser = async (myId: string) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/v1/users/${myId}/followings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,9 +39,9 @@ export const followUser = async (id: string) => {
   }
 };
 
-export const unfollowUser = async (id: string) => {
+export const unfollowUser = async (myId: string) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/users/${id}/followings`, {
+    const response = await fetch(`${API_URL}/api/v1/users/${myId}/followings`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -139,6 +145,18 @@ export const fetchUserForHeader = async (): Promise<UserForHeader | string> => {
   const response = await fetch(`${API_URL}/api/v1/users/header`);
   if (!response.ok) {
     return "Failed to fetch user for header";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const fetchMyViewsPosts = async (headers: Headers): Promise<ViewsPostList | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/views`, {
+    headers: new Headers(headers),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch users";
   }
   const data = await response.json();
   return data;

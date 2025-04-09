@@ -9,9 +9,11 @@ import { MdOutlineFirstPage } from "react-icons/md";
 import { fetchPosts } from "@/features/posts/endpoint";
 import { createQueryParams } from "@/utils/queryParams";
 import { useSearchStore } from "@/libs/store/search-store";
-import { FluidPostCard } from "@/components/fluid-post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useRouter } from "next/navigation";
+import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
+import { Image as ImageType, User } from "@/features/posts/types";
+
 const breakpoints = {
   large: 1280, // 1280px以上
   medium: 1040, // 1040px以上1280px未満
@@ -52,6 +54,17 @@ const adjustGridLayout = (items: NodeListOf<Element>, columns: number) => {
   });
 };
 
+type PhotoGalleryPost = {
+  postId: string;
+  show_sensitive_type: string;
+  postImageCount: number;
+  images: ImageType;
+  isLiked: boolean;
+  user: User;
+  title: string;
+  handleLikeOrUnlike: () => void;
+};
+
 export const SearchResult = ({
   posts,
   selectedTag,
@@ -66,12 +79,23 @@ export const SearchResult = ({
   totalPages: number;
 }) => {
   const [changedCurrentPage, setChangedCurrentPage] = useState(currentPage - 1);
-
   const [postList, setPostList] = useState<Post[]>(posts);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
     Object.fromEntries(posts.map((post) => [post.id, post.is_liked]))
+  );
+  const [photoGalleryPosts, setPhotoGalleryPosts] = useState<PhotoGalleryPost[]>(
+    posts.map((post) => ({
+      postId: post.id,
+      show_sensitive_type: post.show_sensitive_type,
+      postImageCount: post.images.length,
+      images: post.images[0],
+      isLiked: likedPosts[post.id.toString()],
+      user: post.user,
+      title: post.title,
+      handleLikeOrUnlike: () => handleLike(post.id.toString()),
+    }))
   );
   const { handleLikeOrUnlike } = useLikePost();
 
@@ -83,11 +107,31 @@ export const SearchResult = ({
     { label: "今週の人気順", value: "this_week_popular" },
   ];
 
+  // タグ選択、検索時にAPIからのデータが変更されたら、postListを更新
   useEffect(() => {
     setPostList(posts);
-    const updatedLikedPosts = Object.fromEntries(posts.map((post) => [post.id, post.is_liked]));
-    setLikedPosts(updatedLikedPosts);
-  }, [posts, changedCurrentPage]);
+  }, [posts]);
+
+  useEffect(() => {
+    const updatedLikedPosts = Object.fromEntries(postList.map((post) => [post.id, post.is_liked]));
+    if (JSON.stringify(updatedLikedPosts) !== JSON.stringify(likedPosts)) {
+      setLikedPosts(updatedLikedPosts);
+    }
+
+    setPhotoGalleryPosts(
+      postList.map((post) => ({
+        postId: post.id,
+        show_sensitive_type: post.show_sensitive_type,
+        postImageCount: post.images.length,
+        images: post.images[0],
+        isLiked: likedPosts[post.id.toString()],
+        user: post.user,
+        title: post.title,
+        handleLikeOrUnlike: () => handleLike(post.id),
+      }))
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postList, changedCurrentPage]);
 
   const handlePageChange = async (page: number) => {
     setChangedCurrentPage(page);
@@ -99,13 +143,11 @@ export const SearchResult = ({
 
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
-
-    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
-
-    setPostList((prevList) =>
-      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
-    );
     await handleLikeOrUnlike(postId, currentLiked);
+    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
+    setPostList(
+      postList.map((post) => (post.id == postId ? { ...post, is_liked: !currentLiked } : post))
+    );
   };
 
   const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -120,6 +162,7 @@ export const SearchResult = ({
     if (typeof postsList === "string") {
       return <div>{postsList}</div>;
     }
+
     setPostList(postsList.posts);
   };
 
@@ -178,32 +221,7 @@ export const SearchResult = ({
           </div>
         </div>
       </div>
-      <div>
-        <div className={styles.userPostsList}>
-          {postList.map((post, index) => {
-            const imageWidth =
-              Number(post.id) % 2 === 0 ? 804 : Number(post.id) % 3 === 0 ? 402 : 600;
-
-            return (
-              <FluidPostCard
-                key={`${post.id}-${index}`}
-                postCardProps={{
-                  postId: post.id,
-                  myId: post.user.my_id,
-                  postName: post.title,
-                  postImageUrl: post.images[0].url,
-                  postImageCount: post.images.length,
-                  userName: post.user.name,
-                  userImageUrl: post.user.profile_url,
-                  isLiked: likedPosts[post.id.toString()],
-                  imageWidth: imageWidth,
-                  handleLikeOrUnlike: () => handleLike(post.id.toString()),
-                }}
-              />
-            );
-          })}
-        </div>
-      </div>
+      <PhotoGallery posts={photoGalleryPosts} />
 
       {/* ページネーションUI */}
       <div className={styles.pagination}>
