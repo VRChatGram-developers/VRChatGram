@@ -32,40 +32,59 @@ export const NotificationsList = ({
       バグ修正: styles.notificationsNotificationTypeBugFix,
       アップデート: styles.notificationsNotificationTypeUpdate,
     };
-    return functionMap[notificationType] || styles.notificationsNotificationTypeBugFix;
+    return (
+      functionMap[notificationType] ||
+      styles.notificationsNotificationTypeBugFix
+    );
   };
 
   return (
     <div className={styles.notificationsListContainer}>
-      {notifications.map((notification) => {
-        return (
-          <div className={styles.notificationsElementContainer} key={notification.id}>
+      <div className={styles.notificationsListContent}>
+        {notifications.map((notification) => {
+          return (
             <div
-              className={styles.notificationMetaContainer}
+              className={styles.notificationsElementContainer}
+              key={notification.id}
               onClick={() => handleRedirectToDetail(notification.id)}
             >
-              <div className={getNotificationTypeClassName(notification.notification_type[0])}>
-                <p className={styles.notificationsNotificationTypeText}>
-                  {notification.notification_type[0]}
-                </p>
+              <div className={styles.notificationMetaContainer}>
+                <div
+                  className={getNotificationTypeClassName(
+                    notification.notification_type[0]
+                  )}
+                >
+                  <p className={styles.notificationsNotificationTypeText}>
+                    {notification.notification_type[0]}
+                  </p>
+                </div>
+                <div className={styles.notificationsPublishDate}>
+                  <p className={styles.notificationsPublishDateText}>
+                    {notification.publishedAt}
+                  </p>
+                </div>
               </div>
-              <div className={styles.notificationsPublishDate}>
-                <p>{notification.publishedAt}</p>
-              </div>
-            </div>
-            <div className={styles.notificationsContentContainer}>
-              <div className={styles.notificationsTitle}>{notification.title}</div>
+              <div className={styles.notificationsContentContainer}>
+                <div className={styles.notificationsTitle}>
+                  {notification.title}
+                </div>
 
-              <div className={styles.notificationsContentText}>
-                {removeHtmlTags(notification.content)}
+                <div className={styles.notificationsContentTextContent}>
+                  <p className={styles.notificationsContentText}>
+                    {removeHtmlTags(notification.content)}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
       <div className={styles.pagination}>
-        <button className={styles.paginationButton} onClick={() => handlePageChange(0)}>
+        <button
+          className={styles.paginationButton}
+          onClick={() => handlePageChange(0)}
+        >
           <MdOutlineFirstPage className={styles.paginationButtonIcon} />
         </button>
         {Array.from({ length: totalPages }, (_, i) => (
@@ -73,7 +92,9 @@ export const NotificationsList = ({
             key={i}
             onClick={() => handlePageChange(i)}
             className={
-              currentPage === i + 1 ? styles.paginationSelectedButton : styles.paginationButton
+              currentPage === i + 1
+                ? styles.paginationSelectedButton
+                : styles.paginationButton
             }
           >
             {i + 1}
