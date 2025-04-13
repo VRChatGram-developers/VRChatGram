@@ -1,4 +1,5 @@
 import {
+  FavoritePostList,
   User,
   UserForHeader,
   ViewsPostList,
@@ -152,6 +153,18 @@ export const fetchUserForHeader = async (): Promise<UserForHeader | string> => {
 
 export const fetchMyViewsPosts = async (headers: Headers): Promise<ViewsPostList | string> => {
   const response = await fetch(`${API_URL}/api/v1/users/views`, {
+    headers: new Headers(headers),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch users";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const fetchMyLikePostList = async (headers: Headers): Promise<FavoritePostList | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/likes`, {
     headers: new Headers(headers),
   });
   if (!response.ok) {
