@@ -54,6 +54,7 @@ export const PostList = ({ posts, popularTags }: { posts: PostListType; popularT
           postCount={displayPosts.postCount}
           currentPage={displayPosts.currentPage}
           totalPages={displayPosts.totalPages}
+          postImageUrlWithMaxLikes={displayPosts.postImageUrlWithMaxLikes}
         />
       </div>
     </>
