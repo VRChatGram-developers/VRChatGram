@@ -49,6 +49,10 @@ export const Header = () => {
     router.push(`/users/views`);
   };
 
+  const handleToMyFavoritePosts = () => {
+    router.push(`/users/likes`);
+  };
+
   const handleSearch = () => {
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: 1 })
@@ -184,8 +188,18 @@ export const Header = () => {
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p className={`${styles.moduleDrawerMenutext}`}>ダッシュボード</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>自分の作品</p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={() => router.push(`/users/${user?.my_id}`)}
+                      >
+                        ダッシュボード
+                      </p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={handleToMyFavoritePosts}
+                      >
+                        良いね一覧
+                      </p>
                       <p
                         className={`${styles.moduleDrawerMenutext}`}
                         onClick={handleToMyViewsPosts}

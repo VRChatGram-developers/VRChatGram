@@ -164,6 +164,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                   width={200}
                   height={200}
                   className={styles.postDetailProfileIcon}
+                  onClick={() => handleForwardToUserDetail(post.user.my_id)}
                 />
               </div>
               <div className={styles.postDetailProfileContent}>
@@ -176,7 +177,10 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                   </p>
                 </div>
                 <div className={styles.postDetailProfileUserNameContainer}>
-                  <p className={styles.postDetailProfileUserName}>
+                  <p
+                    className={styles.postDetailProfileUserName}
+                    onClick={() => handleForwardToUserDetail(post.user.my_id)}
+                  >
                     {post.user?.name}
                   </p>
                 </div>
