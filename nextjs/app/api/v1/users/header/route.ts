@@ -11,12 +11,12 @@ export async function GET() {
   }
 
   const user = await prisma.users.findFirst({
-    where: { id: session.user.id },
+    where: { id: session.user.uid },
     select: {
       id: true,
       header_url: true,
       name: true,
-      my_id: true
+      my_id: true,
     },
   });
   return NextResponse.json(user, { status: 200 });
