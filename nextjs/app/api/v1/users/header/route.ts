@@ -11,7 +11,7 @@ export async function GET() {
   }
 
   const user = await prisma.users.findFirst({
-    where: { id: session.user.uid },
+    where: { uid: session.user.uid },
     select: {
       id: true,
       header_url: true,
