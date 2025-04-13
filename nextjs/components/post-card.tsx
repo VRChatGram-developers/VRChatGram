@@ -9,7 +9,7 @@ interface PostCardProps {
   postId: string | bigint;
   myId: string | bigint;
   postName: string;
-  postImageUrl: string;
+  postImageUrl: string | null;
   postImageCount: number;
   userName: string;
   userImageUrl: string;
@@ -67,7 +67,12 @@ export const PostCard = ({
         <div className={styles.userInfo}>
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
-            <Image src={userImageUrl} alt="new-post-image" className={styles.userInfoIcon} fill />
+            <Image
+              src={userImageUrl || "/posts/sample-user-icon.png"}
+              alt="new-post-image"
+              className={styles.userInfoIcon}
+              fill
+            />
             <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(myId)}>
               {userName}
             </p>

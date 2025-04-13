@@ -79,3 +79,9 @@ export type ViewsPostList = {
   posts: Post[][];
   postCount: number;
 };
+
+export type FavoritePostList = {
+  totalPages: number;
+  posts: Post[][];
+  postCount: number;
+};

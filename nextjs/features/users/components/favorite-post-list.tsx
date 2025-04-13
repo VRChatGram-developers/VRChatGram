@@ -1,18 +1,16 @@
 "use client";
 
-import { ViewsPostList as ViewsPostListType } from "@/features/users/types/index";
+import { FavoritePostList as FavoritePostListType } from "@/features/users/types/index";
 import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { Post } from "@/features/users/types/index";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
-import styles from "../styles/my-views-posts.module.scss";
+import styles from "../styles/favorite-post-list.module.scss";
 
-export const MyViewsPosts = ({ viewsPostList }: { viewsPostList: ViewsPostListType }) => {
-  console.log(viewsPostList);
-
+export const FavoritePostList = ({ favoritePostList }: { favoritePostList: FavoritePostListType }) => {
   const { handleLikeOrUnlike } = useLikePost();
-  const totalPages = viewsPostList.totalPages;
+  const totalPages = favoritePostList.totalPages;
 
   const [currentPage, setCurrentPage] = useState(0);
   const [currentPosts, setCurrentPosts] = useState<Post[]>([]);
@@ -20,7 +18,7 @@ export const MyViewsPosts = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
 
   // 投稿データといいね状態を更新
   const updatePostsData = useCallback((page: number) => {
-    const posts = viewsPostList.posts[page] || [];
+    const posts = favoritePostList.posts[page] || [];
     setCurrentPosts(posts);
 
     const newLikedPosts = Object.fromEntries(
@@ -33,10 +31,16 @@ export const MyViewsPosts = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
     updatePostsData(currentPage);
   }, [currentPage, updatePostsData]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleLike = async (postId: string) => {
     const isCurrentlyLiked = likedPosts[postId];
-    await handleLikeOrUnlike(postId, isCurrentlyLiked);
     setLikedPosts((prev) => ({ ...prev, [postId]: !isCurrentlyLiked }));
+    try {
+      await handleLikeOrUnlike(postId, isCurrentlyLiked);
+    } catch (error) {
+      console.error(error);
+      setLikedPosts((prev) => ({ ...prev, [postId]: isCurrentlyLiked }));
+    }
   };
 
   const photoList = useMemo(() => {
@@ -56,12 +60,12 @@ export const MyViewsPosts = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
       isLiked: likedPosts[post.id.toString()],
       handleLikeOrUnlike: () => handleLike(post.id.toString()),
     }));
-  }, [currentPosts, likedPosts]);
+  }, [currentPosts, handleLike, likedPosts]);
   return (
     <>
-      <div className={styles.myViewsPostsContainer}>
-        <div className={styles.myViewsPostsContainerTitle}>
-          <p>閲覧履歴</p>
+      <div className={styles.favoritePostListContainer}>
+        <div className={styles.favoritePostListContainerTitle}>
+          <p>良いね一覧</p>
         </div>
         <div>
           <PhotoGallery posts={photoList} />
