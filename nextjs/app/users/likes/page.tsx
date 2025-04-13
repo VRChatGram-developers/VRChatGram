@@ -6,7 +6,5 @@ export default async function Page() {
   if (typeof postList === "string") {
     return <div>{postList}</div>;
   }
-  console.log(`postList`);
-  console.log(postList);
   return <FavoritePostList favoritePostList={postList} />;
 }

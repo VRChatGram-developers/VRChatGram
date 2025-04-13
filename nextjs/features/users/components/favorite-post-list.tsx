@@ -61,9 +61,6 @@ export const FavoritePostList = ({ favoritePostList }: { favoritePostList: Favor
       handleLikeOrUnlike: () => handleLike(post.id.toString()),
     }));
   }, [currentPosts, handleLike, likedPosts]);
-
-  console.log(photoList);
-  console.log(`photoList`);
   return (
     <>
       <div className={styles.favoritePostListContainer}>

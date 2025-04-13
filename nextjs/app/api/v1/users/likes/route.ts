@@ -60,12 +60,7 @@ export async function GET(request: Request) {
       },
     });
 
-    const postsWithLikes =
-      likedPosts.map(({ post }) => ({
-        ...toJson(post),
-        isLiked: true,
-      })) || [];
-
+    const postsWithLikes = likedPosts.map(({ post }) => ({ ...toJson(post), isLiked: true }));
     const viewsPostCount = await prisma.views.count({ where: { user_id: user?.id } });
     const chunkedPostsWithLikes = _.chunk(postsWithLikes, 10);
 
