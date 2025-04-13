@@ -8,8 +8,7 @@ import { Post } from "@/features/users/types/index";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
 import styles from "../styles/my-views-posts.module.scss";
 
-export const ViewsPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListType }) => {
-
+export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListType }) => {
   const { handleLikeOrUnlike } = useLikePost();
   const totalPages = viewsPostList.totalPages;
 
@@ -34,8 +33,13 @@ export const ViewsPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListT
 
   const handleLike = async (postId: string) => {
     const isCurrentlyLiked = likedPosts[postId];
-    await handleLikeOrUnlike(postId, isCurrentlyLiked);
     setLikedPosts((prev) => ({ ...prev, [postId]: !isCurrentlyLiked }));
+    try {
+      await handleLikeOrUnlike(postId, isCurrentlyLiked);
+    } catch (error) {
+      console.error(error);
+      setLikedPosts((prev) => ({ ...prev, [postId]: isCurrentlyLiked }));
+    }
   };
 
   const photoList = useMemo(() => {

@@ -20,14 +20,18 @@ export const PopularPostList = ({
 
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
-
-    await handleLikeOrUnlike(postId, currentLiked);
-
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
 
     setPopularPostList((prevList) =>
       prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
     );
+
+    try {
+      await handleLikeOrUnlike(postId, currentLiked);
+    } catch (error) {
+      console.error(error);
+      setLikedPosts((prev) => ({ ...prev, [postId]: currentLiked }));
+    }
   };
 
   useEffect(() => {
@@ -54,7 +58,7 @@ export const PopularPostList = ({
                 postImageUrl: post.images[0].url,
                 postImageCount: post.images.length,
                 userName: post.user.name,
-                userImageUrl: "/posts/sample-user-icon.png",
+                userImageUrl: post.user.profile_url,
                 isLiked: likedPosts[post.id],
                 setIsLiked: setIsLiked,
                 handleLikeOrUnlike: () => handleLike(post.id),

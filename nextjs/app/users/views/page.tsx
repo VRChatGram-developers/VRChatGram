@@ -1,4 +1,4 @@
-import { ViewsPostList } from "@/features/users/components/view-post-list";
+import { ViewPostList } from "@/features/users/components/view-post-list";
 import { fetchMyViewsPosts } from "@/features/users/endpoint";
 import { headers } from "next/headers";
 export default async function Page() {
@@ -6,5 +6,5 @@ export default async function Page() {
   if (typeof postList === "string") {
     return <div>{postList}</div>;
   }
-  return <ViewsPostList viewsPostList={postList} />;
+  return <ViewPostList viewsPostList={postList} />;
 }
