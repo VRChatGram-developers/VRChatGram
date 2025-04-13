@@ -12,11 +12,12 @@ type Faq = {
 export const Faq = () => {
   const totalPages = Math.ceil(faqData.length / 10);
   const [currentPage, setCurrentPage] = useState(0);
+  const faqList = JSON.parse(JSON.stringify(faqData));
 
   return (
     <div className={styles.faqContainer}>
       <div className={styles.faqTitle}>よくあるご質問</div>
-      {faqData.map((faq: Faq, index: number) => (
+      {faqList.map((faq: Faq, index: number) => (
         <details className={styles.qa} key={index}>
           <summary>{faq.question}</summary>
           <p>{faq.answer}</p>
