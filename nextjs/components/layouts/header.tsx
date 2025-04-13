@@ -188,8 +188,12 @@ export const Header = () => {
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p className={`${styles.moduleDrawerMenutext}`}>ダッシュボード</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>自分の作品</p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={() => router.push(`/users/${user?.my_id}`)}
+                      >
+                        ダッシュボード
+                      </p>
                       <p
                         className={`${styles.moduleDrawerMenutext}`}
                         onClick={handleToMyFavoritePosts}
