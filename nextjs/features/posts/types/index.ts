@@ -12,6 +12,7 @@ export type PostList = {
   currentPage: number;
   posts: Post[];
   postCount: number;
+  postImageUrlWithMaxLikes: string;
 };
 
 export type UserOtherPost = {

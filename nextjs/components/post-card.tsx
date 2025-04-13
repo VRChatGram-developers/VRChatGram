@@ -9,7 +9,7 @@ interface PostCardProps {
   postId: string | bigint;
   myId: string | bigint;
   postName: string;
-  postImageUrl: string;
+  postImageUrl: string | null;
   postImageCount: number;
   userName: string;
   userImageUrl: string;
