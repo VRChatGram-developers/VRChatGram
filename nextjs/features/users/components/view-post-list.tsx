@@ -8,8 +8,7 @@ import { Post } from "@/features/users/types/index";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
 import styles from "../styles/my-views-posts.module.scss";
 
-export const MyViewsPosts = ({ viewsPostList }: { viewsPostList: ViewsPostListType }) => {
-  console.log(viewsPostList);
+export const ViewsPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListType }) => {
 
   const { handleLikeOrUnlike } = useLikePost();
   const totalPages = viewsPostList.totalPages;
