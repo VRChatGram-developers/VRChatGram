@@ -128,7 +128,7 @@ export const checkDuplicateMyId = async (myId: string): Promise<boolean | string
 export const updateUserProfile = async (
   requestUpdateUserProfile: requestUpdateUserProfile
 ): Promise<string> => {
-  const response = await fetch(`${API_URL}/api/v1/users/${requestUpdateUserProfile.id}/profile`, {
+  const response = await fetch(`${API_URL}/api/v1/users/profile/${requestUpdateUserProfile.myId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
