@@ -16,7 +16,10 @@ type PostCardProps = {
   isLiked: boolean;
   setIsLiked: (isLiked: boolean) => void;
   handleLikeOrUnlike: () => void;
-}
+};
+
+const sampleUserImageUrl = "/posts/sample-user-icon.png";
+const samplePostImageUrl = "/posts/sample-icon.png";
 
 export const PostCard = ({
   postCardProps,
@@ -50,7 +53,7 @@ export const PostCard = ({
   return (
     <div className={styles.likesPostsItem}>
       <Image
-        src={postImageUrl}
+        src={postImageUrl || samplePostImageUrl}
         alt={`ピックアップ画像`}
         width={402}
         height={402}
@@ -68,7 +71,7 @@ export const PostCard = ({
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
             <Image
-              src={userImageUrl || "/posts/sample-user-icon.png"}
+              src={userImageUrl || sampleUserImageUrl}
               alt="new-post-image"
               className={styles.userInfoIcon}
               fill
