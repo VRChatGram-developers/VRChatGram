@@ -71,6 +71,7 @@ export type UserForHeader = {
   id: string;
   name: string;
   header_url: string;
+  profile_url: string;
   my_id: string;
 };
 
