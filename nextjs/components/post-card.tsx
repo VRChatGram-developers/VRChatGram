@@ -5,14 +5,14 @@ import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
-interface PostCardProps {
+type PostCardProps = {
   postId: string | bigint;
   myId: string | bigint;
   postName: string;
-  postImageUrl: string;
+  postImageUrl: string | null;
   postImageCount: number;
   userName: string;
-  userImageUrl: string;
+  userImageUrl: string | null;
   isLiked: boolean;
   setIsLiked: (isLiked: boolean) => void;
   handleLikeOrUnlike: () => void;
