@@ -12,8 +12,9 @@ import { useSession } from "next-auth/react";
 import { updateUserProfile } from "@/features/users/endpoint";
 import { useEffect } from "react";
 import { useSingleImageUpload } from "@/features/users/hooks/use-upload-image";
-
+import { useRouter } from "next/navigation";
 export const Users = ({ user }: { user: User }) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isUserEditing, setIsUserEditing] = useState(false);
@@ -104,6 +105,7 @@ export const Users = ({ user }: { user: User }) => {
         name: name,
       });
       setIsUserEditing(false);
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
