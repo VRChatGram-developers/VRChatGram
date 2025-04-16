@@ -166,10 +166,10 @@ export const UserHome = ({
                 postId: post.id,
                 myId: user.my_id,
                 postName: post.title,
-                postImageUrl: "/home/new-post-image.png",
+                postImageUrl: post.images[0].url,
                 postImageCount: Number(post.images.length),
                 userName: user.name,
-                userImageUrl: "/users/post-sample-image2.png",
+                userImageUrl: user.profile_url || "/posts/sample-user-icon.png",
                 isLiked: isLiked,
                 setIsLiked: setIsLiked,
                 handleLikeOrUnlike: () => {
