@@ -136,6 +136,36 @@ export const updateUser = async (user: requestUpdateUser) => {
   return data;
 };
 
+export const updateUserEmail = async (currentEmail: string, newEmail: string) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings/email`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ currentEmail: currentEmail, newEmail: newEmail }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const updateUserPassword = async (currentPassword: string, newPassword: string) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings/password`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ currentPassword: currentPassword, newPassword: newPassword }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
+};
+
 export const checkPassword = async (password: string) => {
   const response = await fetch(`${API_URL}/api/v1/users/check/password`, {
     method: "POST",
