@@ -37,7 +37,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
 
   // 公開日が過ぎていない通知をフィルタリング
   const notifications = response.contents.filter(
-    (notification: Notification) => notification.publishedAt > currentDateISOString
+    (notification: Notification) => notification.publishedAt < currentDateISOString
   );
 
   // 日付のフォーマット

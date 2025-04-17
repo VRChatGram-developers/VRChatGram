@@ -181,7 +181,7 @@ export const Users = ({ user }: { user: User }) => {
                 <p>{user.totalViews}閲覧</p>
               </div>
               <div className={styles.profilePostCount}>
-                <p>投稿{user.posts[0].length}件</p>
+                <p>投稿{user.posts[0]?.length ?? 0}件</p>
               </div>
               <div className={styles.profileLikeCount}>
                 <p>{user.totalLikes} いいね</p>
