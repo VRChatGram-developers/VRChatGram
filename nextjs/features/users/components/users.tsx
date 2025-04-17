@@ -228,7 +228,6 @@ export const Users = ({ user }: { user: User }) => {
           setIntroductionDetail={setIntroductionDetail}
           introductionTitle={introductionTitle}
           introductionDetail={introductionDetail}
-          socialLinks={socialLinks}
           handleEditSocialLink={handleEditSocialLink}
         />
       )}
