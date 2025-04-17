@@ -1,0 +1,38 @@
+.recommendPostsContainer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+    .recommendPostsTitle {
+      color: #151c4b;
+  
+      // font-size: 2.25rem;
+      font-size: 3vw;
+      font-weight: bold;
+      font-family: "Noto Sans JP";
+      margin-bottom: 2rem;
+    }
+    .recommendPostsListContainer {
+      max-height: 20rem;
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+    }
+  }
+  
+  // 1,280px以上（デスクトップ）
+  @media (min-width: 1280px) {
+    .recommendPostsListContainer {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  // 1040px以上1,279px未満（デスクトップ中）
+  @media (max-width: 1279px) {
+    .recommendPostsListContainer {
+      overflow-x: auto;
+      grid-auto-flow: column;
+    }
+  }
+  

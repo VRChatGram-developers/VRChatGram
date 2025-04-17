@@ -71,12 +71,14 @@ export const SearchResult = ({
   postCount,
   currentPage,
   totalPages,
+  postImageUrlWithMaxLikes
 }: {
   posts: Post[];
   selectedTag: string;
   postCount: number;
   currentPage: number;
   totalPages: number;
+  postImageUrlWithMaxLikes: string;
 }) => {
   const [changedCurrentPage, setChangedCurrentPage] = useState(currentPage - 1);
   const [postList, setPostList] = useState<Post[]>(posts);
@@ -143,11 +145,16 @@ export const SearchResult = ({
 
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
-    await handleLikeOrUnlike(postId, currentLiked);
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
     setPostList(
       postList.map((post) => (post.id == postId ? { ...post, is_liked: !currentLiked } : post))
     );
+    try {
+      await handleLikeOrUnlike(postId, currentLiked);
+    } catch (error) {
+      console.error(error);
+      setLikedPosts((prev) => ({ ...prev, [postId]: currentLiked }));
+    }
   };
 
   const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -193,14 +200,16 @@ export const SearchResult = ({
     <div className={styles.userPostsContainer}>
       <div className={styles.searchContainer}>
         <Image
-          src="https://vrcss-development.s3.ap-southeast-2.amazonaws.com/GhuNddiboAEbt0B.jpeg"
+          src={postImageUrlWithMaxLikes || ""}
           alt="logo"
           className={styles.searchThumbnail}
           width={260}
           height={260}
         />
         <div className={styles.searchDetailContainer}>
-          <p className={styles.searchDetailTitle}>{selectedTag === "ALL" ? "ALL" : `#${selectedTag}`}</p>
+          <p className={styles.searchDetailTitle}>
+            {selectedTag === "ALL" ? "ALL" : `#${selectedTag}`}
+          </p>
           <div className={styles.searchDetailContent}>
             <p className={styles.searchPostCount}>投稿数: {postCount}</p>
             <div className={styles.searchSortContainer}>

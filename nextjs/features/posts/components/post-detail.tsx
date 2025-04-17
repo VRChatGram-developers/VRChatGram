@@ -13,6 +13,8 @@ import { MdOutlineNavigateBefore } from "react-icons/md";
 import { GrPersonalComputer } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import useLikePost from "../hooks/use-like-post";
+import { RecommendPostList } from "./recommend-post-list";
+
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -60,6 +62,17 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const selectImage = (url: string, index: number) => {
     setSelectedImage(url);
     setCurrentIndex(index);
+  };
+
+  const getPlatformIcon = (type: string) => {
+    switch (type) {
+      case "x":
+        return <FaXTwitter size={32} />;
+      case "discord":
+        return <FaDiscord size={32} />;
+      default:
+        return <GrPersonalComputer size={32} />;
+    }
   };
 
   return (
@@ -129,9 +142,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             <div className={styles.postDetailInformationContainer}>
               <div className={styles.postDetailInfomationViewContainer}>
                 <FaRegEye size={24} />
-                <p className={styles.postDetailInfomationView}>
-                  {post.view_count}View
-                </p>
+                <p className={styles.postDetailInfomationView}>{post.view_count}View</p>
               </div>
               <div className={styles.postDetailInfomationLikeCountContainer}>
                 {isLiked ? (
@@ -151,9 +162,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                     onClick={handleLike}
                   />
                 )}
-                <p className={styles.postDetailInfomationLikeCount}>
-                  {likeCount}
-                </p>
+                <p className={styles.postDetailInfomationLikeCount}>{likeCount}</p>
               </div>
             </div>
             <div className={styles.postDetailProfileContainer}>
@@ -164,6 +173,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                   width={200}
                   height={200}
                   className={styles.postDetailProfileIcon}
+                  onClick={() => handleForwardToUserDetail(post.user.my_id)}
                 />
               </div>
               <div className={styles.postDetailProfileContent}>
@@ -176,30 +186,18 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                   </p>
                 </div>
                 <div className={styles.postDetailProfileUserNameContainer}>
-                  <p className={styles.postDetailProfileUserName}>
+                  <p
+                    className={styles.postDetailProfileUserName}
+                    onClick={() => handleForwardToUserDetail(post.user.my_id)}
+                  >
                     {post.user?.name}
                   </p>
                 </div>
                 <div className={styles.postDetailProfileSNSContainer}>
                   {post.user?.social_links.map((socialLink, index) => (
-                    <div
-                      key={index}
-                      className={styles.postDetailProfileSNSItem}
-                    >
-                      <a
-                        href={socialLink.platform_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {socialLink.platform_types === "x" && (
-                          <FaXTwitter size={32} />
-                        )}
-                        {socialLink.platform_types === "discord" && (
-                          <FaDiscord size={32} />
-                        )}
-                        {socialLink.platform_types === "other" && (
-                          <GrPersonalComputer size={32} />
-                        )}
+                    <div key={index} className={styles.postDetailProfileSNSItem}>
+                      <a href={socialLink.platform_url} target="_blank" rel="noopener noreferrer">
+                        {getPlatformIcon(socialLink.platform_types)}
                       </a>
                     </div>
                   ))}
@@ -208,9 +206,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             </div>
             <div className={styles.postDetailProfileDescriptionContainer}>
               <div className={styles.postDetailProfileDescriptionContent}>
-                <p className={styles.postDetailProfileDescriptionTitle}>
-                  作品説明
-                </p>
+                <p className={styles.postDetailProfileDescriptionTitle}>作品説明</p>
                 <div className={styles.postDetailProfileDescription}>
                   <input
                     id="readMoreToggle"
@@ -240,9 +236,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             </div>
             <div className={styles.postDetailProfileBoothContainer}>
               <div className={styles.postDetailProfileBoothTitleContainer}>
-                <p className={styles.postDetailProfileBoothTitle}>
-                  Booth購入リスト
-                </p>
+                <p className={styles.postDetailProfileBoothTitle}>Booth購入リスト</p>
               </div>
               <div className={styles.postDetailProfileBoothContent}>
                 {post.booth_items.map((boothItem) => (
@@ -260,14 +254,8 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                       height={200}
                       className={styles.postDetailProfileBoothImage}
                     />
-                    <div
-                      className={
-                        styles.postDetailProfileBoothInfomationContainer
-                      }
-                    >
-                      <p
-                        className={styles.postDetailProfileBoothInfomationTitle}
-                      >
+                    <div className={styles.postDetailProfileBoothInfomationContainer}>
+                      <p className={styles.postDetailProfileBoothInfomationTitle}>
                         {boothItem.booth.title}
                       </p>
                       <p className={styles.postDetailProfileBoothInfomation}>
@@ -282,7 +270,8 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
         </div>
       </div>
 
-      <OtherPostList post={post} setIsLiked={setIsLiked} isLiked={isLiked} />
+      <OtherPostList post={post} setIsLiked={setIsLiked} />
+      <RecommendPostList post={post} setIsLiked={setIsLiked} />
     </>
   );
 };

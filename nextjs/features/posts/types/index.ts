@@ -12,15 +12,24 @@ export type PostList = {
   currentPage: number;
   posts: Post[];
   postCount: number;
+  postImageUrlWithMaxLikes: string;
 };
 
 export type UserOtherPost = {
-  id: bigint;
+  id: string;
   title: string;
   images: Image[];
+  is_liked: boolean;
   user: User;
 };
 
+export type RecommendPost = {
+  id: string;
+  title: string;
+  images: Image[];
+  is_liked: boolean;
+  user: User;
+};
 
 export type Image = {
   id: bigint;
@@ -40,6 +49,7 @@ export type PostDetail = {
   likeCount: number;
   view_count: number;
   otherPostList: UserOtherPost[];
+  recommendPostList: RecommendPost[];
   isLiked: boolean;
 };
 

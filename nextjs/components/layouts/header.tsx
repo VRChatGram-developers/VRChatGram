@@ -50,6 +50,14 @@ export const Header = () => {
     router.push("/users/account-settings");
   };
 
+  const handleToMyViewsPosts = () => {
+    router.push(`/users/views`);
+  };
+
+  const handleToMyFavoritePosts = () => {
+    router.push(`/users/likes`);
+  };
+
   const handleSearch = () => {
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: 1 })
@@ -106,7 +114,7 @@ export const Header = () => {
               </div>
               <div className={styles.userIconContainer}>
                 <Image
-                  src={user?.header_url || "/posts/sample-user-icon.png"}
+                  src={user?.profile_url || "/posts/sample-user-icon.png"}
                   alt="User Icon"
                   width={60}
                   height={60}
@@ -174,7 +182,7 @@ export const Header = () => {
                 <div className={styles.userIconContainer}>
                   <div className={styles.userProfileContainer}>
                     <Image
-                      src="/header/user-sample-icon.png"
+                      src={user?.profile_url || "/posts/sample-user-icon.png"}
                       alt="User Icon"
                       width={100}
                       height={100}
@@ -185,9 +193,24 @@ export const Header = () => {
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p className={`${styles.moduleDrawerMenutext}`}>ダッシュボード</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>自分の作品</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>閲覧履歴</p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={() => router.push(`/users/${user?.my_id}`)}
+                      >
+                        ダッシュボード
+                      </p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={handleToMyFavoritePosts}
+                      >
+                        良いね一覧
+                      </p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={handleToMyViewsPosts}
+                      >
+                        閲覧履歴
+                      </p>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
                       <p>Language</p>

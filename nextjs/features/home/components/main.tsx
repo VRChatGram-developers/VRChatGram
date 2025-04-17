@@ -15,7 +15,7 @@ import { LatestPost } from "./latest-post";
 import { XPost } from "./x-post";
 import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
 import { GoArrowRight } from "react-icons/go";
 
@@ -38,14 +38,6 @@ export const Main = ({
   const [popularPosts, setPopularPosts] = useState<PopularPostType[]>([]);
   const [latestPostsWithX, setLatestPostsWithX] = useState<XPostType[]>([]);
 
-  const redirectToNotificationList = () => {
-    router.push("/notifications");
-  };
-
-  const redirectToNotificationToDetail = (id: string) => {
-    router.push(`/notifications/${id}`);
-  };
-
   useEffect(() => {
     setLatestPosts(latestPostList);
     setPopularPosts(popularPostList);
@@ -54,31 +46,38 @@ export const Main = ({
 
   const testNews = [
     {
-      imageURL: "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
+      imageURL:
+        "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL: "https://pbs.twimg.com/media/GjOaoOYbgAAJRaD?format=jpg&name=medium",
+      imageURL:
+        "https://pbs.twimg.com/media/GjOaoOYbgAAJRaD?format=jpg&name=medium",
       linkUrl: "/",
     },
     {
-      imageURL: "https://pbs.twimg.com/media/Gc_EUiKbYAEpQUp?format=jpg&name=4096x4096",
+      imageURL:
+        "https://pbs.twimg.com/media/Gc_EUiKbYAEpQUp?format=jpg&name=4096x4096",
       linkUrl: "/",
     },
     {
-      imageURL: "https://pbs.twimg.com/media/GLpW566bUAAmrmI?format=jpg&name=4096x4096",
+      imageURL:
+        "https://pbs.twimg.com/media/GLpW566bUAAmrmI?format=jpg&name=4096x4096",
       linkUrl: "/",
     },
     {
-      imageURL: "https://pbs.twimg.com/media/F3PiVIYaAAEaFla?format=jpg&name=large",
+      imageURL:
+        "https://pbs.twimg.com/media/F3PiVIYaAAEaFla?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL: "https://pbs.twimg.com/media/GQWxLH1a8AAeTou?format=jpg&name=large",
+      imageURL:
+        "https://pbs.twimg.com/media/GQWxLH1a8AAeTou?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL: "https://pbs.twimg.com/media/GMoEo5CboAAJNsD?format=jpg&name=large",
+      imageURL:
+        "https://pbs.twimg.com/media/GMoEo5CboAAJNsD?format=jpg&name=large",
       linkUrl: "/",
     },
   ];
@@ -103,7 +102,7 @@ export const Main = ({
           <div className={styles.mainImagesContainer}>
             <div className={styles.mainImagesContent}>
               {testNews.map(({ imageURL, linkUrl }, index: Key) => (
-                <Link href={linkUrl} key={index}>
+                <Link href={linkUrl} key={index} className={styles.mainImageLink}>
                   <Image
                     src={imageURL}
                     alt="メイン画像"
@@ -153,43 +152,35 @@ export const Main = ({
             <div className={styles.mainSecondContainerThirdBox}>
               <p className={styles.mainSecondTitle}>お知らせ</p>
               <div className={styles.notificationContainer}>
-                {notifications.map((notification) => (
-                  <div key={notification.id} className={styles.notificationsList}>
-                    <div className={styles.notificationsListBox}>
-                      <div className={styles.notificationsListBoxText}>
-                        <span
-                          className={
-                            notification.notification_type[0] === "バグ修正"
-                              ? styles.notificationsListBoxTextRelease
-                              : notification.notification_type[0] === "アップデート"
-                              ? styles.notificationsListBoxTextImportant
-                              : styles.notificationsListBoxTextCommon
-                          }
-                        >
-                          {notification.notification_type}
-                        </span>
-                        <div
-                          className={styles.notificationsContainer}
-                          onClick={() => redirectToNotificationToDetail(notification.id)}
-                        >
-                          <time className={styles.notificationTime}>
-                            {notification.publishedAt}
-                          </time>
-                          {notification.content && (
-                            <div className={styles.notificationContent}>
-                              <p>{parse(notification.content)}</p>
-                            </div>
-                          )}
-                        </div>
+                <div className={styles.notificationsList}>
+                  {notifications.map((notification) => (
+                    <div key={notification.id} className={styles.notificationsListContent}>
+                      <div
+                        className={`${
+                          notification.notification_type[0] === "バグ修正"
+                            ? styles.bugFix
+                            : notification.notification_type[0] === "アップデート"
+                            ? styles.update
+                            : styles.release
+                        } ${styles.notificationsTagContainer}
+                            `}
+                      >
+                        <p className={styles.text}>{notification.notification_type}</p>
                       </div>
+                      <Link
+                        className={styles.detailContainer}
+                        href={`/notifications/${notification.id}`}
+                      >
+                        <div className={styles.postDateTime}>{notification.publishedAt}</div>
+                        {notification.content && (
+                          <div className={styles.postDetailText}>{parse(notification.content)}</div>
+                        )}
+                      </Link>
                     </div>
-                  </div>
-                ))}
-              </div>
-              <div onClick={redirectToNotificationList}>
-                <div className={styles.notificationMoreButton}>
-                  <p>お知らせをもっと見る</p>
-                  <GoArrowRight />
+                  ))}
+                </div>
+                <div className={styles.notificationsMoreContainer}>
+                  <Link href={"/notifications"}>お知らせをもっと見る→</Link>
                 </div>
               </div>
             </div>
@@ -228,34 +219,37 @@ export const Main = ({
 
         <div className={styles.mobileMainSecondContainerThirdBox}>
           <p className={styles.mobileMainSecondTitle}>お知らせ</p>
-          <div className={styles.mobileNotificationContainer}>
-            {notifications.map((notification) => (
-              <div key={notification.id} className={styles.mobileNotificationsList}>
-                <div className={styles.mobileNotificationsListBox}>
-                  <div className={styles.mobileNotificationsListBoxText}>
-                    <span
-                      className={
-                        notification.notification_type[0] === "バグ修正"
-                          ? styles.mobileNotificationsListBoxTextRelease
-                          : notification.notification_type[0] === "アップデート"
-                          ? styles.mobileNotificationsListBoxTextImportant
-                          : styles.mobileNotificationsListBoxTextCommon
-                      }
-                    >
-                      {notification.notification_type}
-                    </span>
-                    <div className={styles.mobileNotificationsContainer}>
-                      <time className={styles.mobileNotificationTime}>
-                        {notification.publishedAt}
-                      </time>
-                      {notification.content && (
-                        <p className={styles.mobileNotificationContent}>{notification.content}</p>
-                      )}
-                    </div>
+          <div className={styles.notificationContainer}>
+            <div className={styles.notificationsList}>
+              {notifications.map((notification) => (
+                <div key={notification.id} className={styles.notificationsListContent}>
+                  <div
+                    className={`${
+                      notification.notification_type[0] === "バグ修正"
+                        ? styles.bugFix
+                        : notification.notification_type[0] === "アップデート"
+                        ? styles.update
+                        : styles.release
+                    } ${styles.notificationsTagContainer}
+                            `}
+                  >
+                    <p className={styles.text}>{notification.notification_type}</p>
                   </div>
+                  <Link
+                    className={styles.detailContainer}
+                    href={`/notifications/${notification.id}`}
+                  >
+                    <div className={styles.postDateTime}>{notification.publishedAt}</div>
+                    {notification.content && (
+                      <div className={styles.postDetailText}>{parse(notification.content)}</div>
+                    )}
+                  </Link>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className={styles.notificationsMoreContainer}>
+              <Link href={"/notifications"}>お知らせをもっと見る→</Link>
+            </div>
           </div>
         </div>
 

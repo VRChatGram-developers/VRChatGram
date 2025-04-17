@@ -1,11 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -14,11 +8,220 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 基本的なenumの定義
-enum genders {
-  male
-  female
-  others
+model tags {
+  id                 String      @id @default(uuid())
+  name               String      @unique @db.VarChar(50)
+  created_at         DateTime    @default(now())
+  updated_at         DateTime    @updatedAt
+  top_post_image_url String?     @db.VarChar(150)
+  posts              post_tags[]
+}
+
+model booth_items {
+  id         String             @id @default(uuid())
+  image      String             @db.VarChar(255)
+  title      String             @db.VarChar(255)
+  detail     String             @db.Text
+  url        String             @db.VarChar(255)
+  created_at DateTime           @default(now())
+  updated_at DateTime           @updatedAt
+  posts      post_booth_items[]
+}
+
+model report_reason_categories {
+  id         String    @id @default(uuid())
+  name       String    @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  reports    reports[]
+}
+
+model users {
+  id                  String               @id @default(uuid())
+  uid                 String               @unique @db.VarChar(255)
+  name                String               @db.VarChar(50)
+  email               String               @db.VarChar(255)
+  introduction_title  String?              @db.VarChar(255)
+  introduction_detail String?              @db.Text
+  gender              users_gender
+  profile_url         String?              @db.VarChar(255)
+  created_at          DateTime             @default(now())
+  updated_at          DateTime             @updatedAt
+  deleted_at          DateTime?
+  status              user_statuses
+  birthday            DateTime             @db.Date
+  header_url          String?              @db.VarChar(255)
+  my_id               String               @unique @db.VarChar(255)
+  show_sensitive_type show_sensitive_types @default(default)
+  is_admin            Boolean              @default(false)
+  followers           follows[]            @relation("followers")
+  following           follows[]            @relation("following")
+  likes_given         likes[]              @relation("likedBy")
+  notifications       notifications[]
+  posts               posts[]
+  reports             reports[]
+  social_links        social_links[]
+  subscriptions       subscription[]
+  views               views[]
+}
+
+model posts {
+  id                  String               @id @default(uuid())
+  user_id             String
+  title               String               @db.VarChar(50)
+  view_count          Int                  @default(0)
+  description         String?              @db.Text
+  created_at          DateTime             @default(now())
+  updated_at          DateTime             @updatedAt
+  deleted_at          DateTime?
+  show_sensitive_type show_sensitive_types @default(default)
+  is_posted_x         Boolean              @default(false)
+  is_publish          Boolean              @default(false)
+  likes               likes[]
+  booth_items         post_booth_items[]
+  images              post_images[]
+  tags                post_tags[]
+  user                users                @relation(fields: [user_id], references: [id])
+  views               views[]
+
+  @@index([user_id], map: "posts_user_id_fkey")
+}
+
+model post_images {
+  id         String   @id @default(uuid())
+  post_id    String
+  url        String   @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  width      Int?
+  height     Int?
+  post       posts    @relation(fields: [post_id], references: [id])
+
+  @@index([post_id], map: "post_images_post_id_fkey")
+}
+
+model post_tags {
+  id         String   @id @default(uuid())
+  post_id    String
+  tag_id     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  post       posts    @relation(fields: [post_id], references: [id])
+  tag        tags     @relation(fields: [tag_id], references: [id])
+
+  @@index([post_id])
+  @@index([tag_id])
+}
+
+model post_booth_items {
+  id         String      @id @default(uuid())
+  booth_id   String
+  post_id    String
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  booth      booth_items @relation(fields: [booth_id], references: [id])
+  post       posts       @relation(fields: [post_id], references: [id])
+
+  @@index([booth_id])
+  @@index([post_id])
+}
+
+model likes {
+  id         String   @id @default(uuid())
+  post_id    String
+  user_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       users    @relation("likedBy", fields: [user_id], references: [id], map: "likes_given_fkey")
+  post       posts    @relation(fields: [post_id], references: [id])
+
+  @@index([user_id], map: "likes_given_fkey")
+  @@index([post_id], map: "likes_post_id_fkey")
+}
+
+model follows {
+  id           String   @id @default(uuid())
+  follower_id  String
+  following_id String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  follower     users    @relation("followers", fields: [follower_id], references: [id])
+  following    users    @relation("following", fields: [following_id], references: [id])
+
+  @@index([follower_id])
+  @@index([following_id])
+}
+
+model views {
+  id         String   @id @default(uuid())
+  user_id    String
+  post_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  post       posts    @relation(fields: [post_id], references: [id])
+  user       users    @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@index([post_id])
+}
+
+model notifications {
+  id                String             @id @default(uuid())
+  title             String             @db.VarChar(255)
+  content           String?            @db.Text
+  notification_type notification_types
+  published_at      DateTime
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @updatedAt
+  deleted_at        DateTime?
+  user_id           String
+  user              users              @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+}
+
+model reports {
+  id                 String                   @id @default(uuid())
+  post_id            String
+  user_id            String
+  report_category_id String
+  status             report_statuses
+  title              String                   @db.Text
+  created_at         DateTime                 @default(now())
+  updated_at         DateTime                 @updatedAt
+  detail             String?                  @db.VarChar(255)
+  report_category    report_reason_categories @relation(fields: [report_category_id], references: [id])
+  reported_user_id   users                    @relation(fields: [user_id], references: [id])
+
+  @@index([post_id])
+  @@index([report_category_id])
+  @@index([user_id])
+}
+
+model social_links {
+  id             String         @id @default(uuid())
+  user_id        String
+  platform_types platform_types
+  platform_url   String?        @db.VarChar(255)
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+  user           users          @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+}
+
+model subscription {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  plan      Plan     @default(basic)
+  status    Status   @default(active)
+  start     DateTime @default(now())
+  end       DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      users    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 enum user_statuses {
@@ -63,219 +266,8 @@ enum Status {
   stop
 }
 
-// 独立したマスターテーブル
-model tags {
-  id                 String      @id @default(uuid())
-  name               String      @unique @db.VarChar(50)
-  created_at         DateTime    @default(now())
-  updated_at         DateTime    @updatedAt
-  top_post_image_url String?     @db.VarChar(50)
-  posts              post_tags[]
-}
-
-model booth_items {
-  id         String             @id @default(uuid())
-  image      String             @db.VarChar(255)
-  title      String             @db.VarChar(255)
-  detail     String             @db.Text
-  url        String             @db.VarChar(255)
-  created_at DateTime           @default(now())
-  updated_at DateTime           @updatedAt
-  posts      post_booth_items[]
-}
-
-model report_reason_categories {
-  id         String    @id @default(uuid())
-  name       String    @db.VarChar(255)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  reports    reports[]
-}
-
-// メインとなるユーザーモデル
-model users {
-  id                  String               @id @default(uuid())
-  uid                 String               @unique @db.VarChar(255)
-  name                String               @db.VarChar(50)
-  email               String               @db.VarChar(255)
-  introduction_title  String?              @db.VarChar(255)
-  introduction_detail String?              @db.Text
-  gender              genders
-  profile_url         String?              @db.VarChar(255)
-  created_at          DateTime             @default(now())
-  updated_at          DateTime             @updatedAt
-  deleted_at          DateTime?
-  status              user_statuses
-  birthday            DateTime             @db.Date
-  header_url          String?              @db.VarChar(255)
-  my_id               String               @unique @db.VarChar(255)
-  show_sensitive_type show_sensitive_types @default(default)
-  is_admin            Boolean              @default(false)
-  // リレーション
-  posts               posts[]
-  likes_given         likes[]              @relation("likedBy")
-  followers           follows[]            @relation("followers")
-  following           follows[]            @relation("following")
-  notifications       notifications[]
-  reports             reports[]
-  social_links        social_links[]
-  views               views[]
-  subscriptions       subscription[]
-}
-
-// 投稿関連のモデル
-model posts {
-  id                  String               @id @default(uuid())
-  user_id             String
-  title               String               @db.VarChar(50)
-  view_count          Int                  @default(0)
-  description         String?              @db.Text
-  created_at          DateTime             @default(now())
-  updated_at          DateTime             @updatedAt
-  deleted_at          DateTime?
-  show_sensitive_type show_sensitive_types @default(default)
-  is_posted_x         Boolean              @default(false)
-  is_publish          Boolean              @default(false)
-
-  // リレーション
-  user        users              @relation(fields: [user_id], references: [id])
-  images      post_images[]
-  likes       likes[]
-  tags        post_tags[]
-  views       views[]
-  booth_items post_booth_items[]
-}
-
-// 中間テーブルと関連テーブル
-model post_images {
-  id         String   @id @default(uuid())
-  post_id    String
-  url        String   @db.VarChar(255)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  width      Int?
-  height     Int?
-  post       posts    @relation(fields: [post_id], references: [id])
-}
-
-model post_tags {
-  id      String @id @default(uuid())
-  post_id String
-  tag_id  String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
-  post    posts  @relation(fields: [post_id], references: [id])
-  tag     tags   @relation(fields: [tag_id], references: [id])
-
-  @@index([post_id])
-  @@index([tag_id])
-}
-
-model post_booth_items {
-  id       String      @id @default(uuid())
-  booth_id String
-  post_id  String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
-  booth    booth_items @relation(fields: [booth_id], references: [id])
-  post     posts       @relation(fields: [post_id], references: [id])
-
-  @@index([booth_id])
-  @@index([post_id])
-}
-
-model likes {
-  id             String   @id @default(uuid())
-  post_id        String
-  user_id        String
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  post           posts    @relation(fields: [post_id], references: [id])
-  user           users    @relation("likedBy", fields: [user_id], references: [id], map: "likes_given_fkey")
-}
-
-model follows {
-  id           String   @id @default(uuid())
-  follower_id  String
-  following_id String
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-  follower     users    @relation("followers", fields: [follower_id], references: [id])
-  following    users    @relation("following", fields: [following_id], references: [id])
-
-  @@index([follower_id])
-  @@index([following_id])
-}
-
-// 機能関連のモデル
-model views {
-  id         String   @id @default(uuid())
-  user_id    String
-  post_id    String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
-  user       users    @relation(fields: [user_id], references: [id])
-  post       posts    @relation(fields: [post_id], references: [id])
-
-  @@index([user_id])
-  @@index([post_id])
-}
-
-model notifications {
-  id                String             @id @default(uuid())
-  title             String             @db.VarChar(255)
-  content           String?            @db.Text
-  notification_type notification_types
-  published_at      DateTime
-  created_at        DateTime           @default(now())
-  updated_at        DateTime           @updatedAt
-  deleted_at        DateTime?
-  user_id           String
-  user              users              @relation(fields: [user_id], references: [id])
-
-  @@index([user_id])
-}
-
-model reports {
-  id                 String                   @id @default(uuid())
-  post_id            String
-  user_id            String
-  report_category_id String
-  status             report_statuses
-  title              String                   @db.Text
-  created_at         DateTime                 @default(now())
-  updated_at         DateTime                 @updatedAt
-  reported_user_id   users                    @relation(fields: [user_id], references: [id])
-  detail             String?                  @db.VarChar(255)
-  report_category    report_reason_categories @relation(fields: [report_category_id], references: [id])
-
-  @@index([post_id])
-  @@index([report_category_id])
-  @@index([user_id])
-}
-
-model social_links {
-  id             String         @id @default(uuid())
-  user_id        String
-  platform_types platform_types
-  platform_url   String?        @db.VarChar(255)
-  created_at     DateTime       @default(now())
-  updated_at     DateTime       @updatedAt
-  user           users          @relation(fields: [user_id], references: [id])
-
-  @@index([user_id])
-}
-
-model subscription {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
-  plan      Plan     @default(basic)
-  status    Status   @default(active)
-  start     DateTime @default(now())
-  end       DateTime
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      users    @relation(fields: [userId], references: [id])
-
-  @@index([userId])
+enum users_gender {
+  male
+  female
+  other
 }

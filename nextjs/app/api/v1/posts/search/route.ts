@@ -7,6 +7,19 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
+const fetchPostImageUrlWithMaxLikes = async (where: Prisma.postsWhereInput) => {
+  const post = await prisma.posts.findFirst({
+    where: where,
+    select: {
+      images: true,
+    },
+    orderBy: {
+      likes: { _count: "desc" },
+    },
+  });
+  return post?.images[0].url;
+};
+
 export async function GET(request: Request) {
   try {
     const session = await auth();
@@ -54,12 +67,26 @@ export async function GET(request: Request) {
       } else if (sort === "popular") {
         orderBy = { likes: { _count: "desc" } };
       } else if (sort === "this_week_popular") {
-        const startOfWeek = getStartOfWeek();
-        where.created_at = {
-          gte: startOfWeek,
-          lte: new Date(),
-        };
-        orderBy = { likes: { _count: "desc" } };
+        const likedPostIds = await prisma.likes.groupBy({
+          by: ["post_id"],
+          where: {
+            created_at: {
+              gte: getStartOfWeek(),
+              lte: new Date(),
+            },
+          },
+          _count: {
+            post_id: true,
+          },
+          orderBy: {
+            _count: {
+              post_id: "desc",
+            },
+          },
+          take: Number(limit),
+          skip: offset,
+        });
+        where.id = { in: likedPostIds.map((post) => post.post_id) };
       }
     }
 
@@ -102,8 +129,9 @@ export async function GET(request: Request) {
       ...post,
       is_liked: post.likes.some((like) => like.user_id == user?.id),
     }));
-
     const postCount = await prisma.posts.count({ where: where });
+    // 検索条件内で一番良いねが多い投稿の画像を取得
+    const postImageUrlWithMaxLikes = await fetchPostImageUrlWithMaxLikes(where);
 
     return NextResponse.json(
       {
@@ -111,6 +139,7 @@ export async function GET(request: Request) {
         totalPages: Math.ceil(postCount / limit),
         currentPage: page,
         postCount: postCount,
+        postImageUrlWithMaxLikes: postImageUrlWithMaxLikes,
       },
       { status: 200 }
     );
