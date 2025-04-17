@@ -2,13 +2,21 @@
 import Image from "next/image";
 import { Tag } from "../types/index";
 import styles from "../styles/popular-tag.module.scss";
+import { useSearchStore } from "@/libs/store/search-store";
 import { useRouter } from "next/navigation";
+import { createQueryParams } from "@/utils/queryParams";
 
 export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   const router = useRouter();
+  const { setSearchQuery } = useSearchStore();
 
   const handleToPostSearchList = () => {
     router.push(`/posts?${new URLSearchParams({ page: "1" })}`);
+  };
+
+  const redirectToPostSearchListByTagName = (tagName: string) => {
+    setSearchQuery(tagName);
+    router.push(`/posts?${createQueryParams({ tag: tagName, page: 1 })}`);
   };
 
   return (
@@ -96,7 +104,10 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
               fill
               className={styles.tagImage}
             />
-            <div className={styles.tagListTextContainer}>
+            <div
+              className={styles.tagListTextContainer}
+              onClick={() => redirectToPostSearchListByTagName(tag.name)}
+            >
               <p className={styles.tagListText}>#{tag.name}</p>
             </div>
           </div>
