@@ -69,6 +69,7 @@ export async function POST(request: Request) {
       take: Number(4),
     });
 
+
     const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>(
       Prisma.sql`SELECT tag_id FROM post_tags pt
       JOIN posts p ON pt.post_id = p.id 
@@ -83,6 +84,7 @@ export async function POST(request: Request) {
       select: {
         id: true,
         name: true,
+        top_post_image_url: true,
       },
       take: Number(6),
     });

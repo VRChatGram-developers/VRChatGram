@@ -15,6 +15,7 @@ export async function GET() {
     select: {
       id: true,
       header_url: true,
+      profile_url: true,
       name: true,
       my_id: true,
     },

@@ -5,18 +5,21 @@ import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
-interface PostCardProps {
+type PostCardProps = {
   postId: string | bigint;
   myId: string | bigint;
   postName: string;
   postImageUrl: string | null;
   postImageCount: number;
   userName: string;
-  userImageUrl: string;
+  userImageUrl: string | null;
   isLiked: boolean;
   setIsLiked: (isLiked: boolean) => void;
   handleLikeOrUnlike: () => void;
-}
+};
+
+const sampleUserImageUrl = "/posts/sample-user-icon.png";
+const samplePostImageUrl = "/posts/sample-icon.png";
 
 export const PostCard = ({
   postCardProps,
@@ -50,7 +53,7 @@ export const PostCard = ({
   return (
     <div className={styles.likesPostsItem}>
       <Image
-        src={postImageUrl}
+        src={postImageUrl || samplePostImageUrl}
         alt={`ピックアップ画像`}
         width={402}
         height={402}
@@ -68,7 +71,7 @@ export const PostCard = ({
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
             <Image
-              src={userImageUrl || "/posts/sample-user-icon.png"}
+              src={userImageUrl || sampleUserImageUrl}
               alt="new-post-image"
               className={styles.userInfoIcon}
               fill

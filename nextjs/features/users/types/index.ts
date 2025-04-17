@@ -52,7 +52,7 @@ export type SocialLink = {
 };
 
 export type requestUpdateUserProfile = {
-  id: string;
+  myId: string;
   introduction_title: string;
   introduction_detail: string;
   profile_image?: {
@@ -71,6 +71,7 @@ export type UserForHeader = {
   id: string;
   name: string;
   header_url: string;
+  profile_url: string;
   my_id: string;
 };
 

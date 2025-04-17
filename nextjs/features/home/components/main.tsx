@@ -102,11 +102,7 @@ export const Main = ({
           <div className={styles.mainImagesContainer}>
             <div className={styles.mainImagesContent}>
               {testNews.map(({ imageURL, linkUrl }, index: Key) => (
-                <Link
-                  href={linkUrl}
-                  key={index}
-                  className={styles.mainImageLink}
-                >
+                <Link href={linkUrl} key={index} className={styles.mainImageLink}>
                   <Image
                     src={imageURL}
                     alt="メイン画像"
@@ -158,36 +154,26 @@ export const Main = ({
               <div className={styles.notificationContainer}>
                 <div className={styles.notificationsList}>
                   {notifications.map((notification) => (
-                    <div
-                      key={notification.id}
-                      className={styles.notificationsListContent}
-                    >
+                    <div key={notification.id} className={styles.notificationsListContent}>
                       <div
                         className={`${
                           notification.notification_type[0] === "バグ修正"
                             ? styles.bugFix
-                            : notification.notification_type[0] ===
-                              "アップデート"
+                            : notification.notification_type[0] === "アップデート"
                             ? styles.update
                             : styles.release
                         } ${styles.notificationsTagContainer}
                             `}
                       >
-                        <p className={styles.text}>
-                          {notification.notification_type}
-                        </p>
+                        <p className={styles.text}>{notification.notification_type}</p>
                       </div>
                       <Link
                         className={styles.detailContainer}
                         href={`/notifications/${notification.id}`}
                       >
-                        <p className={styles.postDateTime}>
-                          {notification.publishedAt}
-                        </p>
+                        <div className={styles.postDateTime}>{notification.publishedAt}</div>
                         {notification.content && (
-                          <p className={styles.postDetailText}>
-                            {parse(notification.content)}
-                          </p>
+                          <div className={styles.postDetailText}>{parse(notification.content)}</div>
                         )}
                       </Link>
                     </div>
@@ -236,10 +222,7 @@ export const Main = ({
           <div className={styles.notificationContainer}>
             <div className={styles.notificationsList}>
               {notifications.map((notification) => (
-                <div
-                  key={notification.id}
-                  className={styles.notificationsListContent}
-                >
+                <div key={notification.id} className={styles.notificationsListContent}>
                   <div
                     className={`${
                       notification.notification_type[0] === "バグ修正"
@@ -250,21 +233,15 @@ export const Main = ({
                     } ${styles.notificationsTagContainer}
                             `}
                   >
-                    <p className={styles.text}>
-                      {notification.notification_type}
-                    </p>
+                    <p className={styles.text}>{notification.notification_type}</p>
                   </div>
                   <Link
                     className={styles.detailContainer}
                     href={`/notifications/${notification.id}`}
                   >
-                    <p className={styles.postDateTime}>
-                      {notification.publishedAt}
-                    </p>
+                    <div className={styles.postDateTime}>{notification.publishedAt}</div>
                     {notification.content && (
-                      <p className={styles.postDetailText}>
-                        {parse(notification.content)}
-                      </p>
+                      <div className={styles.postDetailText}>{parse(notification.content)}</div>
                     )}
                   </Link>
                 </div>

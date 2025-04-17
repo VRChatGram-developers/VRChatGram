@@ -109,7 +109,7 @@ export const Header = () => {
               </div>
               <div className={styles.userIconContainer}>
                 <Image
-                  src={user?.header_url || "/posts/sample-user-icon.png"}
+                  src={user?.profile_url || "/posts/sample-user-icon.png"}
                   alt="User Icon"
                   width={60}
                   height={60}
@@ -177,7 +177,7 @@ export const Header = () => {
                 <div className={styles.userIconContainer}>
                   <div className={styles.userProfileContainer}>
                     <Image
-                      src="/header/user-sample-icon.png"
+                      src={user?.profile_url || "/posts/sample-user-icon.png"}
                       alt="User Icon"
                       width={100}
                       height={100}

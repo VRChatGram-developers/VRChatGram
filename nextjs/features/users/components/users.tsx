@@ -12,8 +12,9 @@ import { useSession } from "next-auth/react";
 import { updateUserProfile } from "@/features/users/endpoint";
 import { useEffect } from "react";
 import { useSingleImageUpload } from "@/features/users/hooks/use-upload-image";
-
+import { useRouter } from "next/navigation";
 export const Users = ({ user }: { user: User }) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isUserEditing, setIsUserEditing] = useState(false);
@@ -21,11 +22,16 @@ export const Users = ({ user }: { user: User }) => {
   const [introductionDetail, setIntroductionDetail] = useState(user.introduction_detail);
   const [socialLinks, setSocialLinks] = useState(user.social_links);
   const [name, setName] = useState(user.name);
-  const { image: profileImage, handleImageChange: handleProfileImageChange } = useSingleImageUpload(
-    user.profile_url
-  );
-  const { image: backgroundImage, handleImageChange: handleBackgroundImageChange } =
-    useSingleImageUpload(user.header_url);
+  const {
+    image: profileImage,
+    handleImageChange: handleProfileImageChange,
+  } = useSingleImageUpload("");
+  const {
+    image: backgroundImage,
+    handleImageChange: handleBackgroundImageChange,
+  } = useSingleImageUpload("");
+  const [previewHeaderUrl, setPreviewHeaderUrl] = useState<string>("");
+  const [previewProfileUrl, setPreviewProfileUrl] = useState<string>("");
 
   const handleUserEditing = () => {
     setIsUserEditing(!isUserEditing);
@@ -46,7 +52,9 @@ export const Users = ({ user }: { user: User }) => {
     const createdSocialLinkList = createSocialLinkList(user.social_links);
     setSocialLinks(createdSocialLinkList);
     setIsFollowing(user.isFollowedByAccount);
-  }, [user.social_links, user.isFollowedByAccount]);
+    setPreviewHeaderUrl(backgroundImage?.preview_url || "");
+    setPreviewProfileUrl(profileImage?.preview_url || "");
+  }, [user.social_links, user.isFollowedByAccount, profileImage, backgroundImage]);
 
   const handleEditSocialLink = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const socialLinkList = socialLinks.map((socialLink, i) => {
@@ -88,7 +96,7 @@ export const Users = ({ user }: { user: User }) => {
 
     try {
       await updateUserProfile({
-        id: user.id,
+        myId: user.my_id,
         introduction_title: introductionTitle,
         introduction_detail: introductionDetail,
         profile_image: profileImage || undefined,
@@ -97,6 +105,7 @@ export const Users = ({ user }: { user: User }) => {
         name: name,
       });
       setIsUserEditing(false);
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
@@ -112,18 +121,22 @@ export const Users = ({ user }: { user: User }) => {
       <div
         className={styles.profileHeaderContainer}
         style={
-          !isUserEditing
-            ? { backgroundImage: `url(${user.header_url || BackgeoundImageURL})` }
-            : undefined
+          isUserEditing
+            ? {
+                backgroundImage: `url(${
+                  previewHeaderUrl || user.header_url || BackgeoundImageURL
+                })`,
+              }
+            : { backgroundImage: `url(${encodeURI(user.header_url || previewHeaderUrl)})` }
         }
       >
         {/* ヘッダー画像の編集 */}
         {isUserEditing && (
-          <div className={styles.profileHeaderUserIconContainer}>
+          <div className={styles.headerIconEditContainer}>
             <input
               type="file"
               onChange={handleBackgroundImageChange}
-              className={styles.profileHeaderUserIcon}
+              className={styles.headerUserIconInput}
             />
           </div>
         )}
@@ -131,9 +144,20 @@ export const Users = ({ user }: { user: User }) => {
         <div className={styles.profileHeaderContent}>
           <div className={styles.profileHeaderUserIconContainer}>
             {isUserEditing ? (
-              <div className={styles.profileHeaderUserIcon}>
-                <input type="file" onChange={handleProfileImageChange} />
-              </div>
+              <>
+                <div className={styles.profileHeaderUserIconInputContainer}>
+                  <div className={styles.profileHeaderUserIconInput}>
+                    <input type="file" onChange={handleProfileImageChange} />
+                  </div>
+                  <Image
+                    src={previewProfileUrl || user.profile_url || BackgeoundImageURL}
+                    alt="profile"
+                    width={260}
+                    height={260}
+                    className={styles.profileHeaderUserIcon}
+                  />
+                </div>
+              </>
             ) : (
               <Image
                 src={user.profile_url || IconImageURL}
@@ -157,7 +181,7 @@ export const Users = ({ user }: { user: User }) => {
                 <p>{user.totalViews}閲覧</p>
               </div>
               <div className={styles.profilePostCount}>
-                <p>投稿{user.posts.length}件</p>
+                <p>投稿{user.posts[0].length}件</p>
               </div>
               <div className={styles.profileLikeCount}>
                 <p>{user.totalLikes} いいね</p>
@@ -204,7 +228,6 @@ export const Users = ({ user }: { user: User }) => {
           setIntroductionDetail={setIntroductionDetail}
           introductionTitle={introductionTitle}
           introductionDetail={introductionDetail}
-          socialLinks={socialLinks}
           handleEditSocialLink={handleEditSocialLink}
         />
       )}
