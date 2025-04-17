@@ -1,45 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/libs/firebase/auth";
 import prisma from "@/prisma/client";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth as authClient } from "@/libs/firebase/client";
-import { updateUser } from "@/libs/firebase/firebase-auth-for-edge";
 
 export const runtime = "edge";
-
-const updateEmailToFirebase = async (uid: string, newEmail: string) => {
-  try {
-    await updateUser(uid, {
-      email: newEmail,
-    });
-    console.log("メールアドレスが更新されました:");
-  } catch (error) {
-    console.error("メールアドレスの更新に失敗しました:", error);
-  }
-};
-
-const updatePasswordToFirebase = async (
-  uid: string,
-  email: string,
-  currentPassword: string,
-  newPassword: string
-) => {
-  // 現在のパスワードを比較する
-  const token = await signInWithEmailAndPassword(authClient, email, currentPassword);
-
-  if (!token) {
-    return;
-  }
-
-  try {
-    await updateUser(uid, {
-      password: newPassword,
-    });
-    console.log("パスワードが更新されました:");
-  } catch (error) {
-    console.error("パスワードの更新に失敗しました:", error);
-  }
-};
 
 export async function GET() {
   try {
@@ -78,30 +41,13 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "ユーザーがログインしていません" }, { status: 401 });
     }
 
-    const { email, show_sensitive_type, gender, currentPassword, newPassword } =
-      await request.json();
-
-    const userByFetchedDb = await prisma.users.findFirst({
-      where: {
-        uid: session.user.uid,
-      },
-    });
-
-    // メールアドレスのパラメーターが存在または、DBとのメールアドレスを比較して変更があった場合、更新する
-    if (email && userByFetchedDb?.email != email) {
-      await updateEmailToFirebase(session.user.uid, email);
-    }
-
-    if (newPassword && currentPassword != newPassword) {
-      await updatePasswordToFirebase(session.user.uid, email, currentPassword, newPassword);
-    }
+    const { show_sensitive_type, gender } = await request.json();
 
     const user = await prisma.users.update({
       where: {
         uid: session.user.uid,
       },
       data: {
-        email: email,
         show_sensitive_type: show_sensitive_type,
         gender: gender,
       },
@@ -109,14 +55,16 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json(user);
   } catch (error) {
-    console.error(error.message);
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
     return NextResponse.json({ error: `Failed to connect to database ${error}` }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE() {
   try {
     const session = await auth();
     if (!session) {
