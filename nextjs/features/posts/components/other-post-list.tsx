@@ -1,26 +1,44 @@
 "use client";
 
 import styles from "../styles/other-post-list.module.scss";
-import { PostDetail as PostDetailType } from "@/features/posts/types/index";
+import { PostDetail as PostDetailType, UserOtherPost } from "@/features/posts/types/index";
 import { PostCard } from "@/components/post-card";
+import useLikePost from "@/features/posts/hooks/use-like-post";
+import { useState } from "react";
+
 export const OtherPostList = ({
   post,
   setIsLiked,
-  isLiked,
 }: {
   post: PostDetailType;
   setIsLiked: (isLiked: boolean) => void;
-  isLiked: boolean;
 }) => {
-  if (post.otherPostList.length === 0) {
-    return null;
-  }
+  const { handleLikeOrUnlike } = useLikePost();
+  const [otherPostList, setOtherPostList] = useState<UserOtherPost[]>(post.otherPostList);
+  const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
+    Object.fromEntries(post.otherPostList.map((post) => [post.id, post.is_liked]))
+  );
+
+  const handleLike = async (postId: string) => {
+    const currentLiked = likedPosts[postId];
+    setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
+
+    setOtherPostList((prevList) =>
+      prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
+    );
+    try {
+      await handleLikeOrUnlike(postId, currentLiked);
+    } catch (error) {
+      console.error(error);
+      setLikedPosts((prev) => ({ ...prev, [postId]: currentLiked }));
+    }
+  };
 
   return (
     <div className={styles.otherPostsContainer}>
       <p className={styles.otherPostsTitle}>「{post.user?.name}」他の投稿</p>
       <div className={styles.otherPostsListContainer}>
-        {post.otherPostList.map((post) => (
+        {otherPostList.map((post) => (
           <PostCard
             key={post.id}
             postCardProps={{
@@ -31,11 +49,9 @@ export const OtherPostList = ({
               postImageCount: post.images.length,
               userName: post.user?.name,
               userImageUrl: post.user?.profile_url ?? "",
-              isLiked: isLiked,
+              isLiked: likedPosts[post.id],
               setIsLiked: setIsLiked,
-              handleLikeOrUnlike: () => {
-                setIsLiked(!isLiked);
-              },
+              handleLikeOrUnlike: () => handleLike(post.id),
             }}
           />
         ))}
@@ -43,3 +59,4 @@ export const OtherPostList = ({
     </div>
   );
 };
+
