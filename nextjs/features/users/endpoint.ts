@@ -112,7 +112,7 @@ export const checkEmail = async (email: string): Promise<boolean | string> => {
 
 export const fetchByAccountSettings = async (headers: Headers) => {
   const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
-    headers: headers,
+    headers: new Headers(headers),
   });
   if (!response.ok) {
     throw new Error("Failed to fetch account settings");
