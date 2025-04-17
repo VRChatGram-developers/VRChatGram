@@ -25,6 +25,18 @@ export type Post = {
   user: User;
 };
 
+export type AccountSetting = {
+  email: string;
+  show_sensitive_type: string;
+  gender: string;
+  currentPassword: string;
+  newPassword: string;
+};
+
+export type requestUpdateUser = {
+  show_sensitive_type: string;
+  gender: string;
+};
 export type Image = {
   id: bigint;
   url: string;

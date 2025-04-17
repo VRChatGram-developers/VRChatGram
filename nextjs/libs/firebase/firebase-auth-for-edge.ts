@@ -13,10 +13,10 @@ export const {
   verifyAndRefreshExpiredIdToken,
   setCustomUserClaims,
 } = getFirebaseAuth({
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
+  apiKey: process.env.FIREBASE_API_KEY ?? "",
   serviceAccount: {
-    projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
-    clientEmail: process.env.NEXT_PUBLIC_CLIENT_EMAIL!,
-    privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY!,
+    projectId: process.env.FIREBASE_PROJECT_ID?? "",
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL ?? "",
+    privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n") : "",
   },
 });

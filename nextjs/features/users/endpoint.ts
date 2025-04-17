@@ -5,6 +5,7 @@ import {
   ViewsPostList,
   requestCreateUser,
   requestUpdateUserProfile,
+  requestUpdateUser
 } from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
@@ -107,6 +108,91 @@ export const checkEmail = async (email: string): Promise<boolean | string> => {
   }
   const data = await response.json();
   return data.isRegisteredEnail;
+};
+
+export const fetchByAccountSettings = async (headers: Headers) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
+    headers: headers,
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch account settings");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const updateUser = async (user: requestUpdateUser) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const updateUserEmail = async (currentEmail: string, newEmail: string) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings/email`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ currentEmail: currentEmail, newEmail: newEmail }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const updateUserPassword = async (currentPassword: string, newPassword: string) => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings/password`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ currentPassword: currentPassword, newPassword: newPassword }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const checkPassword = async (password: string) => {
+  const response = await fetch(`${API_URL}/api/v1/users/check/password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const deleteAccount = async () => {
+  const response = await fetch(`${API_URL}/api/v1/users/account-settings`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update user");
+  }
+  const data = await response.json();
+  return data;
 };
 
 export const checkDuplicateMyId = async (myId: string): Promise<boolean | string> => {

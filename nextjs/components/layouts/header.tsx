@@ -44,6 +44,11 @@ export const Header = () => {
       fetchUser();
     }
   }, [session]);
+  
+
+  const handleRedirectToAccountSettings = () => {
+    router.push("/users/account-settings");
+  };
 
   const handleToMyViewsPosts = () => {
     router.push(`/users/views`);
@@ -210,7 +215,12 @@ export const Header = () => {
                     <div className={styles.moduleDrawerMenuSection}>
                       <p>Language</p>
                       <p className={`${styles.moduleDrawerMenutext}`}>日本語</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>アカウント設定</p>
+                      <p
+                        className={`${styles.moduleDrawerMenutext}`}
+                        onClick={handleRedirectToAccountSettings}
+                      >
+                        アカウント設定
+                      </p>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
                       <button className={`${styles.moduleDrawerMenutext}`}>ログアウト</button>
