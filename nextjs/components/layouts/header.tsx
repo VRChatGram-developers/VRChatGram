@@ -58,6 +58,11 @@ export const Header = () => {
     router.push(`/users/likes`);
   };
 
+  const handleToTopPage = () => {
+    setSearchQuery("");
+    router.push(`/`);
+  };
+
   const handleSearch = () => {
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: 1 })
@@ -76,7 +81,7 @@ export const Header = () => {
             layout="fill"
             objectFit="contain"
             className={styles.logo}
-            onClick={() => router.push("/")}
+            onClick={handleToTopPage}
           />
         </div>
 
