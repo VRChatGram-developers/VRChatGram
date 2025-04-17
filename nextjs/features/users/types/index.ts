@@ -34,11 +34,8 @@ export type AccountSetting = {
 };
 
 export type requestUpdateUser = {
-  email: string;
   show_sensitive_type: string;
   gender: string;
-  currentPassword: string;
-  newPassword: string;
 };
 export type Image = {
   id: bigint;
