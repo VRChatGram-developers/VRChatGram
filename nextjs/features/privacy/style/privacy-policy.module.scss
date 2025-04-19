@@ -1,7 +1,7 @@
 .privacyPolicyContainer {
   display: grid;
   gap: 1.5rem;
-  padding: 6rem 13rem 1.5rem 13rem;
+  padding: 6rem 13rem 1.5rem 13rem;  
 
   .privacyPolicyTitle {
     justify-self: center;
@@ -13,11 +13,21 @@
   .privacyPolicyContentContainer {
     display: grid;
     background-color: #fff;
-    padding: 1.5rem 8rem 1.5rem 8rem;
+    padding: 2rem 8rem;
     border-radius: 1rem;
   }
 
   .privacyPolicySection {
     padding-top: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacyPolicyContainer {
+    padding: 6rem 1rem !important;
+
+    .privacyPolicyContentContainer {
+      padding: 2rem 2rem !important;
+    }
   }
 }
