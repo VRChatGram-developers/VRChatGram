@@ -15,17 +15,19 @@ export const TagList = ({
   return (
     <div className={styles.tagList}>
       {popularTags.map(({ tag }) => (
-        <button
-          key={tag.id}
-          className={
-            selectedTag === `${tag.name}`
-              ? `${styles.tagItem} ${styles.selectedTagItem}`
-              : styles.tagItem
-          }
-          onClick={() => handleSelectTag(tag.name)}
-        >
-          {tag.name === "ALL" ? "ALL" : `#${tag.name}`}
-        </button>
+        <div className={styles.tagItemContainer} key={tag.id}>
+          <button
+            key={tag.id}
+            className={
+              selectedTag === `${tag.name}`
+                ? `${styles.tagItem} ${styles.selectedTagItem}`
+                : styles.tagItem
+            }
+            onClick={() => handleSelectTag(tag.name)}
+          >
+            {tag.name === "ALL" ? "ALL" : `#${tag.name}`}
+          </button>
+        </div>
       ))}
     </div>
   );
