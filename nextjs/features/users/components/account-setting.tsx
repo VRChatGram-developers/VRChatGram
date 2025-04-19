@@ -4,7 +4,7 @@ import { useState } from "react";
 import { updateUser } from "../endpoint";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/provider/modal-provider";
-import { AccountDeleteModal } from "./account-delete-modal";
+import { AccountDelete } from "./account-delete";
 import { PasswordSetting } from "./password-setting";
 import { AccountSetting as AccountSettingType } from "../types/index";
 import { EmailSetting } from "./email-setting";
@@ -135,7 +135,7 @@ export const AccountSetting = ({ accountSetting }: { accountSetting: AccountSett
         <div className={styles.accountSettingDeleteButtonContainer}>
           <button
             className={styles.accountSettingDeleteButton}
-            onClick={() => openModal(<AccountDeleteModal onClose={closeModal} />)}
+            onClick={() => openModal(<AccountDelete onClose={closeModal} />)}
           >
             アカウントを削除する
           </button>

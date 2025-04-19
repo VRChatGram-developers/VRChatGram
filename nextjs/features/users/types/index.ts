@@ -98,3 +98,7 @@ export type FavoritePostList = {
   posts: Post[][];
   postCount: number;
 };
+
+export type IsDeletedUser = {
+  isDeleted: boolean;
+};

@@ -5,7 +5,8 @@ import {
   ViewsPostList,
   requestCreateUser,
   requestUpdateUserProfile,
-  requestUpdateUser
+  requestUpdateUser,
+  IsDeletedUser,
 } from "./types/index";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
@@ -175,7 +176,7 @@ export const checkPassword = async (password: string) => {
     body: JSON.stringify({ password }),
   });
   if (!response.ok) {
-    throw new Error("Failed to update user");
+    throw new Error("Failed to password");
   }
   const data = await response.json();
   return data;
@@ -256,6 +257,22 @@ export const fetchMyLikePostList = async (headers: Headers): Promise<FavoritePos
   if (!response.ok) {
     console.error(response);
     return "Failed to fetch users";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const checkDeletedUser = async (email: string): Promise<IsDeletedUser> => {
+  const response = await fetch(`${API_URL}/api/v1/users/check/deleted-user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return { isDeleted: false };
   }
   const data = await response.json();
   return data;

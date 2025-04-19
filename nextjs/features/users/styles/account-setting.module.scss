@@ -18,9 +18,8 @@
         gap: 2rem;
         border-radius: 1rem;
 
-
         .accountSettingContentContainer {
-            padding: 1.5rem 8rem 1.5rem 8rem;
+            padding: 1.5rem 9rem 1.5rem 9rem;
             background-color: #fff;
             display: grid;
             gap: 1rem;
@@ -92,7 +91,7 @@
                     font-size: 1rem;
                     display: flex;
                     align-items: center;
-                    gap: 3rem;
+                    gap: 2rem;
 
                     .genderSettingRadioButtonItem {
                         display: flex;
@@ -194,5 +193,11 @@
                 padding: 0.5rem 1rem;
             }
         }
+    }
+}
+
+@media (max-width: 768px) {
+    .accountSettingContentContainer {
+      padding: 1.5rem 2rem !important;
     }
 }
