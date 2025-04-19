@@ -17,12 +17,14 @@ export const Faq = () => {
   return (
     <div className={styles.faqContainer}>
       <div className={styles.faqTitle}>よくあるご質問</div>
-      {faqList.map((faq: Faq, index: number) => (
-        <details className={styles.qa} key={index}>
-          <summary>{faq.question}</summary>
-          <p>{faq.answer}</p>
-        </details>
-      ))}
+      <div className={styles.faqContentContainer}>
+        {faqList.map((faq: Faq, index: number) => (
+          <details className={styles.qa} key={index}>
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
 
       <div className={styles.pagination}>
         <button
