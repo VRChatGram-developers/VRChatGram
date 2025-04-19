@@ -169,14 +169,15 @@
 
 // 768px以下（スマホ）
 @media (max-width: 767px) {
-  .userPostsList {
-    grid-template-columns: 1fr; // 1列に統一
-    gap: 1rem 0;
-  }
+  .searchContainer{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
 
-  .userPostsItemImageContainer {
-    width: 100%;
-    aspect-ratio: 1 / 1; // 全て正方形に統一
-    grid-column: span 1;
+    .searchDetailContent{
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
   }
 }
