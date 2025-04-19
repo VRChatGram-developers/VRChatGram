@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import { checkDeletedUser } from "@/features/users/endpoint";
 
 export const SignInForm = () => {
   const [email, setEmail] = useState("");
@@ -19,7 +20,6 @@ export const SignInForm = () => {
   const [errorPassword, setErrorPassword] = useState("");
   const [fireBaseError, setFireBaseError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -70,11 +70,13 @@ export const SignInForm = () => {
     setIsLoading(true);
 
     try {
-      const credentials = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userStatus = await checkDeletedUser(email);
+      if (userStatus.isDeleted === true) {
+        setIsLoading(false);
+        setFireBaseError("既に退会しているユーザーです");
+        return;
+      }
+      const credentials = await signInWithEmailAndPassword(auth, email, password);
       const token = await credentials.user.getIdToken();
       const result = await signIn("credentials", {
         idToken: token,
@@ -123,9 +125,7 @@ export const SignInForm = () => {
               >
                 今日も素敵な写真をいっぱい投稿しましょう
               </p>
-              {fireBaseError && (
-                <p className={styles.errorMailMessage}>{fireBaseError}</p>
-              )}
+              {fireBaseError && <p className={styles.errorMailMessage}>{fireBaseError}</p>}
               <div className="flex flex-col gap-6 w-[260px] mx-auto">
                 <TextField
                   fullWidth
@@ -152,9 +152,7 @@ export const SignInForm = () => {
                     },
                   }}
                 />
-                {errorMail && (
-                  <p className={styles.errorMailMessage}>{errorMail}</p>
-                )}
+                {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
                 <TextField
                   fullWidth
                   type="password"
@@ -181,9 +179,7 @@ export const SignInForm = () => {
                     },
                   }}
                 />
-                {errorPassword && (
-                  <p className={styles.errorPasswordMessage}>{errorPassword}</p>
-                )}
+                {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
                 <button
                   onClick={handleSignIn}
                   style={{
