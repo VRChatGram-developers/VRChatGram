@@ -193,8 +193,8 @@ export const Header = () => {
                       height={100}
                       className={styles.userProfileIcon}
                     />
-                    <p className={styles.userNameText}>EXTENSION CLOTHING</p>
-                    <p className={styles.userIdText}>@HeyH033</p>
+                    <p className={styles.userNameText}>{user?.name}</p>
+                    <p className={styles.userIdText}>@{user?.my_id}</p>
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
