@@ -3,6 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { updateUserPassword } from "../endpoint";
+import { MdOutlineChangeCircle } from "react-icons/md";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+import styles from "../styles/password-setting.module.scss";
 
 type PasswordSettingProps = {
   onClose: () => void;
@@ -10,15 +14,18 @@ type PasswordSettingProps = {
 
 export const PasswordSetting = ({ onClose }: PasswordSettingProps) => {
   const [currentPassword, setCurrentPassword] = useState("");
+  const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
   const [newPassword, setNewPassword] = useState("");
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [errorCurrentPassword, setErrorCurrentPassword] = useState("");
   const [errorNewPassword, setErrorNewPassword] = useState("");
   const router = useRouter();
 
   const isValidCurrentPassword = () => {
     setErrorCurrentPassword("");
-    if (currentPassword === "") {
-      return true;
+    if (!currentPassword) {
+      setErrorCurrentPassword("パスワードを入力してください");
+      return false;
     }
 
     if (currentPassword.length < 6) {
@@ -30,8 +37,9 @@ export const PasswordSetting = ({ onClose }: PasswordSettingProps) => {
 
   const isValidNewPassword = () => {
     setErrorNewPassword("");
-    if (newPassword === "") {
-      return true;
+    if (!newPassword) {
+      setErrorNewPassword("パスワードを入力してください");
+      return false;
     }
 
     if (newPassword.length < 6) {
@@ -69,31 +77,65 @@ export const PasswordSetting = ({ onClose }: PasswordSettingProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full bg-white">
-      <div>パスワードの変更</div>
-      <div>
-        <div>現在のパスワード</div>
-        <div>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-          {errorCurrentPassword.length > 0 && <div>{errorCurrentPassword}</div>}
+    <div className={styles.passwordSettingContainer}>
+      <MdOutlineChangeCircle className={styles.passwordSettingIcon} />
+      <div className={styles.passwordSettingTitle}>パスワードの変更</div>
+      <div className={styles.passwordSettingContentContainer}>
+        <div className={styles.passwordSettingInputContainer}>
+          <div className={styles.passwordSettingContentTitle}>現在のパスワード</div>
+          <div className={styles.passwordSettingFieldContainer}>
+            <input
+              type={isCurrentPasswordVisible ? "text" : "password"}
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className={styles.passwordSettingContentInput}
+            />
+            {isCurrentPasswordVisible ? (
+              <FaRegEyeSlash
+                className={styles.eyeIconSlash}
+                onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+              />
+            ) : (
+              <FaRegEye
+                className={styles.eyeIcon}
+                onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+              />
+            )}
+            {errorCurrentPassword.length > 0 && <div className={styles.passwordSettingErrorMessage}>{errorCurrentPassword}</div>}
+          </div>
+        </div>
+        <div className={styles.passwordSettingInputContainer}>
+          <div className={styles.passwordSettingInputContainer}>
+            <div className={styles.passwordSettingContentTitle}>変更後のパスワード</div>
+            <div className={styles.passwordSettingFieldContainer}>
+              <input
+                type={isNewPasswordVisible ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className={styles.passwordSettingContentInput}
+              />
+              {isNewPasswordVisible ? (
+                <FaRegEyeSlash
+                  className={styles.eyeIconSlash}
+                  onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)}
+                />
+              ) : (
+                <FaRegEye
+                  className={styles.eyeIcon}
+                  onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)}
+                />
+              )}
+              {errorNewPassword.length > 0 && <div className={styles.passwordSettingErrorMessage}>{errorNewPassword}</div>}
+            </div>
+          </div>
         </div>
       </div>
-      <div>
-        <div>新しいパスワード</div>
-        <div>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          {errorNewPassword.length > 0 && <div>{errorNewPassword}</div>}
-        </div>
+      <div className={styles.passwordSettingBorder} />
+      <div className={styles.passwordSettingButtonContainer}>
+        <button onClick={handleUpdatePassword} className={styles.passwordSettingButton}>
+          変更する
+        </button>
       </div>
-      <button onClick={handleUpdatePassword}>変更する</button>
     </div>
   );
 };
