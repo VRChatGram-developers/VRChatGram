@@ -289,6 +289,9 @@
       color: #000;
       .userProfileIcon {
         margin-bottom: 1rem;
+        border-radius: 50%;
+        aspect-ratio: 1/1;
+        object-fit: fill;
       }
       .userNameText {
         font-size: 2rem;
