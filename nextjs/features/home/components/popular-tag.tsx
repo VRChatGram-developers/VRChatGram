@@ -99,7 +99,7 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
         {popularTagList.map((tag) => (
           <div className={styles.tagListContent} key={tag.id}>
             <Image
-              src={tag.top_post_image_url || "/home/femailtag-icon.png"}
+              src={tag.url || "/home/femailtag-icon.png"}
               alt={`#${tag.name}`}
               fill
               className={styles.tagImage}
