@@ -25,6 +25,32 @@
           }
         }
 
+        .signupFormPasswordContainer {
+          position: relative;
+
+          .eyeIconSlash {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            width: 25px;
+            height: 25px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #D9D9D9;
+          }
+  
+          .eyeIcon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            width: 25px;
+            height: 25px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #D9D9D9;
+          }
+        }
+
         .createButtonContainer {
           width: 100%;
           max-width: 20rem;

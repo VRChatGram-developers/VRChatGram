@@ -5,6 +5,7 @@ import { Link, TextField } from "@mui/material";
 import { useState } from "react";
 import styles from "@/features/auth/styles/sign-up-form.module.scss";
 import { checkEmail } from "@/features/users/endpoint";
+import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 
 export const SignUpForm = ({
   email,
@@ -21,6 +22,9 @@ export const SignUpForm = ({
 }) => {
   const [errorMail, setErrorMail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+  const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
+  const googleFormLinks =
+  "https://docs.google.com/forms/d/e/1FAIpQLSc2wPHJNSmD8tBIWMb6UDrJzlXNF3dYFx-okEQvITZvRXpOtQ/viewform";
 
   const mailValidation = () => {
     if (email === "") {
@@ -117,44 +121,54 @@ export const SignUpForm = ({
                   },
                 }}
               />
-              {errorMail && (
-                <p className={styles.errorMailMessage}>{errorMail}</p>
-              )}
+              {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
             </div>
 
             <div className={styles.textForm}>
-              <TextField
-                fullWidth
-                type="password"
-                label="パスワード"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                  sx: {
-                    color: "#69BEEF",
-                  },
-                }}
-                sx={{
-                  height: "64px",
-                  "& .MuiInputLabel-shrink": {
-                    transform: "translate(14px, -9px) scale(0.75)",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderWidth: "2px",
-                      borderColor: "#69BEEF",
+              <div className={styles.signupFormPasswordContainer}>
+                <TextField
+                  fullWidth
+                  type={isCurrentPasswordVisible ? "text" : "password"}
+                  label="パスワード"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                    sx: {
+                      color: "#69BEEF",
                     },
-                  },
-                }}
-              />
+                  }}
+                  sx={{
+                    height: "64px",
+                    "& .MuiInputLabel-shrink": {
+                      transform: "translate(14px, -9px) scale(0.75)",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderWidth: "2px",
+                        borderColor: "#69BEEF",
+                      },
+                    },
+                  }}
+                />
+                {isCurrentPasswordVisible ? (
+                  <IoEyeOffSharp
+                    className={styles.eyeIconSlash}
+                    onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+                  />
+                ) : (
+                  <IoEyeSharp
+                    className={styles.eyeIcon}
+                    onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+                  />
+                )}
+              </div>
+
               <p className={styles.warningLabel}>
                 パスワードは半角英字、数字、記号を合わせた6文字以上で入力してください
               </p>
-              {errorPassword && (
-                <p className={styles.errorPasswordMessage}>{errorPassword}</p>
-              )}
+              {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
             </div>
             <div className={styles.createButtonContainer}>
               <button onClick={handleSignUp} className={styles.createButton}>
@@ -172,7 +186,7 @@ export const SignUpForm = ({
             <div className={styles.separateLoginContainer}>
               <p className={styles.separateLoginText}>
                 パスワードを忘れた方は{" "}
-                <Link href="/sign-in" className="underline">
+                <Link href={googleFormLinks} className="underline">
                   こちら
                 </Link>
               </p>
