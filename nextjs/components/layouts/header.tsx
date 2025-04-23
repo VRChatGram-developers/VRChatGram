@@ -119,10 +119,11 @@ export const Header = () => {
               </div>
               <div className={styles.userIconContainer}>
                 <Image
-                  src={user?.profile_url || "/posts/sample-user-icon.png"}
+                  src={user?.profile_url || "/default-icon-user.png"}
                   alt="User Icon"
                   width={60}
                   height={60}
+                  className={styles.userProfileIcon}
                 />
                 <RiArrowDownSLine onClick={() => setIsDropdownOpen(!isDropdownOpen)} size={24} />
                 {isDropdownOpen && (
@@ -187,7 +188,7 @@ export const Header = () => {
                 <div className={styles.userIconContainer}>
                   <div className={styles.userProfileContainer}>
                     <Image
-                      src={user?.profile_url || "/posts/sample-user-icon.png"}
+                      src={user?.profile_url || "/default-icon-user.png"}
                       alt="User Icon"
                       width={100}
                       height={100}
