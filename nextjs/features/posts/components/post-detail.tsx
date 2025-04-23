@@ -14,6 +14,9 @@ import { GrPersonalComputer } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import useLikePost from "../hooks/use-like-post";
 import { RecommendPostList } from "./recommend-post-list";
+import { useSession } from "next-auth/react";
+import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
+import { useModal } from "@/provider/modal-provider";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
@@ -23,6 +26,9 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likeCount ?? 0);
   const { handleLikeOrUnlike } = useLikePost();
+  const { openModal, closeModal } = useModal();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: _, status } = useSession();
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);
@@ -53,7 +59,11 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     router.push(`/users/${myId}`);
   };
 
-  const handleLike = async () => {
+  const handleClickLikeOrUnlike = async () => {
+    if (status === "unauthenticated") {
+      return openModal(<SignInFormModal onClose={closeModal} />);
+    }
+
     setIsLiked(!isLiked);
     setLikeCount(likeCount + (isLiked ? -1 : 1));
     await handleLikeOrUnlike(post.id.toString(), isLiked);
@@ -151,7 +161,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                     alt="heart"
                     width={24}
                     height={24}
-                    onClick={handleLike}
+                    onClick={handleClickLikeOrUnlike}
                   />
                 ) : (
                   <Image
@@ -159,7 +169,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                     alt="heart"
                     width={24}
                     height={24}
-                    onClick={handleLike}
+                    onClick={handleClickLikeOrUnlike}
                   />
                 )}
                 <p className={styles.postDetailInfomationLikeCount}>{likeCount}</p>
