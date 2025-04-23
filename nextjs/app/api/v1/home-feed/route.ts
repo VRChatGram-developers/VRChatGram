@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
 import { toJson } from "@/utils/json";
 import prisma from "@/prisma/client";
 
@@ -69,26 +68,6 @@ export async function POST(request: Request) {
       take: Number(4),
     });
 
-
-    const popularTagIdList = await prisma.$queryRaw<{ tag_id: bigint }[]>(
-      Prisma.sql`SELECT tag_id FROM post_tags pt
-      JOIN posts p ON pt.post_id = p.id 
-      JOIN likes i ON p.id = i.post_id
-      GROUP BY pt.tag_id
-      ORDER BY COUNT(i.id) DESC
-      LIMIT ${10}`
-    );
-
-    const popularTagList = await prisma.tags.findMany({
-      where: { id: { in: popularTagIdList.map((tag) => tag.tag_id.toString()) } },
-      select: {
-        id: true,
-        name: true,
-        top_post_image_url: true,
-      },
-      take: Number(6),
-    });
-
     const latestPostListWithX = await prisma.posts.findMany({
       orderBy: { created_at: "desc" },
       where: { is_posted_x: true },
@@ -133,7 +112,6 @@ export async function POST(request: Request) {
     return NextResponse.json({
       popularPostList: popularPostListWithIsLiked.map(toJson),
       latestPostList: latestPostListWithIsLiked.map(toJson),
-      popularTagList: popularTagList.map(toJson),
       latestPostListWithX: latestPostListWithXWithIsLiked.map(toJson),
     });
   } catch (error) {

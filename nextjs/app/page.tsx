@@ -1,10 +1,9 @@
 import { Main } from "@/features/home/components/main";
-import { fetchHomeFeed } from "@/features/home/endpoint";
+import { fetchHomeFeed, fetchPopularTagListForHome } from "@/features/home/endpoint";
 import {
   PopularPost as PopularPostType,
   LatestPost as LatestPostType,
   XPost as XPostType,
-  Tag,
   Notification,
 } from "@/features/home/types/index";
 import { auth } from "@/libs/firebase/auth";
@@ -16,7 +15,10 @@ export default async function Home() {
     apiKey: process.env.X_MICROCMS_API_KEY ?? "",
   });
 
-  const response = await client.get({ endpoint: "notifications", queries: { limit: 2, orders: "publishedAt" } });
+  const response = await client.get({
+    endpoint: "notifications",
+    queries: { limit: 2, orders: "publishedAt" },
+  });
   const notifications = response.contents.map((notification: Notification) => {
     return {
       ...notification,
@@ -33,16 +35,20 @@ export default async function Home() {
       publishedAt: formattedDate,
     };
   });
+
+  const popularTagList = await fetchPopularTagListForHome();
   const homeData = await fetchHomeFeed<{
     popularPostList: PopularPostType[];
     latestPostList: LatestPostType[];
-    popularTagList: Tag[];
     latestPostListWithX: XPostType[];
   }>(session);
   if (typeof homeData === "string") {
     return <div>{homeData}</div>;
   }
-  const { popularPostList, latestPostList, popularTagList, latestPostListWithX } = homeData;
+  if (typeof popularTagList === "string") {
+    return <div>{popularTagList}</div>;
+  }
+  const { popularPostList, latestPostList, latestPostListWithX } = homeData;
 
   return (
     <Main

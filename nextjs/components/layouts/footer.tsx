@@ -26,7 +26,7 @@ export const Footer = () => {
             お問い合わせ
           </div>
         </div>
-        <div className={styles.copyright}>© vgram.app All rights reserved.</div>
+        <div className={styles.copyright}>© vrcss.com All rights reserved.</div>
       </div>
     </footer>
   );

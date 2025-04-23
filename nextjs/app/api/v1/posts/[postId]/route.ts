@@ -44,6 +44,7 @@ const fetchRecommendPostListByTagName = async (tagName: string) => {
           id: true,
           name: true,
           profile_url: true,
+          my_id: true,
         },
       },
     },
@@ -81,6 +82,7 @@ const fetchOtherPostList = async (userId: string, postId: string) => {
         select: {
           id: true,
           name: true,
+          my_id: true,
           profile_url: true,
         },
       },

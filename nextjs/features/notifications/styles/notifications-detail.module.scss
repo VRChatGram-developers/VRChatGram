@@ -2,7 +2,7 @@
     display: grid;
     gap: 1.5rem;
     padding: 6rem 13rem 1.5rem 13rem;
-  
+
     .notificationDetailTitle {
       font-size: 1.5rem;
       font-weight: bold;
@@ -12,7 +12,7 @@
     .notificationDetailTypeContainer {
       display: flex;
     }
-  
+
     .notificationDetailContentContainer {
       display: grid;
       background-color: #fff;
@@ -24,9 +24,8 @@
       font-size: 1rem;
       font-family: "Noto Sans JP";
     }
-  
+
     .privacyPolicySection {
       padding-top: 1.5rem;
     }
   }
-  
