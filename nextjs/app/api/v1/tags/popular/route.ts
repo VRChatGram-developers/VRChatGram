@@ -57,7 +57,6 @@ export async function GET(
         },
         take: Number(limit),
       })
-      console.log(popularPostImageByTagId);
 
       return NextResponse.json(
         popularTagList.map((tag) => {
