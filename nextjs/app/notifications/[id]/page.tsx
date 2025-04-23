@@ -18,6 +18,5 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     ...notification,
     publishedAt: formattedDate,
   };
-  console.log(serializedNotification);
   return <NotificationDetail notification={serializedNotification} />;
 }
