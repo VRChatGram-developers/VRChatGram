@@ -114,7 +114,7 @@ export const Users = ({ user }: { user: User }) => {
   const BackgeoundImageURL =
     "https://i0.wp.com/bussan-b.info/wp-content/uploads/2021/03/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%AC%E3%83%BC%E3%83%88.jpg?resize=1024%2C576&ssl=1";
 
-  const IconImageURL = "https://pbs.twimg.com/media/GijziWvbYAAfm3D?format=jpg&name=4096x4096";
+  const IconImageURL = "/default-icon-user.png";
 
   return (
     <>
