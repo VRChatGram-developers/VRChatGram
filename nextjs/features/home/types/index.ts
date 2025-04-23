@@ -48,7 +48,7 @@ export type Like = {
 export type Tag = {
   id: bigint;
   name: string;
-  top_post_image_url: string;
+  url: string;
 };
 
 

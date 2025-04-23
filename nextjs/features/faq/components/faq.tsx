@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "@/features/faq/styles/faq.module.scss";
-import { faqData } from "@/features/faq/data.json";
+import faqData from "@/features/faq/data.json";
 import { useState } from "react";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
 type Faq = {
@@ -10,9 +10,9 @@ type Faq = {
 };
 
 export const Faq = () => {
-  const totalPages = Math.ceil(faqData.length / 10);
+  const totalPages = Math.ceil(faqData.data.length / 10);
   const [currentPage, setCurrentPage] = useState(0);
-  const faqList = JSON.parse(JSON.stringify(faqData));
+  const faqList = JSON.parse(JSON.stringify(faqData.data));
 
   return (
     <div className={styles.faqContainer}>

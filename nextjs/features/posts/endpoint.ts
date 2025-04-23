@@ -18,16 +18,6 @@ export const fetchPosts = async (
   return response.json();
 };
 
-export const fetchPopularTags = async (): Promise<Tag[] | string> => {
-  const response = await fetch(`${API_URL}/api/v1/tags/popular`);
-  if (!response.ok) {
-    console.error(response);
-    return "Failed to fetch popular tags";
-  }
-  const data = await response.json();
-  return data;
-};
-
 export const fetchPostById = async (postId: string, headers?: Headers): Promise<PostDetail | string> => {
   const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
     headers: new Headers(headers),
@@ -115,6 +105,16 @@ export const uploadImage = async (image: {
   if (!response.ok) {
     console.error(response);
     return "Failed to upload images";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const fetchPopularTagList = async (): Promise<Tag[] | string> => {
+  const response = await fetch(`${API_URL}/api/v1/tags/popular?limit=20&isFeatchedPostImage=false`);
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch popular posts";
   }
   const data = await response.json();
   return data;

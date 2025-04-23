@@ -1,5 +1,5 @@
 import { PostList } from "@/features/posts/components";
-import { fetchPosts, fetchPopularTags } from "@/features/posts/endpoint";
+import { fetchPosts, fetchPopularTagList } from "@/features/posts/endpoint";
 import { headers } from "next/headers";
 export default async function Page({
   searchParams,
@@ -10,7 +10,8 @@ export default async function Page({
   const queryParamsString = new URLSearchParams(params as Record<string, string>).toString();
 
   const postsList = await fetchPosts(queryParamsString, new Headers(await headers()));
-  const popularTags = await fetchPopularTags();
+  const popularTags = await fetchPopularTagList();
+  
   if (typeof postsList === "string") {
     return <div>{postsList}</div>;
   }

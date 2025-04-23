@@ -4,6 +4,9 @@ import styles from "./styles/post-card.module.scss";
 import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
+import { useModal } from "@/provider/modal-provider";
 
 type PostCardProps = {
   postId: string | bigint;
@@ -18,15 +21,12 @@ type PostCardProps = {
   handleLikeOrUnlike: () => void;
 };
 
-const sampleUserImageUrl = "/posts/sample-user-icon.png";
+const sampleUserImageUrl = "/default-icon-user.png";
 const samplePostImageUrl = "/posts/sample-icon.png";
 
-export const PostCard = ({
-  postCardProps,
-}: {
-  postCardProps: PostCardProps;
-}) => {
+export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) => {
   const router = useRouter();
+  const { openModal, closeModal } = useModal();
 
   const {
     postId,
@@ -50,6 +50,17 @@ export const PostCard = ({
     const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
     router.prefetch(`/users/${myIdString}`);
     router.push(`/users/${myIdString}`);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: _, status } = useSession();
+  const handleClickLikeOrUnlike = () => {
+    
+    if (status === "unauthenticated") {
+      return openModal(<SignInFormModal onClose={closeModal} />);
+    }
+
+    handleLikeOrUnlike();
   };
 
   return (
@@ -84,7 +95,7 @@ export const PostCard = ({
           </div>
         </div>
         <div className={styles.likesPostsItemLikeContents}>
-          <div className={styles.likesPostsItemLikeItem} onClick={() => handleLikeOrUnlike()}>
+          <div className={styles.likesPostsItemLikeItem} onClick={() => handleClickLikeOrUnlike()}>
             {isLiked ? (
               <Image src="/heart-outline.png" alt="heart" className={styles.likesIcon} fill />
             ) : (

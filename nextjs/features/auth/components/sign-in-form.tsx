@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { checkDeletedUser } from "@/features/users/endpoint";
+import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 
 export const SignInForm = () => {
   const [email, setEmail] = useState("");
@@ -22,6 +23,7 @@ export const SignInForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
 
   const mailValidation = () => {
     setErrorMail("");
@@ -97,36 +99,28 @@ export const SignInForm = () => {
   return (
     <>
       {isLoading ? (
-        <div className="flex justify-center items-center h-screen">
+        <div className={styles.signInFormContainerModal}>
           <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
         </div>
       ) : (
-        <div className="flex">
-          <div className="flex-1 relative h-full">
+        <div className={styles.signInFormContainer}>
+          <div className={styles.signInFormContainerImageWrapper}>
             <Image
               src="/login_page.png"
               alt="Login page image"
-              className="object-cover w-full h-full"
+              className={styles.signInFormContainerImage}
               width={864}
               height={1000}
             />
           </div>
-          <div className="flex-1 flex items-center justify-center">
-            <div className="max-w-md p-8">
-              <h1
-                style={{ fontSize: "40px" }}
-                className="font-bold leading-[40px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-2"
-              >
-                おかえりなさい！
-              </h1>
-              <p
-                style={{ fontSize: "14px" }}
-                className="font-bold leading-[14px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-8"
-              >
+          <div className={styles.signInFormCntentContainer}>
+            <div className={styles.signInFormContentWrapper}>
+              <h1 className={styles.signInFormContentTitle}>おかえりなさい！</h1>
+              <p className={styles.signInFormContentSubTitle}>
                 今日も素敵な写真をいっぱい投稿しましょう
               </p>
               {fireBaseError && <p className={styles.errorMailMessage}>{fireBaseError}</p>}
-              <div className="flex flex-col gap-6 w-[260px] mx-auto">
+              <div className={styles.signInFormContentInputContainer}>
                 <TextField
                   fullWidth
                   label="メールアドレス*"
@@ -140,7 +134,7 @@ export const SignInForm = () => {
                     },
                   }}
                   sx={{
-                    height: "64px",
+                    height: "60px",
                     "& .MuiInputLabel-shrink": {
                       transform: "translate(14px, -9px) scale(0.75)",
                     },
@@ -153,32 +147,45 @@ export const SignInForm = () => {
                   }}
                 />
                 {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
-                <TextField
-                  fullWidth
-                  type="password"
-                  label="パスワード"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  variant="outlined"
-                  InputLabelProps={{
-                    shrink: true,
-                    sx: {
-                      color: "#69BEEF",
-                    },
-                  }}
-                  sx={{
-                    height: "64px",
-                    "& .MuiInputLabel-shrink": {
-                      transform: "translate(14px, -9px) scale(0.75)",
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderWidth: "2px",
-                        borderColor: "#69BEEF",
+                <div className={styles.signInFormContentPasswordContainer}>
+                  <TextField
+                    fullWidth
+                    type={isCurrentPasswordVisible ? "text" : "password"}
+                    label="パスワード"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    variant="outlined"
+                    InputLabelProps={{
+                      shrink: true,
+                      sx: {
+                        color: "#69BEEF",
                       },
-                    },
-                  }}
-                />
+                    }}
+                    sx={{
+                      height: "60px",
+                      "& .MuiInputLabel-shrink": {
+                        transform: "translate(14px, -9px) scale(0.75)",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderWidth: "2px",
+                          borderColor: "#69BEEF",
+                        },
+                      },
+                    }}
+                  />
+                  {isCurrentPasswordVisible ? (
+                    <IoEyeOffSharp
+                      className={styles.eyeIconSlash}
+                      onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+                    />
+                  ) : (
+                    <IoEyeSharp
+                      className={styles.eyeIcon}
+                      onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+                    />
+                  )}
+                </div>
                 {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
                 <button
                   onClick={handleSignIn}

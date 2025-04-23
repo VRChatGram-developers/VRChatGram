@@ -72,7 +72,7 @@ export const UserHome = ({
                 postImageUrl: post.images[0].url,
                 postImageCount: Number(post.images.length),
                 userName: user.name,
-                userImageUrl: user.profile_url || "/posts/sample-user-icon.png",
+                userImageUrl: user.profile_url || "/default-icon-user.png",
                 isLiked: isLiked,
                 setIsLiked: setIsLiked,
                 handleLikeOrUnlike: () => {
