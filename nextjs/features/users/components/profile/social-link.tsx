@@ -48,7 +48,12 @@ export const SocialLink = ({
         : socialLinks.map((socialLink: SocialLinkType) => (
             <div key={socialLink.platform_types} className={styles.profileIntroduceContent}>
               {getIcon(socialLink.platform_types)}
-              <a href={socialLink.platform_url} className={styles.profileIntroduceLink}>
+              <a
+                href={socialLink.platform_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.profileIntroduceLink}
+              >
                 {socialLink.platform_url}
               </a>
             </div>
