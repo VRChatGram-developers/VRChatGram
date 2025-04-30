@@ -10,9 +10,16 @@ import { useRouter } from "next/navigation";
 import { createQueryParams } from "@/utils/queryParams";
 import { ClipLoader } from "react-spinners";
 
-
-export const PostList = ({ posts, popularTags }: { posts: PostListType; popularTags: Tag[] }) => {
-  const [selectedTag, setSelectedTag] = useState("ALL");
+export const PostList = ({
+  posts,
+  popularTags,
+  tagName,
+}: {
+  posts: PostListType;
+  popularTags: Tag[];
+  tagName: string;
+}) => {
+  const [selectedTag, setSelectedTag] = useState(tagName || "ALL");
   const [displayPosts, setDisplayPosts] = useState<PostListType>(posts);
   const { setSearchQuery } = useSearchStore();
   const router = useRouter();
@@ -20,7 +27,7 @@ export const PostList = ({ posts, popularTags }: { posts: PostListType; popularT
   const handleSelectTag = async (tag: string) => {
     const tagName = tag === "ALL" ? tag : `${tag}`;
     setSelectedTag(tagName);
-  
+
     if (tagName === "ALL") {
       setSearchQuery("");
       router.push(`/posts?${createQueryParams({ tag: "", page: 1 })}`);
@@ -35,13 +42,15 @@ export const PostList = ({ posts, popularTags }: { posts: PostListType; popularT
     setIsLoading(false);
   }, [posts]);
 
-  const addAllToPopularTags = useMemo(
-    () => [
-      { tag: { id: 0, name: "ALL" } },
-      ...popularTags,
-    ],
-    [popularTags]
-  );
+  const addAllToPopularTags = useMemo(() => {
+    const allTag = { tag: { id: 0, name: "ALL" } };
+    const selectedTagObj = popularTags.find((t) => t.tag.name === tagName);
+    const otherTags = popularTags.filter((t) => t.tag.name !== tagName);
+
+    return tagName === "ALL"
+      ? [allTag, ...popularTags]
+      : [allTag, ...(selectedTagObj ? [selectedTagObj] : []), ...otherTags];
+  }, [popularTags, tagName]);
 
   return (
     <>
@@ -51,20 +60,20 @@ export const PostList = ({ posts, popularTags }: { posts: PostListType; popularT
           selectedTag={selectedTag}
           handleSelectTag={handleSelectTag}
         />
-         {isLoading ? (
-        <div className="flex justify-center items-center h-screen">
-          <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-        </div>
-      ) : (
-        <SearchResult
-          posts={displayPosts.posts}
-          selectedTag={selectedTag}
-          postCount={displayPosts.postCount}
-          currentPage={displayPosts.currentPage}
-          totalPages={displayPosts.totalPages}
-          postImageUrlWithMaxLikes={displayPosts.postImageUrlWithMaxLikes}
-        />
-      )}
+        {isLoading ? (
+          <div className="flex justify-center items-center h-screen">
+            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+          </div>
+        ) : (
+          <SearchResult
+            posts={displayPosts.posts}
+            selectedTag={selectedTag}
+            postCount={displayPosts.postCount}
+            currentPage={displayPosts.currentPage}
+            totalPages={displayPosts.totalPages}
+            postImageUrlWithMaxLikes={displayPosts.postImageUrlWithMaxLikes}
+          />
+        )}
       </div>
     </>
   );
