@@ -183,6 +183,7 @@
   color: #000;
   // background-color: rgb(34, 35, 36);
   background-color: #fff;
+  overflow-y: auto;
   height: 0;
   opacity: 0;
   .headerMobileDraweContainer {
@@ -309,6 +310,7 @@
       .moduleDrawerMenutext {
         font-size: 1.5rem;
         font-family: "Noto Sans JP", sans-serif;
+        cursor: pointer;
       }
     }
   }
