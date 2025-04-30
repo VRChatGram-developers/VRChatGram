@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../styles/user-post-list.module.scss";
+import styles from "@/features/users/styles/user-post-list.module.scss";
 import { User, Post } from "@/features/users/types/index";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { MdOutlineLastPage, MdOutlineFirstPage } from "react-icons/md";
