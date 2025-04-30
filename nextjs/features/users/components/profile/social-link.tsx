@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../styles/user-home.module.scss";
+import styles from "@/features/users/styles/user-home.module.scss";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
 import { SocialLink as SocialLinkType } from "@/features/users/types/index";

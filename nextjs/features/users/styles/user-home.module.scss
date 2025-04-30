@@ -47,6 +47,9 @@
         gap: 1rem;
         .profileIntroduceLink {
           font-weight: lighter;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          flex: 1;
         }
       }
     }
