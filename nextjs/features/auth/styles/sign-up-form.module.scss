@@ -98,7 +98,7 @@
   .signupContainer {
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
-    height: calc(100vh - 50px);
+    height: calc(100vh);
   }
   .signupFormContent {
     width: 80%;
@@ -108,7 +108,7 @@
 // 1024px未満（タブレット）
 @media (min-width: 768px) AND (max-width: 1023px) {
   .signupContainer {
-    height: calc(100vh - 50px);
+    height: calc(100vh);
   }
   .registerImageContainer {
     display: none;
@@ -121,7 +121,7 @@
 // 1024px未満（タブレット）
 @media (max-width: 767px) {
   .signupContainer {
-    height: calc(100vh - 50px);
+    height: calc(100vh);
   }
   .registerImageContainer {
     display: none;

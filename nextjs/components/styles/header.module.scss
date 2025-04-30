@@ -325,6 +325,12 @@
   padding: 6rem 0;
 }
 
+@media screen and (min-width: 1040px) {
+  .headerMobileDrawerMenu {
+    display: none;
+  }  
+}
+
 // 1,039px未満（タブレット）
 @media (max-width: 1039px) {
   .headerContainer {

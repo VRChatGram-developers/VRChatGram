@@ -21,7 +21,7 @@
   }
 }
 
-.signinContainer {
+.container {
   display: grid;
 }
 
@@ -263,7 +263,7 @@
   .signinContainer {
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
-    height: calc(100vh - 50px);
+    height: calc(100vh);
   }
   .registerContent {
     width: 80%;
@@ -283,7 +283,7 @@
   //   order: 1;
   // }
   .signinContainer {
-    height: calc(100vh - 50px);
+    height: calc(100vh);
   }
   .registerImageContainer {
     display: none;
@@ -306,7 +306,7 @@
   //   order: 1;
   // }
   .signinContainer {
-    height: calc(100vh - 50px);
+    height: calc(100vh);
   }
   .registerImageContainer {
     display: none;

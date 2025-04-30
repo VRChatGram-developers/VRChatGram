@@ -144,7 +144,7 @@ export const AccountInfoInput = ({
           <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
         </div>
       ) : (
-        <div className={styles.signinContainer}>
+        <div className={styles.container}>
           <div className={styles.registerContainer}>
             <div className={styles.registerContent}>
               <div className={styles.registerTitleContent}>
