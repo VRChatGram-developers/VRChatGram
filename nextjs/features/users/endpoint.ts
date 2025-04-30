@@ -277,3 +277,19 @@ export const checkDeletedUser = async (email: string): Promise<IsDeletedUser> =>
   const data = await response.json();
   return data;
 };
+
+export const blockUser = async (blockedUserMyId: string): Promise<IsDeletedUser> => {
+  const response = await fetch(`${API_URL}/api/v1/users/blocks`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ blockedUserMyId }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return { isDeleted: false };
+  }
+  const data = await response.json();
+  return data;
+};

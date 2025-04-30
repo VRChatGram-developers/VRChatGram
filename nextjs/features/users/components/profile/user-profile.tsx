@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../styles/users.module.scss";
+import styles from "@/features/users/styles/users.module.scss";
 import Image from "next/image";
 import { SocialLink, User } from "@/features/users/types/index";
 import { useState } from "react";
@@ -13,7 +13,11 @@ import { updateUserProfile } from "@/features/users/endpoint";
 import { useEffect } from "react";
 import { useSingleImageUpload } from "@/features/users/hooks/use-upload-image";
 import { useRouter } from "next/navigation";
-export const Users = ({ user }: { user: User }) => {
+import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
+import { useModal } from "@/provider/modal-provider";
+import { DropdownMenu } from "./drop-down-menu";
+
+export const UserProfile = ({ user }: { user: User }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -22,16 +26,19 @@ export const Users = ({ user }: { user: User }) => {
   const [introductionDetail, setIntroductionDetail] = useState(user.introduction_detail);
   const [socialLinks, setSocialLinks] = useState(user.social_links);
   const [name, setName] = useState(user.name);
-  const {
-    image: profileImage,
-    handleImageChange: handleProfileImageChange,
-  } = useSingleImageUpload("");
-  const {
-    image: backgroundImage,
-    handleImageChange: handleBackgroundImageChange,
-  } = useSingleImageUpload("");
+  const { image: profileImage, handleImageChange: handleProfileImageChange } =
+    useSingleImageUpload("");
+  const { image: backgroundImage, handleImageChange: handleBackgroundImageChange } =
+    useSingleImageUpload("");
   const [previewHeaderUrl, setPreviewHeaderUrl] = useState<string>("");
   const [previewProfileUrl, setPreviewProfileUrl] = useState<string>("");
+  const { openModal, closeModal } = useModal();
+  const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
+
+  const handleDropdownMenuOpen = () => {
+    console.log("handleDropdownMenuOpen");
+    setIsDropdownMenuOpen(!isDropdownMenuOpen);
+  };
 
   const handleUserEditing = () => {
     setIsUserEditing(!isUserEditing);
@@ -39,11 +46,19 @@ export const Users = ({ user }: { user: User }) => {
 
   const { data: session } = useSession();
   const handleFollow = async () => {
+    if (!session?.user) {
+      openModal(<SignInFormModal onClose={closeModal} />);
+      return;
+    }
     await followUser(user.my_id);
     setIsFollowing(true);
   };
 
   const handleUnfollow = async () => {
+    if (!session?.user) {
+      openModal(<SignInFormModal onClose={closeModal} />);
+      return;
+    }
     await unfollowUser(user.my_id);
     setIsFollowing(false);
   };
@@ -208,16 +223,18 @@ export const Users = ({ user }: { user: User }) => {
         </div>
 
         <div className={styles.tabNavigationButtonContainer}>
-          {session?.user &&
-            renderFollowOrprofileEditButton(
-              user,
-              isFollowing,
-              isUserEditing,
-              handleUnfollow,
-              handleFollow,
-              handleUserEditing,
-              handleSubmitIntroduction
-            )}
+          {renderFollowOrprofileEditButton(
+            user,
+            isFollowing,
+            isUserEditing,
+            handleUnfollow,
+            handleFollow,
+            handleUserEditing,
+            handleSubmitIntroduction,
+            isDropdownMenuOpen,
+            setIsDropdownMenuOpen,
+            handleDropdownMenuOpen
+          )}
         </div>
       </div>
       {activeTab === 0 && (
@@ -243,47 +260,34 @@ const renderFollowOrprofileEditButton = (
   handleUnfollow: () => void,
   handleFollow: () => void,
   handleUserEditing: () => void,
-  handleSubmitIntroduction: () => void
+  handleSubmitIntroduction: () => void,
+  isDropdownMenuOpen: boolean,
+  setIsDropdownMenuOpen: (open: boolean) => void,
+  handleDropdownMenuOpen: () => void
 ) => {
+  const renderThreeDotsMenu = () => (
+    <div className={styles.threeDots}>
+      <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
+      {isDropdownMenuOpen && (
+        <DropdownMenu
+          isOpen={isDropdownMenuOpen}
+          setIsOpen={setIsDropdownMenuOpen}
+          blockedUserId={user.my_id}
+        />
+      )}
+    </div>
+  );
+
   if (user.isCurrentUser) {
-    if (isUserEditing) {
-      return (
-        <>
-          <div className={styles.editProfileStoreButtonContainer}>
-            <button className={styles.editProfileButton} onClick={handleSubmitIntroduction}>
-              設定を保存
-            </button>
-          </div>
-          <div className={styles.threeDots}>
-            <BsThreeDots size={24} />
-          </div>
-        </>
-      );
-    }
     return (
       <>
         <div className={styles.editProfileButtonContainer}>
-          <button className={styles.editProfileButton} onClick={handleUserEditing}>
-            プロフィールを変更
+          <button
+            className={styles.editProfileButton}
+            onClick={isUserEditing ? handleSubmitIntroduction : handleUserEditing}
+          >
+            {isUserEditing ? "設定を保存" : "プロフィールを変更"}
           </button>
-        </div>
-        <div className={styles.threeDots}>
-          <BsThreeDots size={24} />
-        </div>
-      </>
-    );
-  }
-
-  if (isFollowing) {
-    return (
-      <>
-        <div className={styles.unFollowButtonContainer}>
-          <button className={styles.unFollowButton} onClick={handleUnfollow}>
-            フォローを外す
-          </button>
-        </div>
-        <div className={styles.threeDots}>
-          <BsThreeDots size={24} />
         </div>
       </>
     );
@@ -291,14 +295,15 @@ const renderFollowOrprofileEditButton = (
 
   return (
     <>
-      <div className={styles.followButtonContainer}>
-        <button className={styles.followButton} onClick={handleFollow}>
-          フォロー
+      <div className={isFollowing ? styles.unFollowButtonContainer : styles.followButtonContainer}>
+        <button
+          className={isFollowing ? styles.unFollowButton : styles.followButton}
+          onClick={isFollowing ? handleUnfollow : handleFollow}
+        >
+          {isFollowing ? "フォローを外す" : "フォロー"}
         </button>
       </div>
-      <div className={styles.threeDots}>
-        <BsThreeDots size={24} />
-      </div>
+      {renderThreeDotsMenu()}
     </>
   );
 };

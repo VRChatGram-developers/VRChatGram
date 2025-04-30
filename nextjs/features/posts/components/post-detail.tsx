@@ -178,7 +178,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             <div className={styles.postDetailProfileContainer}>
               <div className={styles.postDetailProfileIconContainer}>
                 <Image
-                  src={post.user?.profile_url || "/posts/sample-user-icon.png"}
+                  src={post.user?.profile_url || "/default-icon-user.png"}
                   alt="avatar"
                   width={200}
                   height={200}

@@ -11,6 +11,8 @@ export default async function Page({
 
   const postsList = await fetchPosts(queryParamsString, new Headers(await headers()));
   const popularTags = await fetchPopularTagList();
+  const tagName = params.tag as string;
+  const decodedTagName = decodeURIComponent(tagName);
   
   if (typeof postsList === "string") {
     return <div>{postsList}</div>;
@@ -19,5 +21,5 @@ export default async function Page({
     return <div>{popularTags}</div>;
   }
 
-  return <PostList posts={postsList} popularTags={popularTags} />;
+  return <PostList posts={postsList} popularTags={popularTags} tagName={decodedTagName} />;
 }

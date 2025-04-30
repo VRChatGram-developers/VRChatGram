@@ -1,10 +1,10 @@
 "use client";
 
-import styles from "../styles/user-home.module.scss";
+import styles from "@/features/users/styles/user-home.module.scss";
 import { User } from "@/features/users/types/index";
 import { useState } from "react";
 import { PostCard } from "@/components/post-card";
-import { SocialLink } from "@/features/users/components/social-link";
+import { SocialLink } from "@/features/users/components/profile/social-link";
 
 export const UserHome = ({
   user,

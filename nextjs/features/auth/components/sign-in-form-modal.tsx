@@ -101,12 +101,7 @@ export const SignInFormModal = ({ onClose }: { onClose: () => void }) => {
     <div className={styles.signInFormModalContainer}>
       <div className={styles.signInFormModalContentContainer}>
         <div className={styles.signInFormModalTitleContainer}>
-          <div
-            style={{ fontSize: "1rem" }}
-            className="font-bold leading-[40px] tracking-[0.21666669845581055px] font-['October_Devanagari']"
-          >
-            良いねをするにはログインが必要です
-          </div>
+          <div className={styles.signInFormModalTitle}>いいねをするにはログインが必要です</div>
           {fireBaseError.length > 0 && (
             <div className={styles.signInFormModalErrorMessage}>{fireBaseError}</div>
           )}
