@@ -8,6 +8,10 @@ export const Footer = () => {
   const googleFormLinks =
     "https://docs.google.com/forms/d/e/1FAIpQLSc2wPHJNSmD8tBIWMb6UDrJzlXNF3dYFx-okEQvITZvRXpOtQ/viewform";
 
+  const openGoogleForm = () => {
+    window.open(googleFormLinks, "_blank");
+  };
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -22,7 +26,7 @@ export const Footer = () => {
           <div className={styles.faq} onClick={() => router.push("/faq")}>
             Q&A
           </div>
-          <div className={styles.contact} onClick={() => router.push(googleFormLinks)}>
+          <div className={styles.contact} onClick={openGoogleForm}>
             お問い合わせ
           </div>
         </div>
