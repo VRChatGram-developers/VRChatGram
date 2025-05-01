@@ -2,7 +2,7 @@
 
 import styles from "../styles/latest-post.module.scss";
 import { LatestPost as LatestPostType } from "../types/index";
-import { PostCard } from "@/components/post-card";
+import { PostCard } from "@/components/layouts/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState } from "react";
 

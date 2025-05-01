@@ -2,7 +2,7 @@
 
 import styles from "../styles/recommend-post-list.module.scss";
 import { PostDetail as PostDetailType, RecommendPost } from "@/features/posts/types/index";
-import { PostCard } from "@/components/post-card";
+import { PostCard } from "@/components/layouts/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState } from "react";
 
