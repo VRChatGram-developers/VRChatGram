@@ -2,7 +2,7 @@
   position: fixed;
   width: 100%;
   box-sizing: border-box;
-  z-index: 999;
+  z-index: 99;
   display: grid;
   gap: 4rem;
   grid-auto-flow: column;
@@ -323,6 +323,12 @@
   z-index: 5;
   position: fixed;
   padding: 6rem 0;
+}
+
+@media screen and (min-width: 1040px) {
+  .headerMobileDrawerMenu {
+    display: none;
+  }  
 }
 
 // 1,039px未満（タブレット）

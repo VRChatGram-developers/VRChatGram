@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./styles/post-card.module.scss";
+import styles from "../styles/post-card.module.scss";
 import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
 import { useRouter } from "next/navigation";

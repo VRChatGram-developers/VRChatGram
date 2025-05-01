@@ -127,7 +127,7 @@ export const Header = () => {
                 />
                 <RiArrowDownSLine onClick={() => setIsDropdownOpen(!isDropdownOpen)} size={24} />
                 {isDropdownOpen && (
-                  <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} />
+                  <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} user={user} />
                 )}
               </div>
             </>

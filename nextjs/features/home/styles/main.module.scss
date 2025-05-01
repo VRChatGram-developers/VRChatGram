@@ -1,5 +1,5 @@
 .mainContainer {
-  padding: 3rem 1.5rem 3rem 1.5rem;
+  padding: 5rem 1.5rem 3rem 1.5rem;
   background-color: #fff;
 
   .topImage {
@@ -9,15 +9,19 @@
 
   .topNoticeMainContainer {
     width: 100%;
-    height: 100%;
-    padding: 2rem 0 0 0;
+    max-height: 60vh;
+    aspect-ratio: 16 / 9; // ← 画像と同じ比率を指定
+    position: relative;
+    overflow: hidden;
+    margin-top: 1rem;
+  
     .topNoticeMainImage {
       width: 100%;
-      height: 70%;
+      height: 100%;
       object-fit: cover;
-      max-height: 20rem;
     }
   }
+  
   .mainImagesContainer {
     display: flex;
     justify-content: center;
@@ -27,19 +31,21 @@
 
     .mainImagesContent {
       display: grid;
-      gap: 1rem;
+      gap: 0.5rem;
       width: 100%;
       overflow-x: auto;
       grid-auto-flow: column;
+      // height: 24rem; // ← グリッドの高さを固定（必要に応じて調整）
       .mainImageLink {
         aspect-ratio: 16 / 9;
-        min-height: 10rem;
+        height: 100%; // ← 高さをグリッドに合わせる
         .mainImage {
+          width: 100%;
+          height: 100%; // ← 高さをリンクに合わせる
           object-fit: cover;
           border-radius: 0.5rem;
         }
       }
-
       &::-webkit-scrollbar {
         display: none;
       }
@@ -47,6 +53,7 @@
   }
 
   .mainSecondContainer {
+    margin-top: 2rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -165,12 +172,17 @@
   padding-bottom: 3rem;
   background-color: #fff;
   .mobileMainImageContaier {
-    height: 50vh;
     width: 100%;
+    aspect-ratio: 16 / 9; // 元画像と同じ比率
+    max-height: 60vh; // モバイルで縦幅制限
     margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  
     .mobileMainImage {
-      height: 100%;
       width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
   .mobileSubImageContainer {

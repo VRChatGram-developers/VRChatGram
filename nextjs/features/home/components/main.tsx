@@ -90,16 +90,17 @@ export const Main = ({
           <div className={styles.topNoticeMainContainer}>
             {testNews.length > 0 && (
               <Image
-                src={testNews[0].imageURL}
-                alt="メイン画像"
-                width={1680}
-                height={384}
-                className={styles.topNoticeMainImage}
+              src={testNews[0].imageURL}
+              alt="メイン画像"
+              width={1680}
+              height={384}
+              className={styles.topNoticeMainImage}
               />
             )}
           </div>
 
-          <div className={styles.mainImagesContainer}>
+          {/* PC版お知らせ */}
+          {/* <div className={styles.mainImagesContainer}>
             <div className={styles.mainImagesContent}>
               {testNews.map(({ imageURL, linkUrl }, index: Key) => (
                 <Link href={linkUrl} key={index} className={styles.mainImageLink}>
@@ -113,7 +114,7 @@ export const Main = ({
                 </Link>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div className={styles.mainSecondContainer}>
             <div className={styles.mainSecondContainerFirst}>
@@ -203,7 +204,7 @@ export const Main = ({
         </div>
 
         {/* お知らせ並び */}
-        <div className={styles.mobileSubImageContainer}>
+        {/* <div className={styles.mobileSubImageContainer}>
           {testNews.map(({ imageURL, linkUrl }, index: Key) => (
             <Link href={linkUrl} key={index}>
               <Image
@@ -215,7 +216,7 @@ export const Main = ({
               />
             </Link>
           ))}
-        </div>
+        </div> */}
 
         <div className={styles.mobileMainSecondContainerThirdBox}>
           <p className={styles.mobileMainSecondTitle}>お知らせ</p>
