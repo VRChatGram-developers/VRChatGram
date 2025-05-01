@@ -50,8 +50,8 @@ export const UserProfile = ({ user }: { user: User }) => {
       openModal(<SignInFormModal onClose={closeModal} />);
       return;
     }
-    await followUser(user.my_id);
     setIsFollowing(true);
+    await followUser(user.my_id);
   };
 
   const handleUnfollow = async () => {
@@ -59,8 +59,8 @@ export const UserProfile = ({ user }: { user: User }) => {
       openModal(<SignInFormModal onClose={closeModal} />);
       return;
     }
-    await unfollowUser(user.my_id);
     setIsFollowing(false);
+    await unfollowUser(user.my_id);
   };
 
   useEffect(() => {
