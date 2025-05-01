@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import styles from "../styles/dropdown-menu.module.scss";
 import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
 
 type DropdownMenuProps = {
@@ -32,11 +33,22 @@ export const DropdownMenu = ({ isOpen, setIsOpen }: DropdownMenuProps) => {
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={menuRef}
-      className="absolute right-[0px] mt-10 w-30 bg-white border rounded shadow-lg"
-    >
-      <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => logOutWithFirebaseAuth()}>ログアウト</div>
+    <div className={styles.offcanvas}>
+      <div className={styles.offcanvas__content}>
+        <h1 className={styles.offcanvas__heading}>contents</h1>
+      </div>
+      <div className={styles.offcanvas__toggle}>
+        <div className={`offcanvas__menu ${isOpen ? "offcanvas__menu--open" : ""}`}>
+          <ul className={styles.offcanvas__list}>
+            <li className={styles.offcanvas__item}><a href="#">menu1</a></li>
+            <li className={styles.offcanvas__item}><a href="#">menu2</a></li>
+            <li className={styles.offcanvas__item}><a href="#">menu3</a></li>
+            <li className={styles.offcanvas__item}><a href="#">menu4</a></li>
+            <li className={styles.offcanvas__item}><a href="#">menu5</a></li>
+            <p onClick={() => logOutWithFirebaseAuth()}>ログアウト</p>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
