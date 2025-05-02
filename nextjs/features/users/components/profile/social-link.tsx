@@ -33,7 +33,7 @@ export const SocialLink = ({
       <p className={styles.profileSocialLinksTitle}>SNSリンク</p>
       {isUserEditing
         ? socialLinks.map((socialLink: SocialLinkType, index: number) => (
-            <div key={socialLink.platform_types} className={styles.profileIntroduceContent}>
+            <div key={socialLink.id} className={styles.profileIntroduceContent}>
               {getIcon(socialLink.platform_types)}
               <input
                 type="text"
@@ -46,7 +46,7 @@ export const SocialLink = ({
             </div>
           ))
         : socialLinks.map((socialLink: SocialLinkType) => (
-            <div key={socialLink.platform_types} className={styles.profileIntroduceContent}>
+            <div key={socialLink.id} className={styles.profileIntroduceContent}>
               {getIcon(socialLink.platform_types)}
               <a
                 href={socialLink.platform_url}

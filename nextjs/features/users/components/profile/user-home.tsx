@@ -37,6 +37,7 @@ export const UserHome = ({
               onChange={(e) => {
                 setIntroductionTitle(e.target.value);
               }}
+              placeholder="タイトル"
             />
             <textarea
               defaultValue={introductionDetail}
@@ -44,6 +45,7 @@ export const UserHome = ({
               onChange={(e) => {
                 setIntroductionDetail(e.target.value);
               }}
+              placeholder="詳細"
             />
           </div>
         ) : (
