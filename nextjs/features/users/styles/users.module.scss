@@ -1,6 +1,6 @@
 .profileHeaderContainer {
   width: 100%;
-  min-height: 30rem;
+  min-height: 35rem;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -9,11 +9,39 @@
   padding: 2rem;
 
   .headerIconEditContainer {
-    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem;
+
+    .profileInputTextContainer {
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     .headerUserIconInput {
       width: 100%;
       height: 100%;
+    }
+
+    .headerUserIconInputButtonContainer {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #000;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+
+      .headerUserIconInputButtonImage {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
     }
   }
 
@@ -40,6 +68,41 @@
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
+          padding: 0 0.5rem;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+
+          .profileInputTextContainer {
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .profileInputText {
+              font-size: 0.8rem;
+            }
+          }
+
+          .profileHeaderUserIconInputButtonContainer {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #000;
+            font-size: 0.8rem;
+            gap: 0.5rem;
+
+            .profileHeaderUserIconInputButtonImage {
+              width: 20px;
+              height: 20px;
+              object-fit: contain;
+            }
+          }
         }
       }
 
@@ -56,11 +119,27 @@
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      align-self: start;
 
       .profileUserNameContainer {
+        color: #fff;
+
         .profileUserNameText {
           font-weight: bold;
-          font-size: 4rem;
+          font-size: 3rem;
+        }
+
+        .profileUserNameInputContainer {
+
+          color: #000;
+
+          .profileUserNameInput {
+            border: 1px solid #000;
+            border-radius: 0.5rem;
+            padding: 0.8rem 1rem;
+            width: 100%;
+            font-size: 3rem;
+          }
         }
       }
 
@@ -69,6 +148,7 @@
         font-size: 1.5rem;
         gap: 1rem;
         font-weight: lighter;
+        color: #fff;
 
         .profileUserNameContainer {
           .profileUserNameText {}

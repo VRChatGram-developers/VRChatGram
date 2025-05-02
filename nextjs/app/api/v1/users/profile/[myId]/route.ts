@@ -20,6 +20,14 @@ const formatUpdateSocialLink = (social_links: SocialLink[]) => {
   });
 };
 
+const generateNumericUUID = () => {
+  const sectionLengths = [8, 4, 4, 4, 12];
+
+  return sectionLengths
+    .map((len) => Array.from({ length: len }, () => Math.floor(Math.random() * 9) + 1).join(""))
+    .join("-");
+}
+
 export async function PUT(request: Request, { params }: { params: Promise<{ myId: string }> }) {
   try {
     const { myId } = await params;
@@ -92,7 +100,6 @@ export async function PUT(request: Request, { params }: { params: Promise<{ myId
     return NextResponse.json({ error: "エラーが発生しました" }, { status: 500 });
   }
 }
-
 
 export async function GET(request: Request, { params }: { params: Promise<{ myId: string }> }) {
   try {
@@ -172,6 +179,22 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
         images: post.images.map(toJson),
         isLiked: post.likes.some((like) => like.user_id == currentUser?.id),
       })) || [];
+
+    if (user?.social_links.length === 0) {
+      [
+        platform_types.x,
+        platform_types.discord,
+        platform_types.vrchat,
+        platform_types.other,
+        platform_types.other,
+      ].forEach(async (platform_types) => {
+        user?.social_links.push({
+          id: generateNumericUUID(),
+          platform_types: platform_types,
+          platform_url: "",
+        });
+      });
+    }
 
     const totalLikes = postsWithLikes.reduce((total, post) => total + post.likesCount, 0);
     const top4Posts = postsWithLikes.sort((a, b) => b.likesCount - a.likesCount).slice(0, 4);
