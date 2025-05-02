@@ -3,7 +3,7 @@
 import styles from "@/features/users/styles/users.module.scss";
 import Image from "next/image";
 import { SocialLink, User } from "@/features/users/types/index";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { followUser, unfollowUser } from "@/features/users/endpoint";
 import { UserPostList } from "./user-post-list";
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import { DropdownMenu } from "./drop-down-menu";
+import { FaImage } from "react-icons/fa6";
 
 export const UserProfile = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -34,9 +35,10 @@ export const UserProfile = ({ user }: { user: User }) => {
   const [previewProfileUrl, setPreviewProfileUrl] = useState<string>("");
   const { openModal, closeModal } = useModal();
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const backgroundFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDropdownMenuOpen = () => {
-    console.log("handleDropdownMenuOpen");
     setIsDropdownMenuOpen(!isDropdownMenuOpen);
   };
 
@@ -84,7 +86,6 @@ export const UserProfile = ({ user }: { user: User }) => {
   const createSocialLinkList = (socialLinks: SocialLink[]) => {
     const requiredLength = 5;
     const existingPlatforms = new Set(socialLinks.map((link) => link.platform_types));
-
     const emptyLinks: SocialLink[] = [];
 
     for (const platform of ["x", "discord"]) {
@@ -108,7 +109,6 @@ export const UserProfile = ({ user }: { user: User }) => {
     setIsUserEditing(true);
 
     const filteredSocialLinks = socialLinks.filter((socialLink) => socialLink.platform_url !== "");
-
     try {
       await updateUserProfile({
         myId: user.my_id,
@@ -145,14 +145,33 @@ export const UserProfile = ({ user }: { user: User }) => {
             : { backgroundImage: `url(${encodeURI(user.header_url || previewHeaderUrl)})` }
         }
       >
-        {/* ヘッダー画像の編集 */}
         {isUserEditing && (
           <div className={styles.headerIconEditContainer}>
+            <FaImage size={40} />
+            <div className={styles.profileInputTextContainer}>
+              <p className={styles.profileInputText}>ここにドロップ&ドロップ</p>
+              <p className={styles.profileInputText}>または</p>
+            </div>
             <input
               type="file"
               onChange={handleBackgroundImageChange}
               className={styles.headerUserIconInput}
+              ref={backgroundFileInputRef}
+              hidden
             />
+            <div className={styles.headerUserIconInputButtonContainer}>
+              <img
+                src={"/upload-file.png"}
+                alt="profile"
+                className={styles.headerUserIconInputButtonImage}
+              />
+              <button
+                className={styles.profileInputButton}
+                onClick={() => backgroundFileInputRef.current?.click()}
+              >
+                ファイルを選択
+              </button>
+            </div>
           </div>
         )}
 
@@ -162,7 +181,32 @@ export const UserProfile = ({ user }: { user: User }) => {
               <>
                 <div className={styles.profileHeaderUserIconInputContainer}>
                   <div className={styles.profileHeaderUserIconInput}>
-                    <input type="file" onChange={handleProfileImageChange} />
+                    <FaImage size={32} />
+                    <div className={styles.profileInputTextContainer}>
+                      <p className={styles.profileInputText}>ここにドロップ&ドロップ</p>
+                      <p className={styles.profileInputText}>または</p>
+                    </div>
+                    <input
+                      type="file"
+                      onChange={handleProfileImageChange}
+                      className={styles.headerUserIconInput}
+                      ref={fileInputRef}
+                      hidden
+                    />
+
+                    <div className={styles.profileHeaderUserIconInputButtonContainer}>
+                      <img
+                        src={"/upload-file.png"}
+                        alt="profile"
+                        className={styles.profileHeaderUserIconInputButtonImage}
+                      />
+                      <button
+                        className={styles.profileInputButton}
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        ファイルを選択
+                      </button>
+                    </div>
                   </div>
                   <Image
                     src={previewProfileUrl || user.profile_url || BackgeoundImageURL}
@@ -184,24 +228,36 @@ export const UserProfile = ({ user }: { user: User }) => {
             )}
           </div>
           <div className={styles.profuleHeaderInfomationContainer}>
-            <div className={styles.profileUserNameContainer}>
-              {isUserEditing ? (
-                <input type="text" defaultValue={name} onChange={(e) => setName(e.target.value)} />
-              ) : (
-                <p className={styles.profileUserNameText}>{user.name}</p>
-              )}
-            </div>
-            <div className={styles.profuleUserStatusContainer}>
-              <div className={styles.profileViewCount}>
-                <p>{user.totalViews}閲覧</p>
+            {isUserEditing ? (
+              <div className={styles.profileUserNameContainer}>
+                <div className={styles.profileUserNameInputContainer}>
+                  <input
+                    type="text"
+                    defaultValue={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={styles.profileUserNameInput}
+                    placeholder="名前を入力"
+                  />
+                </div>
               </div>
-              <div className={styles.profilePostCount}>
-                <p>投稿{user.posts[0]?.length ?? 0}件</p>
-              </div>
-              <div className={styles.profileLikeCount}>
-                <p>{user.totalLikes} いいね</p>
-              </div>
-            </div>
+            ) : (
+              <>
+                <div className={styles.profileUserNameContainer}>
+                  <p className={styles.profileUserNameText}>{user.name}</p>
+                </div>
+                <div className={styles.profuleUserStatusContainer}>
+                  <div className={styles.profileViewCount}>
+                    <p>{user.totalViews}閲覧</p>
+                  </div>
+                  <div className={styles.profilePostCount}>
+                    <p>投稿{user.posts[0]?.length ?? 0}件</p>
+                  </div>
+                  <div className={styles.profileLikeCount}>
+                    <p>{user.totalLikes} いいね</p>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -281,14 +337,22 @@ const renderFollowOrprofileEditButton = (
   if (user.isCurrentUser) {
     return (
       <>
-        <div className={styles.editProfileButtonContainer}>
-          <button
-            className={styles.editProfileButton}
-            onClick={isUserEditing ? handleSubmitIntroduction : handleUserEditing}
-          >
-            {isUserEditing ? "設定を保存" : "プロフィールを変更"}
-          </button>
-        </div>
+        {isUserEditing ? (
+          <div className={styles.editProfileStoreButtonContainer}>
+            <button className={styles.editProfileStoreButton} onClick={handleSubmitIntroduction}>
+              {"設定を保存"}
+            </button>
+          </div>
+        ) : (
+          <div className={styles.editProfileButtonContainer}>
+            <button
+              className={styles.editProfileButton}
+              onClick={isUserEditing ? handleSubmitIntroduction : handleUserEditing}
+            >
+              {"プロフィール変更"}
+            </button>
+          </div>
+        )}
       </>
     );
   }
