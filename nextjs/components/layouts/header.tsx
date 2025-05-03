@@ -102,7 +102,7 @@ export const Header = () => {
             <></>
           ) : status !== "authenticated" ? (
             <>
-              <button onClick={() => router.push("/signin")} className={styles.signInButton}>
+              <button onClick={() => router.push("/login")} className={styles.signInButton}>
                 <p className={styles.signInButtonText}>ログイン</p>
               </button>
               <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
@@ -168,7 +168,7 @@ export const Header = () => {
               <></>
             ) : status !== "authenticated" ? (
               <>
-                <button onClick={() => router.push("/signin")} className={styles.signInButton}>
+                <button onClick={() => router.push("/login")} className={styles.signInButton}>
                   <p className={styles.signInButtonText}>ログイン</p>
                 </button>
                 <button onClick={() => router.push("/signup")} className={styles.signUpButton}>

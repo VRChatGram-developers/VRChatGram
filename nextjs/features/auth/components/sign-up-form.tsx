@@ -178,7 +178,7 @@ export const SignUpForm = ({
             <div className={styles.separateLoginContainer}>
               <p className={styles.separateLoginText}>
                 既にアカウントをお持ちですか？{" "}
-                <Link href="/signin" className="underline">
+                <Link href="/login" className="underline">
                   ログイン
                 </Link>
               </p>
