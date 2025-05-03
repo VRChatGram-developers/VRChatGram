@@ -1,4 +1,4 @@
-import { SignInForm } from "@/features/auth/components/sign-in-form";
+import { LoginForm } from "@/features/auth/components/login-form";
 import { redirect } from "next/navigation";
 import { auth } from "@/libs/firebase/auth";
 
@@ -7,6 +7,6 @@ export default async function Page() {
   if (session) {
     redirect("/");
   }
-  return <SignInForm />;
+  return <LoginForm />;
 }
 
