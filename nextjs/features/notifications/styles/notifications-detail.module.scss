@@ -1,77 +1,87 @@
 .notificationDetailContainer {
-    display: grid;
-    gap: 1.5rem;
-    padding: 6rem 13rem 1.5rem 13rem;
+  display: grid;
+  gap: 1.5rem;
+  padding: 6rem 13rem 1.5rem 13rem;
 
-    .notificationDetailTitle {
-      font-size: 1.5rem;
-      font-weight: bold;
-      font-family: "Noto Sans JP";
-    }
-
-    .notificationDetailTypeContainer {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-
-      .notificationDetailTypeBugFix {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        background-color: #eff287;
-        border-radius: 1rem;
-        padding: 0.5rem 1rem;
-        font-weight: bold;
-      }
-
-      .notificationDetailTypeUpdate {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        background-color: #69beef;
-        border-radius: 1rem;
-        padding: 0.5rem 1rem;
-        font-weight: bold;
-      }
-    }
-
-    .notificationDetailContentContainer {
-      display: grid;
-      background-color: #fff;
-      padding: 1.5rem 8rem 1.5rem 8rem;
-      border-radius: 1rem;
-      gap: 1rem;
-
-      .notificationDetailBackButton {
-        text-align: center;
-        font-size: 0.9rem;
-        font-family: "Noto Sans JP";
-        font-weight: bold;
-        color: #151C4B;
-        cursor: pointer;
-      }
-    }
-
-    .notificationDetailContentText {
-      font-size: 1rem;
-      font-family: "Noto Sans JP";
-    }
-
-    .privacyPolicySection {
-      padding-top: 1.5rem;
-    }
-
-    
+  .notificationDetailTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: "Noto Sans JP";
   }
 
-  @media (max-width: 768px) {
-    .notificationDetailContainer {
-        padding: 6rem 1rem !important;
+  .notificationDetailTypeContainer {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 
-        .notificationDetailContentContainer {
-          padding: 2rem 2rem !important;
-        }
+    .notificationDetailTypeBugFix {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: #eff287;
+      border-radius: 1rem;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
     }
+
+    .notificationDetailTypeUpdate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: #69beef;
+      border-radius: 1rem;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+    }
+  }
+
+  .notificationDetailContentContainer {
+    display: grid;
+    background-color: #fff;
+    padding: 1.5rem 8rem 1.5rem 8rem;
+    border-radius: 1rem;
+    gap: 1rem;
+
+    .notificationDetailBackButton {
+      text-align: center;
+      font-size: 0.9rem;
+      font-family: "Noto Sans JP";
+      font-weight: bold;
+      color: #151C4B;
+      cursor: pointer;
+    }
+  }
+
+  .notificationDetailContentText {
+    font-size: 1rem;
+    font-family: "Noto Sans JP";
+  }
+
+  .privacyPolicySection {
+    padding-top: 1.5rem;
+  }
+}
+
+/* タブレット */
+@media (max-width: 1024px) {
+  .notificationDetailContainer {
+    padding: 6rem 10rem 1.5rem 10rem;
+
+    .notificationDetailContentContainer {
+      padding: 2rem 2rem !important;
+    }
+  }
+}
+
+/* タブレット  ~ スマートフォン */
+@media (max-width: 768px) {
+  .notificationDetailContainer {
+    padding: 6rem 1rem !important;
+
+    .notificationDetailContentContainer {
+      padding: 2rem 2rem !important;
+    }
+  }
 }
