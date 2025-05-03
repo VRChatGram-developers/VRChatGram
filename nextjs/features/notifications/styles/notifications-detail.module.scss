@@ -11,6 +11,30 @@
 
     .notificationDetailTypeContainer {
       display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      .notificationDetailTypeBugFix {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: #eff287;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+      }
+
+      .notificationDetailTypeUpdate {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: #69beef;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+      }
     }
 
     .notificationDetailContentContainer {
@@ -18,6 +42,16 @@
       background-color: #fff;
       padding: 1.5rem 8rem 1.5rem 8rem;
       border-radius: 1rem;
+      gap: 1rem;
+
+      .notificationDetailBackButton {
+        text-align: center;
+        font-size: 0.9rem;
+        font-family: "Noto Sans JP";
+        font-weight: bold;
+        color: #151C4B;
+        cursor: pointer;
+      }
     }
 
     .notificationDetailContentText {
@@ -28,4 +62,16 @@
     .privacyPolicySection {
       padding-top: 1.5rem;
     }
+
+    
   }
+
+  @media (max-width: 768px) {
+    .notificationDetailContainer {
+        padding: 6rem 1rem !important;
+
+        .notificationDetailContentContainer {
+          padding: 2rem 2rem !important;
+        }
+    }
+}
