@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { FaCamera } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
 import styles from "../styles/header.module.scss";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useModal } from "@/provider/modal-provider";
 import { PostForm } from "@/features/posts/components/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
@@ -25,9 +25,11 @@ export const Header = () => {
   const { status, data: session } = useSession();
   const { searchQuery, setSearchQuery } = useSearchStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const menuFunction = () => {
-    setOpenMenu(!openMenu);
+  const menuFunction = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setOpenMenu((prev) => !prev);
   };
 
   useEffect(() => {
@@ -44,32 +46,52 @@ export const Header = () => {
       fetchUser();
     }
   }, [session]);
-  
 
-  const handleRedirectToAccountSettings = () => {
-    router.push("/users/account-settings");
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpenMenu(false);
+      }
+    };
+
+    if (openMenu) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [openMenu]);
+
+  const handleRedirectToAccountSettings = async () => {
+    await router.push("/users/account-settings");
+    setOpenMenu(false);
   };
 
-  const handleToMyViewsPosts = () => {
-    router.push(`/users/views`);
+  const handleToMyViewsPosts = async () => {
+    await router.push(`/users/views`);
+    setOpenMenu(false);
   };
 
-  const handleToMyFavoritePosts = () => {
-    router.push(`/users/likes`);
+  const handleToMyFavoritePosts = async () => {
+    await router.push(`/users/likes`);
+    setOpenMenu(false);
   };
 
-  const handleToTopPage = () => {
+  const handleToTopPage = async () => {
     setSearchQuery("");
-    router.push(`/`);
+    await router.push(`/`);
+    setOpenMenu(false);
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: 1 })
       : createQueryParams({ title: searchQuery, page: 1 });
     setSearchQuery(searchQuery);
 
-    router.push(`/posts?${query}`);
+    await router.push(`/posts?${query}`);
+    setOpenMenu(false);
   };
   return (
     <>
@@ -135,7 +157,7 @@ export const Header = () => {
         </div>
 
         {/* Mobile Only */}
-        <div className={styles.headerMobileContainer} onClick={() => menuFunction()}>
+        <div className={styles.headerMobileContainer} onClick={(e) => menuFunction(e)}>
           <div
             className={`${styles.headerMobileHumburger} ${
               openMenu ? styles.headerMobileHumburgerOpen : undefined
@@ -151,6 +173,7 @@ export const Header = () => {
         className={`${styles.headerMobileDrawerMenu} ${
           openMenu ? styles.headerMobileDrawerMenuOpen : undefined
         }`}
+        ref={menuRef}
       >
         <div className={styles.headerMobileDraweContainer}>
           <div className={styles.searchInputMobileContainer}>
