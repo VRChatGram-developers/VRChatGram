@@ -109,123 +109,129 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <div className={styles.loginImageContainer}>
-        <Image
-          src="/login_page.png"
-          alt="Login page image"
-          className="object-cover w-full h-full"
-          width={864}
-          height={800}
-        />
-      </div>
-      <div className={styles.loginContent}>
-        <div className={styles.loginFormContent}>
-          <h1
-            style={{ fontSize: "40px" }}
-            className="font-bold leading-[40px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-2"
-          >
-            おかえりなさい！
-          </h1>
-          <p className={styles.loginFormContentSubTitle}>
-            今日も素敵な写真をいっぱい投稿しましょう
-          </p>
+    <>
+      {isLoading ? (
+        <div className={styles.loginContainerModal}>
+          <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+        </div>
+      ) : (
+        <div className={styles.loginContainer}>
+          <div className={styles.loginImageContainer}>
+            <Image
+              src="/login_page.png"
+              alt="Login page image"
+              className="object-cover w-full h-full"
+              width={864}
+              height={800}
+            />
+          </div>
+          <div className={styles.loginContent}>
+            <div className={styles.loginFormContent}>
+              <h1
+                style={{ fontSize: "40px" }}
+                className="font-bold leading-[40px] tracking-[0.21666669845581055px] text-center font-['October_Devanagari'] mb-2"
+              >
+                おかえりなさい！
+              </h1>
+              <p className={styles.loginFormContentSubTitle}>
+                今日も素敵な写真をいっぱい投稿しましょう
+              </p>
 
-          <div className={styles.loginTextFormContainer}>
-            <div className={styles.textForm}>
-              <TextField
-                fullWidth
-                label="メールアドレス*"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                  sx: {
-                    color: "#69BEEF",
-                  },
-                }}
-                sx={{
-                  height: "64px",
-                  "& .MuiInputLabel-shrink": {
-                    transform: "translate(14px, -9px) scale(0.75)",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderWidth: "2px",
-                      borderColor: "#69BEEF",
-                    },
-                  },
-                }}
-              />
-              {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
-            </div>
-
-            <div className={styles.textForm}>
-              <div className={styles.loginFormPasswordContainer}>
-                <TextField
-                  fullWidth
-                  type={isCurrentPasswordVisible ? "text" : "password"}
-                  label="パスワード"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  variant="outlined"
-                  InputLabelProps={{
-                    shrink: true,
-                    sx: {
-                      color: "#69BEEF",
-                    },
-                  }}
-                  sx={{
-                    height: "64px",
-                    "& .MuiInputLabel-shrink": {
-                      transform: "translate(14px, -9px) scale(0.75)",
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderWidth: "2px",
-                        borderColor: "#69BEEF",
+              <div className={styles.loginTextFormContainer}>
+                <div className={styles.textForm}>
+                  <TextField
+                    fullWidth
+                    label="メールアドレス*"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    variant="outlined"
+                    InputLabelProps={{
+                      shrink: true,
+                      sx: {
+                        color: "#69BEEF",
                       },
-                    },
-                  }}
-                />
-                {isCurrentPasswordVisible ? (
-                  <IoEyeOffSharp
-                    className={styles.eyeIconSlash}
-                    onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+                    }}
+                    sx={{
+                      height: "64px",
+                      "& .MuiInputLabel-shrink": {
+                        transform: "translate(14px, -9px) scale(0.75)",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderWidth: "2px",
+                          borderColor: "#69BEEF",
+                        },
+                      },
+                    }}
                   />
-                ) : (
-                  <IoEyeSharp
-                    className={styles.eyeIcon}
-                    onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
-                  />
-                )}
-              </div>
-              {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
-            </div>
-            <div className={styles.createButtonContainer}>
-              <button onClick={handleSignIn} className={styles.createButton}>
-                ログイン
-              </button>
-            </div>
-            <div className={styles.separateLoginContainer}>
-              <p className={styles.separateLoginText}>
-                既にアカウントをお持ちですか？{" "}
-                <Link href="/login" className="underline">
-                  ログイン
-                </Link>
-              </p>
-            </div>
-            <div className={styles.separateLoginContainer}>
-              <p className={styles.separateLoginText}>
-                パスワードを忘れた方は{" "}
-                <Link href={googleFormLinks} className="underline">
-                  こちら
-                </Link>
-              </p>
-            </div>
+                  {errorMail && <p className={styles.errorMailMessage}>{errorMail}</p>}
+                </div>
 
-            {/* <div>
+                <div className={styles.textForm}>
+                  <div className={styles.loginFormPasswordContainer}>
+                    <TextField
+                      fullWidth
+                      type={isCurrentPasswordVisible ? "text" : "password"}
+                      label="パスワード"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      variant="outlined"
+                      InputLabelProps={{
+                        shrink: true,
+                        sx: {
+                          color: "#69BEEF",
+                        },
+                      }}
+                      sx={{
+                        height: "64px",
+                        "& .MuiInputLabel-shrink": {
+                          transform: "translate(14px, -9px) scale(0.75)",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderWidth: "2px",
+                            borderColor: "#69BEEF",
+                          },
+                        },
+                      }}
+                    />
+                    {isCurrentPasswordVisible ? (
+                      <IoEyeOffSharp
+                        className={styles.eyeIconSlash}
+                        onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+                      />
+                    ) : (
+                      <IoEyeSharp
+                        className={styles.eyeIcon}
+                        onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
+                      />
+                    )}
+                  </div>
+                  {errorPassword && <p className={styles.errorPasswordMessage}>{errorPassword}</p>}
+                </div>
+                <div className={styles.createButtonContainer}>
+                  <button onClick={handleSignIn} className={styles.createButton}>
+                    ログイン
+                  </button>
+                </div>
+                <div className={styles.separateLoginContainer}>
+                  <p className={styles.separateLoginText}>
+                    アカウントをお持ちではありませんか？{" "}
+                    <Link href="/signup" className="underline">
+                      アカウント作成
+                    </Link>
+                  </p>
+                </div>
+                <div className={styles.separateLoginContainer}>
+                  <p className={styles.separateLoginText}>
+                    パスワードを忘れた方は{" "}
+                    <Link href={googleFormLinks} className="underline">
+                      こちら
+                    </Link>
+                  </p>
+                </div>
+
+                {/* <div>
               <p
                 style={{ marginTop: "16px", fontSize: "10px" }}
                 className="text-center text-[#000000] mt-[30px]"
@@ -240,9 +246,11 @@ export const LoginForm = () => {
                 <p className={styles.googleLoginText}>Googleで続行</p>
               </button>
             </div> */}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
