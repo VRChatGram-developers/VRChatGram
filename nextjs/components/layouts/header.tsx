@@ -16,6 +16,8 @@ import { createQueryParams } from "@/utils/queryParams";
 import { useEffect } from "react";
 import { fetchUserForHeader } from "@/features/users/endpoint";
 import { UserForHeader } from "@/features/users/types";
+import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
+import Link from "next/link";
 
 export const Header = () => {
   const router = useRouter();
@@ -63,27 +65,6 @@ export const Header = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [openMenu]);
 
-  const handleRedirectToAccountSettings = async () => {
-    await router.push("/users/account-settings");
-    setOpenMenu(false);
-  };
-
-  const handleToMyViewsPosts = async () => {
-    await router.push(`/users/views`);
-    setOpenMenu(false);
-  };
-
-  const handleToMyFavoritePosts = async () => {
-    await router.push(`/users/likes`);
-    setOpenMenu(false);
-  };
-
-  const handleToTopPage = async () => {
-    setSearchQuery("");
-    await router.push(`/`);
-    setOpenMenu(false);
-  };
-
   const handleSearch = async () => {
     const query = searchQuery.includes("#")
       ? createQueryParams({ tag: searchQuery, page: 1 })
@@ -96,16 +77,20 @@ export const Header = () => {
   return (
     <>
       <header className={styles.headerContainer}>
-        <div className={styles.headerImageContainer}>
+        <Link
+          href="/"
+          className={styles.headerImageContainer}
+          onClick={() => setOpenMenu(false)}
+          prefetch={true}
+        >
           <Image
             src="/header/vrcss_icon.svg"
             alt="Logo"
             layout="fill"
             objectFit="contain"
             className={styles.logo}
-            onClick={handleToTopPage}
           />
-        </div>
+        </Link>
 
         {/* PC Only */}
         <div className={styles.searchInputContainer}>
@@ -124,12 +109,20 @@ export const Header = () => {
             <></>
           ) : status !== "authenticated" ? (
             <>
-              <button onClick={() => router.push("/login")} className={styles.signInButton}>
+              <Link
+                href="/login"
+                onClick={() => setOpenMenu(false)}
+                className={styles.signInButton}
+              >
                 <p className={styles.signInButtonText}>ログイン</p>
-              </button>
-              <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setOpenMenu(false)}
+                className={styles.signUpButton}
+              >
                 <p className={styles.signUpButtonText}>新規登録</p>
-              </button>
+              </Link>
             </>
           ) : (
             <>
@@ -191,12 +184,20 @@ export const Header = () => {
               <></>
             ) : status !== "authenticated" ? (
               <>
-                <button onClick={() => router.push("/login")} className={styles.signInButton}>
+                <Link
+                  href="/login"
+                  onClick={() => setOpenMenu(false)}
+                  className={styles.signInButton}
+                >
                   <p className={styles.signInButtonText}>ログイン</p>
-                </button>
-                <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setOpenMenu(false)}
+                  className={styles.signUpButton}
+                >
                   <p className={styles.signUpButtonText}>新規登録</p>
-                </button>
+                </Link>
               </>
             ) : (
               <>
@@ -222,36 +223,47 @@ export const Header = () => {
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={() => router.push(`/users/${user?.my_id}`)}
+                      <Link
+                        href={`/users/${user?.my_id}`}
+                        onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         ダッシュボード
-                      </p>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={handleToMyFavoritePosts}
+                      </Link>
+                      <Link
+                        href="/users/likes"
+                        onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         良いね一覧
-                      </p>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={handleToMyViewsPosts}
+                      </Link>
+                      <Link
+                        href="/users/views"
+                        onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         閲覧履歴
-                      </p>
+                      </Link>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
                       <p>Language</p>
                       <p className={`${styles.moduleDrawerMenutext}`}>日本語</p>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={handleRedirectToAccountSettings}
+                      <Link
+                        href="/users/account-settings"
+                        onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         アカウント設定
-                      </p>
+                      </Link>
                     </div>
-                    <div className={styles.moduleDrawerMenuSection}>
+                    <div
+                      className={styles.moduleDrawerMenuSection}
+                      onClick={logOutWithFirebaseAuth}
+                    >
                       <button className={`${styles.moduleDrawerMenutext}`}>ログアウト</button>
                     </div>
                   </div>
