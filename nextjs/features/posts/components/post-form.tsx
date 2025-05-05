@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { createPost } from "../endpoint";
+import { createPost, fetchS3SignedUrl, convertToWebp } from "../endpoint";
 import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
 import { FaImage } from "react-icons/fa6";
-import { uploadImage } from "../endpoint";
 import { ClipLoader } from "react-spinners";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
@@ -20,6 +19,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [mainImage, setMainImage] = useState<ImageData | null>(null);
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -157,10 +157,16 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
 
     const postImages = await Promise.all(
       images.map(async (image) => {
-        const serializedImage = await uploadImage(image);
-        return serializedImage;
+        const imageUrl = await uploadImage(image.file, image.file_name);
+        return {
+          url: imageUrl,
+          width: image.width,
+          height: image.height,
+        };
       })
     );
+
+    console.log(postImages);
 
     try {
       await createPost({
@@ -178,7 +184,30 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  async function uploadImage(file: File, fileName: string): Promise<string> {
+    // 1. APIから署名付きURL取得
+    const response = await fetchS3SignedUrl({
+      fileName: fileName.replace(/\.[^/.]+$/, "") + ".webp",
+      contentType: "image/webp",
+    });
+
+    const url = typeof response === "string" ? response : response.url;
+    const webpBlob = await convertToWebp(file, 640);
+    const uploadRes = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "image/webp",
+      },
+      body: webpBlob,
+    });
+
+    if (!uploadRes.ok) {
+      throw new Error("S3 upload failed");
+    }
+
+    // 3. 公開URLを返す
+    return url.split("?")[0]; // クエリを除いた公開URLを返す
+  }
 
   return (
     <div className={styles.container}>
