@@ -30,7 +30,10 @@ export async function POST(req: Request) {
   try {
     const signedUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
     return new Response(JSON.stringify({ url: signedUrl }), { status: 200 });
-  } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    }
+    return new Response(JSON.stringify({ error: "An unknown error occurred" }), { status: 500 });
   }
 }
