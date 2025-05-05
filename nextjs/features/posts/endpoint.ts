@@ -119,3 +119,36 @@ export const fetchPopularTagList = async (): Promise<Tag[] | string> => {
   const data = await response.json();
   return data;
 };
+
+
+export const fetchS3SignedUrl = async ({
+  fileName,
+  contentType,
+}: {
+  fileName: string;
+  contentType: string;
+}): Promise<{ url: string } | string> => {
+  const response = await fetch(`${API_URL}/api/v1/s3`, {
+    method: "POST",
+    body: JSON.stringify({ fileName, contentType }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch S3 signed url";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const convertToWebp = async (file: File, width: number): Promise<Blob> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("width", width.toString());
+
+  const res = await fetch(`${API_URL}/api/v1/s3/webp`, {
+    method: "POST",
+    body: formData
+  });
+  const data = await res.blob();
+  return data;
+};
