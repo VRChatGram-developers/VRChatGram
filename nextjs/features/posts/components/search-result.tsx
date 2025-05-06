@@ -208,7 +208,7 @@ export const SearchResult = ({
         />
         <div className={styles.searchDetailContainer}>
           <p className={styles.searchDetailTitle}>
-            {selectedTag === "ALL" ? "ALL" : `#${selectedTag}`}
+            {selectedTag === "ALL" ? "ALL" : `${selectedTag}`}
           </p>
           <div className={styles.searchDetailContent}>
             <div>
