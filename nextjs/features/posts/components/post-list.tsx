@@ -33,7 +33,7 @@ export const PostList = ({
       router.push(`/posts?${createQueryParams({ tag: "", page: 1 })}`);
     } else {
       setSearchQuery(tagName);
-      router.push(`/posts?${createQueryParams({ tag: tagName, page: 1 })}`);
+      router.push(`/posts?${createQueryParams({ tag: tagName.replace("#", ""), page: 1 })}`);
     }
   };
 
