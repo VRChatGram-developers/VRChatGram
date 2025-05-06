@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
   const command = new PutObjectCommand({
     Bucket: process.env.S3_BUCKET_NAME!,
-    Key: fileName,
+    Key:`originals/${fileName}`,
     ContentType: contentType,
     ACL: "public-read",
   });
