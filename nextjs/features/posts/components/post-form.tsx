@@ -166,8 +166,6 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       })
     );
 
-    console.log(postImages);
-
     try {
       await createPost({
         title,
@@ -187,26 +185,25 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   async function uploadImage(file: File, fileName: string): Promise<string> {
     // 1. APIから署名付きURL取得
     const response = await fetchS3SignedUrl({
-      fileName: fileName.replace(/\.[^/.]+$/, "") + ".webp",
-      contentType: "image/webp",
+      fileName: fileName,
+      contentType: file.type,
     });
 
     const url = typeof response === "string" ? response : response.url;
-    const webpBlob = await convertToWebp(file, 640);
     const uploadRes = await fetch(url, {
       method: "PUT",
       headers: {
-        "Content-Type": "image/webp",
+        "Content-Type": file.type,
       },
-      body: webpBlob,
+      body: file,
     });
 
     if (!uploadRes.ok) {
       throw new Error("S3 upload failed");
     }
 
-    // 3. 公開URLを返す
-    return url.split("?")[0]; // クエリを除いた公開URLを返す
+    const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+    return `https://d3o6x7pz3sf2lk.cloudfront.net/webp/${fileNameWithoutExtension}.webp`;
   }
 
   return (
