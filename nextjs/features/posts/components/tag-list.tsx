@@ -25,7 +25,7 @@ export const TagList = ({
             }
             onClick={() => handleSelectTag(tag.name)}
           >
-            {tag.name === "ALL" ? "ALL" : `#${tag.name}`}
+            {tag.name === "ALL" ? "ALL" : `${tag.name}`}
           </button>
         </div>
       ))}

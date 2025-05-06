@@ -11,11 +11,11 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   const { setSearchQuery } = useSearchStore();
 
   const handleToPostSearchList = () => {
-    router.push(`/posts?${new URLSearchParams({ page: "1" })}`);
+    router.push(`/posts?${new URLSearchParams({ tag: "", page: "1" })}`);
   };
 
   const redirectToPostSearchListByTagName = (tagName: string) => {
-    setSearchQuery(tagName);
+    setSearchQuery(`#${tagName}`);
     router.push(`/posts?${createQueryParams({ tag: tagName, page: 1 })}`);
   };
 
