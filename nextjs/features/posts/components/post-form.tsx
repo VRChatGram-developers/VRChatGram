@@ -203,7 +203,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     }
 
     const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-    return `https://d3o6x7pz3sf2lk.cloudfront.net/webp/${fileNameWithoutExtension}.webp`;
+    return `https://${process.env.CLOUDFRONT_DISTRIBUTION_DOMAIN}/webp/${fileNameWithoutExtension}.webp`;
   }
 
   return (
