@@ -24,6 +24,16 @@
         font-family: 'October_Devanagari', sans-serif;
       }
 
+      .loginErrorMessage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding-top: 1rem;
+        font-size: 1rem;
+        font-weight: bold;
+      }
+
       .loginTextFormContainer {
         display: flex;
         flex-direction: column;
