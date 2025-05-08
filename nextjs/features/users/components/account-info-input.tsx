@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "@/features/users/styles/users-register.module.scss";
+import styles from "@/features/users/styles/account-info-input.module.scss";
 import { createUser } from "../endpoint";
 import { useRouter } from "next/navigation";
 import { ClipLoader } from "react-spinners";
@@ -274,7 +274,7 @@ export const AccountInfoInput = ({
                 </div>
                 <div className={styles.signupContent}>
                   <button onClick={handleCreateAccount} className={styles.userCreateButton}>
-                    アカウント作成
+                    アカウントを作成
                   </button>
                 </div>
               </div>
