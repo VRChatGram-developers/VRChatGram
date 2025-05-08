@@ -5,6 +5,8 @@ import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
 import { FaImage } from "react-icons/fa6";
 import { ClipLoader } from "react-spinners";
+import { Id, toast } from "react-toastify";
+import axios, { AxiosProgressEvent } from "axios";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -155,9 +157,15 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
 
     onClose();
 
+    const toastId = toast.loading("画像をアップロード中...", {
+      autoClose: false, // 自動で閉じない
+      closeButton: false, // 閉じるボタンを非表示
+      progress: 0, // 初期進捗（0%）
+    });
+
     const postImages = await Promise.all(
       images.map(async (image) => {
-        const imageUrl = await uploadImage(image.file, image.file_name);
+        const imageUrl = await uploadImage(image.file, image.file_name, toastId);
         return {
           url: imageUrl,
           width: image.width,
@@ -175,14 +183,24 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
         tags,
         show_sensitive_type: selectedAgeRestriction,
       });
-      setIsLoading(false);
+      toast.update(toastId, {
+        render: "投稿しました！",
+        type: "success",
+        isLoading: false,
+        autoClose: 4000,
+      });
+
+      setTimeout(() => {
+        toast.dismiss(toastId); // トーストを手動で閉じる
+      }, 4000);
     } catch (error) {
       console.error(error);
       setIsLoading(false);
+      toast.error("投稿に失敗しました");
     }
   };
 
-  async function uploadImage(file: File, fileName: string): Promise<string> {
+  async function uploadImage(file: File, fileName: string, toastId: Id): Promise<string> {
     // 1. APIから署名付きURL取得
     const response = await fetchS3SignedUrl({
       fileName: fileName,
@@ -190,15 +208,24 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     });
 
     const url = typeof response === "string" ? response : response.url;
-    const uploadRes = await fetch(url, {
-      method: "PUT",
+    const uploadRes = await axios.put(url, file, {
       headers: {
         "Content-Type": file.type,
       },
-      body: file,
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        if (progressEvent.lengthComputable && progressEvent.total) {
+          const progress = (progressEvent.loaded / progressEvent.total) * 100;
+          // 進捗をトーストに反映
+          toast.update(toastId, {
+            render: `画像をアップロード中... ${progress.toFixed(2)}%`,
+            progress: progress / 100, // 0から1に変換
+            type: "info",
+          });
+        }
+      },
     });
 
-    if (!uploadRes.ok) {
+    if (uploadRes.status !== 200) {
       throw new Error("S3 upload failed");
     }
 
