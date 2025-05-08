@@ -141,7 +141,7 @@ export const Header = () => {
               </div>
               <div className={styles.userIconContainer}>
                 <Image
-                  src={user?.profile_url || "/default-icon-user.png"}
+                  src={user?.profile_url || "/user-icon.png"}
                   alt="User Icon"
                   width={60}
                   height={60}
@@ -219,7 +219,7 @@ export const Header = () => {
                 <div className={styles.userIconContainer}>
                   <div className={styles.userProfileContainer}>
                     <Image
-                      src={user?.profile_url || "/default-icon-user.png"}
+                      src={user?.profile_url || "/user-icon.png"}
                       alt="User Icon"
                       width={100}
                       height={100}
@@ -232,7 +232,7 @@ export const Header = () => {
                     <div className={styles.moduleDrawerMenuSection}>
                       <Link
                         href={`/users/${user?.my_id}`}
-                        onClick={() => setOpenMenu(false)}
+                        // onClick={() => setOpenMenu(false)}
                         className={styles.moduleDrawerMenutext}
                         prefetch={true}
                       >
@@ -240,7 +240,7 @@ export const Header = () => {
                       </Link>
                       <Link
                         href="/users/likes"
-                        onClick={() => setOpenMenu(false)}
+                        // onClick={() => setOpenMenu(false)}
                         className={styles.moduleDrawerMenutext}
                         prefetch={true}
                       >
@@ -248,7 +248,7 @@ export const Header = () => {
                       </Link>
                       <Link
                         href="/users/views"
-                        onClick={() => setOpenMenu(false)}
+                        // onClick={() => setOpenMenu(false)}
                         className={styles.moduleDrawerMenutext}
                         prefetch={true}
                       >
@@ -256,11 +256,9 @@ export const Header = () => {
                       </Link>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p>Language</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>日本語</p>
                       <Link
                         href="/users/account-settings"
-                        onClick={() => setOpenMenu(false)}
+                        // onClick={() => setOpenMenu(false)}
                         className={styles.moduleDrawerMenutext}
                         prefetch={true}
                       >
@@ -271,7 +269,7 @@ export const Header = () => {
                       className={styles.moduleDrawerMenuSection}
                       onClick={logOutWithFirebaseAuth}
                     >
-                      <button className={`${styles.moduleDrawerMenutext}`}>ログアウト</button>
+                      <div className={`${styles.moduleDrawerMenutext}`}>ログアウト</div>
                     </div>
                   </div>
                 </div>
