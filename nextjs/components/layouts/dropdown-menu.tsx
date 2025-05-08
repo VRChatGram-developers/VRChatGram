@@ -48,7 +48,7 @@ export const DropdownMenu = ({ isOpen, setIsOpen, user }: DropdownMenuProps) => 
         >
           <div className={styles.offcanvas__heading__image_container}>
             <Image
-              src={user?.profile_url || "/default-icon-user.png"}
+              src={user?.profile_url || "/user-icon.png"}
               alt="user-icon"
               width={70}
               height={70}
