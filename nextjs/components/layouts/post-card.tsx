@@ -21,7 +21,7 @@ type PostCardProps = {
   handleLikeOrUnlike: () => void;
 };
 
-const sampleUserImageUrl = "/default-icon-user.png";
+const sampleUserImageUrl = "/user-icon.png";
 const samplePostImageUrl = "/posts/sample-icon.png";
 
 export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) => {

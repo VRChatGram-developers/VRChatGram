@@ -34,7 +34,7 @@ export default function RootLayout({
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <link rel="icon" type="image/svg" sizes="50x50" href="/header/vrcss_icon.svg" />
           </head>
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased layout`}>
             <Header />
             <main> {children}</main>
             <Footer />

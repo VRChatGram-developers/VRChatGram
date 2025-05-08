@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 
 interface ImageData {
+  file: File | null;
   file_data: string;
   file_name: string;
   preview_url: string;
+  width: number;
+  height: number;
 }
 
 export const useSingleImageUpload = (initialUrl: string = "") => {
   const [image, setImage] = useState<ImageData | null>(
-    initialUrl ? { file_data: initialUrl, file_name: "", preview_url: initialUrl } : null
+    initialUrl ? { file: null, file_data: initialUrl, file_name: "", preview_url: initialUrl, width: 0, height: 0 } : null
   );
 
   useEffect(() => {
@@ -19,9 +22,12 @@ export const useSingleImageUpload = (initialUrl: string = "") => {
       const objectUrl = URL.createObjectURL(file);
       img.onload = () => {
         setImage({
+          file: file,
           file_data: reader.result as string,
           file_name: file.name,
           preview_url: objectUrl,
+          width: img.width,
+          height: img.height,
         });
       };
       img.src = initialUrl;
@@ -39,9 +45,12 @@ export const useSingleImageUpload = (initialUrl: string = "") => {
       const objectUrl = URL.createObjectURL(file);
       img.onload = () => {
         const imageData: ImageData = {
+          file: file,
           file_data: e.target?.result as string,
           file_name: file.name,
           preview_url: objectUrl,
+          width: img.width,
+          height: img.height,
         };
 
         setImage(imageData);
@@ -54,7 +63,7 @@ export const useSingleImageUpload = (initialUrl: string = "") => {
 
   // 画像をリセットする
   const resetImage = () => {
-    setImage({ file_data: "", file_name: "", preview_url: "" });
+    setImage({ file: null, file_data: "", file_name: "", preview_url: "", width: 0, height: 0 });
   };
 
   return { image, handleImageChange, resetImage };

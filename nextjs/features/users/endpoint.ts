@@ -293,3 +293,22 @@ export const blockUser = async (blockedUserMyId: string): Promise<IsDeletedUser>
   const data = await response.json();
   return data;
 };
+
+export const fetchS3SignedUrl = async ({
+  fileName,
+  contentType,
+}: {
+  fileName: string | null;
+  contentType: string;
+}): Promise<{ url: string } | string> => {
+  const response = await fetch(`${API_URL}/api/v1/s3`, {
+    method: "POST",
+    body: JSON.stringify({ fileName, contentType }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch S3 signed url";
+  }
+  const data = await response.json();
+  return data;
+};

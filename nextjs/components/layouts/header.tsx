@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { FaCamera } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
 import styles from "../styles/header.module.scss";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useModal } from "@/provider/modal-provider";
 import { PostForm } from "@/features/posts/components/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
@@ -16,6 +16,9 @@ import { createQueryParams } from "@/utils/queryParams";
 import { useEffect } from "react";
 import { fetchUserForHeader } from "@/features/users/endpoint";
 import { UserForHeader } from "@/features/users/types";
+import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
+import Link from "next/link";
+import { useCloseMenuOnRouteChange } from "@/hooks/use-close-menu-on-route-change";
 
 export const Header = () => {
   const router = useRouter();
@@ -25,9 +28,12 @@ export const Header = () => {
   const { status, data: session } = useSession();
   const { searchQuery, setSearchQuery } = useSearchStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  useCloseMenuOnRouteChange(setOpenMenu);
 
-  const menuFunction = () => {
-    setOpenMenu(!openMenu);
+  const menuFunction = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setOpenMenu((prev) => !prev);
   };
 
   useEffect(() => {
@@ -44,46 +50,54 @@ export const Header = () => {
       fetchUser();
     }
   }, [session]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpenMenu(false);
+      }
+    };
+
+    if (openMenu) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [openMenu]);
+
+  const handleSearch = async () => {
+    const isTagSearch = searchQuery.includes("#");
+    const keyword = isTagSearch ? searchQuery.replace("#", "") : searchQuery;
   
-
-  const handleRedirectToAccountSettings = () => {
-    router.push("/users/account-settings");
-  };
-
-  const handleToMyViewsPosts = () => {
-    router.push(`/users/views`);
-  };
-
-  const handleToMyFavoritePosts = () => {
-    router.push(`/users/likes`);
-  };
-
-  const handleToTopPage = () => {
-    setSearchQuery("");
-    router.push(`/`);
-  };
-
-  const handleSearch = () => {
-    const query = searchQuery.includes("#")
-      ? createQueryParams({ tag: searchQuery, page: 1 })
-      : createQueryParams({ title: searchQuery, page: 1 });
+    const query = createQueryParams({
+      [isTagSearch ? "tag" : "title"]: keyword,
+      page: 1,
+    });
+  
     setSearchQuery(searchQuery);
-
-    router.push(`/posts?${query}`);
+    await router.push(`/posts?${query}`);
+    setOpenMenu(false);
   };
+
   return (
     <>
       <header className={styles.headerContainer}>
-        <div className={styles.headerImageContainer}>
+        <Link
+          href="/"
+          className={styles.headerImageContainer}
+          onClick={() => setOpenMenu(false)}
+          prefetch={true}
+        >
           <Image
             src="/header/vrcss_icon.svg"
             alt="Logo"
             layout="fill"
             objectFit="contain"
             className={styles.logo}
-            onClick={handleToTopPage}
           />
-        </div>
+        </Link>
 
         {/* PC Only */}
         <div className={styles.searchInputContainer}>
@@ -102,12 +116,20 @@ export const Header = () => {
             <></>
           ) : status !== "authenticated" ? (
             <>
-              <button onClick={() => router.push("/signin")} className={styles.signInButton}>
+              <Link
+                href="/login"
+                // onClick={() => setOpenMenu(false)}
+                className={styles.signInButton}
+              >
                 <p className={styles.signInButtonText}>ログイン</p>
-              </button>
-              <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
+              </Link>
+              <Link
+                href="/signup"
+                // onClick={() => setOpenMenu(false)}
+                className={styles.signUpButton}
+              >
                 <p className={styles.signUpButtonText}>新規登録</p>
-              </button>
+              </Link>
             </>
           ) : (
             <>
@@ -119,7 +141,7 @@ export const Header = () => {
               </div>
               <div className={styles.userIconContainer}>
                 <Image
-                  src={user?.profile_url || "/default-icon-user.png"}
+                  src={user?.profile_url || "/user-icon.png"}
                   alt="User Icon"
                   width={60}
                   height={60}
@@ -135,7 +157,7 @@ export const Header = () => {
         </div>
 
         {/* Mobile Only */}
-        <div className={styles.headerMobileContainer} onClick={() => menuFunction()}>
+        <div className={styles.headerMobileContainer} onClick={(e) => menuFunction(e)}>
           <div
             className={`${styles.headerMobileHumburger} ${
               openMenu ? styles.headerMobileHumburgerOpen : undefined
@@ -151,6 +173,7 @@ export const Header = () => {
         className={`${styles.headerMobileDrawerMenu} ${
           openMenu ? styles.headerMobileDrawerMenuOpen : undefined
         }`}
+        ref={menuRef}
       >
         <div className={styles.headerMobileDraweContainer}>
           <div className={styles.searchInputMobileContainer}>
@@ -168,12 +191,20 @@ export const Header = () => {
               <></>
             ) : status !== "authenticated" ? (
               <>
-                <button onClick={() => router.push("/signin")} className={styles.signInButton}>
+                <Link
+                  href="/login"
+                  // onClick={() => setOpenMenu(false)}
+                  className={styles.signInButton}
+                >
                   <p className={styles.signInButtonText}>ログイン</p>
-                </button>
-                <button onClick={() => router.push("/signup")} className={styles.signUpButton}>
+                </Link>
+                <Link
+                  href="/signup"
+                  // onClick={() => setOpenMenu(false)}
+                  className={styles.signUpButton}
+                >
                   <p className={styles.signUpButtonText}>新規登録</p>
-                </button>
+                </Link>
               </>
             ) : (
               <>
@@ -188,7 +219,7 @@ export const Header = () => {
                 <div className={styles.userIconContainer}>
                   <div className={styles.userProfileContainer}>
                     <Image
-                      src={user?.profile_url || "/default-icon-user.png"}
+                      src={user?.profile_url || "/user-icon.png"}
                       alt="User Icon"
                       width={100}
                       height={100}
@@ -199,37 +230,46 @@ export const Header = () => {
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={() => router.push(`/users/${user?.my_id}`)}
+                      <Link
+                        href={`/users/${user?.my_id}`}
+                        // onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         ダッシュボード
-                      </p>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={handleToMyFavoritePosts}
+                      </Link>
+                      <Link
+                        href="/users/likes"
+                        // onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         良いね一覧
-                      </p>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={handleToMyViewsPosts}
+                      </Link>
+                      <Link
+                        href="/users/views"
+                        // onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         閲覧履歴
-                      </p>
+                      </Link>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <p>Language</p>
-                      <p className={`${styles.moduleDrawerMenutext}`}>日本語</p>
-                      <p
-                        className={`${styles.moduleDrawerMenutext}`}
-                        onClick={handleRedirectToAccountSettings}
+                      <Link
+                        href="/users/account-settings"
+                        // onClick={() => setOpenMenu(false)}
+                        className={styles.moduleDrawerMenutext}
+                        prefetch={true}
                       >
                         アカウント設定
-                      </p>
+                      </Link>
                     </div>
-                    <div className={styles.moduleDrawerMenuSection}>
-                      <button className={`${styles.moduleDrawerMenutext}`}>ログアウト</button>
+                    <div
+                      className={styles.moduleDrawerMenuSection}
+                      onClick={logOutWithFirebaseAuth}
+                    >
+                      <div className={`${styles.moduleDrawerMenutext}`}>ログアウト</div>
                     </div>
                   </div>
                 </div>

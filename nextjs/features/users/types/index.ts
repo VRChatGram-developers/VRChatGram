@@ -68,12 +68,10 @@ export type requestUpdateUserProfile = {
   introduction_title: string;
   introduction_detail: string;
   profile_image?: {
-    file_data: string;
-    file_name: string;
+    url: string;
   };
   header_image?: {
-    file_data: string;
-    file_name: string;
+    url: string;
   };
   social_links: SocialLink[];
   name: string;

@@ -71,7 +71,7 @@ export const PhotoCard = ({
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer} onClick={() => handleForwardToUserDetail(myId)}>
             <Image
-              src={userImageUrl || "/default-icon-user.png"}
+              src={userImageUrl || "/user-icon.png"}
               alt="new-post-image"
               className={styles.userInfoIcon}
               fill
@@ -80,10 +80,7 @@ export const PhotoCard = ({
           </div>
         </div>
         <div className={styles.likesPostsItemLikeContents}>
-          <div
-            className={styles.likesPostsItemLikeItem}
-            onClick={() => handleClickLikeOrUnlike()}
-          >
+          <div className={styles.likesPostsItemLikeItem} onClick={() => handleClickLikeOrUnlike()}>
             {isLiked ? (
               <Image src="/heart-outline.png" alt="heart" className={styles.likesIcon} fill />
             ) : (

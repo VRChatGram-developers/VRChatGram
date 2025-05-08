@@ -17,6 +17,8 @@ import { RecommendPostList } from "./recommend-post-list";
 import { useSession } from "next-auth/react";
 import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
+import { useSearchStore } from "@/libs/store/search-store";
+import { createQueryParams } from "@/utils/queryParams";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
@@ -29,6 +31,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const { openModal, closeModal } = useModal();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: _, status } = useSession();
+  const { setSearchQuery } = useSearchStore();
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);
@@ -85,6 +88,11 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
     }
   };
 
+  const redirectToPostSearchListByTagName = (tagName: string) => {
+    setSearchQuery(`#${tagName}`);
+    router.push(`/posts?${createQueryParams({ tag: tagName, page: 1 })}`);
+  };
+
   return (
     <>
       <div className={styles.postDetailContainer}>
@@ -135,7 +143,12 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
           <div className={styles.postImageTagContainer}>
             {post.tags.map(({ tag }) => (
               <div key={tag.id} className={styles.postImageTag}>
-                <button className={styles.postImageTagText}>#{tag.name}</button>
+                <button
+                  className={styles.postImageTagText}
+                  onClick={() => redirectToPostSearchListByTagName(tag.name)}
+                >
+                  #{tag.name}
+                </button>
               </div>
             ))}
           </div>
@@ -178,7 +191,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
             <div className={styles.postDetailProfileContainer}>
               <div className={styles.postDetailProfileIconContainer}>
                 <Image
-                  src={post.user?.profile_url || "/default-icon-user.png"}
+                  src={post.user?.profile_url || "/user-icon.png"}
                   alt="avatar"
                   width={200}
                   height={200}
