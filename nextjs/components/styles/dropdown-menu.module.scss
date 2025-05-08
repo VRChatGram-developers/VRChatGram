@@ -9,6 +9,7 @@
 
   &__menu {
     padding: 2rem 1rem 6rem 1rem;
+
     &__name_container {
       padding: 1rem 0;
 
@@ -45,6 +46,12 @@
       color: #333;
       border-bottom: 1px solid #fff;
       cursor: pointer;
+      background-color: #fff;
+      transition: filter 0.2s;
+
+      &:hover {
+        filter: brightness(0.95);
+      }
     }
   }
 
@@ -53,6 +60,12 @@
     font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
+    background-color: #fff;
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.95);
+    }
   }
 
   &__content {
@@ -89,6 +102,5 @@
       padding: 2rem 1rem 6rem 1rem;
     }
   }
-  
-}
 
+}
