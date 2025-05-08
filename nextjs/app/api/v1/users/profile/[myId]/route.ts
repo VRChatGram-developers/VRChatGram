@@ -4,7 +4,6 @@ import { toJson } from "@/utils/json";
 import _ from "lodash";
 import { auth } from "@/libs/firebase/auth";
 import prisma from "@/prisma/client";
-import { S3Service } from "@/app/api/services/s3-service";
 import { platform_types } from "@prisma/client";
 import { SocialLink } from "@/features/users/types";
 
@@ -49,16 +48,6 @@ export async function PUT(request: Request, { params }: { params: Promise<{ myId
       name,
     } = await request.json();
 
-    const s3Service = new S3Service();
-    const profileImageUrl = await s3Service.uploadFileToS3(
-      profile_image.file_data,
-      profile_image.file_name
-    );
-    const headerImageUrl = await s3Service.uploadFileToS3(
-      header_image.file_data,
-      header_image.file_name
-    );
-
     const userHasId = await prisma.users.findFirstOrThrow({
       where: { my_id: myId },
       select: {
@@ -71,8 +60,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ myId
       data: {
         introduction_title: introduction_title,
         introduction_detail: introduction_detail,
-        profile_url: profileImageUrl,
-        header_url: headerImageUrl,
+        profile_url: profile_image.url,
+        header_url: header_image.url,
         name: name,
       },
     });
