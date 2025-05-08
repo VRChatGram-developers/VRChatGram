@@ -23,7 +23,6 @@ export const PostList = ({
   const [displayPosts, setDisplayPosts] = useState<PostListType>(posts);
   const { setSearchQuery } = useSearchStore();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
   const handleSelectTag = async (tag: string) => {
     const tagName = tag === "ALL" ? tag : `${tag}`;
     setSelectedTag(tagName);
@@ -39,7 +38,6 @@ export const PostList = ({
 
   useEffect(() => {
     setDisplayPosts(posts);
-    setIsLoading(false);
   }, [posts]);
 
   const addAllToPopularTags = useMemo(() => {
@@ -60,20 +58,15 @@ export const PostList = ({
           selectedTag={selectedTag}
           handleSelectTag={handleSelectTag}
         />
-        {isLoading ? (
-          <div className="flex justify-center items-center h-screen">
-            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-          </div>
-        ) : (
-          <SearchResult
-            posts={displayPosts.posts}
-            selectedTag={selectedTag}
-            postCount={displayPosts.postCount}
-            currentPage={displayPosts.currentPage}
-            totalPages={displayPosts.totalPages}
-            postImageUrlWithMaxLikes={displayPosts.postImageUrlWithMaxLikes}
-          />
-        )}
+
+        <SearchResult
+          posts={displayPosts.posts}
+          selectedTag={selectedTag}
+          postCount={displayPosts.postCount}
+          currentPage={displayPosts.currentPage}
+          totalPages={displayPosts.totalPages}
+          postImageUrlWithMaxLikes={displayPosts.postImageUrlWithMaxLikes}
+        />
       </div>
     </>
   );
