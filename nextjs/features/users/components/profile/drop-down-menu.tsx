@@ -20,6 +20,7 @@ export const DropdownMenu = ({ isOpen, setIsOpen, blockedUserId }: DropdownMenuP
   const handleBlockUser = async () => {
     try {
       await blockUser(blockedUserId);
+      setIsOpen(false);
     } catch (error) {
       console.error(error);
     }
