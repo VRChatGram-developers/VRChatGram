@@ -18,6 +18,7 @@ import { fetchUserForHeader } from "@/features/users/endpoint";
 import { UserForHeader } from "@/features/users/types";
 import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
 import Link from "next/link";
+import { useCloseMenuOnRouteChange } from "@/hooks/use-close-menu-on-route-change";
 
 export const Header = () => {
   const router = useRouter();
@@ -28,6 +29,7 @@ export const Header = () => {
   const { searchQuery, setSearchQuery } = useSearchStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  useCloseMenuOnRouteChange(setOpenMenu);
 
   const menuFunction = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -66,14 +68,19 @@ export const Header = () => {
   }, [openMenu]);
 
   const handleSearch = async () => {
-    const query = searchQuery.includes("#")
-      ? createQueryParams({ tag: searchQuery, page: 1 })
-      : createQueryParams({ title: searchQuery, page: 1 });
+    const isTagSearch = searchQuery.includes("#");
+    const keyword = isTagSearch ? searchQuery.replace("#", "") : searchQuery;
+  
+    const query = createQueryParams({
+      [isTagSearch ? "tag" : "title"]: keyword,
+      page: 1,
+    });
+  
     setSearchQuery(searchQuery);
-
     await router.push(`/posts?${query}`);
     setOpenMenu(false);
   };
+
   return (
     <>
       <header className={styles.headerContainer}>
@@ -111,14 +118,14 @@ export const Header = () => {
             <>
               <Link
                 href="/login"
-                onClick={() => setOpenMenu(false)}
+                // onClick={() => setOpenMenu(false)}
                 className={styles.signInButton}
               >
                 <p className={styles.signInButtonText}>ログイン</p>
               </Link>
               <Link
                 href="/signup"
-                onClick={() => setOpenMenu(false)}
+                // onClick={() => setOpenMenu(false)}
                 className={styles.signUpButton}
               >
                 <p className={styles.signUpButtonText}>新規登録</p>
@@ -186,14 +193,14 @@ export const Header = () => {
               <>
                 <Link
                   href="/login"
-                  onClick={() => setOpenMenu(false)}
+                  // onClick={() => setOpenMenu(false)}
                   className={styles.signInButton}
                 >
                   <p className={styles.signInButtonText}>ログイン</p>
                 </Link>
                 <Link
                   href="/signup"
-                  onClick={() => setOpenMenu(false)}
+                  // onClick={() => setOpenMenu(false)}
                   className={styles.signUpButton}
                 >
                   <p className={styles.signUpButtonText}>新規登録</p>
