@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/features/users/styles/users.module.scss";
+import styles from "@/features/users/styles/user-profile.module.scss";
 import Image from "next/image";
 import { SocialLink, User } from "@/features/users/types/index";
 import { useState, useRef } from "react";
@@ -9,7 +9,7 @@ import { followUser, unfollowUser } from "@/features/users/endpoint";
 import { UserPostList } from "./user-post-list";
 import { UserHome } from "./user-home";
 import { useSession } from "next-auth/react";
-import { updateUserProfile } from "@/features/users/endpoint";
+import { updateUserProfile, fetchS3SignedUrl } from "@/features/users/endpoint";
 import { useEffect } from "react";
 import { useSingleImageUpload } from "@/features/users/hooks/use-upload-image";
 import { useRouter } from "next/navigation";
@@ -108,14 +108,27 @@ export const UserProfile = ({ user }: { user: User }) => {
   const handleSubmitIntroduction = async () => {
     setIsUserEditing(true);
 
+    const postImages = await Promise.all(
+      [profileImage, backgroundImage].map(async (image) => {
+        if (!image?.file) {
+          return null;
+        }
+        const imageUrl = await uploadImage(image.file, image.file_name);
+        return {
+          url: imageUrl,
+        };
+      })
+    );
+
+    const [updatedProfileImage, updatedBackgroundImage] = postImages;
     const filteredSocialLinks = socialLinks.filter((socialLink) => socialLink.platform_url !== "");
     try {
       await updateUserProfile({
         myId: user.my_id,
         introduction_title: introductionTitle,
         introduction_detail: introductionDetail,
-        profile_image: profileImage || undefined,
-        header_image: backgroundImage || undefined,
+        profile_image: updatedProfileImage || undefined,
+        header_image: updatedBackgroundImage || undefined,
         social_links: filteredSocialLinks,
         name: name,
       });
@@ -126,10 +139,34 @@ export const UserProfile = ({ user }: { user: User }) => {
     }
   };
 
+  async function uploadImage(file: File, fileName: string): Promise<string> {
+    // 1. APIから署名付きURL取得
+    const response = await fetchS3SignedUrl({
+      fileName: fileName,
+      contentType: file.type,
+    });
+
+    const url = typeof response === "string" ? response : response.url;
+    const uploadRes = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type,
+      },
+      body: file,
+    });
+
+    if (!uploadRes.ok) {
+      throw new Error("S3 upload failed");
+    }
+
+    const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+    return `https://${process.env.NEXT_PUBLIC_CLOUDFRONT_DISTRIBUTION_DOMAIN}/webp/${fileNameWithoutExtension}.webp`;
+  }
+
   const BackgeoundImageURL =
     "https://i0.wp.com/bussan-b.info/wp-content/uploads/2021/03/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%AC%E3%83%BC%E3%83%88.jpg?resize=1024%2C576&ssl=1";
 
-  const IconImageURL = "/default-icon-user.png";
+  const IconImageURL = "/user-icon.png";
 
   return (
     <>
@@ -209,7 +246,7 @@ export const UserProfile = ({ user }: { user: User }) => {
                     </div>
                   </div>
                   <Image
-                    src={previewProfileUrl || user.profile_url || BackgeoundImageURL}
+                    src={previewProfileUrl || user.profile_url || IconImageURL}
                     alt="profile"
                     width={260}
                     height={260}
