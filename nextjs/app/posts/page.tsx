@@ -2,6 +2,8 @@ import { PostList } from "@/features/posts/components";
 import { fetchPosts, fetchPopularTagList } from "@/features/posts/endpoint";
 import { headers } from "next/headers";
 import { Tag } from "@/features/posts/types";
+import { Suspense } from "react";
+import { ClipLoader } from "react-spinners";
 
 export default async function Page({
   searchParams,
@@ -28,5 +30,13 @@ export default async function Page({
     tag: { ...tag.tag, name: `#${tag.tag.name}` },
   }));
 
-  return <PostList posts={postsList} popularTags={popularTagsWithHash} tagName={`#${tagName}`} />;
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+      </div>
+    }>
+      <PostList posts={postsList} popularTags={popularTagsWithHash} tagName={`#${tagName}`} />
+    </Suspense>
+  );
 }
