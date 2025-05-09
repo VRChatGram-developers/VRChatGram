@@ -5,6 +5,8 @@ import { SessionProvider } from "@/features/auth/providers/SessionProvider";
 import { Header } from "@/components/layouts/header";
 import { Footer } from "@/components/layouts/footer";
 import { ModalProvider } from "@/provider/modal-provider";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +39,7 @@ export default function RootLayout({
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased layout`}>
             <Header />
             <main> {children}</main>
+            <ToastContainer position="bottom-right" autoClose={3000} />
             <Footer />
           </body>
         </html>
