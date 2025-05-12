@@ -90,7 +90,7 @@ export const Main = ({
           <div className={styles.topNoticeMainContainer}>
             {testNews.length > 0 && (
               <Image
-              src={testNews[0].imageURL}
+              src="/home/main.png"
               alt="メイン画像"
               width={1680}
               height={384}
@@ -131,7 +131,7 @@ export const Main = ({
               <div className={styles.mainSecondContainerSecondBox}>
                 <div className={styles.mainSecondContainerImageContainer}>
                   <Image
-                    src="/top-image2.png"
+                    src="/home/vrcss-introduction.png"
                     alt="画像2"
                     width={402}
                     height={194}
@@ -140,7 +140,7 @@ export const Main = ({
                 </div>
                 <div className={styles.mainSecondContainerImageContainer}>
                   <Image
-                    src="/top-image3.png"
+                    src="/home/vrcss-usage-guide.png"
                     alt="画像3"
                     width={402}
                     height={194}
