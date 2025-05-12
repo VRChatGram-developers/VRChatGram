@@ -176,12 +176,6 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
 
     try {
 
-      toast.update(toastId, {
-        render: "画像をアップロード中...",
-        isLoading: true,
-        autoClose: false,
-      });
-
       await createPost({
         title,
         description,
@@ -264,13 +258,12 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                   <img
                     src="/header/vrcss_icon.svg"
                     alt="Logo"
-                    // width={240}
-                    // height={148}
                     className={styles.logo}
                   />
                 </div>
                 <div className={styles.postFormInputTextContainer}>
-                  <p className={styles.postFormInputText}>ここにドロップ&ドロップまたは</p>
+                  <p className={styles.postFormInputText}>ここにドロップ&ドロップ</p>
+                  <p className={styles.postFormInputText}>または</p>
                   <div className={styles.postFormInputButtonContainer}>
                     <input
                       type="file"
