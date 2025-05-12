@@ -1,4 +1,5 @@
 .container {
+  // margin-top: 6rem;
   display: flex;
   background-color: #fff;
   width: 100%;
@@ -10,9 +11,9 @@
         display: flex;
         align-items: center;
         border-bottom: 1px solid;
-        padding: 2rem;
+        padding: 1rem 2rem;
         .postTitle {
-          font-size: 2rem;
+          font-size: 1.3rem;
           font-weight: bold;
         }
       }
@@ -25,11 +26,17 @@
         padding: 4rem 2rem;
         gap: 2rem;
         .postFormInputContentBorder {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
           border: 2px dotted #000;
           .postFormLogoContainer {
-            max-width: 20rem;
+            max-width: 10rem;
+            height: 20%;            
           }
           .postFormInputTextContainer {
+            font-size: 1rem;
             width: 100%;
             height: 100%;
             display: flex;
@@ -38,14 +45,15 @@
             align-items: center;
             .postFormInputText {
               font-weight: bold;
-              font-size: 1.2rem;
+              font-size: 1rem;
             }
             .postFormInputButtonContainer {
+              font-size: 0.8rem;
               margin-top: 1rem;
               display: flex;
               gap: 0.5rem;
-              padding: 1rem 2rem;
-              border: 2px solid;
+              padding: 0.5rem 1rem;
+              border: 1px solid;
               border-radius: 0.5rem;
             }
           }
@@ -55,31 +63,31 @@
 
     .postTitleContent {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       border-bottom: 1px solid;
-      padding: 0 2rem;
+      padding: 1rem 2rem;
       .postTitle {
-        font-size: 2rem;
+        font-size: 1.3rem;
         font-weight: bold;
       }
     }
     .postContainer {
       display: grid;
-      grid-template-rows: 5rem auto 5rem;
+      // grid-template-rows: 5rem auto 5rem;
 
       .postDetailContainer {
         display: grid;
 
-        height: 40rem;
+        // height: 40rem;
 
         .postDetailContent {
-          padding: 2rem 2rem 0 0;
+          // padding: 2rem 2rem 0 0;
           overflow-y: scroll;
-          height: 40rem;
+          // height: 40rem;
           border-right: 2px solid;
-          padding: 2rem 2rem;
+          padding: 1rem 2rem;
           .postDetailTitleContainer {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
 
             .postDetailTitleInput {
               width: 100%;
@@ -92,7 +100,7 @@
             }
           }
           .postDetailTagContainer {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             .postDetailTagContent {
               display: flex;
               flex-direction: column;
@@ -141,12 +149,13 @@
           }
 
           .postDetailAgeLimitContainer {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             .postDetailAgeLimitContent {
               display: flex;
               flex-wrap: wrap;
               border: none;
               .postDetailAgeLimitLabel {
+                font-size: 0.8rem;
                 display: flex;
                 align-items: center;
                 margin-right: 1rem;
@@ -181,7 +190,7 @@
             }
           }
           .postDetailTextAreaContainer {
-            margin-bottom: 2rem;
+            margin-bottom: 1.3rem;
             .postDetailTextArea {
               field-sizing: content;
               width: 100%;
@@ -210,7 +219,7 @@
                   width: 100%;
                   .postDetailMaterialFormInput {
                     width: 100%;
-                    padding: 8px 10px;
+                    padding: 6px 8px;
                     border: 1px solid #969da3;
                     border-radius: 3px;
                     font-size: 1em;
@@ -235,21 +244,23 @@
           }
 
           .postDetailTitleText {
-            font-size: 1.3rem;
+            font-size: 0.8rem;
             font-weight: bold;
             margin-bottom: 0.5rem;
           }
         }
         .postImageContainer {
           display: grid;
-          grid-template-rows: 4rem 25rem 1fr;
-          max-height: 40rem;
-          padding: 2rem 2rem 0 2rem;
+          grid-template-rows: 3rem 20rem 1fr;
+          // max-height: 40rem;
+          padding: 1rem 2rem 0 2rem;
           background-color: #f2f8f8;
           .postImageQuanityLimitContainer {
+            font-size: 0.8rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             .postImageQuanityLimitText {
+              font-size: 0.8rem;
             }
           }
           .postImageContentContainer {
@@ -324,7 +335,7 @@
       border-top: 1px solid;
       display: flex;
       align-items: center;
-      padding: 0 2rem;
+      padding: 1rem;
       justify-content: end;
       button {
         background-color: #69beef;
@@ -334,7 +345,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.5rem 3rem;
+        padding: 0.5rem 2rem;
         .postButtonText {
           font-size: 1rem;
           font-weight: bold;
@@ -347,11 +358,11 @@
 // 768px以上1,280px未満（タブレット）
 @media (min-width: 1040px) {
   .container {
-    width: 90vw;
+    width: 70vw;
   }
 
   .postFormInputContentBorder {
-    padding: 4rem 14rem;
+    padding: 3rem 8rem;
   }
   .postDetailContainer {
     grid-auto-flow: column;

@@ -17,6 +17,7 @@ import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import { DropdownMenu } from "./drop-down-menu";
 import { FaImage } from "react-icons/fa6";
+import { Slide, toast } from "react-toastify";
 
 export const UserProfile = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -133,9 +134,23 @@ export const UserProfile = ({ user }: { user: User }) => {
         name: name,
       });
       setIsUserEditing(false);
+
+      toast.success("プロフィールを変更しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
+
       router.refresh();
     } catch (error) {
       console.error(error);
+      toast.error("プロフィールを変更に失敗しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
     }
   };
 

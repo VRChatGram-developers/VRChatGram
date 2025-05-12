@@ -5,7 +5,7 @@ import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
 import { FaImage } from "react-icons/fa6";
 import { ClipLoader } from "react-spinners";
-import { Id, toast } from "react-toastify";
+import { Bounce, Id, Slide, toast } from "react-toastify";
 import axios, { AxiosProgressEvent } from "axios";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
@@ -175,6 +175,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     );
 
     try {
+
       await createPost({
         title,
         description,
@@ -183,20 +184,29 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
         tags,
         show_sensitive_type: selectedAgeRestriction,
       });
+
       toast.update(toastId, {
         render: "投稿しました！",
         type: "success",
         isLoading: false,
-        autoClose: 4000,
+        autoClose: false,
+        transition: Slide,
       });
 
       setTimeout(() => {
-        toast.dismiss(toastId); // トーストを手動で閉じる
-      }, 4000);
+        toast.dismiss(toastId);
+      }, 1000);
+
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      toast.error("投稿に失敗しました");
+      toast.update(toastId, {
+        render: "投稿に失敗しました",
+        type: "error",
+        isLoading: false,
+        autoClose: false,
+        transition: Slide,
+      });
     }
   };
 
@@ -220,6 +230,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             render: `画像をアップロード中... ${progress.toFixed(2)}%`,
             progress: progress / 100, // 0から1に変換
             type: "info",
+            autoClose: false
           });
         }
       },
@@ -244,16 +255,15 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             <div className={styles.postFormInputContent}>
               <div className={styles.postFormInputContentBorder}>
                 <div className={styles.postFormLogoContainer}>
-                  <Image
+                  <img
                     src="/header/vrcss_icon.svg"
                     alt="Logo"
-                    width={840}
-                    height={548}
                     className={styles.logo}
                   />
                 </div>
                 <div className={styles.postFormInputTextContainer}>
-                  <p className={styles.postFormInputText}>ここにドロップ&ドロップまたは</p>
+                  <p className={styles.postFormInputText}>ここにドロップ&ドロップ</p>
+                  <p className={styles.postFormInputText}>または</p>
                   <div className={styles.postFormInputButtonContainer}>
                     <input
                       type="file"
