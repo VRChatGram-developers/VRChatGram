@@ -44,7 +44,12 @@ export const DropdownMenu = ({ isOpen, setIsOpen, user }: DropdownMenuProps) => 
       <div className={styles.offcanvas__content}>
         <div
           className={styles.offcanvas__heading}
-          style={{ backgroundImage: `url(${encodeURI(user?.profile_url || BackgeoundImageURL)})` }}
+          style={{
+            backgroundImage: `url(${encodeURI(user?.header_url || BackgeoundImageURL)})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
         >
           <div className={styles.offcanvas__heading__image_container}>
             <Image
