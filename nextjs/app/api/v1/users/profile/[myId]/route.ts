@@ -55,15 +55,25 @@ export async function PUT(request: Request, { params }: { params: Promise<{ myId
       },
     });
 
+    // 更新データを組み立て（undefined な画像は含めない）
+    const updatedUserData: Record<string, unknown> = {
+      introduction_title: introduction_title,
+      introduction_detail: introduction_detail,
+      name: name,
+    };
+
+    if (profile_image?.url) {
+      updatedUserData.profile_url = profile_image.url;
+    }
+
+    if (header_image?.url) {
+      updatedUserData.header_url = header_image.url;
+    }
+
+    // ユーザープロフィールを更新
     await prisma.users.update({
       where: { id: userHasId.id },
-      data: {
-        introduction_title: introduction_title,
-        introduction_detail: introduction_detail,
-        profile_url: profile_image.url,
-        header_url: header_image.url,
-        name: name,
-      },
+      data: updatedUserData,
     });
 
     await Promise.all(

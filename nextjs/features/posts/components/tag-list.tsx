@@ -10,16 +10,23 @@ export const TagList = ({
 }: {
   popularTags: Tag[];
   selectedTag: string;
-  handleSelectTag: (tag: string) => void;
+  handleSelectTag: (tag: string) => void
 }) => {
+  const normalizeTag = (tag: string) => tag.replace(/^#/, "").trim();
+
+  console.log(selectedTag);
   return (
     <div className={styles.tagList}>
-      {popularTags.map(({ tag }) => (
-        <div className={styles.tagItemContainer} key={tag.id}>
+      {popularTags.map(({ tag }) => {
+         const normalizedTagName = normalizeTag(tag.name);
+         const isSelected = normalizeTag(selectedTag) === normalizedTagName;
+ 
+        return (
+          <div className={styles.tagItemContainer} key={tag.id}>
           <button
             key={tag.id}
             className={
-              selectedTag === `${tag.name}`
+              isSelected
                 ? `${styles.tagItem} ${styles.selectedTagItem}`
                 : styles.tagItem
             }
@@ -28,7 +35,8 @@ export const TagList = ({
             {tag.name === "ALL" ? "ALL" : `${tag.name}`}
           </button>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

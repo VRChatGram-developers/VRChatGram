@@ -85,43 +85,44 @@ export const UserProfile = ({ user }: { user: User }) => {
   };
 
   const createSocialLinkList = (socialLinks: SocialLink[]) => {
-    const requiredLength = 5;
-    const existingPlatforms = new Set(socialLinks.map((link) => link.platform_types));
-    const emptyLinks: SocialLink[] = [];
-
-    for (const platform of ["x", "discord"]) {
-      if (
-        !existingPlatforms.has(platform) &&
-        emptyLinks.length + socialLinks.length < requiredLength
-      ) {
-        emptyLinks.push({ id: "", platform_types: platform, platform_url: "" });
+    const REQUIRED_LENGTH = 5;
+    const PREFERRED_PLATFORMS = ["x", "discord"];
+    const result: SocialLink[] = [...socialLinks];
+  
+    // 優先プラットフォームを優先的に追加（未登録かつ必要数未満なら）
+    for (const platform of PREFERRED_PLATFORMS) {
+      const alreadyExists = result.some(link => link.platform_types === platform);
+      if (!alreadyExists && result.length < REQUIRED_LENGTH) {
+        result.push({ id: "", platform_types: platform, platform_url: "" });
       }
     }
-
-    // 必要な数まで空要素を追加
-    while (emptyLinks.length + socialLinks.length < requiredLength) {
-      emptyLinks.push({ id: "", platform_types: "", platform_url: "" });
+  
+    // 必要数まで空要素で埋める
+    while (result.length < REQUIRED_LENGTH) {
+      result.push({ id: "", platform_types: "other", platform_url: "" });
     }
-
-    return [...socialLinks, ...emptyLinks];
+  
+    // 念のため最大5件で制限
+    return result.slice(0, REQUIRED_LENGTH);
   };
-
+  
   const handleSubmitIntroduction = async () => {
     setIsUserEditing(true);
 
-    const postImages = await Promise.all(
-      [profileImage, backgroundImage].map(async (image) => {
-        if (!image?.file) {
-          return null;
-        }
-        const imageUrl = await uploadImage(image.file, image.file_name);
-        return {
-          url: imageUrl,
-        };
-      })
-    );
-
-    const [updatedProfileImage, updatedBackgroundImage] = postImages;
+    let updatedProfileImage: { url: string } | null = null;
+    let updatedBackgroundImage: { url: string } | null = null;
+  
+    if (profileImage || backgroundImage) {
+      const postImages = await Promise.all(
+        [profileImage, backgroundImage].map(async (image) => {
+          if (!image?.file) return null;
+          const imageUrl = await uploadImage(image.file, image.file_name);
+          return { url: imageUrl };
+        })
+      );
+  
+      [updatedProfileImage, updatedBackgroundImage] = postImages;
+    }
     const filteredSocialLinks = socialLinks.filter((socialLink) => socialLink.platform_url !== "");
     try {
       await updateUserProfile({
@@ -230,7 +231,6 @@ export const UserProfile = ({ user }: { user: User }) => {
         <div className={styles.profileHeaderContent}>
           <div className={styles.profileHeaderUserIconContainer}>
             {isUserEditing ? (
-              <>
                 <div className={styles.profileHeaderUserIconInputContainer}>
                   <div className={styles.profileHeaderUserIconInput}>
                     <FaImage size={32} />
@@ -260,23 +260,26 @@ export const UserProfile = ({ user }: { user: User }) => {
                       </button>
                     </div>
                   </div>
-                  <Image
-                    src={previewProfileUrl || user.profile_url || IconImageURL}
-                    alt="profile"
-                    width={260}
-                    height={260}
+                  <div className={styles.profileUserIconContainer}>
+                    <Image
+                      src={previewProfileUrl || user.profile_url || IconImageURL}
+                      alt="profile"
+                      width={260}
+                      height={260}
                     className={styles.profileHeaderUserIcon}
                   />
+                  </div>
                 </div>
-              </>
             ) : (
-              <Image
-                src={user.profile_url || IconImageURL}
-                alt="profile"
-                width={260}
-                height={260}
-                className={styles.profileHeaderUserIcon}
-              />
+              <div className={styles.profileUserIconContainer}>
+                <Image
+                  src={user.profile_url || IconImageURL}
+                  alt="profile"
+                  width={260}
+                  height={260}
+                  className={styles.profileHeaderUserIcon}
+                  />
+              </div>
             )}
           </div>
           <div className={styles.profuleHeaderInfomationContainer}>
@@ -348,6 +351,7 @@ export const UserProfile = ({ user }: { user: User }) => {
       {activeTab === 0 && (
         <UserHome
           user={user}
+          socialLinks={socialLinks}
           isUserEditing={isUserEditing}
           setIntroductionTitle={setIntroductionTitle}
           setIntroductionDetail={setIntroductionDetail}
