@@ -56,10 +56,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ myId
     });
 
     // 更新データを組み立て（undefined な画像は含めない）
-    const updatedUserData: Record<string, any> = {
-      introduction_title,
-      introduction_detail,
-      name,
+    const updatedUserData: Record<string, unknown> = {
+      introduction_title: introduction_title,
+      introduction_detail: introduction_detail,
+      name: name,
     };
 
     if (profile_image?.url) {
