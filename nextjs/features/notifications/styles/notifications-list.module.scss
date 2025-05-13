@@ -23,6 +23,7 @@
         grid-template-rows: 1fr 1fr;
         font-family: "Noto Sans JP";
         gap: 0.5rem;
+        min-width: 8rem;
 
         .notificationsPublishDate {
           display: flex;
@@ -122,3 +123,9 @@
     grid-template-columns: 1fr 5fr;
   }
 }
+
+  @media (max-width: 768px) {
+    .notificationsElementContainer {
+      grid-template-columns: 2fr 5fr;
+    }
+  }
