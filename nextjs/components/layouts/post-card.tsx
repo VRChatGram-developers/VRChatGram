@@ -92,15 +92,18 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
             <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(myId)}>
               {userName}
             </p>
-          </div>
-        </div>
-        <div className={styles.likesPostsItemLikeContents}>
-          <div className={styles.likesPostsItemLikeItem} onClick={() => handleClickLikeOrUnlike()}>
-            {isLiked ? (
-              <Image src="/heart-outline.png" alt="heart" className={styles.likesIcon} fill />
-            ) : (
-              <Image src="/heart.png" alt="heart" className={styles.likesIcon} fill />
-            )}
+            <div className={styles.likesPostsItemLikeContents}>
+              <div
+                className={styles.likesPostsItemLikeItem}
+                onClick={() => handleClickLikeOrUnlike()}
+              >
+                {isLiked ? (
+                  <Image src="/heart-outline.png" alt="heart" className={styles.likesIcon} fill />
+                ) : (
+                  <Image src="/heart.png" alt="heart" className={styles.likesIcon} fill />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
