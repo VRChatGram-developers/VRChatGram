@@ -35,6 +35,7 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
             </div>
           </div>
           <div className={styles.shortMoiveSearchButtonContent}>
+            <div className={styles.comingSoonText}>Coming Soon ...</div>
             <div className={styles.shortMoiveSearchTextContainer}>
               <p className={styles.shortMoiveSearchTitle}>ショート動画</p>
               <button className={styles.shortMoiveSearchText}>

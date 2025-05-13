@@ -47,6 +47,7 @@ export async function POST(request: Request) {
       orderBy: { created_at: "desc" },
       select: {
         id: true,
+        title: true,
         show_sensitive_type: true,
         images: true,
         user: {
