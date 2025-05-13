@@ -5,9 +5,11 @@ import { User } from "@/features/users/types/index";
 import { useState } from "react";
 import { PostCard } from "@/components/layouts/post-card";
 import { SocialLink } from "@/features/users/components/profile/social-link";
+import { SocialLink as SocialLinkType } from "@/features/users/types/index";
 
 export const UserHome = ({
   user,
+  socialLinks,
   isUserEditing,
   introductionTitle,
   setIntroductionTitle,
@@ -16,6 +18,7 @@ export const UserHome = ({
   handleEditSocialLink,
 }: {
   user: User;
+  socialLinks: SocialLinkType[];
   isUserEditing: boolean;
   introductionTitle: string;
   setIntroductionTitle: (introductionTitle: string) => void;
@@ -55,7 +58,7 @@ export const UserHome = ({
           </div>
         )}
         <SocialLink
-          socialLinks={user.social_links}
+          socialLinks={socialLinks}
           isUserEditing={isUserEditing}
           handleEditSocialLink={handleEditSocialLink}
         />

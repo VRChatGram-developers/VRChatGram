@@ -45,7 +45,7 @@ export const SocialLink = ({
               />
             </div>
           ))
-        : socialLinks.map((socialLink: SocialLinkType) => (
+        : socialLinks.filter((socialLink: SocialLinkType) => socialLink.id ).map((socialLink: SocialLinkType) => (
             <div key={socialLink.id} className={styles.profileIntroduceContent}>
               {getIcon(socialLink.platform_types)}
               <a
