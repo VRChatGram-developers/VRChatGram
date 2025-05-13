@@ -7,7 +7,7 @@ import { MdOutlineChangeCircle } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import styles from "../styles/password-setting.module.scss";
-
+import { Slide, toast } from "react-toastify";
 type PasswordSettingProps = {
   onClose: () => void;
 };
@@ -68,8 +68,20 @@ export const PasswordSetting = ({ onClose }: PasswordSettingProps) => {
 
     try {
       await updateUserPassword(currentPassword, newPassword);
+      toast.success("パスワードを変更しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
     } catch (error) {
       console.error(error);
+      toast.error("パスワードの変更に失敗しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
     }
 
     onClose();

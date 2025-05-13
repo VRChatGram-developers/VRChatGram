@@ -5,6 +5,7 @@ import { useState } from "react";
 import { updateUserEmail } from "../endpoint";
 import { MdOutlineChangeCircle } from "react-icons/md";
 import styles from "../styles/email-setting.module.scss";
+import { Slide, toast } from "react-toastify";
 
 type EmailSettingProps = {
   onClose: () => void;
@@ -41,8 +42,21 @@ export const EmailSetting = ({ onClose, currentEmail }: EmailSettingProps) => {
 
     try {
       await updateUserEmail(email, newEmail);
+
+      toast.success("メールアドレスを変更しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
     } catch (error) {
       console.error(error);
+      toast.error("メールアドレスの変更に失敗しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
     }
 
     onClose();

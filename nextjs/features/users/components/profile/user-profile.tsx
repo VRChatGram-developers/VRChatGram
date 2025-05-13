@@ -109,19 +109,20 @@ export const UserProfile = ({ user }: { user: User }) => {
   const handleSubmitIntroduction = async () => {
     setIsUserEditing(true);
 
-    const postImages = await Promise.all(
-      [profileImage, backgroundImage].map(async (image) => {
-        if (!image?.file) {
-          return null;
-        }
-        const imageUrl = await uploadImage(image.file, image.file_name);
-        return {
-          url: imageUrl,
-        };
-      })
-    );
-
-    const [updatedProfileImage, updatedBackgroundImage] = postImages;
+    let updatedProfileImage: { url: string } | null = null;
+    let updatedBackgroundImage: { url: string } | null = null;
+  
+    if (profileImage || backgroundImage) {
+      const postImages = await Promise.all(
+        [profileImage, backgroundImage].map(async (image) => {
+          if (!image?.file) return null;
+          const imageUrl = await uploadImage(image.file, image.file_name);
+          return { url: imageUrl };
+        })
+      );
+  
+      [updatedProfileImage, updatedBackgroundImage] = postImages;
+    }
     const filteredSocialLinks = socialLinks.filter((socialLink) => socialLink.platform_url !== "");
     try {
       await updateUserProfile({
