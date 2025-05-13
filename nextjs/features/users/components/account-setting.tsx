@@ -9,7 +9,7 @@ import { PasswordSetting } from "./password-setting";
 import { AccountSetting as AccountSettingType } from "../types/index";
 import { EmailSetting } from "./email-setting";
 import styles from "../styles/account-setting.module.scss";
-
+import { Slide, toast } from "react-toastify";
 export const AccountSetting = ({ accountSetting }: { accountSetting: AccountSettingType }) => {
   const { openModal, closeModal } = useModal();
   const [showSensitiveType, setShowSensitiveType] = useState(accountSetting.show_sensitive_type);
@@ -42,9 +42,21 @@ export const AccountSetting = ({ accountSetting }: { accountSetting: AccountSett
         show_sensitive_type: showSensitiveType,
         gender,
       });
+      toast.success("アカウント設定を変更しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
       router.refresh();
     } catch (error) {
       console.error(error);
+      toast.error("アカウント設定の変更に失敗しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
     }
   };
 
