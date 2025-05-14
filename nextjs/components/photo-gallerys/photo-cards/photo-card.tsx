@@ -5,10 +5,10 @@ import clsx from "clsx";
 import Image from "next/image";
 import styles from "./photo-card.module.scss";
 import { MdOutlinePhoto } from "react-icons/md";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
+import Link from "next/link";
 
 export const PhotoCard = ({
   className,
@@ -32,22 +32,9 @@ export const PhotoCard = ({
   handleLikeOrUnlike: () => void;
   myId: string;
 }) => {
-  const router = useRouter();
   const { openModal, closeModal } = useModal();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: _, status } = useSession();
-
-  const handleForwardToPostDetail = (postId: string | bigint) => {
-    const postIdString = typeof postId === "bigint" ? postId.toString() : postId;
-    router.prefetch(`/posts/${postIdString}`);
-    router.push(`/posts/${postIdString}`);
-  };
-
-  const handleForwardToUserDetail = (myId: string | bigint) => {
-    const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
-    router.prefetch(`/users/${myIdString}`);
-    router.push(`/users/${myIdString}`);
-  };
+  const { data: _, status } = useSession()
 
   const handleClickLikeOrUnlike = () => {
     if (status === "unauthenticated") {
@@ -59,7 +46,9 @@ export const PhotoCard = ({
 
   return (
     <div className={clsx(styles.postLikeContainer, className)} {...rest}>
-      <div onClick={() => handleForwardToPostDetail(postId)}>{children}</div>
+      <Link href={`/posts/${postId}`} prefetch={true}>
+        {children}
+      </Link>
       {postImageCount > 1 && (
         <div className={styles.likesPostsItemImageContents}>
           <MdOutlinePhoto className={styles.MdOutlinePhoto} />
@@ -69,14 +58,20 @@ export const PhotoCard = ({
       <div className={styles.userInfoLikeContainer}>
         <div className={styles.userInfo}>
           <p className={styles.userInfoTitle}>{postName}</p>
-          <div className={styles.userInfoContainer} onClick={() => handleForwardToUserDetail(myId)}>
-            <Image
-              src={userImageUrl || "/user-icon.png"}
-              alt="new-post-image"
-              className={styles.userInfoIcon}
-              fill
-            />
-            <p className={styles.userInfoName}>{userName}</p>
+          <div className={styles.userInfoContainer}>
+            <Link href={`/users/${myId}`} prefetch={true}>
+              <Image
+                src={userImageUrl || "/user-icon.png"}
+                alt="new-post-image"
+                className={styles.userInfoIcon}
+                fill
+              />
+            </Link>
+            <p className={styles.userInfoName}>
+              <Link href={`/users/${myId}`} prefetch={true}>
+                {userName}
+              </Link>
+            </p>
             <div className={styles.likesPostsItemLikeContents}>
               <div
                 className={styles.likesPostsItemLikeItem}
