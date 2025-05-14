@@ -7,6 +7,72 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
+const fetchPostsOrderLikesThisWeek = async (limit: number, offset: number) => {
+  const startOfWeek = getStartOfWeek();
+
+  const results = await prisma.posts.findMany({
+    where: {
+      likes: {
+        some: {
+          created_at: {
+            gte: startOfWeek,
+            lte: new Date(),
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      created_at: true,
+      show_sensitive_type: true,
+      likes: {
+        where: {
+          created_at: {
+            gte: startOfWeek,
+            lte: new Date(),
+          },
+        },
+        select: {
+          id: true,
+          post_id: true,
+          user_id: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          profile_url: true,
+          my_id: true,
+        },
+      },
+      images: {
+        select: {
+          id: true,
+          url: true,
+          width: true,
+          height: true,
+        },
+      },
+    },
+    orderBy: [
+      {
+        likes: {
+          _count: "desc", // いいね数で降順ソート
+        },
+      },
+      {
+        created_at: "desc", // 作成日時で降順ソート
+      },
+    ],
+    take: Number(limit),
+    skip: offset,
+  });
+
+  return results;
+};
+
 const fetchPostImageUrlWithMaxLikes = async (where: Prisma.postsWhereInput) => {
   const post = await prisma.posts.findFirst({
     where: where,
@@ -42,9 +108,9 @@ export async function GET(request: Request) {
 
     //クエリパラメータからページ番号を取得し、整数に変換（デフォルトは1）
     // const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const page = parseInt(url.searchParams.get("page") || "1", 20);
     //クエリパラメータからページごとの表示数を取得し、整数に変換（デフォルトは10）
-    const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+    const limit = parseInt(url.searchParams.get("limit") || "10", 20);
     //検索の開始位置を取得。
     const offset = (page - 1) * limit;
 
@@ -66,64 +132,49 @@ export async function GET(request: Request) {
         orderBy = { created_at: "desc" };
       } else if (sort === "popular") {
         orderBy = { likes: { _count: "desc" } };
-      } else if (sort === "this_week_popular") {
-        const likedPostIds = await prisma.likes.groupBy({
-          by: ["post_id"],
-          where: {
-            created_at: {
-              gte: getStartOfWeek(),
-              lte: new Date(),
-            },
-          },
-          _count: {
-            post_id: true,
-          },
-          orderBy: {
-            _count: {
-              post_id: "desc",
-            },
-          },
-          take: Number(limit),
-          skip: offset,
-        });
-        where.id = { in: likedPostIds.map((post) => post.post_id) };
       }
     }
 
-    const posts = await prisma.posts.findMany({
-      where: where,
-      orderBy: orderBy,
-      take: Number(limit),
-      skip: offset,
-      select: {
-        id: true,
-        title: true,
-        show_sensitive_type: true,
-        likes: {
-          select: {
-            id: true,
-            post_id: true,
-            user_id: true,
+    let posts;
+    if (sort === "this_week_popular") {
+      posts = await fetchPostsOrderLikesThisWeek(limit, offset);
+      console.log(posts);
+    } else {
+      posts = await prisma.posts.findMany({
+        where: where,
+        orderBy: orderBy,
+        take: Number(limit),
+        skip: offset,
+        select: {
+          id: true,
+          title: true,
+          show_sensitive_type: true,
+          likes: {
+            select: {
+              id: true,
+              post_id: true,
+              user_id: true,
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              profile_url: true,
+              my_id: true,
+            },
+          },
+          images: {
+            select: {
+              id: true,
+              url: true,
+              width: true,
+              height: true,
+            },
           },
         },
-        user: {
-          select: {
-            id: true,
-            name: true,
-            profile_url: true,
-            my_id: true,
-          },
-        },
-        images: {
-          select: {
-            id: true,
-            url: true,
-            width: true,
-            height: true,
-          },
-        },
-      },
-    });
+      });
+    }
 
     const postsWithIsLiked = posts.map((post) => ({
       ...post,
@@ -144,6 +195,7 @@ export async function GET(request: Request) {
       { status: 200 }
     );
   } catch (error) {
+    console.error(error.stack);
     return NextResponse.json({ error: `Failed to connect to database ${error}` }, { status: 500 });
   }
 }
