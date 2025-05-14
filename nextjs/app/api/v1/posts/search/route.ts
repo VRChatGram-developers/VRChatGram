@@ -9,7 +9,6 @@ export const runtime = "edge";
 
 const fetchPostsOrderLikesThisWeek = async (limit: number, offset: number, where: Prisma.postsWhereInput) => {
   const startOfWeek = getStartOfWeek();
-
   const results = await prisma.posts.findMany({
     where: {
       ...where,
@@ -138,7 +137,7 @@ export async function GET(request: Request) {
 
     let posts;
     if (sort === "this_week_popular") {
-      posts = await fetchPostsOrderLikesThisWeek(limit, offset);
+      posts = await fetchPostsOrderLikesThisWeek(limit, offset, where);
       console.log(posts);
     } else {
       posts = await prisma.posts.findMany({
