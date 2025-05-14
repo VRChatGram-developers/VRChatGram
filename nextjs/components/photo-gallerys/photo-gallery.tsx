@@ -50,6 +50,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
       }}
       skeleton={<div style={{ width: "100%", minHeight: 300 }} />}
       defaultContainerWidth={300}
+      spacing={10}
       // sizes={{
       //   size: "1168px",
       //   sizes: [{ viewport: "(max-width: 1200px)", size: "calc(100vw - 32px)" }],
