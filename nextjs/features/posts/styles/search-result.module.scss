@@ -14,6 +14,8 @@
     .searchThumbnail {
       max-width: 16rem;
       max-height: 16rem;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
     }
 
     .searchDetailContainer {
@@ -114,12 +116,18 @@
   .pagination {
     display: flex;
     justify-content: center;
-    padding: 4rem 1.5rem;
-    gap: 1.5rem;
+    padding: 4rem 0;
+
+    .paginationMoveButton{
+      margin: 0 0.5rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+    }
 
     .paginationButton {
       background-color: #ffffff;
-      color: 000000;
+      color: #000000;
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -181,3 +189,13 @@
     }
   }
 }
+
+@media (min-width: 576px) {
+    .paginationMoveFirstButton {
+        margin-right: 1rem;
+    }
+    .paginationMoveLastButton{
+        margin-left: 1rem;
+    }
+}
+

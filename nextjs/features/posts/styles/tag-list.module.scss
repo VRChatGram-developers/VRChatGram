@@ -1,29 +1,42 @@
 .tagList {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  overflow-x: auto; // ← スクロール可能に
+  white-space: nowrap; // ← 子要素の折り返し防止
   padding: 1rem 0;
+  gap: 1rem;
+  margin: 1rem 0 2rem 0;
 
-  .tagItem,
-  .selectedTagItem {
-    font-family: "Noto Sans JP";
-    border-radius: 0.5rem;
-    min-width: 5rem;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 0 2rem;
-  }
+  // スクロールバーの非表示（必要に応じて）
+  -ms-overflow-style: none; // IE, Edge
+  scrollbar-width: none;    // Firefox
 
-  .tagItem {
-    background-color: #ffffff;
+  &::-webkit-scrollbar {
+    display: none;          // Chrome, Safari
   }
+}
 
-  .selectedTagItem {
-    background-color: #69beef;
-    color: #fff;
+.tagItemContainer {
+  flex: 0 0 auto; // ← 子要素が縮まないように
+}
+
+.tagItem {
+  background-color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #f0f0f0;
   }
+}
+
+.selectedTagItem {
+  background-color: #69beef;
+  color: #fff;
+  border-color: #69beef;
 }

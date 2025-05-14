@@ -44,17 +44,18 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
   return (
     <RowsPhotoAlbum
       photos={photoObjects}
-      targetRowHeight={200}
+      targetRowHeight={400}
       render={{
         wrapper: (props, { photo }) => <PhotoCard {...props} {...photo} />,
       }}
-      defaultContainerWidth={1200}
+      skeleton={<div style={{ width: "100%", minHeight: 400 }} />}
+      defaultContainerWidth={100}
       // sizes={{
       //   size: "1168px",
       //   sizes: [{ viewport: "(max-width: 1200px)", size: "calc(100vw - 32px)" }],
       // }}
-      breakpoints={[220, 360, 480, 600, 900, 1200, 1500, 1700]}
-      rowConstraints={{ singleRowMaxHeight: 200, maxPhotos: 4, minPhotos: 1 }}
+      breakpoints={[600, 900, 1200, 1500, 1700]}
+      rowConstraints={{ singleRowMaxHeight: 400, maxPhotos: 3, minPhotos: 1 }}
     />
   );
 };

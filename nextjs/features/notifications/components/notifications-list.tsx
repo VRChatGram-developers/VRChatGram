@@ -82,7 +82,7 @@ export const NotificationsList = ({
 
       <div className={styles.pagination}>
         <button
-          className={styles.paginationButton}
+          className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
           onClick={() => handlePageChange(0)}
         >
           <MdOutlineFirstPage className={styles.paginationButtonIcon} />
@@ -91,17 +91,20 @@ export const NotificationsList = ({
           <button
             key={i}
             onClick={() => handlePageChange(i)}
-            className={
-              currentPage === i + 1
+            className={`
+              ${currentPage === i + 1
                 ? styles.paginationSelectedButton
-                : styles.paginationButton
+                : styles.paginationNotSelectButton}
+
+                ${styles.paginationMoveButton}
+                `
             }
           >
             {i + 1}
           </button>
         ))}
         <button
-          className={styles.paginationButton}
+          className={`${styles.paginationButton} ${styles.paginationMoveLastButton}`}
           onClick={() => handlePageChange(totalPages - 1)}
         >
           <MdOutlineLastPage className={styles.paginationButtonIcon} />

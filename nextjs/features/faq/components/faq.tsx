@@ -28,7 +28,7 @@ export const Faq = () => {
 
       <div className={styles.pagination}>
         <button
-          className={styles.paginationButton}
+          className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
           onClick={() => setCurrentPage(0)}
           disabled={currentPage === 0}
         >
@@ -39,8 +39,13 @@ export const Faq = () => {
           <button
             key={i}
             onClick={() => setCurrentPage(i)}
-            className={
-              currentPage === i ? styles.paginationSelectedButton : styles.paginationButton
+            className={`
+              ${currentPage === i + 1
+                ? styles.paginationSelectedButton
+                : styles.paginationNotSelectButton}
+
+                ${styles.paginationMoveButton}
+                `
             }
           >
             {i + 1}
@@ -48,7 +53,7 @@ export const Faq = () => {
         ))}
 
         <button
-          className={styles.paginationButton}
+          className={`${styles.paginationButton} ${styles.paginationMoveLastButton}`}
           onClick={() => setCurrentPage(totalPages - 1)}
           disabled={currentPage === totalPages - 1}
         >
