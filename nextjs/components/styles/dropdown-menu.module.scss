@@ -3,13 +3,13 @@
   top: 5rem;
   right: 0;
   background-color: #fff;
-  width: 15vw;
-  border: 1px solid #333;
-  border-radius: 5px;
+
 
   &__menu {
     &__name_container {
-      padding: 3rem 2rem 1rem 1rem;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      padding: 0 1rem;
 
       &__name {
         font-size: 0.9rem;
@@ -40,7 +40,8 @@
 
   &__item {
     a {
-      padding: 0.25rem 1rem;
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
       display: block;
       color: #333;
       border-bottom: 1px solid #fff;
@@ -55,7 +56,8 @@
   }
 
   &__logout_container {
-    padding: 1rem 1rem 3rem 1rem;
+    margin-bottom: 3rem;
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
