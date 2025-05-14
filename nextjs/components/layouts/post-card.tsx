@@ -40,18 +40,6 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
     handleLikeOrUnlike,
   } = postCardProps;
 
-  const handleForwardToPostDetail = (postId: string | bigint) => {
-    const postIdString = typeof postId === "bigint" ? postId.toString() : postId;
-    router.prefetch(`/posts/${postIdString}`);
-    router.push(`/posts/${postIdString}`);
-  };
-
-  const handleForwardToUserDetail = (myId: string | bigint) => {
-    const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
-    router.prefetch(`/users/${myIdString}`);
-    router.push(`/users/${myIdString}`);
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: _, status } = useSession();
   const handleClickLikeOrUnlike = () => {
