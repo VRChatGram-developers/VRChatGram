@@ -25,7 +25,6 @@ const sampleUserImageUrl = "/user-icon.png";
 const samplePostImageUrl = "/posts/sample-icon.png";
 
 export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) => {
-  const router = useRouter();
   const { openModal, closeModal } = useModal();
 
   const {
