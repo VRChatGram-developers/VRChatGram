@@ -3,7 +3,6 @@
 import styles from "../styles/post-card.module.scss";
 import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
