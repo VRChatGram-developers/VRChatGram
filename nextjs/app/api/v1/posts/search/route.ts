@@ -195,7 +195,6 @@ export async function GET(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error(error.stack);
     return NextResponse.json({ error: `Failed to connect to database ${error}` }, { status: 500 });
   }
 }
