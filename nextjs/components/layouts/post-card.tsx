@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
-
+import Link from "next/link";
 type PostCardProps = {
   postId: string | bigint;
   myId: string | bigint;
@@ -65,14 +65,15 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
 
   return (
     <div className={styles.likesPostsItem}>
-      <Image
-        src={postImageUrl || samplePostImageUrl}
-        alt={`ピックアップ画像`}
-        width={402}
-        height={402}
-        className={styles.likesPostsItemImage}
-        onClick={() => handleForwardToPostDetail(postId)}
-      />
+      <Link href={`/posts/${postId}`} prefetch={true}>
+        <Image
+          src={postImageUrl || samplePostImageUrl}
+          alt={`ピックアップ画像`}
+          width={402}
+          height={402}
+          className={styles.likesPostsItemImage}
+        />
+      </Link>
       {postImageCount > 1 && (
         <div className={styles.likesPostsItemImageContents}>
           <MdOutlinePhoto className={styles.MdOutlinePhoto} />
@@ -89,8 +90,8 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
               className={styles.userInfoIcon}
               fill
             />
-            <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(myId)}>
-              {userName}
+            <p className={styles.userInfoName}>
+              <Link href={`/users/${myId}`} prefetch={true}>{userName}</Link>
             </p>
             <div className={styles.likesPostsItemLikeContents}>
               <div
