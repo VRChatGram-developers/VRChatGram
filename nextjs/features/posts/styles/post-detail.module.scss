@@ -99,7 +99,7 @@
       }
       .postDetailTitleContainer {
         .postDetailTitle {
-          font-size: 4rem;
+          font-size: 3rem;
           font-weight: bold;
         }
       }
@@ -321,6 +321,6 @@
 @media (max-width: 1039px) {
   .postDetailContainer {
     grid-auto-flow: row;
-    gap: 5rem !important;
+    // gap: 5rem !important;
   }
 }

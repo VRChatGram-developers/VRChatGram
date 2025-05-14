@@ -8,6 +8,8 @@ import {
 } from "@/features/home/types/index";
 import { auth } from "@/libs/firebase/auth";
 import { createClient } from "microcms-js-sdk";
+import { Suspense } from "react";
+import { ClipLoader } from "react-spinners";
 
 export default async function Home() {
   const client = createClient({
@@ -51,12 +53,20 @@ export default async function Home() {
   const { popularPostList, latestPostList, latestPostListWithX } = homeData;
 
   return (
-    <Main
-      notifications={serializedNotifications}
-      latestPostList={latestPostList}
-      popularTagList={popularTagList}
-      popularPostList={popularPostList}
-      latestPostListWithX={latestPostListWithX}
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+        </div>
+      }
+    >
+      <Main
+        notifications={serializedNotifications}
+        latestPostList={latestPostList}
+        popularTagList={popularTagList}
+        popularPostList={popularPostList}
+        latestPostListWithX={latestPostListWithX}
+      />
+    </Suspense>
   );
 }

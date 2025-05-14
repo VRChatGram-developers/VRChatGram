@@ -132,9 +132,9 @@
       gap: 2.5rem;
 
       .moduleDrawerMenuSection {
-        moduleDrawerMenutext {
-          font-size: 1.5rem;
-          padding: 0.25rem 0;
+        .moduleDrawerMenutext {
+          font-size: 1.5rem ;
+          padding: 0.25rem 1.5rem;
           font-family: "Noto Sans JP", sans-serif;
           cursor: pointer;
           display: block;
@@ -215,14 +215,14 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 0 1.5rem;
+    // padding: 0 1.5rem;
     .searchInputMobileContainer {
       position: relative;
       display: flex;
       align-items: center;
       width: 100%;
       height: 100%;
-      padding: 0.5rem 0;
+      padding: 0.5rem 1.5rem;
       height: 4rem;
       input {
         height: 100%;
@@ -235,7 +235,7 @@
 
       .FaSearch {
         position: absolute;
-        left: 1rem;
+        left: 2rem;
         top: 50%;
         transform: translateY(-50%);
         color: #5d5d5d;
@@ -290,6 +290,7 @@
       }
 
       .postButtonContainer {
+        padding: 0 1.5rem;
         display: flex;
 
         button {
@@ -317,6 +318,7 @@
     display: flex;
     flex-direction: column;
     .userProfileContainer {
+      padding: 0 1.5rem;
       display: flex;
       flex-direction: column;
       margin: 3rem 0;
@@ -342,9 +344,9 @@
       gap: 2.5rem;
 
       .moduleDrawerMenuSection {
-        moduleDrawerMenutext {
+        .moduleDrawerMenutext {
           font-size: 1.5rem;
-          padding: 0.25rem 0;
+          padding: 0.25rem 1.5rem;
           font-family: "Noto Sans JP", sans-serif;
           cursor: pointer;
           display: block;

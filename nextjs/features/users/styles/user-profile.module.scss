@@ -106,12 +106,14 @@
         }
       }
 
-      .profileHeaderUserIcon {
-        aspect-ratio: 1/1;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
+      .profileUserIconContainer {
+        .profileHeaderUserIcon {
+          aspect-ratio: 1/1;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+        }
       }
     }
 
@@ -299,10 +301,38 @@
   .profileHeaderContent {
     grid-auto-flow: column;
     grid-template-columns: 13rem auto;
+    max-width: 100%; // 必要であれば追加（中央寄せを阻害しないように）
+    margin: 0 auto; // 中央寄せ
+    align-items: center; // 高さを揃える
   }
+
+  .profileHeaderUserIconInputContainer {
+    position: relative;
+  }
+
+
 }
 
 @media (max-width: 768px) {
+
+  .profileHeaderUserIconInputContainer {
+    position: relative;
+    max-width: 14rem;
+
+    .profileUserIconContainer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 0 0.5rem;
+      width: 100%;
+    }
+
+    .profileHeaderUserIconInput {
+      z-index: 100;
+    }
+
+  }
 
   .profileHeaderContent {
     grid-auto-flow: row;
