@@ -236,22 +236,27 @@ export const SearchResult = ({
 
       {/* ページネーションUI */}
       <div className={styles.pagination}>
-        <button className={styles.paginationButton} onClick={() => handlePageChange(0)}>
+        <button className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`} onClick={() => handlePageChange(0)}>
           <MdOutlineFirstPage className={styles.paginationButtonIcon} />
         </button>
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
             onClick={() => handlePageChange(i)}
-            className={
-              changedCurrentPage === i ? styles.paginationSelectedButton : styles.paginationButton
+            className={`
+              ${currentPage === i + 1
+                ? styles.paginationSelectedButton
+                : styles.paginationNotSelectButton}
+
+                ${styles.paginationMoveButton}
+                `
             }
           >
             {i + 1}
           </button>
         ))}
         <button
-          className={styles.paginationButton}
+          className={`${styles.paginationButton} ${styles.paginationMoveLastButton}`}
           onClick={() => handlePageChange(totalPages - 1)}
         >
           <MdOutlineLastPage className={styles.paginationButtonIcon} />

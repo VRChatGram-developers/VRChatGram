@@ -3,11 +3,10 @@
 import styles from "../styles/post-card.module.scss";
 import Image from "next/image";
 import { MdOutlinePhoto } from "react-icons/md";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
-
+import Link from "next/link";
 type PostCardProps = {
   postId: string | bigint;
   myId: string | bigint;
@@ -25,7 +24,6 @@ const sampleUserImageUrl = "/user-icon.png";
 const samplePostImageUrl = "/posts/sample-icon.png";
 
 export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) => {
-  const router = useRouter();
   const { openModal, closeModal } = useModal();
 
   const {
@@ -40,18 +38,6 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
     handleLikeOrUnlike,
   } = postCardProps;
 
-  const handleForwardToPostDetail = (postId: string | bigint) => {
-    const postIdString = typeof postId === "bigint" ? postId.toString() : postId;
-    router.prefetch(`/posts/${postIdString}`);
-    router.push(`/posts/${postIdString}`);
-  };
-
-  const handleForwardToUserDetail = (myId: string | bigint) => {
-    const myIdString = typeof myId === "bigint" ? myId.toString() : myId;
-    router.prefetch(`/users/${myIdString}`);
-    router.push(`/users/${myIdString}`);
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: _, status } = useSession();
   const handleClickLikeOrUnlike = () => {
@@ -65,14 +51,15 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
 
   return (
     <div className={styles.likesPostsItem}>
-      <Image
-        src={postImageUrl || samplePostImageUrl}
-        alt={`ピックアップ画像`}
-        width={402}
-        height={402}
-        className={styles.likesPostsItemImage}
-        onClick={() => handleForwardToPostDetail(postId)}
-      />
+      <Link href={`/posts/${postId}`} prefetch={true}>
+        <Image
+          src={postImageUrl || samplePostImageUrl}
+          alt={`ピックアップ画像`}
+          width={402}
+          height={402}
+          className={styles.likesPostsItemImage}
+        />
+      </Link>
       {postImageCount > 1 && (
         <div className={styles.likesPostsItemImageContents}>
           <MdOutlinePhoto className={styles.MdOutlinePhoto} />
@@ -89,8 +76,8 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
               className={styles.userInfoIcon}
               fill
             />
-            <p className={styles.userInfoName} onClick={() => handleForwardToUserDetail(myId)}>
-              {userName}
+            <p className={styles.userInfoName}>
+              <Link href={`/users/${myId}`} prefetch={true}>{userName}</Link>
             </p>
             <div className={styles.likesPostsItemLikeContents}>
               <div

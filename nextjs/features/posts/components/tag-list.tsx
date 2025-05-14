@@ -25,11 +25,7 @@ export const TagList = ({
           <div className={styles.tagItemContainer} key={tag.id}>
           <button
             key={tag.id}
-            className={
-              isSelected
-                ? `${styles.tagItem} ${styles.selectedTagItem}`
-                : styles.tagItem
-            }
+            className={`${isSelected ? styles.selectedTagItem : ``} ${styles.tagItem}`}
             onClick={() => handleSelectTag(tag.name)}
           >
             {tag.name === "ALL" ? "ALL" : `${tag.name}`}
