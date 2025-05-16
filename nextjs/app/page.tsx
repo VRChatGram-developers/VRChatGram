@@ -11,6 +11,8 @@ import { createClient } from "microcms-js-sdk";
 import { Suspense } from "react";
 import { ClipLoader } from "react-spinners";
 
+export const revalidate = 60;
+
 export default async function Home() {
   const client = createClient({
     serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN ?? "",

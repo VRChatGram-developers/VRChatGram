@@ -195,7 +195,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
 
       setTimeout(() => {
         toast.dismiss(toastId);
-      }, 1000);
+      }, 2000);
 
     } catch (error) {
       console.error(error);

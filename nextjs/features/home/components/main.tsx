@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Notification } from "../types/index";
-import { useState, useEffect, Key } from "react";
+import { useState, useEffect } from "react";
 import { PopularTag } from "./popular-tag";
 import {
   LatestPost as LatestPostType,
@@ -12,12 +12,10 @@ import {
 } from "../types/index";
 import { PopularPostList } from "./popular-post-list";
 import { LatestPost } from "./latest-post";
-import { XPost } from "./x-post";
 import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
 import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
-import { GoArrowRight } from "react-icons/go";
 
 export const Main = ({
   popularPostList,
@@ -32,7 +30,6 @@ export const Main = ({
   popularPostList: PopularPostType[];
   latestPostListWithX: XPostType[];
 }) => {
-  const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const [latestPosts, setLatestPosts] = useState<LatestPostType[]>([]);
   const [popularPosts, setPopularPosts] = useState<PopularPostType[]>([]);
@@ -95,6 +92,7 @@ export const Main = ({
               width={1680}
               height={384}
               className={styles.topNoticeMainImage}
+              priority
               />
             )}
           </div>
@@ -199,6 +197,7 @@ export const Main = ({
               width={1680}
               height={384}
               className={styles.mobileMainImage}
+              priority
             />
           )}
         </div>
