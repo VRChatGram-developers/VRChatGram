@@ -95,6 +95,7 @@ export const Main = ({
               width={1680}
               height={384}
               className={styles.topNoticeMainImage}
+              priority
               />
             )}
           </div>
