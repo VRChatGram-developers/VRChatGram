@@ -6,23 +6,23 @@ import styles from "../styles/popular-post-list.module.scss";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState, useEffect } from "react";
 
+
 export const PopularPostList = ({
   popularPostList,
-  setIsLiked,
-  setPopularPostList,
 }: {
   popularPostList: PopularPost[];
-  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
-  setPopularPostList: React.Dispatch<React.SetStateAction<PopularPost[]>>;
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setIsLiked] = useState(false);
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>({});
+  const [popularPosts, setPopularPosts] = useState<PopularPost[]>(popularPostList || []);
   const { handleLikeOrUnlike } = useLikePost();
 
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
 
-    setPopularPostList((prevList) =>
+    setPopularPosts((prevList) =>
       prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
     );
 
@@ -36,19 +36,19 @@ export const PopularPostList = ({
 
   useEffect(() => {
     const updatedLikedPosts = Object.fromEntries(
-      popularPostList.map((post) => [post.id, post.is_liked])
+      popularPosts.map((post) => [post.id, post.is_liked])
     );
     setLikedPosts(updatedLikedPosts);
 
     // const updatedChunkedPosts = chunkPopularPostList(popularPostList);
-  }, [popularPostList]);
+  }, [popularPosts]);
 
   return (
     <>
       <div className={styles.popularPostListContainer}>
         <p className={styles.popularPostListTitle}>ピックアップ</p>
         <div className={styles.popularPostList}>
-          {popularPostList.map((post, index) => (
+          {popularPosts.map((post, index) => (
             <PostCard
               key={`${index}-${post.id}`}
               postCardProps={{

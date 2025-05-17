@@ -2,79 +2,38 @@
 
 import Image from "next/image";
 import { Notification } from "../types/index";
-import { useState, useEffect } from "react";
-import { PopularTag } from "./popular-tag";
-import {
-  LatestPost as LatestPostType,
-  PopularPost as PopularPostType,
-  XPost as XPostType,
-  Tag,
-} from "../types/index";
-import { PopularPostList } from "./popular-post-list";
-import { LatestPost } from "./latest-post";
 import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
 import parse from "html-react-parser";
-import { useRouter } from "next/navigation";
 
-export const Main = ({
-  popularPostList,
-  latestPostList,
-  popularTagList,
-  notifications,
-  latestPostListWithX,
-}: {
-  notifications: Notification[];
-  latestPostList: LatestPostType[];
-  popularTagList: Tag[];
-  popularPostList: PopularPostType[];
-  latestPostListWithX: XPostType[];
-}) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const [latestPosts, setLatestPosts] = useState<LatestPostType[]>([]);
-  const [popularPosts, setPopularPosts] = useState<PopularPostType[]>([]);
-  const [latestPostsWithX, setLatestPostsWithX] = useState<XPostType[]>([]);
-
-  useEffect(() => {
-    setLatestPosts(latestPostList);
-    setPopularPosts(popularPostList);
-    setLatestPostsWithX(latestPostsWithX);
-  }, [latestPostList, popularPostList, latestPostsWithX]);
-
+export const Main = ({ notifications }: { notifications: Notification[] }) => {
   const testNews = [
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GjOaoOYbgAAJRaD?format=jpg&name=medium",
+      imageURL: "https://pbs.twimg.com/media/GjOaoOYbgAAJRaD?format=jpg&name=medium",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/Gc_EUiKbYAEpQUp?format=jpg&name=4096x4096",
+      imageURL: "https://pbs.twimg.com/media/Gc_EUiKbYAEpQUp?format=jpg&name=4096x4096",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GLpW566bUAAmrmI?format=jpg&name=4096x4096",
+      imageURL: "https://pbs.twimg.com/media/GLpW566bUAAmrmI?format=jpg&name=4096x4096",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/F3PiVIYaAAEaFla?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/F3PiVIYaAAEaFla?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GQWxLH1a8AAeTou?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/GQWxLH1a8AAeTou?format=jpg&name=large",
       linkUrl: "/",
     },
     {
-      imageURL:
-        "https://pbs.twimg.com/media/GMoEo5CboAAJNsD?format=jpg&name=large",
+      imageURL: "https://pbs.twimg.com/media/GMoEo5CboAAJNsD?format=jpg&name=large",
       linkUrl: "/",
     },
   ];
@@ -87,12 +46,12 @@ export const Main = ({
           <div className={styles.topNoticeMainContainer}>
             {testNews.length > 0 && (
               <Image
-              src="/home/main.png"
-              alt="メイン画像"
-              width={1680}
-              height={384}
-              className={styles.topNoticeMainImage}
-              priority
+                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/main.webp"
+                alt="メイン画像"
+                width={1680}
+                height={384}
+                className={styles.topNoticeMainImage}
+                priority
               />
             )}
           </div>
@@ -129,7 +88,7 @@ export const Main = ({
               <div className={styles.mainSecondContainerSecondBox}>
                 <div className={styles.mainSecondContainerImageContainer}>
                   <Image
-                    src="/home/vrcss-introduction.png"
+                    src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
                     alt="画像2"
                     width={402}
                     height={194}
@@ -138,7 +97,7 @@ export const Main = ({
                 </div>
                 <div className={styles.mainSecondContainerImageContainer}>
                   <Image
-                    src="/home/vrcss-usage-guide.png"
+                    src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
                     alt="画像3"
                     width={402}
                     height={194}
@@ -192,7 +151,7 @@ export const Main = ({
         <div className={styles.mobileMainImageContaier}>
           {testNews.length > 0 && (
             <Image
-              src="/home/main.png"
+              src="https://d3o6x7pz3sf2lk.cloudfront.net/static/main.webp"
               alt="メイン画像"
               width={1680}
               height={384}
@@ -267,7 +226,7 @@ export const Main = ({
           <div className={styles.mobileMainSecondContainerSecondBox}>
             <div className={styles.mobileMainSecondContainerImageContent}>
               <Image
-                src="/home/vrcss-introduction.png"
+                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
                 alt="画像2"
                 width={402}
                 height={194}
@@ -276,7 +235,7 @@ export const Main = ({
             </div>
             <div className={styles.mobileMainSecondContainerImageContent}>
               <Image
-                src="/home/vrcss-usage-guide.png"
+                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
                 alt="画像3"
                 width={402}
                 height={194}
@@ -286,22 +245,6 @@ export const Main = ({
           </div>
         </div>
       </div>
-
-      <PopularPostList
-        popularPostList={popularPosts}
-        setIsLiked={setIsLiked}
-        setPopularPostList={setPopularPosts}
-      />
-      <PopularTag popularTagList={popularTagList} />
-      <LatestPost
-        latestPostList={latestPosts}
-        setIsLiked={setIsLiked}
-        setLatestPostList={setLatestPosts}
-      />
-      {/* <XPost
-        latestPostListWithX={latestPostListWithX}
-        setLatestPostListWithX={setLatestPostsWithX}
-      /> */}
     </>
   );
 };
