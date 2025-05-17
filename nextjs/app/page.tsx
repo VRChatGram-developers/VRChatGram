@@ -55,7 +55,7 @@ export default async function Home() {
   if (typeof popularTagList === "string") {
     return <div>{popularTagList}</div>;
   }
-  const { popularPostList, latestPostList, latestPostListWithX } = homeData;
+  const { popularPostList, latestPostList } = homeData;
 
   return (
     <>
