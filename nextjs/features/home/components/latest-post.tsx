@@ -8,14 +8,13 @@ import { useState } from "react";
 
 export const LatestPost = ({
   latestPostList,
-  setIsLiked,
-  setLatestPostList,
 }: {
   latestPostList: LatestPostType[];
-  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
-  setLatestPostList: React.Dispatch<React.SetStateAction<LatestPostType[]>>;
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setIsLiked] = useState(false);
   const { handleLikeOrUnlike } = useLikePost();
+  const [latestPosts, setLatestPosts] = useState<LatestPostType[]>(latestPostList || []);
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
     Object.fromEntries(latestPostList.map((post) => [post.id, post.is_liked]))
   );
@@ -24,7 +23,7 @@ export const LatestPost = ({
     const currentLiked = likedPosts[postId];
     setLikedPosts((prev) => ({ ...prev, [postId]: !currentLiked }));
 
-    setLatestPostList((prevList) =>
+    setLatestPosts((prevList) =>
       prevList.map((post) => (post.id === postId ? { ...post, is_liked: !currentLiked } : post))
     );
     try {
@@ -40,7 +39,7 @@ export const LatestPost = ({
       <div className={styles.latestPostContainer}>
         <p className={styles.latestPostTitle}>新着</p>
         <div className={styles.latestPostListConatiner}>
-          {latestPostList.map((post) => (
+          {latestPosts.map((post) => (
             <PostCard
               key={post.id}
               postCardProps={{

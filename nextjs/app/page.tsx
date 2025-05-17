@@ -10,6 +10,9 @@ import { auth } from "@/libs/firebase/auth";
 import { createClient } from "microcms-js-sdk";
 import { Suspense } from "react";
 import { ClipLoader } from "react-spinners";
+import { PopularPostList } from "@/features/home/components/popular-post-list";
+import { PopularTag } from "@/features/home/components/popular-tag";
+import { LatestPost } from "@/features/home/components/latest-post";
 
 export const revalidate = 60;
 
@@ -55,20 +58,43 @@ export default async function Home() {
   const { popularPostList, latestPostList, latestPostListWithX } = homeData;
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-screen">
-          <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-        </div>
-      }
-    >
-      <Main
-        notifications={serializedNotifications}
-        latestPostList={latestPostList}
-        popularTagList={popularTagList}
-        popularPostList={popularPostList}
-        latestPostListWithX={latestPostListWithX}
-      />
-    </Suspense>
+    <>
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center h-screen">
+            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+          </div>
+        }
+      >
+        <Main notifications={serializedNotifications} />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center h-screen">
+            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+          </div>
+        }
+      >
+        <PopularPostList popularPostList={popularPostList} />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center h-screen">
+            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+          </div>
+        }
+      >
+        <PopularTag popularTagList={popularTagList} />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center h-screen">
+            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+          </div>
+        }
+      >
+        <LatestPost latestPostList={latestPostList} />
+      </Suspense>
+    </>
   );
 }
