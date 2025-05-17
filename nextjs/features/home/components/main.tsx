@@ -2,19 +2,11 @@
 
 import Image from "next/image";
 import { Notification } from "../types/index";
-import { useState, useEffect } from "react";
-import { XPost as XPostType } from "../types/index";
 import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
 import parse from "html-react-parser";
 
 export const Main = ({ notifications }: { notifications: Notification[] }) => {
-  const [latestPostsWithX, setLatestPostsWithX] = useState<XPostType[]>([]);
-
-  useEffect(() => {
-    setLatestPostsWithX(latestPostsWithX);
-  }, [latestPostsWithX]);
-
   const testNews = [
     {
       imageURL: "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
@@ -54,7 +46,7 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
           <div className={styles.topNoticeMainContainer}>
             {testNews.length > 0 && (
               <Image
-                src="/home/main.png"
+                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/main.webp"
                 alt="メイン画像"
                 width={1680}
                 height={384}
@@ -96,7 +88,7 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
               <div className={styles.mainSecondContainerSecondBox}>
                 <div className={styles.mainSecondContainerImageContainer}>
                   <Image
-                    src="/home/vrcss-introduction.png"
+                    src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
                     alt="画像2"
                     width={402}
                     height={194}
@@ -105,7 +97,7 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
                 </div>
                 <div className={styles.mainSecondContainerImageContainer}>
                   <Image
-                    src="/home/vrcss-usage-guide.png"
+                    src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
                     alt="画像3"
                     width={402}
                     height={194}
@@ -234,7 +226,7 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
           <div className={styles.mobileMainSecondContainerSecondBox}>
             <div className={styles.mobileMainSecondContainerImageContent}>
               <Image
-                src="/home/vrcss-introduction.png"
+                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
                 alt="画像2"
                 width={402}
                 height={194}
@@ -243,7 +235,7 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
             </div>
             <div className={styles.mobileMainSecondContainerImageContent}>
               <Image
-                src="/home/vrcss-usage-guide.png"
+                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
                 alt="画像3"
                 width={402}
                 height={194}
