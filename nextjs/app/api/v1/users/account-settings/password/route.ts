@@ -24,7 +24,6 @@ const updatePasswordToFirebase = async (
     await updateUser(uid, {
       password: newPassword,
     });
-    console.log("パスワードが更新されました:");
   } catch (error) {
     console.error("パスワードの更新に失敗しました:", error);
   }

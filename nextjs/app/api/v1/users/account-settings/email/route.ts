@@ -23,7 +23,6 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "ユーザーがログインしていません" }, { status: 401 });
     }
 
-    console.log("通ってる１");
     const { currentEmail, newEmail } = await request.json();
 
     const userByCurrentEmail = await prisma.users.findFirst({
