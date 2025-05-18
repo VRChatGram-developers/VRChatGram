@@ -72,17 +72,23 @@
       }
     }
     .postContainer {
-      display: grid;
+      max-height: 90vh;
+      display: flex;
       // grid-template-rows: 5rem auto 5rem;
+      flex-direction: column;
 
       .postDetailContainer {
         display: grid;
 
         // height: 40rem;
+        // height: 40rem; // 固定またはmax-heightでもOK
+        overflow: hidden;
+        overflow-y: scroll;
 
         .postDetailContent {
           // padding: 2rem 2rem 0 0;
-          overflow-y: scroll;
+          
+          flex: 1;
           // height: 40rem;
           border-right: 2px solid;
           padding: 1rem 2rem;
@@ -359,6 +365,7 @@
 @media (min-width: 1040px) {
   .container {
     width: 70vw;
+    max-height: 90vh;
   }
 
   .postFormInputContentBorder {
@@ -374,9 +381,10 @@
 @media (max-width: 1039px) {
   .container {
     width: 90vw;
+    max-height: 80vh;
     // height: 100vh;
     // margin-top: 10rem;
-    padding-top: 32rem;
+    // padding-top: 32rem;
     overflow-y: scroll;
   }
 
@@ -408,6 +416,7 @@
 @media (max-width: 767px) {
   .container {
     width: 100% !important;
+    max-height: 80vh;
   }
 
   .postFormInputContentBorder {
