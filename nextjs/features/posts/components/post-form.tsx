@@ -101,7 +101,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const isValidBoothItemsLink = () => {
-    if (boothItems.length === 0) {
+    if (boothItems.length === 0 || boothItems.every((item) => item === "")) {
       return true;
     }
 
@@ -116,7 +116,11 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       }
     }
 
-    return errorBoothItems.length === 1;
+    if (errorBoothItems.length === 1) {
+      return false;
+    }
+
+    return true;
   };
 
   const isValidTitle = () => {
@@ -307,7 +311,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="タイトルを入力して下さい"
                       />
-                      {errorTitle && <div className={styles.error_message}>{errorTitle}</div>}
+                      {errorTitle && <div className={styles.errorTitleMessage}>{errorTitle}</div>}
                     </div>
 
                     <div className={styles.postDetailTagContainer}>
