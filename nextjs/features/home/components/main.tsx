@@ -87,22 +87,26 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
               </div>
               <div className={styles.mainSecondContainerSecondBox}>
                 <div className={styles.mainSecondContainerImageContainer}>
-                  <Image
-                    src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
-                    alt="画像2"
-                    width={402}
-                    height={194}
-                    className={styles.mainSecondContainerImage}
-                  />
+                  <Link href="/introduction">
+                    <Image
+                      src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
+                      alt="画像2"
+                      width={402}
+                      height={194}
+                      className={styles.mainSecondContainerImage}
+                    />
+                  </Link>
                 </div>
                 <div className={styles.mainSecondContainerImageContainer}>
-                  <Image
-                    src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
-                    alt="画像3"
-                    width={402}
-                    height={194}
-                    className={styles.mainSecondContainerImage}
-                  />
+                  <Link href="/usage">
+                    <Image
+                      src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
+                      alt="画像3"
+                      width={402}
+                      height={194}
+                      className={styles.mainSecondContainerImage}
+                    />
+                  </Link>
                 </div>
               </div>
             </div>
