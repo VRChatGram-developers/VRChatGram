@@ -14,7 +14,7 @@ export const UsageDetail = ({ usage }: { usage: Usage }) => {
         <div className={styles.notificationDetailTitle}>{usage.title}</div>
         <div className={styles.notificationDetailContentText}>{parse(usage.content)}</div>
         <div className={styles.notificationDetailBackButton}>
-          <Link href="/">一覧へ戻る</Link>
+          <Link href="/">トップへ戻る</Link>
         </div>
       </div>
     </div>
