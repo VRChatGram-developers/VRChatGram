@@ -13,8 +13,6 @@ export const TagList = ({
   handleSelectTag: (tag: string) => void
 }) => {
   const normalizeTag = (tag: string) => tag.replace(/^#/, "").trim();
-
-  console.log(selectedTag);
   return (
     <div className={styles.tagList}>
       {popularTags.map(({ tag }) => {

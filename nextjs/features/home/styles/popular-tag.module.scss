@@ -194,6 +194,7 @@
       }
       .tagImage {
         position: relative !important;
+        object-fit: cover;
       }
       &::before {
         content: "";

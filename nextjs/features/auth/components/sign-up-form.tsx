@@ -186,7 +186,7 @@ export const SignUpForm = ({
             <div className={styles.separateLoginContainer}>
               <p className={styles.separateLoginText}>
                 パスワードを忘れた方は{" "}
-                <Link href={googleFormLinks} className="underline">
+                <Link href="/reset-password" className="underline">
                   こちら
                 </Link>
               </p>

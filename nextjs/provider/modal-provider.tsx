@@ -7,8 +7,8 @@ import {
   ReactNode,
   PropsWithChildren,
 } from "react";
-import { createPortal } from "react-dom";
-import { Modal } from "../components/layouts/modal";
+import { CommonModal } from "../components/layouts/common-modal";
+
 type ModalContextType = {
   isOpen: boolean;
   openModal: (content: ReactNode) => void;
@@ -22,6 +22,8 @@ export const ModalProvider = ({ children }: PropsWithChildren) => {
   const [content, setContent] = useState<ReactNode>(null);
 
   const openModal = (content: ReactNode) => {
+    (document.activeElement as HTMLElement)?.blur();
+
     setContent(content);
     setIsOpen(true);
   };
@@ -34,11 +36,13 @@ export const ModalProvider = ({ children }: PropsWithChildren) => {
   return (
     <ModalContext.Provider value={{ isOpen, openModal, closeModal }}>
       {children}
-      {isOpen &&
-        createPortal(
-          <Modal onClose={closeModal}>{content}</Modal>,
-          document.body
-        )}
+      <CommonModal
+        modalProps={{
+          isOpen: isOpen,
+          onClose: closeModal,
+          children: content,
+        }}
+      />
     </ModalContext.Provider>
   );
 };

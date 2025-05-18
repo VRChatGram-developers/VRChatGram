@@ -37,10 +37,12 @@ export default function RootLayout({
             <link rel="icon" type="image/svg" sizes="50x50" href="/header/vrcss_icon.svg" />
           </head>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased layout`}>
-            <Header />
-            <main> {children}</main>
-            <ToastContainer position="bottom-right" autoClose={3000} />
-            <Footer />
+            <div id="modal-root">
+              <Header />
+              <main> {children}</main>
+              <ToastContainer position="bottom-right" autoClose={3000} />
+              <Footer />
+            </div>
           </body>
         </html>
       </ModalProvider>
