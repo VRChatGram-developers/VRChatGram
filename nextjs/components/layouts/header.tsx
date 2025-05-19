@@ -193,14 +193,14 @@ export const Header = () => {
               <>
                 <Link
                   href="/login"
-                  // onClick={() => setOpenMenu(false)}
+                  onClick={() => setOpenMenu(false)}
                   className={styles.signInButton}
                 >
                   <p className={styles.signInButtonText}>ログイン</p>
                 </Link>
                 <Link
                   href="/signup"
-                  // onClick={() => setOpenMenu(false)}
+                  onClick={() => setOpenMenu(false)}
                   className={styles.signUpButton}
                 >
                   <p className={styles.signUpButtonText}>新規登録</p>
