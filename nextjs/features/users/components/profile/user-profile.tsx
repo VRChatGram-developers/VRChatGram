@@ -88,30 +88,30 @@ export const UserProfile = ({ user }: { user: User }) => {
     const REQUIRED_LENGTH = 5;
     const PREFERRED_PLATFORMS = ["x", "discord"];
     const result: SocialLink[] = [...socialLinks];
-  
+
     // 優先プラットフォームを優先的に追加（未登録かつ必要数未満なら）
     for (const platform of PREFERRED_PLATFORMS) {
-      const alreadyExists = result.some(link => link.platform_types === platform);
+      const alreadyExists = result.some((link) => link.platform_types === platform);
       if (!alreadyExists && result.length < REQUIRED_LENGTH) {
         result.push({ id: "", platform_types: platform, platform_url: "" });
       }
     }
-  
+
     // 必要数まで空要素で埋める
     while (result.length < REQUIRED_LENGTH) {
       result.push({ id: "", platform_types: "other", platform_url: "" });
     }
-  
+
     // 念のため最大5件で制限
     return result.slice(0, REQUIRED_LENGTH);
   };
-  
+
   const handleSubmitIntroduction = async () => {
     setIsUserEditing(true);
 
     let updatedProfileImage: { url: string } | null = null;
     let updatedBackgroundImage: { url: string } | null = null;
-  
+
     if (profileImage || backgroundImage) {
       const postImages = await Promise.all(
         [profileImage, backgroundImage].map(async (image) => {
@@ -120,7 +120,7 @@ export const UserProfile = ({ user }: { user: User }) => {
           return { url: imageUrl };
         })
       );
-  
+
       [updatedProfileImage, updatedBackgroundImage] = postImages;
     }
     const filteredSocialLinks = socialLinks.filter((socialLink) => socialLink.platform_url !== "");
@@ -231,45 +231,45 @@ export const UserProfile = ({ user }: { user: User }) => {
         <div className={styles.profileHeaderContent}>
           <div className={styles.profileHeaderUserIconContainer}>
             {isUserEditing ? (
-                <div className={styles.profileHeaderUserIconInputContainer}>
-                  <div className={styles.profileHeaderUserIconInput}>
-                    <FaImage size={32} />
-                    <div className={styles.profileInputTextContainer}>
-                      <p className={styles.profileInputText}>ここにドロップ&ドロップ</p>
-                      <p className={styles.profileInputText}>または</p>
-                    </div>
-                    <input
-                      type="file"
-                      onChange={handleProfileImageChange}
-                      className={styles.headerUserIconInput}
-                      ref={fileInputRef}
-                      hidden
-                    />
-
-                    <div className={styles.profileHeaderUserIconInputButtonContainer}>
-                      <img
-                        src={"/upload-file.png"}
-                        alt="profile"
-                        className={styles.profileHeaderUserIconInputButtonImage}
-                      />
-                      <button
-                        className={styles.profileInputButton}
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        ファイルを選択
-                      </button>
-                    </div>
+              <div className={styles.profileHeaderUserIconInputContainer}>
+                <div className={styles.profileHeaderUserIconInput}>
+                  <FaImage size={32} />
+                  <div className={styles.profileInputTextContainer}>
+                    <p className={styles.profileInputText}>ここにドロップ&ドロップ</p>
+                    <p className={styles.profileInputText}>または</p>
                   </div>
-                  <div className={styles.profileUserIconContainer}>
-                    <Image
-                      src={previewProfileUrl || user.profile_url || IconImageURL}
-                      alt="profile"
-                      width={260}
-                      height={260}
-                    className={styles.profileHeaderUserIcon}
+                  <input
+                    type="file"
+                    onChange={handleProfileImageChange}
+                    className={styles.headerUserIconInput}
+                    ref={fileInputRef}
+                    hidden
                   />
+
+                  <div className={styles.profileHeaderUserIconInputButtonContainer}>
+                    <img
+                      src={"/upload-file.png"}
+                      alt="profile"
+                      className={styles.profileHeaderUserIconInputButtonImage}
+                    />
+                    <button
+                      className={styles.profileInputButton}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      ファイルを選択
+                    </button>
                   </div>
                 </div>
+                <div className={styles.profileUserIconContainer}>
+                  <Image
+                    src={previewProfileUrl || user.profile_url || IconImageURL}
+                    alt="profile"
+                    width={260}
+                    height={260}
+                    className={styles.profileHeaderUserIcon}
+                  />
+                </div>
+              </div>
             ) : (
               <div className={styles.profileUserIconContainer}>
                 <Image
@@ -278,7 +278,7 @@ export const UserProfile = ({ user }: { user: User }) => {
                   width={260}
                   height={260}
                   className={styles.profileHeaderUserIcon}
-                  />
+                />
               </div>
             )}
           </div>
@@ -313,6 +313,17 @@ export const UserProfile = ({ user }: { user: User }) => {
                 </div>
               </>
             )}
+            <div className={styles.mobileButtonContainer}>
+              {renderMobileFollowOrprofileEditButton(
+                user,
+                isFollowing,
+                isUserEditing,
+                handleUnfollow,
+                handleFollow,
+                handleUserEditing,
+                handleSubmitIntroduction
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -341,11 +352,18 @@ export const UserProfile = ({ user }: { user: User }) => {
             handleUnfollow,
             handleFollow,
             handleUserEditing,
-            handleSubmitIntroduction,
-            isDropdownMenuOpen,
-            setIsDropdownMenuOpen,
-            handleDropdownMenuOpen
+            handleSubmitIntroduction
           )}
+          <div className={styles.threeDots}>
+            <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
+            {isDropdownMenuOpen && (
+              <DropdownMenu
+                isOpen={isDropdownMenuOpen}
+                setIsOpen={setIsDropdownMenuOpen}
+                blockedUserId={user.my_id}
+              />
+            )}
+          </div>
         </div>
       </div>
       {activeTab === 0 && (
@@ -372,24 +390,8 @@ const renderFollowOrprofileEditButton = (
   handleUnfollow: () => void,
   handleFollow: () => void,
   handleUserEditing: () => void,
-  handleSubmitIntroduction: () => void,
-  isDropdownMenuOpen: boolean,
-  setIsDropdownMenuOpen: (open: boolean) => void,
-  handleDropdownMenuOpen: () => void
+  handleSubmitIntroduction: () => void
 ) => {
-  const renderThreeDotsMenu = () => (
-    <div className={styles.threeDots}>
-      <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
-      {isDropdownMenuOpen && (
-        <DropdownMenu
-          isOpen={isDropdownMenuOpen}
-          setIsOpen={setIsDropdownMenuOpen}
-          blockedUserId={user.my_id}
-        />
-      )}
-    </div>
-  );
-
   if (user.isCurrentUser) {
     return (
       <>
@@ -423,7 +425,59 @@ const renderFollowOrprofileEditButton = (
           {isFollowing ? "フォローを外す" : "フォロー"}
         </button>
       </div>
-      {renderThreeDotsMenu()}
+    </>
+  );
+};
+
+const renderMobileFollowOrprofileEditButton = (
+  user: User,
+  isFollowing: boolean,
+  isUserEditing: boolean,
+  handleUnfollow: () => void,
+  handleFollow: () => void,
+  handleUserEditing: () => void,
+  handleSubmitIntroduction: () => void
+) => {
+  if (user.isCurrentUser) {
+    return (
+      <>
+        {isUserEditing ? (
+          <div className={styles.mobileEditProfileStoreButtonContainer}>
+            <button
+              className={styles.mobileEditProfileStoreButton}
+              onClick={handleSubmitIntroduction}
+            >
+              {"設定を保存"}
+            </button>
+          </div>
+        ) : (
+          <div className={styles.mobileEditProfileButtonContainer}>
+            <button
+              className={styles.mobileEditProfileButton}
+              onClick={isUserEditing ? handleSubmitIntroduction : handleUserEditing}
+            >
+              {"プロフィール変更"}
+            </button>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div
+        className={
+          isFollowing ? styles.mobileUnFollowButtonContainer : styles.mobileFollowButtonContainer
+        }
+      >
+        <button
+          className={isFollowing ? styles.mobileUnFollowButton : styles.mobileFollowButton}
+          onClick={isFollowing ? handleUnfollow : handleFollow}
+        >
+          {isFollowing ? "フォローを外す" : "フォロー"}
+        </button>
+      </div>
     </>
   );
 };
