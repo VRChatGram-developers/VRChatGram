@@ -5,14 +5,11 @@ import styles from "../styles/popular-tag.module.scss";
 import { useSearchStore } from "@/libs/store/search-store";
 import { useRouter } from "next/navigation";
 import { createQueryParams } from "@/utils/queryParams";
+import Link from "next/link";
 
 export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   const router = useRouter();
   const { setSearchQuery } = useSearchStore();
-
-  const handleToPostSearchList = () => {
-    router.push(`/posts?${new URLSearchParams({ tag: "", page: "1" })}`);
-  };
 
   const redirectToPostSearchListByTagName = (tagName: string) => {
     setSearchQuery(`#${tagName}`);
@@ -29,9 +26,11 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
           <div className={styles.avatarSearchButtonContent}>
             <div className={styles.avatarSearchTextContainer}>
               <p className={styles.avatarSearchTitle}>アバター写真</p>
-              <button className={styles.avatarSearchText} onClick={handleToPostSearchList}>
-                探す <span>›</span>
-              </button>
+              <Link href={`/posts?${new URLSearchParams({ tag: "", page: "1" })}`} prefetch={true}>
+                <button className={styles.avatarSearchText}>
+                  探す <span>›</span>
+                </button>
+              </Link>
             </div>
           </div>
           <div className={styles.shortMoiveSearchButtonContent}>
