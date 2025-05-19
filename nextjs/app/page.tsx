@@ -14,6 +14,7 @@ import { PopularPostList } from "@/features/home/components/popular-post-list";
 import { PopularTag } from "@/features/home/components/popular-tag";
 import { LatestPost } from "@/features/home/components/latest-post";
 
+
 export const revalidate = 60;
 
 export default async function Home() {
@@ -22,16 +23,26 @@ export default async function Home() {
     apiKey: process.env.X_MICROCMS_API_KEY ?? "",
   });
 
-  const response = await client.get({
-    endpoint: "notifications",
-    queries: { limit: 2, orders: "publishedAt" },
-  });
-  const notifications = response.contents.map((notification: Notification) => {
+  const session = await auth();
+
+  const [popularTagList, homeData, notificationsData] = await Promise.all([
+    fetchPopularTagListForHome(),
+    fetchHomeFeed<{
+      popularPostList: PopularPostType[];
+      latestPostList: LatestPostType[];
+      latestPostListWithX: XPostType[];
+    }>(session),
+    client.get({
+      endpoint: "notifications",
+      queries: { limit: 2, orders: "publishedAt" },
+    }),
+  ]);
+
+  const notifications = notificationsData.contents.map((notification: Notification) => {
     return {
       ...notification,
     };
   });
-  const session = await auth();
   const serializedNotifications = notifications.map((notification: Notification) => {
     const year = new Date(notification.publishedAt).getFullYear();
     const month = String(new Date(notification.publishedAt).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
@@ -43,12 +54,6 @@ export default async function Home() {
     };
   });
 
-  const popularTagList = await fetchPopularTagListForHome();
-  const homeData = await fetchHomeFeed<{
-    popularPostList: PopularPostType[];
-    latestPostList: LatestPostType[];
-    latestPostListWithX: XPostType[];
-  }>(session);
   if (typeof homeData === "string") {
     return <div>{homeData}</div>;
   }
