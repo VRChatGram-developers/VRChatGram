@@ -81,16 +81,17 @@ export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
 
           {Array.from({ length: totalPages }, (_, i) => (
             <button
-              key={i}
+              key={i + 1}
               onClick={() => setCurrentPage(i)}
               className={`
-              ${currentPage === i + 1
-                ? styles.paginationSelectedButton
-                : styles.paginationNotSelectButton}
+              ${
+                currentPage === i
+                  ? styles.paginationSelectedButton
+                  : styles.paginationNotSelectButton
+              }
 
                 ${styles.paginationMoveButton}
-                `
-            }
+                `}
             >
               {i + 1}
             </button>
