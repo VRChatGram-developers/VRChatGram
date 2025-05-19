@@ -1,8 +1,6 @@
 "use client";
 
-// import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-// import { updateUserEmail } from "../endpoint";
 import styles from "../styles/sign-in-form-modal.module.scss";
 import { checkDeletedUser } from "@/features/users/endpoint";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -10,9 +8,7 @@ import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { Link, TextField } from "@mui/material";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
-
 
 export const SignInFormModal = ({ onClose }: { onClose: () => void }) => {
   const [email, setEmail] = useState("");
@@ -186,12 +182,20 @@ export const SignInFormModal = ({ onClose }: { onClose: () => void }) => {
       <div onClick={handleSignIn} className={styles.signInFormModalButtonContainer}>
         <button className={styles.signInFormModalButton}>ログイン</button>
       </div>
-      <p className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px]">
-        アカウントをお持ちではありませんか？{" "}
-        <Link href="/signup" className="underline">
-          アカウント作成
-        </Link>
-      </p>
+      <div>
+        <p className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px]">
+          アカウントをお持ちではありませんか？{" "}
+          <Link href="/signup" className="underline">
+            アカウント作成
+          </Link>
+        </p>
+        <p className="font-['October_Devanagari'] text-[10px] font-[400] leading-[16px] text-center">
+          パスワードを忘れた方は{" "}
+          <Link href="/reset-password" className="underline">
+            こちら
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

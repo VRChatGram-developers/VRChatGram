@@ -229,22 +229,26 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
           </div>
           <div className={styles.mobileMainSecondContainerSecondBox}>
             <div className={styles.mobileMainSecondContainerImageContent}>
-              <Image
-                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
-                alt="画像2"
-                width={402}
-                height={194}
-                className={styles.mobileMainSecondContainerImage}
-              />
+              <Link href="/introduction">
+                <Image
+                  src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-introduction.webp"
+                  alt="画像2"
+                  width={402}
+                  height={194}
+                  className={styles.mobileMainSecondContainerImage}
+                />
+              </Link>
             </div>
             <div className={styles.mobileMainSecondContainerImageContent}>
-              <Image
-                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
-                alt="画像3"
-                width={402}
-                height={194}
-                className={styles.mobileMainSecondContainerImage}
-              />
+              <Link href="/usage">
+                <Image
+                  src="https://d3o6x7pz3sf2lk.cloudfront.net/static/vrcss-usage-guide.webp"
+                  alt="画像3"
+                  width={402}
+                  height={194}
+                  className={styles.mobileMainSecondContainerImage}
+                />
+              </Link>
             </div>
           </div>
         </div>
