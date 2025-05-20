@@ -22,6 +22,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(false);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -189,9 +190,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
         show_sensitive_type: selectedAgeRestriction,
       });
 
-      toast.update(toastId, {
-        render: "投稿しました！",
-        type: "success",
+      const toastId = toast.success("投稿しました！", {
         isLoading: false,
         autoClose: false,
         transition: Slide,
