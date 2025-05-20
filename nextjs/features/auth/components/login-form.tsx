@@ -136,6 +136,9 @@ export const LoginForm = () => {
               <p className={styles.loginFormContentSubTitle}>
                 今日も素敵な写真をいっぱい投稿しましょう
               </p>
+              {fireBaseError && (
+                <p className="text-red-500 text-center font-bold text-sm mt-2 pt-2">{fireBaseError}</p>
+              )}
 
               <div className={styles.loginTextFormContainer}>
                 <div className={styles.textForm}>
