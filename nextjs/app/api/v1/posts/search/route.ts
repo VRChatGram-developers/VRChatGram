@@ -9,42 +9,21 @@ export const runtime = "edge";
 
 const fetchPostsOrderLikesThisWeek = async (limit: number, offset: number, where: Prisma.postsWhereInput) => {
   const startOfWeek = getStartOfWeek();
-  const results = await prisma.posts.findMany({
-    where: {
-      ...where,
-      likes: {
-        some: {
-          created_at: {
-            gte: startOfWeek,
-            lte: new Date(),
-          },
-        },
-      },
-    },
-    select: {
-      id: true,
-      title: true,
-      created_at: true,
-      show_sensitive_type: true,
+  const posts = await prisma.posts.findMany({
+    include: {
       likes: {
         where: {
           created_at: {
             gte: startOfWeek,
-            lte: new Date(),
           },
         },
-        select: {
-          id: true,
-          post_id: true,
-          user_id: true,
-        },
+        select: { id: true, post_id: true, user_id: true }, // カウント用にIDだけ取得
       },
       user: {
         select: {
           id: true,
           name: true,
           profile_url: true,
-          my_id: true,
         },
       },
       images: {
@@ -56,21 +35,15 @@ const fetchPostsOrderLikesThisWeek = async (limit: number, offset: number, where
         },
       },
     },
-    orderBy: [
-      {
-        likes: {
-          _count: "desc", // いいね数で降順ソート
-        },
-      },
-      {
-        created_at: "desc", // 作成日時で降順ソート
-      },
-    ],
-    take: Number(limit),
-    skip: offset,
   });
 
-  return results;
+  const sorted = posts
+    .map((post) => ({
+      ...post,
+      weeklyLikeCount: post.likes.length,
+    }))
+    .sort((a, b) => b.weeklyLikeCount - a.weeklyLikeCount);
+  return sorted;
 };
 
 const fetchPostImageUrlWithMaxLikes = async (where: Prisma.postsWhereInput) => {
