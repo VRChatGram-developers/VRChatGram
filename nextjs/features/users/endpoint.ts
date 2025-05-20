@@ -294,6 +294,21 @@ export const blockUser = async (blockedUserMyId: string): Promise<IsDeletedUser>
   return data;
 };
 
+export const unblockUser = async (blockedUserMyId: string): Promise<boolean> => {
+  const response = await fetch(`${API_URL}/api/v1/users/blocks`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ blockedUserMyId }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return false;
+  }
+  return true;
+};
+
 export const fetchS3SignedUrl = async ({
   fileName,
   contentType,
