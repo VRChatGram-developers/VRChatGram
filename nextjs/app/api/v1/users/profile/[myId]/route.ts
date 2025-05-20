@@ -170,6 +170,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
       },
     });
 
+    const isBlocked = !!(await prisma.block_users.findFirst({
+      where: {
+        blocker_user_id: currentUser?.id,
+        blocked_user_id: user?.id,
+      },
+    }));
+
     const isCurrentUser = currentUser?.id === user?.id;
     const postsWithLikes =
       user?.posts.map((post) => ({
@@ -218,6 +225,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
       isCurrentUser: isCurrentUser,
       social_links: user?.social_links.map(toJson),
       isFollowedByAccount: isFollowedByAccount,
+      isBlocked: isBlocked,
     };
 
     return NextResponse.json(response);
