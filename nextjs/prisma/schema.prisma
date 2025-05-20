@@ -37,34 +37,34 @@ model report_reason_categories {
 }
 
 model users {
-  id                  String               @id @default(uuid())
-  uid                 String               @unique @db.VarChar(255)
-  name                String               @db.VarChar(50)
-  email               String               @db.VarChar(255)
-  introduction_title  String?              @db.VarChar(255)
-  introduction_detail String?              @db.Text
-  gender              users_gender
-  profile_url         String?              @db.VarChar(255)
-  created_at          DateTime             @default(now())
-  updated_at          DateTime             @updatedAt
-  deleted_at          DateTime?
-  status              user_statuses
-  birthday            DateTime             @db.Date
-  header_url          String?              @db.VarChar(255)
-  my_id               String               @unique @db.VarChar(255)
-  show_sensitive_type show_sensitive_types @default(default)
-  is_admin            Boolean              @default(false)
-  blocked_users       block_users[]        @relation("block_users_blocked_user_idTousers")
-  block_users         block_users[]        @relation("block_users_blocker_user_idTousers")
-  followers           follows[]            @relation("followers")
-  following           follows[]            @relation("following")
-  likes_given         likes[]              @relation("likedBy")
-  notifications       notifications[]
-  posts               posts[]
-  reports             reports[]
-  social_links        social_links[]
-  subscriptions       subscription[]
-  views               views[]
+  id                                             String               @id @default("uuid()")
+  uid                                            String               @unique @db.VarChar(255)
+  name                                           String               @db.VarChar(50)
+  email                                          String               @db.VarChar(255)
+  introduction_title                             String?              @db.VarChar(255)
+  introduction_detail                            String?              @db.Text
+  gender                                         users_gender
+  profile_url                                    String?              @db.VarChar(255)
+  created_at                                     DateTime             @default(now())
+  updated_at                                     DateTime             @updatedAt
+  deleted_at                                     DateTime?
+  status                                         user_statuses
+  birthday                                       DateTime             @db.Date
+  header_url                                     String?              @db.VarChar(255)
+  my_id                                          String               @unique @db.VarChar(255)
+  show_sensitive_type                            show_sensitive_types @default(default)
+  is_admin                                       Boolean              @default(false)
+  block_users_block_users_blocked_user_idTousers block_users[]        @relation("block_users_blocked_user_idTousers")
+  block_users_block_users_blocker_user_idTousers block_users[]        @relation("block_users_blocker_user_idTousers")
+  followers                                      follows[]            @relation("followers")
+  following                                      follows[]            @relation("following")
+  likes_given                                    likes[]              @relation("likedBy")
+  notifications                                  notifications[]
+  posts                                          posts[]
+  reports                                        reports[]
+  social_links                                   social_links[]
+  subscriptions                                  subscription[]
+  views                                          views[]
 }
 
 model posts {
@@ -227,16 +227,16 @@ model subscription {
 }
 
 model block_users {
-  id                                       String   @id @default(uuid())
-  blocked_user_id                          String
-  blocker_user_id                          String
-  created_at                               DateTime @default(now())
-  updated_at                               DateTime @default(now())
-  users_block_users_blocked_user_idTousers users    @relation("block_users_blocked_user_idTousers", fields: [blocked_user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_blocks_blocked_user")
-  users_block_users_blocker_user_idTousers users    @relation("block_users_blocker_user_idTousers", fields: [blocker_user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_blocks_blocker_user")
+  id                     String   @id @default(uuid())
+  blocked_user_id        String
+  blocker_user_id        String
+  created_at             DateTime @default(now())
+  updated_at             DateTime
+  blocked_user_idTousers users    @relation("block_users_blocked_user_idTousers", fields: [blocked_user_id], references: [id])
+  blocker_user_idTousers users    @relation("block_users_blocker_user_idTousers", fields: [blocker_user_id], references: [id])
 
-  @@index([blocked_user_id], map: "blocks_blocked_user_id_idx")
-  @@index([blocker_user_id], map: "blocks_blocker_user_id_idx")
+  @@index([blocked_user_id])
+  @@index([blocker_user_id])
 }
 
 enum user_statuses {
