@@ -38,6 +38,7 @@ export const UserProfile = ({ user }: { user: User }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const backgroundFileInputRef = useRef<HTMLInputElement>(null);
+  const [isUserBlocked, setIsUserBlocked] = useState(user.isBlocked);
 
   const handleDropdownMenuOpen = () => {
     setIsDropdownMenuOpen(!isDropdownMenuOpen);
@@ -361,6 +362,8 @@ export const UserProfile = ({ user }: { user: User }) => {
                 isOpen={isDropdownMenuOpen}
                 setIsOpen={setIsDropdownMenuOpen}
                 blockedUserId={user.my_id}
+                isBlocked={isUserBlocked}
+                setIsUserBlocked={setIsUserBlocked}
               />
             )}
           </div>
