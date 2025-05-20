@@ -7,7 +7,7 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
-const fetchPostsOrderLikesThisWeek = async (limit: number, offset: number, where: Prisma.postsWhereInput) => {
+const fetchPostsOrderLikesThisWeek = async (limit: number, offset: number) => {
   const startOfWeek = getStartOfWeek();
   const posts = await prisma.posts.findMany({
     include: {
@@ -43,7 +43,11 @@ const fetchPostsOrderLikesThisWeek = async (limit: number, offset: number, where
       weeklyLikeCount: post.likes.length,
     }))
     .sort((a, b) => b.weeklyLikeCount - a.weeklyLikeCount);
-  return sorted;
+
+  const start = offset ?? 0;
+  const end = limit ? start + limit : undefined;
+
+  return sorted.slice(start, end);
 };
 
 const fetchPostImageUrlWithMaxLikes = async (where: Prisma.postsWhereInput) => {
@@ -110,7 +114,7 @@ export async function GET(request: Request) {
 
     let posts;
     if (sort === "this_week_popular") {
-      posts = await fetchPostsOrderLikesThisWeek(limit, offset, where);
+      posts = await fetchPostsOrderLikesThisWeek(limit, offset);
     } else {
       posts = await prisma.posts.findMany({
         where: where,
