@@ -13,6 +13,7 @@ export type User = {
   isCurrentUser: boolean;
   social_links: SocialLink[];
   isFollowedByAccount: boolean;
+  isBlocked: boolean;
 };
 
 export type Post = {
