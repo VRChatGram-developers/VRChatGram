@@ -36,7 +36,6 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
 
   useEffect(() => {
     addViewCountToPost(post.id.toString());
-    console.log("addViewCountToPost");
   }, []);
 
   useEffect(() => {
