@@ -57,7 +57,7 @@ export const createPost = async <T>(post: T) => {
         if (response.ok) {
           const data = await response.json();
           const { description, name, images } = await data;
-          return { detail: description, name: name, image: images[0].resized, url: link };
+          return { detail: description, name: name, image: images[0].original, url: link };
         }
       }
     })

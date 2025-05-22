@@ -102,6 +102,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const isValidBoothItemsLink = () => {
+    setErrorBoothItems([]);
     if (boothItems.length === 0 || boothItems.every((item) => item === "")) {
       return true;
     }
@@ -117,7 +118,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       }
     }
 
-    if (errorBoothItems.length === 1) {
+    if (errorBoothItems.length >= 1) {
       return false;
     }
 
