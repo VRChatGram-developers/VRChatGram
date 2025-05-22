@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/libs/firebase/auth";
 import prisma from "@/prisma/client";
-import styles from "@/features/auth/styles/sign-up-form.module.scss";
 
 export const runtime = "nodejs";
 
@@ -104,8 +103,8 @@ export async function POST(request: Request) {
     );
 
     return NextResponse.json({ status: 200, message: "投稿に成功しました" });
-  } catch (error: any) {
-    console.error(error.stack);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "投稿に失敗しました" }, { status: 500 });
   }
 }
