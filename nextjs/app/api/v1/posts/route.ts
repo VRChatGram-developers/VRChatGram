@@ -40,15 +40,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
 
-    // // 既に存在するタグを取得
-    // const fetchRegisteredTags = await prisma.tags.findMany({
-    //   where: {
-    //     name: {
-    //       in: tags,
-    //     },
-    //   },
-    // });
-
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
 
     const tagsToCreate = await Promise.all(
