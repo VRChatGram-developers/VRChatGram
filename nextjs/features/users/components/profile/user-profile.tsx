@@ -180,9 +180,6 @@ export const UserProfile = ({ user }: { user: User }) => {
     return `https://${process.env.NEXT_PUBLIC_CLOUDFRONT_DISTRIBUTION_DOMAIN}/webp/${fileNameWithoutExtension}.webp`;
   }
 
-  const BackgeoundImageURL =
-    "https://i0.wp.com/bussan-b.info/wp-content/uploads/2021/03/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%AC%E3%83%BC%E3%83%88.jpg?resize=1024%2C576&ssl=1";
-
   const IconImageURL = "/user-icon.png";
 
   return (
@@ -192,9 +189,7 @@ export const UserProfile = ({ user }: { user: User }) => {
         style={
           isUserEditing
             ? {
-                backgroundImage: `url(${
-                  previewHeaderUrl || user.header_url || BackgeoundImageURL
-                })`,
+                backgroundImage: `url(${previewHeaderUrl || user.header_url})`,
               }
             : { backgroundImage: `url(${encodeURI(user.header_url || previewHeaderUrl)})` }
         }
@@ -356,7 +351,7 @@ export const UserProfile = ({ user }: { user: User }) => {
             handleSubmitIntroduction
           )}
           <div className={styles.threeDots}>
-            <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
+            {!user.isCurrentUser && <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />}
             {isDropdownMenuOpen && (
               <DropdownMenu
                 isOpen={isDropdownMenuOpen}
@@ -447,6 +442,7 @@ const renderMobileFollowOrprofileEditButton = (
         {isUserEditing ? (
           <div className={styles.mobileEditProfileStoreButtonContainer}>
             <button
+              disabled={user.name === "" || user.name === null}
               className={styles.mobileEditProfileStoreButton}
               onClick={handleSubmitIntroduction}
             >
