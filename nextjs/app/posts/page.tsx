@@ -17,6 +17,7 @@ export default async function Page({
   const popularTags = await fetchPopularTagList();
   const rawTagName = (params.tag || "ALL") as string;
   const tagName = `${rawTagName}` ? decodeURIComponent(`${rawTagName}`) : "ALL";
+  const title = decodeURIComponent(params.title as string);
 
   if (typeof postsList === "string") {
     return <div>{postsList}</div>;
@@ -31,12 +32,19 @@ export default async function Page({
   }));
 
   return (
-    <Suspense fallback={
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-      </div>
-    }>
-      <PostList posts={postsList} popularTags={popularTagsWithHash} tagName={`#${tagName}`} />
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+        </div>
+      }
+    >
+      <PostList
+        posts={postsList}
+        popularTags={popularTagsWithHash}
+        tagName={`#${tagName}`}
+        title={title}
+      />
     </Suspense>
   );
 }

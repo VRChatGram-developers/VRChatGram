@@ -1,12 +1,12 @@
-import Image from "next/image";
 import { useRef, useState } from "react";
-import { createPost, fetchS3SignedUrl, convertToWebp } from "../endpoint";
+import { createPost, fetchS3SignedUrl } from "../endpoint";
 import styles from "../styles/post-form.module.scss";
 import { ImageData } from "../types";
 import { FaImage } from "react-icons/fa6";
 import { ClipLoader } from "react-spinners";
-import { Bounce, Id, Slide, toast } from "react-toastify";
+import { Id, Slide, toast } from "react-toastify";
 import axios, { AxiosProgressEvent } from "axios";
+import { RxCross2 } from "react-icons/rx";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -22,7 +22,6 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(false);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -102,6 +101,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const isValidBoothItemsLink = () => {
+    setErrorBoothItems([]);
     if (boothItems.length === 0 || boothItems.every((item) => item === "")) {
       return true;
     }
@@ -117,7 +117,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       }
     }
 
-    if (errorBoothItems.length === 1) {
+    if (errorBoothItems.length >= 1) {
       return false;
     }
 
@@ -180,7 +180,6 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     );
 
     try {
-
       await createPost({
         title,
         description,
@@ -199,7 +198,6 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       setTimeout(() => {
         toast.dismiss(toastId);
       }, 2000);
-
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -233,7 +231,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             render: `画像をアップロード中... ${progress.toFixed(2)}%`,
             progress: progress / 100, // 0から1に変換
             type: "info",
-            autoClose: false
+            autoClose: false,
           });
         }
       },
@@ -250,6 +248,9 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className={styles.container}>
       <div className={styles.postFormContainer}>
+        <button className={styles.closeButton} onClick={onClose}>
+          <RxCross2 size={24} />
+        </button>
         {images.length === 0 ? (
           <div className={styles.postFormInputArea}>
             <div className={styles.postTitleContent}>
@@ -258,11 +259,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             <div className={styles.postFormInputContent}>
               <div className={styles.postFormInputContentBorder}>
                 <div className={styles.postFormLogoContainer}>
-                  <img
-                    src="/header/vrcss_icon.svg"
-                    alt="Logo"
-                    className={styles.logo}
-                  />
+                  <img src="/header/vrcss_icon.svg" alt="Logo" className={styles.logo} />
                 </div>
                 <div className={styles.postFormInputTextContainer}>
                   <p className={styles.postFormInputText}>ここにドロップ&ドロップ</p>

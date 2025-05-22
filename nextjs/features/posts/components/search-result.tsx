@@ -14,45 +14,6 @@ import { useRouter } from "next/navigation";
 import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
 import { Image as ImageType, User } from "@/features/posts/types";
 
-const breakpoints = {
-  large: 1280, // 1280px以上
-  medium: 1040, // 1040px以上1280px未満
-  small: 768, // 768px以上1040px未満
-};
-
-const getColumns = (width: number) => {
-  if (width >= breakpoints.large) {
-    return 4; // 1280px以上は4カラム
-  } else if (width >= breakpoints.medium) {
-    return 3; // 1040px以上1280px未満は3カラム
-  } else if (width >= breakpoints.small) {
-    return 2; // 768px以上1040px未満は2カラム
-  } else {
-    return 1; // それ以下は1カラム
-  }
-};
-
-const adjustGridLayout = (items: NodeListOf<Element>, columns: number) => {
-  let rowIndex = 0;
-  let rowItems: string[] = [];
-  const itemsArr = Array.from(items);
-
-  itemsArr.forEach((item, index) => {
-    const isWide = item.classList.contains("wide");
-    rowItems.push(isWide ? "wide" : "tall");
-
-    // 現在の行にアイテムを追加
-    if (rowItems.length === columns || index === itemsArr.length - 1) {
-      // 行に配置できる数に達したら次の行へ
-      rowItems.forEach((type, i) => {
-        (item as HTMLElement).style.gridRowStart = rowIndex.toString();
-        (item as HTMLElement).style.gridColumnStart = (i + 1).toString(); // 順番にカラムを設定
-      });
-      rowIndex += 1;
-      rowItems = []; // 次の行のためにリセット
-    }
-  });
-};
 
 type PhotoGalleryPost = {
   postId: string;
@@ -71,7 +32,8 @@ export const SearchResult = ({
   postCount,
   currentPage,
   totalPages,
-  postImageUrlWithMaxLikes
+  postImageUrlWithMaxLikes,
+  title,
 }: {
   posts: Post[];
   selectedTag: string;
@@ -79,10 +41,10 @@ export const SearchResult = ({
   currentPage: number;
   totalPages: number;
   postImageUrlWithMaxLikes: string;
+  title: string;
 }) => {
   const [changedCurrentPage, setChangedCurrentPage] = useState(currentPage - 1);
   const [postList, setPostList] = useState<Post[]>(posts);
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth); // 現在の画面幅を管理
   const [selectedSortOption, setSelectedSortOption] = useState<string>("newest"); // 選択されたソートオプションを管理
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
     Object.fromEntries(posts.map((post) => [post.id, post.is_liked]))
@@ -173,29 +135,6 @@ export const SearchResult = ({
     setPostList(postsList.posts);
   };
 
-  // 画面幅が変更されるたびに再計算
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // useEffectでアイテム配置調整
-  useEffect(() => {
-    // Todo 画像を取得できるようになってから
-    // コンポーネントがレンダリングされた後にDOMを操作
-    const items = document.querySelectorAll(".userPostsItemImageContainer");
-
-    const columns = getColumns(windowWidth); // 現在のカラム数を決定
-    if (items.length > 0) {
-      adjustGridLayout(items, columns); // アイテムの配置を調整
-    }
-  }, [windowWidth, posts]);
-
   return (
     <div className={styles.userPostsContainer}>
       <div className={styles.searchContainer}>
@@ -208,7 +147,7 @@ export const SearchResult = ({
         />
         <div className={styles.searchDetailContainer}>
           <p className={styles.searchDetailTitle}>
-            {selectedTag === "#ALL" ? "ALL" : `${selectedTag}`}
+            {title != "undefined" ? `${title}` : selectedTag === "#ALL" ? "ALL" : `${selectedTag}`}
           </p>
           <div className={styles.searchDetailContent}>
             <div>
@@ -236,7 +175,10 @@ export const SearchResult = ({
 
       {/* ページネーションUI */}
       <div className={styles.pagination}>
-        <button className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`} onClick={() => handlePageChange(0)}>
+        <button
+          className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
+          onClick={() => handlePageChange(0)}
+        >
           <MdOutlineFirstPage className={styles.paginationButtonIcon} />
         </button>
         {Array.from({ length: totalPages }, (_, i) => (
@@ -244,13 +186,14 @@ export const SearchResult = ({
             key={i}
             onClick={() => handlePageChange(i)}
             className={`
-              ${currentPage === i + 1
-                ? styles.paginationSelectedButton
-                : styles.paginationNotSelectButton}
+              ${
+                currentPage === i + 1
+                  ? styles.paginationSelectedButton
+                  : styles.paginationNotSelectButton
+              }
 
                 ${styles.paginationMoveButton}
-                `
-            }
+                `}
           >
             {i + 1}
           </button>

@@ -8,18 +8,21 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchStore } from "@/libs/store/search-store";
 import { useRouter } from "next/navigation";
 import { createQueryParams } from "@/utils/queryParams";
-import { ClipLoader } from "react-spinners";
 
 export const PostList = ({
   posts,
   popularTags,
   tagName,
+  title
 }: {
   posts: PostListType;
   popularTags: Tag[];
   tagName: string;
+  title: string;
 }) => {
   const [selectedTag, setSelectedTag] = useState(tagName || "ALL");
+  const [searchTitle, setSearchTitle] = useState(title);
+  console.log(searchTitle);
   const [displayPosts, setDisplayPosts] = useState<PostListType>(posts);
   const { setSearchQuery } = useSearchStore();
   const router = useRouter();
@@ -38,7 +41,8 @@ export const PostList = ({
 
   useEffect(() => {
     setDisplayPosts(posts);
-  }, [posts]);
+    setSearchTitle(title);
+  }, [posts, title]);
 
   const addAllToPopularTags = useMemo(() => {
     const allTag = { tag: { id: 0, name: "ALL" } };
@@ -66,6 +70,7 @@ export const PostList = ({
           currentPage={displayPosts.currentPage}
           totalPages={displayPosts.totalPages}
           postImageUrlWithMaxLikes={displayPosts.postImageUrlWithMaxLikes}
+          title={searchTitle}
         />
       </div>
     </>

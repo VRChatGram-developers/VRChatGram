@@ -85,7 +85,7 @@ export const FavoritePostList = ({ favoritePostList }: { favoritePostList: Favor
               key={i}
               onClick={() => setCurrentPage(i)}
               className={`
-              ${currentPage === i + 1
+              ${currentPage === i
                 ? styles.paginationSelectedButton
                 : styles.paginationNotSelectButton}
 

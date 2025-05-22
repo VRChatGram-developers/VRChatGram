@@ -6,6 +6,16 @@
   max-width: 90rem;
   .postFormContainer {
     width: 100%;
+    position: relative;
+
+    .closeButton {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.8rem;
+      border: none;
+      background-color: transparent;
+    }
     .postFormInputArea {
       .postTitleContent {
         display: flex;
@@ -420,12 +430,12 @@
 
 @media (max-width: 767px) {
   .container {
-    width: 100% !important;
+    width: 100vw !important;
     max-height: 80vh;
   }
 
   .postFormInputContentBorder {
-    padding: 1rem;
+    padding: 2rem;
   }
   .postFormInputContent {
     padding: 2rem;
