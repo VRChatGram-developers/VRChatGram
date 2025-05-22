@@ -4,7 +4,7 @@ import prisma from "@/prisma/client";
 
 export const runtime = "edge";
 
-export async function GET(request: Request, { params }: { params: Promise<{ postId: string }> }) {
+export async function POST(request: Request, { params }: { params: Promise<{ postId: string }> }) {
   try {
     const { postId } = await params;
     if (!postId) {

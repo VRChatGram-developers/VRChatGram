@@ -19,6 +19,7 @@ import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";
+import { addViewCountToPost } from "../endpoint";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
@@ -32,6 +33,11 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: _, status } = useSession();
   const { setSearchQuery } = useSearchStore();
+
+  useEffect(() => {
+    addViewCountToPost(post.id.toString());
+    console.log("addViewCountToPost");
+  }, []);
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);

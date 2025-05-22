@@ -2,10 +2,7 @@ import { Tag, PostDetail, PostList } from "./types/index";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export const fetchPosts = async (
-  params: string,
-  headers?: Headers
-): Promise<PostList | string> => {
+export const fetchPosts = async (params: string, headers?: Headers): Promise<PostList | string> => {
   const response = await fetch(`${API_URL}/api/v1/posts/search?${params}`, {
     headers: new Headers(headers),
   });
@@ -18,7 +15,10 @@ export const fetchPosts = async (
   return response.json();
 };
 
-export const fetchPostById = async (postId: string, headers?: Headers): Promise<PostDetail | string> => {
+export const fetchPostById = async (
+  postId: string,
+  headers?: Headers
+): Promise<PostDetail | string> => {
   const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
     headers: new Headers(headers),
   });
@@ -75,9 +75,9 @@ export const createPost = async <T>(post: T) => {
   return data;
 };
 
-export const addViewCountToPost = async (postId: string, headers?: Headers) => {
+export const addViewCountToPost = async (postId: string) => {
   const response = await fetch(`${API_URL}/api/v1/posts/${postId}/views`, {
-    headers: new Headers(headers),
+    method: "POST",
   });
 
   if (response.status === 401) {
@@ -120,7 +120,6 @@ export const fetchPopularTagList = async (): Promise<Tag[] | string> => {
   return data;
 };
 
-
 export const fetchS3SignedUrl = async ({
   fileName,
   contentType,
@@ -147,7 +146,7 @@ export const convertToWebp = async (file: File, width: number): Promise<Blob> =>
 
   const res = await fetch(`${API_URL}/api/v1/s3/webp`, {
     method: "POST",
-    body: formData
+    body: formData,
   });
   const data = await res.blob();
   return data;
