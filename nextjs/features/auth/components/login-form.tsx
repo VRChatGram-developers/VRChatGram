@@ -15,8 +15,6 @@ import { checkDeletedUser } from "@/features/users/endpoint";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 
 export const LoginForm = () => {
-  const googleFormLinks =
-    "https://docs.google.com/forms/d/e/1FAIpQLSc2wPHJNSmD8tBIWMb6UDrJzlXNF3dYFx-okEQvITZvRXpOtQ/viewform";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMail, setErrorMail] = useState("");
