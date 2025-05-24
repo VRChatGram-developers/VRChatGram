@@ -46,7 +46,7 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
           <div className={styles.topNoticeMainContainer}>
             {testNews.length > 0 && (
               <Image
-                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/main.webp"
+                src="https://d3o6x7pz3sf2lk.cloudfront.net/static/main-image.webp"
                 alt="メイン画像"
                 width={1680}
                 height={384}
@@ -155,7 +155,7 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
         <div className={styles.mobileMainImageContaier}>
           {testNews.length > 0 && (
             <Image
-              src="https://d3o6x7pz3sf2lk.cloudfront.net/static/main.webp"
+              src="https://d3o6x7pz3sf2lk.cloudfront.net/static/main-image.webp"
               alt="メイン画像"
               width={1680}
               height={384}
