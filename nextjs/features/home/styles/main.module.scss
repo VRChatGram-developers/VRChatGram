@@ -10,15 +10,13 @@
   .topNoticeMainContainer {
     width: 100%;
     max-height: 90vh;
-    aspect-ratio: 16 / 9; // ← 画像と同じ比率を指定
     position: relative;
     overflow: hidden;
-    margin-top: 1rem;
   
     .topNoticeMainImage {
       width: 100%;
       height: 100%;
-      object-fit: fill;
+      object-fit: contain;
     }
   }
   
@@ -37,12 +35,11 @@
       grid-auto-flow: column;
       // height: 24rem; // ← グリッドの高さを固定（必要に応じて調整）
       .mainImageLink {
-        aspect-ratio: 16 / 9;
         height: 100%; // ← 高さをグリッドに合わせる
         .mainImage {
           width: 100%;
           height: 100%; // ← 高さをリンクに合わせる
-          object-fit: cover;
+          object-fit: contain;
           border-radius: 0.5rem;
         }
       }
@@ -174,7 +171,6 @@
   background-color: #fff;
   .mobileMainImageContaier {
     width: 100%;
-    aspect-ratio: 16 / 9; // 元画像と同じ比率
     max-height: 60vh; // モバイルで縦幅制限
     margin-bottom: 1.5rem;
     position: relative;
@@ -183,7 +179,7 @@
     .mobileMainImage {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
   }
   .mobileSubImageContainer {
