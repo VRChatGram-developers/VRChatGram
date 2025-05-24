@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import styles from "../styles/sign-in-form-modal.module.scss";
+import styles from "../styles/login-form-modal.module.scss";
 import { checkDeletedUser } from "@/features/users/endpoint";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
@@ -17,7 +17,6 @@ export const LoginFormModal = ({
   onClose: () => void;
   requiredAction: string;
 }) => {
-  console.log("requiredAction", requiredAction);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { data: session, status } = useSession();

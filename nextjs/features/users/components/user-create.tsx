@@ -3,8 +3,13 @@
 import { useState } from "react";
 import { SignUpForm } from "@/features/auth/components/sign-up-form";
 import { AccountInfoInput } from "@/features/users/components/account-info-input";
+import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
 
-export const UserCreate = () => {
+export const UserCreate = ({
+  topThreePostImages,
+}: {
+  topThreePostImages: TopThreePostImagesType;
+}) => {
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +17,12 @@ export const UserCreate = () => {
   return (
     <div>
       {isSignUp ? (
-        <AccountInfoInput email={email} password={password} setIsSignUp={setIsSignUp} />
+        <AccountInfoInput
+          email={email}
+          password={password}
+          setIsSignUp={setIsSignUp}
+          topThreePostImages={topThreePostImages}
+        />
       ) : (
         <SignUpForm
           email={email}
@@ -20,6 +30,7 @@ export const UserCreate = () => {
           setEmail={setEmail}
           setPassword={setPassword}
           setIsSignUp={setIsSignUp}
+          topThreePostImages={topThreePostImages}
         />
       )}
     </div>
