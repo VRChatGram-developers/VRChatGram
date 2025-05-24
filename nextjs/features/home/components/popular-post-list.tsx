@@ -6,7 +6,6 @@ import styles from "../styles/popular-post-list.module.scss";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState, useEffect } from "react";
 
-
 export const PopularPostList = ({
   popularPostList,
 }: {
