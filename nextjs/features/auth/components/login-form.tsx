@@ -13,8 +13,13 @@ import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { checkDeletedUser } from "@/features/users/endpoint";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
+import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
 
-export const LoginForm = () => {
+export const LoginForm = ({
+  topThreePostImages,
+}: {
+  topThreePostImages: TopThreePostImagesType;
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMail, setErrorMail] = useState("");
@@ -24,6 +29,14 @@ export const LoginForm = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (topThreePostImages.topThreePostImages.length === 0) return;
+    const images = topThreePostImages.topThreePostImages.map((post) => post.images);
+    const randomIndex = Math.floor(Math.random() * images.length);
+    setSelectedImageUrl(images[randomIndex].url);
+  }, [topThreePostImages]);
 
   const mailValidation = () => {
     setErrorMail("");
@@ -116,7 +129,7 @@ export const LoginForm = () => {
         <div className={styles.loginContainer}>
           <div className={styles.loginImageContainer}>
             <Image
-              src="/login_page.png"
+              src={selectedImageUrl || "/login_page.png"}
               alt="Login page image"
               className="object-cover w-full h-full"
               width={864}
@@ -135,7 +148,9 @@ export const LoginForm = () => {
                 今日も素敵な写真をいっぱい投稿しましょう
               </p>
               {fireBaseError && (
-                <p className="text-red-500 text-center font-bold text-sm mt-2 pt-2">{fireBaseError}</p>
+                <p className="text-red-500 text-center font-bold text-sm mt-2 pt-2">
+                  {fireBaseError}
+                </p>
               )}
 
               <div className={styles.loginTextFormContainer}>
