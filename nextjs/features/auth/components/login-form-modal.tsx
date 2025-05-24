@@ -10,7 +10,14 @@ import { useSession } from "next-auth/react";
 import { Link, TextField } from "@mui/material";
 import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
 
-export const SignInFormModal = ({ onClose }: { onClose: () => void }) => {
+export const LoginFormModal = ({
+  onClose,
+  requiredAction,
+}: {
+  onClose: () => void;
+  requiredAction: string;
+}) => {
+  console.log("requiredAction", requiredAction);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { data: session, status } = useSession();
@@ -19,7 +26,6 @@ export const SignInFormModal = ({ onClose }: { onClose: () => void }) => {
 
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
-  //   const router = useRouter();
 
   const isEmailValidated = () => {
     setErrorEmail("");
@@ -97,7 +103,9 @@ export const SignInFormModal = ({ onClose }: { onClose: () => void }) => {
     <div className={styles.signInFormModalContainer}>
       <div className={styles.signInFormModalContentContainer}>
         <div className={styles.signInFormModalTitleContainer}>
-          <div className={styles.signInFormModalTitle}>いいねをするにはログインが必要です</div>
+          <div className={styles.signInFormModalTitle}>
+            {requiredAction}をするにはログインが必要です
+          </div>
           {fireBaseError.length > 0 && (
             <div className={styles.signInFormModalErrorMessage}>{fireBaseError}</div>
           )}

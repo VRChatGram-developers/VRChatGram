@@ -6,7 +6,7 @@ import Image from "next/image";
 import styles from "./photo-card.module.scss";
 import { MdOutlinePhoto } from "react-icons/md";
 import { useSession } from "next-auth/react";
-import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
+import { LoginFormModal } from "@/features/auth/components/login-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import Link from "next/link";
 
@@ -38,7 +38,7 @@ export const PhotoCard = ({
 
   const handleClickLikeOrUnlike = () => {
     if (status === "unauthenticated") {
-      return openModal(<SignInFormModal onClose={closeModal} />);
+      return openModal(<LoginFormModal onClose={closeModal} requiredAction="いいね" />);
     }
 
     handleLikeOrUnlike();
