@@ -1,12 +1,12 @@
 "use client";
 
 import { ViewsPostList as ViewsPostListType } from "@/features/users/types/index";
-import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
+import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { Post } from "@/features/users/types/index";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
-import styles from "../styles/my-views-posts.module.scss";
+import styles from "../styles/view-post-list.module.scss";
 
 export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListType }) => {
   const { handleLikeOrUnlike } = useLikePost();
@@ -70,6 +70,7 @@ export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
           <PhotoGallery posts={photoList} />
         </div>
 
+        {totalPages > 0 && (
         <div className={styles.pagination}>
           <button
             className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
@@ -105,6 +106,7 @@ export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
             <MdOutlineLastPage className={styles.paginationButtonIcon} />
           </button>
         </div>
+        )}
       </div>
     </>
   );

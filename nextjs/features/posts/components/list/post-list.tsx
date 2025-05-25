@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../styles/post-list.module.scss";
+import styles from "@/features/posts/styles/post-list.module.scss";
 import { SearchResult } from "./search-result";
 import { Tag, PostList as PostListType } from "@/features/posts/types/index";
 import { TagList } from "./tag-list";
@@ -13,7 +13,7 @@ export const PostList = ({
   posts,
   popularTags,
   tagName,
-  title
+  title,
 }: {
   posts: PostListType;
   popularTags: Tag[];

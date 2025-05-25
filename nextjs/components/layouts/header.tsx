@@ -9,7 +9,7 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import styles from "../styles/header.module.scss";
 import { useState, useRef } from "react";
 import { useModal } from "@/provider/modal-provider";
-import { PostForm } from "@/features/posts/components/post-form";
+import { PostForm } from "@/features/posts/components/form/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";

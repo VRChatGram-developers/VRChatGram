@@ -1,7 +1,7 @@
 "use client";
 
 import { FavoritePostList as FavoritePostListType } from "@/features/users/types/index";
-import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
+import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { Post } from "@/features/users/types/index";
@@ -71,6 +71,7 @@ export const FavoritePostList = ({ favoritePostList }: { favoritePostList: Favor
           <PhotoGallery posts={photoList} />
         </div>
 
+      {totalPages > 0 && (
         <div className={styles.pagination}>
           <button
             className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
@@ -105,6 +106,7 @@ export const FavoritePostList = ({ favoritePostList }: { favoritePostList: Favor
             <MdOutlineLastPage className={styles.paginationButtonIcon} />
           </button>
         </div>
+      )}
       </div>
     </>
   );
