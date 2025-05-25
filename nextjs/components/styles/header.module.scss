@@ -229,7 +229,7 @@
       input {
         height: 100%;
         width: 100%;
-        padding: 0.5rem 0 0.5rem 3.5rem;
+        padding: 0.8rem 0 0.8rem 2.5rem;
         border: 1px solid #d1d5db;
         border-radius: 4px;
         color: #5d5d5d;
@@ -258,7 +258,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1rem 2rem;
+        padding: 0.5rem 2rem;
         width: 100%;
         margin-bottom: 1rem;
         .signInButtonText {
@@ -279,7 +279,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 1rem 2rem;
+        padding: 0.5rem 2rem;
         width: 100%;
         .signUpButtonText {
           font-size: 1rem;
@@ -303,7 +303,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 1rem 2rem;
+          padding: 0.5rem 2rem;
           width: 100%;
           margin-bottom: 1rem;
           .postButtonText {

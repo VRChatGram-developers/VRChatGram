@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import useLikePost from "../hooks/use-like-post";
 import { RecommendPostList } from "./recommend-post-list";
 import { useSession } from "next-auth/react";
-import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
+import { LoginFormModal } from "@/features/auth/components/login-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";
@@ -69,7 +69,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
 
   const handleClickLikeOrUnlike = async () => {
     if (status === "unauthenticated") {
-      return openModal(<SignInFormModal onClose={closeModal} />);
+      return openModal(<LoginFormModal onClose={closeModal} requiredAction="いいね" />);
     }
 
     setIsLiked(!isLiked);

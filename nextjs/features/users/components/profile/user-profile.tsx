@@ -13,7 +13,7 @@ import { updateUserProfile, fetchS3SignedUrl } from "@/features/users/endpoint";
 import { useEffect } from "react";
 import { useSingleImageUpload } from "@/features/users/hooks/use-upload-image";
 import { useRouter } from "next/navigation";
-import { SignInFormModal } from "@/features/auth/components/sign-in-form-modal";
+import { LoginFormModal } from "@/features/auth/components/login-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import { DropdownMenu } from "./drop-down-menu";
 import { FaImage } from "react-icons/fa6";
@@ -51,7 +51,7 @@ export const UserProfile = ({ user }: { user: User }) => {
   const { data: session } = useSession();
   const handleFollow = async () => {
     if (!session?.user) {
-      openModal(<SignInFormModal onClose={closeModal} />);
+      openModal(<LoginFormModal onClose={closeModal} requiredAction="フォロー" />);
       return;
     }
     setIsFollowing(true);
@@ -60,7 +60,7 @@ export const UserProfile = ({ user }: { user: User }) => {
 
   const handleUnfollow = async () => {
     if (!session?.user) {
-      openModal(<SignInFormModal onClose={closeModal} />);
+      openModal(<LoginFormModal onClose={closeModal} requiredAction="フォロー" />);
       return;
     }
     setIsFollowing(false);

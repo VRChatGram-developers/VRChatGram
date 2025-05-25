@@ -6,8 +6,6 @@ import parse from "html-react-parser";
 import Link from "next/link";
 
 export const UsageDetail = ({ usage }: { usage: Usage }) => {
-  console.log(usage);
-
   return (
     <div className={styles.notificationDetailContainer}>
       <div className={styles.notificationDetailContentContainer}>

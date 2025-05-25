@@ -22,7 +22,6 @@ export const PostList = ({
 }) => {
   const [selectedTag, setSelectedTag] = useState(tagName || "ALL");
   const [searchTitle, setSearchTitle] = useState(title);
-  console.log(searchTitle);
   const [displayPosts, setDisplayPosts] = useState<PostListType>(posts);
   const { setSearchQuery } = useSearchStore();
   const router = useRouter();

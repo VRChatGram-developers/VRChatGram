@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import { Link, TextField } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "@/features/auth/styles/sign-up-form.module.scss";
 import { checkEmail } from "@/features/users/endpoint";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
+import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
 
 export const SignUpForm = ({
   email,
@@ -13,18 +14,26 @@ export const SignUpForm = ({
   setEmail,
   setPassword,
   setIsSignUp,
+  topThreePostImages,
 }: {
   email: string;
   password: string;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   setIsSignUp: (isSignUp: boolean) => void;
+  topThreePostImages: TopThreePostImagesType;
 }) => {
   const [errorMail, setErrorMail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
-  const googleFormLinks =
-  "https://docs.google.com/forms/d/e/1FAIpQLSc2wPHJNSmD8tBIWMb6UDrJzlXNF3dYFx-okEQvITZvRXpOtQ/viewform";
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (topThreePostImages.topThreePostImages.length === 0) return;
+    const images = topThreePostImages.topThreePostImages.map((post) => post.images);
+    const randomIndex = Math.floor(Math.random() * images.length);
+    setSelectedImageUrl(images[randomIndex].url);
+  }, [topThreePostImages]);
 
   const mailValidation = () => {
     if (email === "") {
@@ -212,8 +221,8 @@ export const SignUpForm = ({
       </div>
       <div className={styles.registerImageContainer}>
         <Image
-          src="/signup-icon.png"
-          alt="Login page image"
+          src={selectedImageUrl || ""}
+          alt="Signup image"
           className="object-cover w-full h-full"
           width={864}
           height={800}
