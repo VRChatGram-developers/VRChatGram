@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { Post } from "@/features/users/types/index";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
-import styles from "../styles/my-views-posts.module.scss";
+import styles from "../styles/view-post-list.module.scss";
 
 export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListType }) => {
   const { handleLikeOrUnlike } = useLikePost();
