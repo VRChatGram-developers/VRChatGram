@@ -1,0 +1,13 @@
+{
+    "name": "VRCSS",
+    "short_name": "VRCSS",
+    "description": "VRCSS",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#fff",
+    "icons": [
+      { "src": "/header/vrcss_icon.svg", "type": "image/svg", "sizes": "192x192" },
+      { "src": "/header/vrcss_icon.svg", "type": "image/svg", "sizes": "512x512" }
+    ]
+  }
