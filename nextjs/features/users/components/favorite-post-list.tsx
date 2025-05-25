@@ -71,6 +71,7 @@ export const FavoritePostList = ({ favoritePostList }: { favoritePostList: Favor
           <PhotoGallery posts={photoList} />
         </div>
 
+      {totalPages > 0 && (
         <div className={styles.pagination}>
           <button
             className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
@@ -105,6 +106,7 @@ export const FavoritePostList = ({ favoritePostList }: { favoritePostList: Favor
             <MdOutlineLastPage className={styles.paginationButtonIcon} />
           </button>
         </div>
+      )}
       </div>
     </>
   );
