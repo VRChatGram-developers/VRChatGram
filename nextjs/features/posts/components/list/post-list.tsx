@@ -41,7 +41,8 @@ export const PostList = ({
   useEffect(() => {
     setDisplayPosts(posts);
     setSearchTitle(title);
-  }, [posts, title]);
+    setSelectedTag(tagName);
+  }, [posts, title, tagName]);
 
   const addAllToPopularTags = useMemo(() => {
     const allTag = { tag: { id: 0, name: "ALL" } };

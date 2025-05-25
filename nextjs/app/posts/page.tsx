@@ -17,7 +17,7 @@ export default async function Page({
   const popularTags = await fetchPopularTagList();
   const rawTagName = (params.tag || "ALL") as string;
   const tagName = `${rawTagName}` ? decodeURIComponent(`${rawTagName}`) : "ALL";
-  const title = decodeURIComponent(params.title as string);
+  const title = decodeURIComponent(params.title as string) || "ALL";
 
   if (typeof postsList === "string") {
     return <div>{postsList}</div>;

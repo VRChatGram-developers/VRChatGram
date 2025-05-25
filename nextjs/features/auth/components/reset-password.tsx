@@ -7,9 +7,22 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
+import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
 
-export const ResetPassword = () => {
+export const ResetPassword = ({
+  topThreePostImages,
+}: {
+  topThreePostImages: TopThreePostImagesType;
+}) => {
   const [isSendPasswordResetEmail, setIsSendPasswordResetEmail] = useState<boolean>(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (topThreePostImages.topThreePostImages.length === 0) return;
+    const images = topThreePostImages.topThreePostImages.map((post) => post.images);
+    const randomIndex = Math.floor(Math.random() * images.length);
+    setSelectedImageUrl(images[randomIndex].url);
+  }, [topThreePostImages]);
   const router = useRouter();
 
   const [email, setEmail] = useState<string>("");
@@ -109,12 +122,28 @@ export const ResetPassword = () => {
         </div>
         <div className={styles.resetPasswordImageContainer}>
           <Image
-            src="/signup-icon.png"
+            src={selectedImageUrl || ""}
             alt="Login page image"
             className="object-cover w-full h-full"
             width={864}
             height={800}
           />
+          <div className={styles.resetPasswordPostInfoContainer}>
+            <p className={styles.resetPasswordPostInfoContainerTitle}>
+              {topThreePostImages.topThreePostImages[0].title}
+            </p>
+            <div className={styles.resetPasswordPostInfoUserContainer}>
+              <Image
+                src={topThreePostImages.topThreePostImages[0].user.profile_url}
+                alt="Profile image"
+                width={32}
+                height={32}
+                unoptimized
+                className={styles.resetPasswordPostInfoUserProfileImage}
+              />
+              <p>{topThreePostImages.topThreePostImages[0].user.name}さんの投稿</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
