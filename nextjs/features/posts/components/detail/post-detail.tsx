@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../../styles/post-detail.module.scss";
+import styles from "@/features/posts/styles/post-detail.module.scss";
 import { FaRegEye } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";

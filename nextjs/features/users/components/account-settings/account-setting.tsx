@@ -8,7 +8,7 @@ import { AccountDelete } from "./account-delete";
 import { PasswordSetting } from "./password-setting";
 import { AccountSetting as AccountSettingType } from "../../types/index";
 import { EmailSetting } from "./email-setting";
-import styles from "../../styles/account-setting.module.scss";
+import styles from "@/features/users/styles/account-setting.module.scss";
 import { Slide, toast } from "react-toastify";
 export const AccountSetting = ({ accountSetting }: { accountSetting: AccountSettingType }) => {
   const { openModal, closeModal } = useModal();

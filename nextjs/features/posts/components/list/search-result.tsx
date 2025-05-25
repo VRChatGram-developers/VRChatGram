@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../../styles/search-result.module.scss";
+import styles from "@/features/posts/styles/search-result.module.scss";
 import { Post } from "@/features/posts/types/index";
 import Image from "next/image";
 import { useState, useEffect } from "react";

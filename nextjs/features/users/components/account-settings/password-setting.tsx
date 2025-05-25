@@ -6,7 +6,7 @@ import { updateUserPassword } from "../../endpoint";
 import { MdOutlineChangeCircle } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
-import styles from "../../styles/password-setting.module.scss";
+import styles from "@/features/users/styles/password-setting.module.scss";
 import { Slide, toast } from "react-toastify";
 
 type PasswordSettingProps = {

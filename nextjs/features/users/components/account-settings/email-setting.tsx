@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { updateUserEmail } from "../../endpoint";
 import { MdOutlineChangeCircle } from "react-icons/md";
-import styles from "../../styles/email-setting.module.scss";
+import styles from "@/features/users/styles/email-setting.module.scss";
 import { Slide, toast } from "react-toastify";
 
 type EmailSettingProps = {

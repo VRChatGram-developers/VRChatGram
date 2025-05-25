@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../../styles/recommend-post-list.module.scss";
+import styles from "@/features/posts/styles/recommend-post-list.module.scss";
 import { PostDetail as PostDetailType, RecommendPost } from "@/features/posts/types/index";
 import { PostCard } from "@/features/posts/components/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";

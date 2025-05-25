@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { createPost, fetchS3SignedUrl } from "../../endpoint";
-import styles from "../../styles/post-form.module.scss";
+import styles from "@/features/posts/styles/post-form.module.scss";
 import { ImageData } from "../../types";
 import { FaImage } from "react-icons/fa6";
 import { ClipLoader } from "react-spinners";

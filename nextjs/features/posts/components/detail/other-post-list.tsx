@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../../styles/other-post-list.module.scss";
+import styles from "@/features/posts/styles/other-post-list.module.scss";
 import { PostDetail as PostDetailType, UserOtherPost } from "@/features/posts/types/index";
 import { PostCard } from "@/features/posts/components/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
