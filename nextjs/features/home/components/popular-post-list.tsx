@@ -1,7 +1,7 @@
 "use client";
 
 import { PopularPost } from "../types/index";
-import { PostCard } from "@/components/layouts/post-card";
+import { PostCard } from "@/features/posts/components/post-card";
 import styles from "../styles/popular-post-list.module.scss";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState, useEffect } from "react";

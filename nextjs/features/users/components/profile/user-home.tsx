@@ -3,7 +3,7 @@
 import styles from "@/features/users/styles/user-home.module.scss";
 import { User } from "@/features/users/types/index";
 import { useState } from "react";
-import { PostCard } from "@/components/layouts/post-card";
+import { PostCard } from "@/features/posts/components/post-card";
 import { SocialLink } from "@/features/users/components/profile/social-link";
 import { SocialLink as SocialLinkType } from "@/features/users/types/index";
 

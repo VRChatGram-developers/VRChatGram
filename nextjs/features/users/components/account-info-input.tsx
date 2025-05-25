@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { createYears, createMonths, createDays } from "@/utils/date";
 import { checkDuplicateMyId } from "../endpoint";
 import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
+import { toast, Slide } from "react-toastify";
 
 export const AccountInfoInput = ({
   email,
@@ -43,7 +44,7 @@ export const AccountInfoInput = ({
   const [errorSex, setErrorSex] = useState("");
   const [errorTerms, setErrorTerms] = useState("");
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
-  
+
   useEffect(() => {
     if (topThreePostImages.topThreePostImages.length === 0) return;
     const images = topThreePostImages.topThreePostImages.map((post) => post.images);
@@ -144,8 +145,16 @@ export const AccountInfoInput = ({
         gender: selectedSex,
       });
     } catch (error) {
+      toast.error("アカウント作成に失敗しました", {
+        isLoading: false,
+        autoClose: 2000,
+        transition: Slide,
+        hideProgressBar: true,
+      });
+      console.error(error);
       setIsLoading(false);
       setIsSignUp(false);
+      router.push("/signup");
     }
   };
 
@@ -294,7 +303,7 @@ export const AccountInfoInput = ({
           </div>
           <div className={styles.registerImageContainer}>
             <Image
-              src={selectedImageUrl || "/signup-icon.png"}
+              src={selectedImageUrl || ""}
               alt="Login page image"
               className="object-cover w-full h-full"
               width={864}

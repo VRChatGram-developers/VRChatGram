@@ -1,10 +1,10 @@
 "use client";
 
-import { deleteAccount, checkPassword } from "../endpoint";
+import { deleteAccount, checkPassword } from "../../endpoint";
 import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
 import { useState } from "react";
 import { GrCircleAlert } from "react-icons/gr";
-import styles from "../styles/account-delete.module.scss";
+import styles from "@/features/users/styles/account-delete.module.scss";
 
 export const AccountDelete = ({ onClose }: { onClose: () => void }) => {
   const [password, setPassword] = useState("");

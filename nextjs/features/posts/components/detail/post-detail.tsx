@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../styles/post-detail.module.scss";
+import styles from "@/features/posts/styles/post-detail.module.scss";
 import { FaRegEye } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
@@ -12,14 +12,14 @@ import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
 import { GrPersonalComputer } from "react-icons/gr";
 import { useRouter } from "next/navigation";
-import useLikePost from "../hooks/use-like-post";
+import useLikePost from "../../hooks/use-like-post";
 import { RecommendPostList } from "./recommend-post-list";
 import { useSession } from "next-auth/react";
 import { LoginFormModal } from "@/features/auth/components/login-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";
-import { addViewCountToPost } from "../endpoint";
+import { addViewCountToPost } from "../../endpoint";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);

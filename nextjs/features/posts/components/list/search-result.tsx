@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "../styles/search-result.module.scss";
+import styles from "@/features/posts/styles/search-result.module.scss";
 import { Post } from "@/features/posts/types/index";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -11,7 +11,7 @@ import { createQueryParams } from "@/utils/queryParams";
 import { useSearchStore } from "@/libs/store/search-store";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useRouter } from "next/navigation";
-import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
+import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import { Image as ImageType, User } from "@/features/posts/types";
 
 

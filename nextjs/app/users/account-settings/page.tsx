@@ -1,4 +1,4 @@
-import { AccountSetting } from "@/features/users/components/account-setting";
+import { AccountSetting } from "@/features/users/components/account-settings/account-setting";
 import { fetchByAccountSettings } from "@/features/users/endpoint";
 import { headers } from "next/headers";
 import { ClipLoader } from "react-spinners";
