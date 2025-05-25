@@ -7,6 +7,7 @@ export type TopThreePostImage = {
   title: string;
   user: {
     name: string;
+    profile_url: string;
   };
   images: Image;
 };
