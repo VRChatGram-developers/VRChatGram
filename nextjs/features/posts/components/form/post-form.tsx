@@ -7,6 +7,7 @@ import { ClipLoader } from "react-spinners";
 import { Id, Slide, toast } from "react-toastify";
 import axios, { AxiosProgressEvent } from "axios";
 import { RxCross2 } from "react-icons/rx";
+import { useDropzone } from "react-dropzone";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -27,6 +28,34 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     { label: "全年齢", isSensitive: false, value: "all" },
     { label: "18歳以上", isSensitive: true, value: "safe" },
   ];
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: { "image/*": [] },
+    onDrop: (acceptedFiles) => {
+      // 画像の寸法を取得
+      acceptedFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new (globalThis.Image as any)();
+          img.onload = () => {
+            const imageData = {
+              file: file,
+              file_data: e.target?.result as string,
+              file_name: file.name,
+              width: img.width,
+              height: img.height,
+            };
+            if (images.length === 0) {
+              setMainImage(imageData);
+            }
+            setImages((prevImages) => [...prevImages, imageData]);
+          };
+          img.src = e.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+      });
+    },
+  });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -257,13 +286,23 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
               <p className={styles.postTitle}>新規投稿</p>
             </div>
             <div className={styles.postFormInputContent}>
-              <div className={styles.postFormInputContentBorder}>
+              <div className={styles.postFormInputContentBorder} {...getRootProps()}>
+                <input {...getInputProps()} hidden />
                 <div className={styles.postFormLogoContainer}>
                   <img src="/header/vrcss_icon.svg" alt="Logo" className={styles.logo} />
                 </div>
                 <div className={styles.postFormInputTextContainer}>
-                  <p className={styles.postFormInputText}>ここにドロップ&ドロップ</p>
-                  <p className={styles.postFormInputText}>または</p>
+                  <p className={styles.postFormInputText}>
+                    {isDragActive ? (
+                      "ここにドロップして下さい"
+                    ) : (
+                      <>
+                        ここにドラッグ&ドロップ
+                        <br />
+                        または
+                      </>
+                    )}
+                  </p>
                   <div className={styles.postFormInputButtonContainer}>
                     <input
                       type="file"
