@@ -70,6 +70,7 @@ export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
           <PhotoGallery posts={photoList} />
         </div>
 
+        {totalPages > 0 && (
         <div className={styles.pagination}>
           <button
             className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
@@ -105,6 +106,7 @@ export const ViewPostList = ({ viewsPostList }: { viewsPostList: ViewsPostListTy
             <MdOutlineLastPage className={styles.paginationButtonIcon} />
           </button>
         </div>
+        )}
       </div>
     </>
   );
