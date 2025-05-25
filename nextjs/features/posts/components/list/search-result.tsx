@@ -11,7 +11,7 @@ import { createQueryParams } from "@/utils/queryParams";
 import { useSearchStore } from "@/libs/store/search-store";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useRouter } from "next/navigation";
-import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
+import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import { Image as ImageType, User } from "@/features/posts/types";
 
 

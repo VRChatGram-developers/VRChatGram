@@ -4,7 +4,7 @@ import styles from "@/features/users/styles/user-post-list.module.scss";
 import { User, Post } from "@/features/users/types/index";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { MdOutlineLastPage, MdOutlineFirstPage } from "react-icons/md";
-import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
+import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 
 export const UserPostList = ({ user }: { user: User }) => {

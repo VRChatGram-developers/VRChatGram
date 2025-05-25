@@ -1,7 +1,7 @@
 "use client";
 
 import { FavoritePostList as FavoritePostListType } from "@/features/users/types/index";
-import { PhotoGallery } from "@/components/photo-gallerys/photo-gallery";
+import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { Post } from "@/features/users/types/index";
