@@ -221,8 +221,8 @@ export const SignUpForm = ({
       </div>
       <div className={styles.registerImageContainer}>
         <Image
-          src={selectedImageUrl || "/signup-icon.png"}
-          alt="Login page image"
+          src={selectedImageUrl || ""}
+          alt="Signup image"
           className="object-cover w-full h-full"
           width={864}
           height={800}

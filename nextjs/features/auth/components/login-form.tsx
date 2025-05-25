@@ -129,8 +129,8 @@ export const LoginForm = ({
         <div className={styles.loginContainer}>
           <div className={styles.loginImageContainer}>
             <Image
-              src={selectedImageUrl || "/login_page.png"}
-              alt="Login page image"
+              src={selectedImageUrl || ""}
+              alt="Login image"
               className="object-cover w-full h-full"
               width={864}
               height={800}
