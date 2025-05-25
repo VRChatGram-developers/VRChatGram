@@ -5,7 +5,7 @@ import { updateUser } from "../../endpoint";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/provider/modal-provider";
 import { AccountDelete } from "./account-delete";
-import { PasswordSetting } from "../password-setting";
+import { PasswordSetting } from "./password-setting";
 import { AccountSetting as AccountSettingType } from "../../types/index";
 import { EmailSetting } from "./email-setting";
 import styles from "../../styles/account-setting.module.scss";

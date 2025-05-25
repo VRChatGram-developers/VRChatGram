@@ -2,12 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { updateUserPassword } from "../endpoint";
+import { updateUserPassword } from "../../endpoint";
 import { MdOutlineChangeCircle } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
-import styles from "../styles/password-setting.module.scss";
+import styles from "../../styles/password-setting.module.scss";
 import { Slide, toast } from "react-toastify";
+
 type PasswordSettingProps = {
   onClose: () => void;
 };
@@ -113,7 +114,9 @@ export const PasswordSetting = ({ onClose }: PasswordSettingProps) => {
                 onClick={() => setIsCurrentPasswordVisible(!isCurrentPasswordVisible)}
               />
             )}
-            {errorCurrentPassword.length > 0 && <div className={styles.passwordSettingErrorMessage}>{errorCurrentPassword}</div>}
+            {errorCurrentPassword.length > 0 && (
+              <div className={styles.passwordSettingErrorMessage}>{errorCurrentPassword}</div>
+            )}
           </div>
         </div>
         <div className={styles.passwordSettingInputContainer}>
@@ -137,7 +140,9 @@ export const PasswordSetting = ({ onClose }: PasswordSettingProps) => {
                   onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)}
                 />
               )}
-              {errorNewPassword.length > 0 && <div className={styles.passwordSettingErrorMessage}>{errorNewPassword}</div>}
+              {errorNewPassword.length > 0 && (
+                <div className={styles.passwordSettingErrorMessage}>{errorNewPassword}</div>
+              )}
             </div>
           </div>
         </div>
