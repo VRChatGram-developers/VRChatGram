@@ -130,18 +130,18 @@ export const ResetPassword = ({
           />
           <div className={styles.resetPasswordPostInfoContainer}>
             <p className={styles.resetPasswordPostInfoContainerTitle}>
-              {topThreePostImages.topThreePostImages[0].title}
+              {topThreePostImages.topThreePostImages[0]?.title || ""}
             </p>
             <div className={styles.resetPasswordPostInfoUserContainer}>
               <Image
-                src={topThreePostImages.topThreePostImages[0].user.profile_url}
+                src={topThreePostImages.topThreePostImages[0]?.user?.profile_url || ""}
                 alt="Profile image"
                 width={32}
                 height={32}
                 unoptimized
                 className={styles.resetPasswordPostInfoUserProfileImage}
               />
-              <p>{topThreePostImages.topThreePostImages[0].user.name}さんの投稿</p>
+              <p>{topThreePostImages.topThreePostImages[0]?.user?.name || ""}さんの投稿</p>
             </div>
           </div>
         </div>
