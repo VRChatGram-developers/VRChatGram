@@ -1,42 +1,47 @@
 "use client";
 
-import type React from "react";
-import clsx from "clsx";
+import styles from "@/features/posts/styles/post-card.module.scss";
 import Image from "next/image";
-import styles from "./photo-card.module.scss";
 import { MdOutlinePhoto } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { LoginFormModal } from "@/features/auth/components/login-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import Link from "next/link";
-
-export const PhotoCard = ({
-  className,
-  children,
-  postId,
-  postName,
-  postImageCount,
-  userName,
-  userImageUrl,
-  isLiked,
-  handleLikeOrUnlike,
-  myId,
-  ...rest
-}: React.ComponentProps<"div"> & {
-  postId: string;
+type PostCardProps = {
+  postId: string | bigint;
+  myId: string | bigint;
   postName: string;
+  postImageUrl: string | null;
   postImageCount: number;
   userName: string;
-  userImageUrl: string;
+  userImageUrl: string | null;
   isLiked: boolean;
+  setIsLiked: (isLiked: boolean) => void;
   handleLikeOrUnlike: () => void;
-  myId: string;
-}) => {
-  const { openModal, closeModal } = useModal();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: _, status } = useSession()
+};
 
+const sampleUserImageUrl = "/user-icon.png";
+const samplePostImageUrl = "/posts/sample-icon.png";
+
+export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) => {
+  const { openModal, closeModal } = useModal();
+
+  const {
+    postId,
+    myId,
+    postName,
+    postImageUrl,
+    postImageCount,
+    userName,
+    userImageUrl,
+    isLiked,
+    handleLikeOrUnlike,
+  } = postCardProps;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: _, status } = useSession();
   const handleClickLikeOrUnlike = () => {
+    
     if (status === "unauthenticated") {
       return openModal(<LoginFormModal onClose={closeModal} requiredAction="いいね" />);
     }
@@ -45,9 +50,15 @@ export const PhotoCard = ({
   };
 
   return (
-    <div className={clsx(styles.postLikeContainer, className)} {...rest}>
+    <div className={styles.likesPostsItem}>
       <Link href={`/posts/${postId}`} prefetch={true}>
-        {children}
+        <Image
+          src={postImageUrl || samplePostImageUrl}
+          alt={`ピックアップ画像`}
+          width={402}
+          height={402}
+          className={styles.likesPostsItemImage}
+        />
       </Link>
       {postImageCount > 1 && (
         <div className={styles.likesPostsItemImageContents}>
@@ -59,18 +70,14 @@ export const PhotoCard = ({
         <div className={styles.userInfo}>
           <p className={styles.userInfoTitle}>{postName}</p>
           <div className={styles.userInfoContainer}>
-            <Link href={`/users/${myId}`} prefetch={true}>
-              <Image
-                src={userImageUrl || "/user-icon.png"}
-                alt="new-post-image"
-                className={styles.userInfoIcon}
-                fill
-              />
-            </Link>
+            <Image
+              src={userImageUrl || sampleUserImageUrl}
+              alt="new-post-image"
+              className={styles.userInfoIcon}
+              fill
+            />
             <p className={styles.userInfoName}>
-              <Link href={`/users/${myId}`} prefetch={true}>
-                {userName}
-              </Link>
+              <Link href={`/users/${myId}`} prefetch={true}>{userName}</Link>
             </p>
             <div className={styles.likesPostsItemLikeContents}>
               <div

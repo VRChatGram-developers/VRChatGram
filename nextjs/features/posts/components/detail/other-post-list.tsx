@@ -2,7 +2,7 @@
 
 import styles from "../../styles/other-post-list.module.scss";
 import { PostDetail as PostDetailType, UserOtherPost } from "@/features/posts/types/index";
-import { PostCard } from "@/components/layouts/post-card";
+import { PostCard } from "@/features/posts/components/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState } from "react";
 
