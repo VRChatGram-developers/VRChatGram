@@ -5,24 +5,36 @@ import faqData from "@/features/faq/data.json";
 import { useState } from "react";
 import { MdOutlineFirstPage, MdOutlineLastPage } from "react-icons/md";
 type Faq = {
-  question: string;
-  answer: string;
+  section: string;
+  section_id: string;
+  qaList: {
+    question: string;
+    answer: string;
+  }[];
 };
 
 export const Faq = () => {
   const totalPages = Math.ceil(faqData.data.length / 10);
   const [currentPage, setCurrentPage] = useState(0);
-  const faqList = JSON.parse(JSON.stringify(faqData.data));
+  const faqList: Faq[] = JSON.parse(JSON.stringify(faqData.data));
+  console.log(faqList);
 
   return (
     <div className={styles.faqContainer}>
       <div className={styles.faqTitle}>よくあるご質問</div>
       <div className={styles.faqContentContainer}>
-        {faqList.map((faq: Faq, index: number) => (
-          <details className={styles.qa} key={index}>
-            <summary>{faq.question}</summary>
-            <p>{faq.answer}</p>
-          </details>
+        {faqList.map((faq, index: number) => (
+          <>
+            <div className={styles.faqSection} key={index}>
+              {faq.section}
+            </div>
+            {faq.qaList.map((qa, index: number) => (
+              <details className={styles.qa} key={index}>
+                <summary>{qa.question}</summary>
+                <p>{qa.answer}</p>
+              </details>
+            ))}
+          </>
         ))}
       </div>
 
@@ -40,13 +52,14 @@ export const Faq = () => {
             key={i}
             onClick={() => setCurrentPage(i)}
             className={`
-              ${currentPage === i + 1
-                ? styles.paginationSelectedButton
-                : styles.paginationNotSelectButton}
+              ${
+                currentPage === i + 1
+                  ? styles.paginationSelectedButton
+                  : styles.paginationNotSelectButton
+              }
 
                 ${styles.paginationMoveButton}
-                `
-            }
+                `}
           >
             {i + 1}
           </button>
