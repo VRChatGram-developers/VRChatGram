@@ -17,6 +17,7 @@
     position: relative;
     min-width: 7.5rem;
     border-radius: 50%;
+
     .logo {
       width: auto !important;
       cursor: pointer;
@@ -30,6 +31,7 @@
     width: 100%;
     height: 100%;
     padding: 0.5rem 0;
+
     input {
       height: 100%;
       width: 100%;
@@ -67,11 +69,14 @@
     align-items: center;
     justify-content: center;
     padding: 0.5rem 2rem;
+
     .signInButtonText {
       font-size: 1rem;
       font-weight: bold;
     }
+
     transition: filter 0.2s;
+
     &:hover {
       filter: brightness(0.95);
     }
@@ -86,9 +91,16 @@
     align-items: center;
     justify-content: center;
     padding: 0.5rem 2rem;
+
     .signUpButtonText {
       font-size: 1rem;
       font-weight: bold;
+    }
+
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.95);
     }
   }
 
@@ -96,6 +108,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     button {
       background-color: #69beef;
       color: white;
@@ -106,6 +119,7 @@
       justify-content: center;
       padding: 0.5rem 2rem;
       height: 3rem;
+
       .postButtonText {
         font-size: 1rem;
         font-weight: bold;
@@ -135,13 +149,14 @@
 
       .moduleDrawerMenuSection {
         .moduleDrawerMenutext {
-          font-size: 1.5rem ;
+          font-size: 1.5rem;
           padding: 0.25rem 1.5rem;
           font-family: "Noto Sans JP", sans-serif;
           cursor: pointer;
           display: block;
           background-color: #fff;
           transition: filter 0.2s;
+
           &:hover {
             filter: brightness(0.95);
           }
@@ -159,8 +174,10 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
+
     .headerMobileHumburger {
       transition: all 0.4s;
+
       span {
         position: absolute;
         background: #fff;
@@ -170,12 +187,15 @@
         height: 3px;
         transition: all 0.4s;
         width: 50%;
+
         &:nth-of-type(1) {
           top: 16px;
         }
+
         &:nth-of-type(2) {
           top: 24px;
         }
+
         &:nth-of-type(3) {
           top: 32px;
         }
@@ -184,6 +204,7 @@
 
     .headerMobileHumburgerOpen {
       transform: rotatex(360deg);
+
       span {
         &:nth-of-type(1) {
           width: 45%;
@@ -191,9 +212,11 @@
           left: 14px;
           transform: translateY(6px) rotate(-135deg);
         }
+
         &:nth-of-type(2) {
           opacity: 0;
         }
+
         &:nth-of-type(3) {
           width: 45%;
           top: 30px;
@@ -213,10 +236,12 @@
   overflow-y: auto;
   height: 0;
   opacity: 0;
+
   .headerMobileDraweContainer {
     display: flex;
     flex-direction: column;
     height: 100%;
+
     // padding: 0 1.5rem;
     .searchInputMobileContainer {
       position: relative;
@@ -226,6 +251,7 @@
       height: 100%;
       padding: 0.5rem 1.5rem;
       height: 4rem;
+
       input {
         height: 100%;
         width: 100%;
@@ -244,11 +270,13 @@
         pointer-events: none;
       }
     }
+
     .headerMobileButtonsContainer {
       padding: 0.5rem 0;
       display: flex;
       flex-direction: column;
       width: 100%;
+
       .signInButton {
         background-color: #fff;
         color: #69beef;
@@ -258,16 +286,19 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.5rem 2rem;
-        width: 100%;
-        margin-bottom: 1rem;
+        padding: 0.7rem 3rem;
+        max-width: 100%;
+        margin: 0 1.5rem 1rem;
+
         .signInButtonText {
           font-size: 1rem;
           font-weight: bold;
         }
+
         transition: filter 0.2s;
-          &:hover {
-            filter: brightness(0.95);
+
+        &:hover {
+          filter: brightness(0.95);
         }
       }
 
@@ -279,15 +310,19 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.5rem 2rem;
-        width: 100%;
+        padding: 0.7rem 2rem;
+        max-width: 100%;
+        margin: 0 1.5rem;
+
         .signUpButtonText {
           font-size: 1rem;
           font-weight: bold;
         }
+
         transition: filter 0.2s;
-          &:hover {
-            filter: brightness(0.95);
+
+        &:hover {
+          filter: brightness(0.95);
         }
       }
 
@@ -303,9 +338,10 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 0.5rem 2rem;
+          padding: 0.7rem 2rem;
           width: 100%;
           margin-bottom: 1rem;
+
           .postButtonText {
             font-size: 1rem;
             font-weight: bold;
@@ -319,44 +355,91 @@
   .userIconContainer {
     display: flex;
     flex-direction: column;
+
     .userProfileContainer {
       padding: 0 1.5rem;
       display: flex;
       flex-direction: column;
-      margin: 3rem 0;
+      margin: 2rem 0;
       color: #000;
+
       .userProfileIcon {
         margin-bottom: 1rem;
         border-radius: 50%;
         aspect-ratio: 1/1;
         object-fit: fill;
       }
+
       .userNameText {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: bold;
         line-height: 2.5rem;
       }
+
       .userIdText {
-        font-size: 1rem;
+        font-size: 0.9rem;
       }
     }
+
     .moduleDrawerMenuContent {
       display: grid;
       grid-auto-flow: row;
-      gap: 2.5rem;
 
       .moduleDrawerMenuSection {
-        .moduleDrawerMenutext {
-          font-size: 1.5rem;
-          padding: 0.25rem 1.5rem;
-          font-family: "Noto Sans JP", sans-serif;
-          cursor: pointer;
-          display: block;
+        .moduleDrawerMenuLinkContainer {
+          padding: 0.5rem 1.5rem;
           background-color: #fff;
           transition: filter 0.2s;
+
           &:hover {
             filter: brightness(0.95);
           }
+
+          .moduleDrawerMenutext {
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: "Noto Sans JP", sans-serif;
+            cursor: pointer;
+            display: block;
+          }
+        }
+
+        .moduleDrawerMenuLinkAccountSettingsContainer {
+          padding: 1.5rem 1.5rem;
+          background-color: #fff;
+          transition: filter 0.2s;
+
+          &:hover {
+            filter: brightness(0.95);
+          }
+
+          .moduleDrawerMenutext {
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: "Noto Sans JP", sans-serif;
+            cursor: pointer;
+            display: block;
+          }
+
+        }
+
+        .moduleDrawerMenuLinkLogoutContainer {
+          padding: 0.5rem 1.5rem 2rem 1.5rem;
+          background-color: #fff;
+          transition: filter 0.2s;
+
+          &:hover {
+            filter: brightness(0.95);
+          }
+
+          .moduleDrawerMenutext {
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: "Noto Sans JP", sans-serif;
+            cursor: pointer;
+            display: block;
+          }
+
         }
       }
     }
@@ -367,7 +450,7 @@
   width: 100%;
   height: 100vh;
   opacity: 1;
-  z-index: 5;
+  z-index: 30;
   position: fixed;
   padding: 6rem 0;
 }
@@ -375,7 +458,7 @@
 @media screen and (min-width: 1040px) {
   .headerMobileDrawerMenu {
     display: none;
-  }  
+  }
 }
 
 // 1,039px未満（タブレット）
@@ -386,9 +469,11 @@
     justify-content: space-between;
     align-items: center;
   }
+
   .searchInputContainer {
     display: none !important;
   }
+
   .headerButtonsContainer {
     display: none !important;
   }
