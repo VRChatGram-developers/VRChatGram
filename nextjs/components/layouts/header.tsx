@@ -81,6 +81,16 @@ export const Header = () => {
     setOpenMenu(false);
   };
 
+  const handleRedirectToLogin = () => {
+    router.push("/login");
+    setOpenMenu(false);
+  };
+
+  const handleRedirectToSignup = () => {
+    router.push("/signup");
+    setOpenMenu(false);
+  };
+
   return (
     <>
       <header className={styles.headerContainer}>
@@ -116,20 +126,12 @@ export const Header = () => {
             <></>
           ) : status !== "authenticated" ? (
             <>
-              <Link
-                href="/login"
-                // onClick={() => setOpenMenu(false)}
-                className={styles.signInButton}
-              >
+              <button onClick={handleRedirectToLogin} className={styles.signInButton}>
                 <p className={styles.signInButtonText}>ログイン</p>
-              </Link>
-              <Link
-                href="/signup"
-                // onClick={() => setOpenMenu(false)}
-                className={styles.signUpButton}
-              >
+              </button>
+              <button onClick={handleRedirectToSignup} className={styles.signUpButton}>
                 <p className={styles.signUpButtonText}>新規登録</p>
-              </Link>
+              </button>
             </>
           ) : (
             <>
@@ -153,11 +155,7 @@ export const Header = () => {
                   size={24}
                 />
                 {isDropdownOpen && (
-                  <DropdownMenu
-                    isOpen={isDropdownOpen}
-                    setIsOpen={setIsDropdownOpen}
-                    user={user}
-                  />
+                  <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} user={user} />
                 )}
               </div>
             </>
