@@ -40,7 +40,7 @@ export const DropdownMenu = ({ isOpen, setIsOpen, user }: DropdownMenuProps) => 
     "https://i0.wp.com/bussan-b.info/wp-content/uploads/2021/03/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%AC%E3%83%BC%E3%83%88.jpg?resize=1024%2C576&ssl=1";
 
   return (
-    <div className={styles.offcanvas} ref={menuRef}>
+    <div className={styles.offcanvas} ref={menuRef} onMouseLeave={() => setIsOpen(false)}>
       <div className={styles.offcanvas__content}>
         <div
           className={styles.offcanvas__heading}
@@ -82,7 +82,7 @@ export const DropdownMenu = ({ isOpen, setIsOpen, user }: DropdownMenuProps) => 
             </div>
           </div>
           <div className={styles.offcanvas__menu__setting_container}>
-            <div className={styles.offcanvas__item}>
+            <div className={styles.offcanvas__menu__setting_container__item}>
               <Link href={`/users/account-settings`}>アカウント設定</Link>
             </div>
           </div>

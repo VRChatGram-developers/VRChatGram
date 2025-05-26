@@ -32,16 +32,34 @@
     }
 
     &__setting_container {
-      padding-top: 1.5rem;
       font-size: 0.9rem;
       font-weight: bold;
+      height: 100%;
+
+      transition: filter 0.2s;
+    
+      &:hover {
+        filter: brightness(0.95);
+      }
+
+      &__item {
+        a {
+          padding: 2rem 1rem 0.5rem;
+          margin-top: 0.5rem;
+          display: block;
+          color: #333;
+          border-bottom: 1px solid #fff;
+          cursor: pointer;
+          background-color: #fff;
+         
+        }
+      }
     }
   }
 
   &__item {
     a {
-      padding: 0.5rem 1rem;
-      margin-top: 0.5rem;
+      padding: 1rem  1rem 0.5rem;
       display: block;
       color: #333;
       border-bottom: 1px solid #fff;
@@ -56,8 +74,7 @@
   }
 
   &__logout_container {
-    margin-bottom: 3rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem 3.5rem;
     font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;

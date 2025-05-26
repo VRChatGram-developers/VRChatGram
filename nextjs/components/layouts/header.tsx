@@ -147,9 +147,17 @@ export const Header = () => {
                   height={60}
                   className={styles.userProfileIcon}
                 />
-                <RiArrowDownSLine onClick={() => setIsDropdownOpen(!isDropdownOpen)} size={24} />
+                <RiArrowDownSLine
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  onMouseOver={() => setIsDropdownOpen(true)}
+                  size={24}
+                />
                 {isDropdownOpen && (
-                  <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} user={user} />
+                  <DropdownMenu
+                    isOpen={isDropdownOpen}
+                    setIsOpen={setIsDropdownOpen}
+                    user={user}
+                  />
                 )}
               </div>
             </>
@@ -226,50 +234,60 @@ export const Header = () => {
                       className={styles.userProfileIcon}
                     />
                     <p className={styles.userNameText}>{user?.name}</p>
-                    <p className={styles.userIdText}>@{user?.my_id}</p>
+                    <p className={styles.userIdText}>{user?.my_id}</p>
                   </div>
                   <div className={styles.moduleDrawerMenuContent}>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <Link
-                        href={`/users/${user?.my_id}`}
-                        // onClick={() => setOpenMenu(false)}
-                        className={styles.moduleDrawerMenutext}
-                        prefetch={true}
-                      >
-                        ダッシュボード
-                      </Link>
-                      <Link
-                        href="/users/likes"
-                        // onClick={() => setOpenMenu(false)}
-                        className={styles.moduleDrawerMenutext}
-                        prefetch={true}
-                      >
-                        良いね一覧
-                      </Link>
-                      <Link
-                        href="/users/views"
-                        // onClick={() => setOpenMenu(false)}
-                        className={styles.moduleDrawerMenutext}
-                        prefetch={true}
-                      >
-                        閲覧履歴
-                      </Link>
+                      <div className={styles.moduleDrawerMenuLinkContainer}>
+                        <Link
+                          href={`/users/${user?.my_id}`}
+                          // onClick={() => setOpenMenu(false)}
+                          className={styles.moduleDrawerMenutext}
+                          prefetch={true}
+                        >
+                          ダッシュボード
+                        </Link>
+                      </div>
+                      <div className={styles.moduleDrawerMenuLinkContainer}>
+                        <Link
+                          href="/users/likes"
+                          // onClick={() => setOpenMenu(false)}
+                          className={styles.moduleDrawerMenutext}
+                          prefetch={true}
+                        >
+                          良いね一覧
+                        </Link>
+                      </div>
+                      <div className={styles.moduleDrawerMenuLinkContainer}>
+                        <Link
+                          href="/users/views"
+                          // onClick={() => setOpenMenu(false)}
+                          className={styles.moduleDrawerMenutext}
+                          prefetch={true}
+                        >
+                          閲覧履歴
+                        </Link>
+                      </div>
                     </div>
                     <div className={styles.moduleDrawerMenuSection}>
-                      <Link
-                        href="/users/account-settings"
-                        // onClick={() => setOpenMenu(false)}
-                        className={styles.moduleDrawerMenutext}
-                        prefetch={true}
-                      >
-                        アカウント設定
-                      </Link>
+                      <div className={styles.moduleDrawerMenuLinkAccountSettingsContainer}>
+                        <Link
+                          href="/users/account-settings"
+                          // onClick={() => setOpenMenu(false)}
+                          className={styles.moduleDrawerMenutext}
+                          prefetch={true}
+                        >
+                          アカウント設定
+                        </Link>
+                      </div>
                     </div>
                     <div
                       className={styles.moduleDrawerMenuSection}
                       onClick={logOutWithFirebaseAuth}
                     >
-                      <div className={`${styles.moduleDrawerMenutext}`}>ログアウト</div>
+                      <div className={`${styles.moduleDrawerMenuLinkLogoutContainer}`}>
+                        <button className={`${styles.moduleDrawerMenutext}`}>ログアウト</button>
+                      </div>
                     </div>
                   </div>
                 </div>
