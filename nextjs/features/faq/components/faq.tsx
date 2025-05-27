@@ -13,11 +13,8 @@ type Faq = {
   }[];
 };
 
-export const Faq = () => {
-  const totalPages = Math.ceil(faqData.data.length / 10);
-  const [currentPage, setCurrentPage] = useState(0);
+export const Faq = () => {  
   const faqList: Faq[] = JSON.parse(JSON.stringify(faqData.data));
-  console.log(faqList);
 
   return (
     <div className={styles.faqContainer}>
@@ -36,42 +33,6 @@ export const Faq = () => {
             ))}
           </>
         ))}
-      </div>
-
-      <div className={styles.pagination}>
-        <button
-          className={`${styles.paginationButton} ${styles.paginationMoveFirstButton}`}
-          onClick={() => setCurrentPage(0)}
-          disabled={currentPage === 0}
-        >
-          <MdOutlineFirstPage className={styles.paginationButtonIcon} />
-        </button>
-
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i)}
-            className={`
-              ${
-                currentPage === i + 1
-                  ? styles.paginationSelectedButton
-                  : styles.paginationNotSelectButton
-              }
-
-                ${styles.paginationMoveButton}
-                `}
-          >
-            {i + 1}
-          </button>
-        ))}
-
-        <button
-          className={`${styles.paginationButton} ${styles.paginationMoveLastButton}`}
-          onClick={() => setCurrentPage(totalPages - 1)}
-          disabled={currentPage === totalPages - 1}
-        >
-          <MdOutlineLastPage className={styles.paginationButtonIcon} />
-        </button>
       </div>
     </div>
   );
