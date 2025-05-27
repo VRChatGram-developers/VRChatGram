@@ -14,6 +14,12 @@
         display: grid;
         gap: 1.5rem;
 
+        .faqSection {
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: "Noto Sans JP";
+        }
+
         .qa {
             display: grid;
             max-width: 100%;
@@ -39,7 +45,7 @@
             position: absolute;
             left: 1em;
             font-weight: 600;
-            font-size: 1.3em;
+            font-size: 1em;
         }
 
         .qa summary::before {
