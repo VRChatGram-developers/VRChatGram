@@ -287,7 +287,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
             </div>
             <div className={styles.postFormInputContent}>
               <div className={styles.postFormInputContentBorder} {...getRootProps()}>
-                <input {...getInputProps()} hidden />
+                <input {...getInputProps()} hidden ref={fileInputRef} />
                 <div className={styles.postFormLogoContainer}>
                   <img src="/header/vrcss_icon.svg" alt="Logo" className={styles.logo} />
                 </div>
