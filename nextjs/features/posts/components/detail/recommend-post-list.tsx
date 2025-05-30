@@ -2,9 +2,14 @@
 
 import styles from "@/features/posts/styles/recommend-post-list.module.scss";
 import { PostDetail as PostDetailType, RecommendPost } from "@/features/posts/types/index";
-import { PostCard } from "@/features/posts/components/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const PostCard = dynamic(
+  () => import("@/features/posts/components/post-card").then((mod) => mod.PostCard),
+  { ssr: false }
+);
 
 export const RecommendPostList = ({
   post,
