@@ -1,12 +1,17 @@
 "use client";
 
 import { PopularPost } from "../types/index";
-import { PostCard } from "@/features/posts/components/post-card";
 import styles from "../styles/popular-post-list.module.scss";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 
-export const PopularPostList = ({
+const PostCard = dynamic(
+  () => import("@/features/posts/components/post-card").then((mod) => mod.PostCard),
+  { ssr: false }
+);
+
+const PopularPostList = ({
   popularPostList,
 }: {
   popularPostList: PopularPost[];
@@ -69,3 +74,5 @@ export const PopularPostList = ({
     </>
   );
 };
+
+export default PopularPostList;
