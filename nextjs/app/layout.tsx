@@ -21,7 +21,38 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "VRCSS",
   description: "VRCSS",
+  icons: {
+    icon: "/assets/vrcss.svg",
+  },
+  openGraph: {
+    type: "website",
+    title: "VRCSS",
+    description:
+      "VRChatの写真を投稿できる",
+    siteName: "VRCSS",
+    url: "https://www.vrcss.com/",
+    images: {
+      url: "/assets/vrcss.svg",
+      type: "image/svg",
+      width: 1200,
+      height: 630,
+    },
+  },
+  twitter: {
+    card: "summary",
+    title: "VRCSS",
+    description:
+      "VRChatの写真を投稿できる",
+    creator: "@vrcss",
+    images: {
+      url: "/assets/vrcss.svg",
+      type: "image/svg",
+      width: 1200,
+      height: 630,
+    }
+  },
 };
+
 
 export default function RootLayout({
   children,
