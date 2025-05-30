@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { createQueryParams } from "@/utils/queryParams";
 import Link from "next/link";
 
-export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
+const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   const router = useRouter();
   const { setSearchQuery } = useSearchStore();
 
@@ -116,3 +116,5 @@ export const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
     </div>
   );
 };
+
+export default PopularTag;

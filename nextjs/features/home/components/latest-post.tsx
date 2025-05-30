@@ -2,11 +2,15 @@
 
 import styles from "../styles/latest-post.module.scss";
 import { LatestPost as LatestPostType } from "../types/index";
-import { PostCard } from "@/features/posts/components/post-card";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+const PostCard = dynamic(
+  () => import("@/features/posts/components/post-card").then((mod) => mod.PostCard),
+  { ssr: false }
+);
 
-export const LatestPost = ({
+const LatestPost = ({
   latestPostList,
 }: {
   latestPostList: LatestPostType[];
@@ -61,3 +65,5 @@ export const LatestPost = ({
     </>
   );
 };
+
+export default LatestPost;

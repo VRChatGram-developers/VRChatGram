@@ -1,4 +1,3 @@
-import { Main } from "@/features/home/components/main";
 import { fetchHomeFeed, fetchPopularTagListForHome } from "@/features/home/endpoint";
 import {
   PopularPost as PopularPostType,
@@ -8,12 +7,40 @@ import {
 } from "@/features/home/types/index";
 import { auth } from "@/libs/firebase/auth";
 import { createClient } from "microcms-js-sdk";
-import { Suspense } from "react";
 import { ClipLoader } from "react-spinners";
-import { PopularPostList } from "@/features/home/components/popular-post-list";
-import { PopularTag } from "@/features/home/components/popular-tag";
-import { LatestPost } from "@/features/home/components/latest-post";
+import dynamic from "next/dynamic";
 
+const PopularPostList = dynamic(() => import("@/features/home/components/popular-post-list"), {
+  loading: () => (
+    <div className="flex justify-center items-center h-screen">
+      <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+    </div>
+  ),
+});
+
+const LatestPost = dynamic(() => import("@/features/home/components/latest-post"), {
+  loading: () => (
+    <div className="flex justify-center items-center h-screen">
+      <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+    </div>
+  ),
+});
+
+const PopularTag = dynamic(() => import("@/features/home/components/popular-tag"), {
+  loading: () => (
+    <div className="flex justify-center items-center h-screen">
+      <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+    </div>
+  ),
+});
+
+const Main = dynamic(() => import("@/features/home/components/main"), {
+  loading: () => (
+    <div className="flex justify-center items-center h-screen">
+      <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+    </div>
+  ),
+});
 
 export const revalidate = 60;
 
@@ -64,42 +91,10 @@ export default async function Home() {
 
   return (
     <>
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center h-screen">
-            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-          </div>
-        }
-      >
-        <Main notifications={serializedNotifications} />
-      </Suspense>
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center h-screen">
-            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-          </div>
-        }
-      >
-        <PopularPostList popularPostList={popularPostList} />
-      </Suspense>
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center h-screen">
-            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-          </div>
-        }
-      >
-        <PopularTag popularTagList={popularTagList} />
-      </Suspense>
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center h-screen">
-            <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-          </div>
-        }
-      >
-        <LatestPost latestPostList={latestPostList} />
-      </Suspense>
+      <Main notifications={serializedNotifications} />
+      <PopularPostList popularPostList={popularPostList} />
+      <PopularTag popularTagList={popularTagList} />
+      <LatestPost latestPostList={latestPostList} />
     </>
   );
 }

@@ -6,7 +6,7 @@ import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
 import parse from "html-react-parser";
 
-export const Main = ({ notifications }: { notifications: Notification[] }) => {
+const Main = ({ notifications }: { notifications: Notification[] }) => {
   const testNews = [
     {
       imageURL: "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
@@ -256,3 +256,5 @@ export const Main = ({ notifications }: { notifications: Notification[] }) => {
     </>
   );
 };
+
+export default Main;
