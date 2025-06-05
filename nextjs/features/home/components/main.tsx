@@ -52,6 +52,7 @@ const Main = ({ notifications }: { notifications: Notification[] }) => {
                 height={384}
                 className={styles.topNoticeMainImage}
                 priority
+                unoptimized
               />
             )}
           </div>
@@ -94,6 +95,7 @@ const Main = ({ notifications }: { notifications: Notification[] }) => {
                       width={402}
                       height={194}
                       className={styles.mainSecondContainerImage}
+                      unoptimized
                     />
                   </Link>
                 </div>
@@ -105,6 +107,7 @@ const Main = ({ notifications }: { notifications: Notification[] }) => {
                       width={402}
                       height={194}
                       className={styles.mainSecondContainerImage}
+                      unoptimized
                     />
                   </Link>
                 </div>
