@@ -263,6 +263,7 @@ export const UserProfile = ({ user }: { user: User }) => {
                     width={260}
                     height={260}
                     className={styles.profileHeaderUserIcon}
+                    unoptimized
                   />
                 </div>
               </div>
@@ -274,6 +275,7 @@ export const UserProfile = ({ user }: { user: User }) => {
                   width={260}
                   height={260}
                   className={styles.profileHeaderUserIcon}
+                  unoptimized
                 />
               </div>
             )}
