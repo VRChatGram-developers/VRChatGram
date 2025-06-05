@@ -13,7 +13,7 @@ import { PostForm } from "@/features/posts/components/form/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { fetchUserForHeader } from "@/features/users/endpoint";
 import { UserForHeader } from "@/features/users/types";
 import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
@@ -29,6 +29,8 @@ export const Header = () => {
   const { searchQuery, setSearchQuery } = useSearchStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const dropdownMenuIconRef = useRef<HTMLDivElement>(null);
+  const dropdownMenuRef = useRef<HTMLDivElement>(null);
   useCloseMenuOnRouteChange(setOpenMenu);
 
   const menuFunction = (event: React.MouseEvent) => {
@@ -51,31 +53,34 @@ export const Header = () => {
     }
   }, [session]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setOpenMenu(false);
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
       }
-    };
+    },
+    [dropdownMenuRef, setIsDropdownOpen]
+  );
 
-    if (openMenu) {
+  useEffect(() => {
+    if (isDropdownOpen) {
       document.addEventListener("click", handleClickOutside);
     } else {
       document.removeEventListener("click", handleClickOutside);
     }
 
     return () => document.removeEventListener("click", handleClickOutside);
-  }, [openMenu]);
+  }, [isDropdownOpen, setIsDropdownOpen, handleClickOutside]);
 
   const handleSearch = async () => {
     const isTagSearch = searchQuery.includes("#");
     const keyword = isTagSearch ? searchQuery.replace("#", "") : searchQuery;
-  
+
     const query = createQueryParams({
       [isTagSearch ? "tag" : "title"]: keyword,
       page: 1,
     });
-  
+
     setSearchQuery(searchQuery);
     await router.push(`/posts?${query}`);
     setOpenMenu(false);
@@ -148,15 +153,24 @@ export const Header = () => {
                   width={60}
                   height={60}
                   className={styles.userProfileIcon}
+                  unoptimized
+                  priority
                 />
-                <RiArrowDownSLine
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  onMouseOver={() => setIsDropdownOpen(true)}
-                  size={24}
-                />
-                {isDropdownOpen && (
+                <div ref={dropdownMenuIconRef}>
+                  <RiArrowDownSLine
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      setIsDropdownOpen((prev) => !prev);
+                    }}
+                    size={24}
+                  />
+                </div>
+                {/* {isDropdownOpen && ( */}
+                <div ref={dropdownMenuRef}>
                   <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} user={user} />
-                )}
+                </div>
+                {/* )} */}
               </div>
             </>
           )}
@@ -230,6 +244,7 @@ export const Header = () => {
                       width={100}
                       height={100}
                       className={styles.userProfileIcon}
+                      unoptimized
                     />
                     <p className={styles.userNameText}>{user?.name}</p>
                     <p className={styles.userIdText}>{user?.my_id}</p>
@@ -239,7 +254,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkContainer}>
                         <Link
                           href={`/users/${user?.my_id}`}
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >
@@ -249,7 +263,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkContainer}>
                         <Link
                           href="/users/likes"
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >
@@ -259,7 +272,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkContainer}>
                         <Link
                           href="/users/views"
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >
@@ -271,7 +283,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkAccountSettingsContainer}>
                         <Link
                           href="/users/account-settings"
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >

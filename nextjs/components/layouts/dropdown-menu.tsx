@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import styles from "../styles/dropdown-menu.module.scss";
 import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
 import { UserForHeader } from "@/features/users/types";
@@ -13,39 +12,17 @@ type DropdownMenuProps = {
   user: UserForHeader | null;
 };
 
-export const DropdownMenu = ({ isOpen, setIsOpen, user }: DropdownMenuProps) => {
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  // メニュー外をクリックしたら閉じる処理
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, setIsOpen]);
-
+export const DropdownMenu = ({ isOpen, user }: DropdownMenuProps) => {
   // 最初は非表示
   if (!isOpen) return null;
 
-  const BackgeoundImageURL =
-    "https://i0.wp.com/bussan-b.info/wp-content/uploads/2021/03/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%AC%E3%83%BC%E3%83%88.jpg?resize=1024%2C576&ssl=1";
-
   return (
-    <div className={styles.offcanvas} ref={menuRef} onMouseLeave={() => setIsOpen(false)}>
+    <div className={styles.offcanvas}>
       <div className={styles.offcanvas__content}>
         <div
           className={styles.offcanvas__heading}
           style={{
-            backgroundImage: `url(${encodeURI(user?.header_url || BackgeoundImageURL)})`,
+            backgroundImage: `url(${encodeURI(user?.header_url || "")})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
