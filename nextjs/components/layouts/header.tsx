@@ -151,7 +151,6 @@ export const Header = () => {
                 />
                 <RiArrowDownSLine
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  onMouseOver={() => setIsDropdownOpen(true)}
                   size={24}
                 />
                 {isDropdownOpen && (
@@ -230,6 +229,7 @@ export const Header = () => {
                       width={100}
                       height={100}
                       className={styles.userProfileIcon}
+                      unoptimized
                     />
                     <p className={styles.userNameText}>{user?.name}</p>
                     <p className={styles.userIdText}>{user?.my_id}</p>
@@ -239,7 +239,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkContainer}>
                         <Link
                           href={`/users/${user?.my_id}`}
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >
@@ -249,7 +248,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkContainer}>
                         <Link
                           href="/users/likes"
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >
@@ -259,7 +257,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkContainer}>
                         <Link
                           href="/users/views"
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >
@@ -271,7 +268,6 @@ export const Header = () => {
                       <div className={styles.moduleDrawerMenuLinkAccountSettingsContainer}>
                         <Link
                           href="/users/account-settings"
-                          // onClick={() => setOpenMenu(false)}
                           className={styles.moduleDrawerMenutext}
                           prefetch={true}
                         >

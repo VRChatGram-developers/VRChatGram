@@ -144,6 +144,8 @@ export const SearchResult = ({
           className={styles.searchThumbnail}
           width={260}
           height={260}
+          unoptimized
+          priority
         />
         <div className={styles.searchDetailContainer}>
           <p className={styles.searchDetailTitle}>
