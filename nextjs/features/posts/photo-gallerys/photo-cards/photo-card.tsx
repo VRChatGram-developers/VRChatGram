@@ -65,6 +65,8 @@ export const PhotoCard = ({
                 alt="new-post-image"
                 className={styles.userInfoIcon}
                 fill
+                unoptimized
+                priority
               />
             </Link>
             <p className={styles.userInfoName}>

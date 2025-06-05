@@ -58,6 +58,8 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
           width={402}
           height={402}
           className={styles.likesPostsItemImage}
+          unoptimized
+          priority
         />
       </Link>
       {postImageCount > 1 && (
@@ -75,6 +77,7 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
               alt="new-post-image"
               className={styles.userInfoIcon}
               fill
+              unoptimized
             />
             <p className={styles.userInfoName}>
               <Link href={`/users/${myId}`} prefetch={true}>{userName}</Link>
