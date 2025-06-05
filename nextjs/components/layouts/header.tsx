@@ -148,6 +148,8 @@ export const Header = () => {
                   width={60}
                   height={60}
                   className={styles.userProfileIcon}
+                  unoptimized
+                  priority
                 />
                 <RiArrowDownSLine
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
