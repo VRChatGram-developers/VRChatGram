@@ -310,17 +310,17 @@ export const AccountInfoInput = ({
               height={800}
             />
              <div className={styles.registerImagePostInfoContainer}>
-              <p className={styles.registerImagePostInfoContainerTitle}>{topThreePostImages.topThreePostImages[0].title}</p>
+              <p className={styles.registerImagePostInfoContainerTitle}>{topThreePostImages.topThreePostImages[0]?.title || ""}</p>
               <div className={styles.registerImagePostInfoUserContainer}>
                 <Image
-                  src={topThreePostImages.topThreePostImages[0].user.profile_url}
+                  src={topThreePostImages.topThreePostImages[0]?.user?.profile_url || ""}
                   alt="Profile image"
                   width={32}
                   height={32}
                   unoptimized
                   className={styles.registerImagePostInfoUserProfileImage}
                 />
-                <p>{topThreePostImages.topThreePostImages[0].user.name}さんの投稿</p>
+                <p>{topThreePostImages.topThreePostImages[0]?.user?.name || ""}さんの投稿</p>
               </div>
             </div>
           </div>
