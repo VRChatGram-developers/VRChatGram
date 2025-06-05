@@ -109,6 +109,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               width={500}
               height={500}
               className={styles.postMainImage}
+              quality={100}
             />
             {currentIndex !== post.images.length - 1 && (
               <MdOutlineNavigateNext
