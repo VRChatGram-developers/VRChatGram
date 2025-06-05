@@ -141,7 +141,7 @@
             max-width: 7rem;
             max-height: 7rem;
             border-radius: 50%;
-            object-fit: fill;
+            object-fit: cover;
             aspect-ratio: 1/1;
           }
         }
@@ -197,6 +197,8 @@
               padding-bottom: 1rem;
               overflow: hidden;
               transition: max-height 0.5s ease-in-out;
+              white-space: break-spaces;
+
 
               &::after {
                 content: "";
