@@ -6,10 +6,14 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 export async function POST(req: Request) {
   const { fileName, contentType } = await req.json();
 
-  if (!fileName || !contentType) {
-    return new Response(JSON.stringify({ error: "Missing fileName or contentType" }), {
+  if (!fileName) {
+    return new Response(JSON.stringify({ error: "Missing fileName" }), {
       status: 400,
     });
+  }
+
+  if (fileName.includes("webp")) {
+    return new Response(JSON.stringify({ url: "" }), { status: 200 });
   }
 
   const s3 = new S3Client({
