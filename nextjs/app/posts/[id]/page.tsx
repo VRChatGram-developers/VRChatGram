@@ -5,6 +5,43 @@ import {
 } from "@/features/posts/endpoint";
 import { headers } from "next/headers";
 import dynamic from "next/dynamic";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const post = await fetchPostById(id, new Headers(await headers()));
+
+  if (typeof post === "string") {
+    return {
+      title: "投稿が見つかりません",
+      description: "投稿が見つかりません",
+      keywords: [],
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: {
+      title: `${post.title}`,
+      description: post.description,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/posts/${id}`,
+      images: [
+        {
+          url: post.images[0].url,
+          width: 1280,
+          height: 720,
+        },
+      ],
+      locale: "ja_JP",
+      type: "article",
+    },
+  };
+}
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
