@@ -173,3 +173,29 @@ export const updatePost = async <T>(postId: string, post: T) => {
   const data = await response.json();
   return data;
 };
+
+export const fetchOtherPostList = async (postId: string, headers?: Headers) => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}/other-post-list`, {
+    headers: new Headers(headers),
+  });
+
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch other posts";
+  }
+
+  const data = await response.json();
+  return data;
+};
+
+export const fetchRecommendPostList = async (postId: string, headers?: Headers) => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}/recommend-post-list`, {
+    headers: new Headers(headers),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to fetch recommend posts";
+  }
+  const data = await response.json();
+  return data;
+};
