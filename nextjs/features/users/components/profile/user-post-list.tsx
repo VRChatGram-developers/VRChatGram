@@ -1,15 +1,15 @@
 "use client";
 
 import styles from "@/features/users/styles/user-post-list.module.scss";
-import { User, Post } from "@/features/users/types/index";
+import { Post, UserPosts } from "@/features/users/types/index";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { MdOutlineLastPage, MdOutlineFirstPage } from "react-icons/md";
 import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 
-export const UserPostList = ({ user }: { user: User }) => {
+export const UserPostList = ({ userPosts }: { userPosts: UserPosts }) => {
   const { handleLikeOrUnlike } = useLikePost();
-  const totalPages = user.posts.length;
+  const totalPages = userPosts.posts.length;
 
   const [currentPage, setCurrentPage] = useState(0);
   const [currentPosts, setCurrentPosts] = useState<Post[]>([]);
@@ -17,14 +17,14 @@ export const UserPostList = ({ user }: { user: User }) => {
 
   // 投稿データといいね状態を更新
   const updatePostsData = useCallback((page: number) => {
-    const posts = user.posts[page] || [];
+    const posts = userPosts.posts[page] || [];
     setCurrentPosts(posts);
 
     const newLikedPosts = Object.fromEntries(
       posts.map((post) => [post.id.toString(), post.isLiked])
     );
     setLikedPosts(newLikedPosts);
-  }, [user]);
+  }, [userPosts]);
 
   useEffect(() => {
     updatePostsData(currentPage);
@@ -42,10 +42,10 @@ export const UserPostList = ({ user }: { user: User }) => {
       show_sensitive_type: post.show_sensitive_type,
       images: post.images[0],
       user: {
-        id: user.id,
-        name: user.name,
-        my_id: user.my_id,
-        profile_url: user.profile_url,
+        id: userPosts.id,
+        name: userPosts.name,
+        my_id: userPosts.my_id,
+        profile_url: userPosts.profile_url,
       },
       postId: post.id.toString(),
       postName: post.title,
@@ -53,7 +53,7 @@ export const UserPostList = ({ user }: { user: User }) => {
       isLiked: likedPosts[post.id.toString()],
       handleLikeOrUnlike: () => handleLike(post.id.toString()),
     }));
-  }, [currentPosts, likedPosts, user]);
+  }, [currentPosts, likedPosts, userPosts]);
 
   return (
     <div className={styles.userPostsContainer}>

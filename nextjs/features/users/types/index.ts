@@ -6,14 +6,21 @@ export type User = {
   introduction_detail: string;
   profile_url?: string;
   header_url?: string;
+  social_links: SocialLink[];
+  isFollowedByAccount: boolean;
+  isBlocked: boolean;
+};
+
+export type UserPosts = {
+  id: string;
+  name: string;
+  my_id: string;
+  profile_url?: string;
   totalLikes: number;
   totalViews: number;
   posts: Post[][];
   top4Posts: Post[];
   isCurrentUser: boolean;
-  social_links: SocialLink[];
-  isFollowedByAccount: boolean;
-  isBlocked: boolean;
 };
 
 export type Post = {

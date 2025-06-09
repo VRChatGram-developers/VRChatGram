@@ -5,7 +5,7 @@ import { User } from "@/features/users/types/index";
 import { useState } from "react";
 import { PostCard } from "@/features/posts/components/post-card";
 import { SocialLink } from "@/features/users/components/profile/social-link";
-import { SocialLink as SocialLinkType } from "@/features/users/types/index";
+import { SocialLink as SocialLinkType, Post } from "@/features/users/types/index";
 
 export const UserHome = ({
   user,
@@ -16,6 +16,7 @@ export const UserHome = ({
   introductionDetail,
   setIntroductionDetail,
   handleEditSocialLink,
+  top4Posts,
 }: {
   user: User;
   socialLinks: SocialLinkType[];
@@ -25,6 +26,7 @@ export const UserHome = ({
   introductionDetail: string;
   setIntroductionDetail: (introductionDetail: string) => void;
   handleEditSocialLink: (e: React.ChangeEvent<HTMLInputElement>, index: number) => void;
+  top4Posts: Post[];
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
@@ -67,7 +69,7 @@ export const UserHome = ({
       <div className={styles.userPostPopularContainer}>
         <p className={styles.userPostPopularTitle}>人気ポスト</p>
         <div className={styles.userPostPopularListConatiner}>
-          {user.top4Posts.map((post) => (
+          {top4Posts.map((post: Post) => (
             <PostCard
               key={post.id}
               postCardProps={{
