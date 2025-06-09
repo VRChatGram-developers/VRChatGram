@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { updatePost, fetchS3SignedUrl } from "../../endpoint";
-import styles from "@/features/posts/styles/post-form.module.scss";
+import styles from "@/features/posts/styles/post-edit-form.module.scss";
 import { PostDetail, ImageDataForUpdate, Booth } from "../../types";
 import { Id, Slide, toast } from "react-toastify";
 import axios, { AxiosProgressEvent } from "axios";
@@ -145,6 +145,9 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
     for (let index = 0; index < boothItems.length; index++) {
       try {
         new URL(boothItems[index].url);
+        if (!boothItems[index].url.includes("https://booth.pm/")) {
+          throw new Error();
+        }
       } catch (error) {
         const errorMessage = "正しい形式のURLを入力してください";
         const newErrorBoothItems = [...errorBoothItems];
@@ -255,7 +258,6 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
       }, 2000);
 
       router.push(`/posts/${post.id}`);
-
     } catch (error) {
       console.error(error);
       toast.update(toastId, {
@@ -336,7 +338,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="タイトルを入力して下さい"
                 />
-                {errorTitle && <div className={styles.errorTitleMessage}>{errorTitle}</div>}
+                {errorTitle && <div className={styles.errorMessage}>{errorTitle}</div>}
               </div>
 
               <div className={styles.postDetailTagContainer}>
@@ -411,7 +413,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
                           placeholder={`BoothのURLを貼って下さい`}
                         />
                         {errorBoothItems[index] && (
-                          <div className={styles.error_message}>{errorBoothItems[index]}</div>
+                          <div className={styles.errorMessage}>{errorBoothItems[index]}</div>
                         )}
                       </form>
                       <div className={styles.postDetailMaterialFormButtonContainer}>
