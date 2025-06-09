@@ -6,7 +6,7 @@ import { auth } from "@/libs/firebase/auth";
 import { toJson } from "@/utils/json";
 import { Prisma } from "@prisma/client";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const fetchRecommendPostListByTagName = async (tagName: string) => {
   const where: Prisma.postsWhereInput = {};
