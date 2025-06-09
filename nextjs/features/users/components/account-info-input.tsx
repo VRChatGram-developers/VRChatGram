@@ -9,7 +9,10 @@ import { ClipLoader } from "react-spinners";
 import { useSession } from "next-auth/react";
 import { createYears, createMonths, createDays } from "@/utils/date";
 import { checkDuplicateMyId } from "../endpoint";
-import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
+import {
+  TopThreePostImages as TopThreePostImagesTypes,
+  TopThreePostImage as TopThreePostImageType,
+} from "@/features/auth/type";
 import { toast, Slide } from "react-toastify";
 
 export const AccountInfoInput = ({
@@ -21,7 +24,7 @@ export const AccountInfoInput = ({
   email: string;
   password: string;
   setIsSignUp: (isSignUp: boolean) => void;
-  topThreePostImages: TopThreePostImagesType;
+  topThreePostImages: TopThreePostImagesTypes;
 }) => {
   const router = useRouter();
   const sexOptions = [
@@ -43,13 +46,12 @@ export const AccountInfoInput = ({
   const [errorBirthday, setErrorBirthday] = useState("");
   const [errorSex, setErrorSex] = useState("");
   const [errorTerms, setErrorTerms] = useState("");
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [selectedDisplayPost, setSelectedDisplayPost] = useState<TopThreePostImageType | null>(null);
 
   useEffect(() => {
     if (topThreePostImages.topThreePostImages.length === 0) return;
-    const images = topThreePostImages.topThreePostImages.map((post) => post.images);
-    const randomIndex = Math.floor(Math.random() * images.length);
-    setSelectedImageUrl(images[randomIndex].url);
+    const randomIndex = Math.floor(Math.random() * topThreePostImages.topThreePostImages.length);
+    setSelectedDisplayPost(topThreePostImages.topThreePostImages[randomIndex]);
   }, [topThreePostImages]);
 
   const { status } = useSession();
@@ -303,24 +305,24 @@ export const AccountInfoInput = ({
           </div>
           <div className={styles.registerImageContainer}>
             <Image
-              src={selectedImageUrl || ""}
+              src={selectedDisplayPost?.images.url || "/default-login-image.jpg"}
               alt="Login page image"
               className="object-cover w-full h-full"
               width={864}
               height={800}
             />
              <div className={styles.registerImagePostInfoContainer}>
-              <p className={styles.registerImagePostInfoContainerTitle}>{topThreePostImages.topThreePostImages[0]?.title || ""}</p>
+              <p className={styles.registerImagePostInfoContainerTitle}>{selectedDisplayPost?.title || ""}</p>
               <div className={styles.registerImagePostInfoUserContainer}>
                 <Image
-                  src={topThreePostImages.topThreePostImages[0]?.user?.profile_url || ""}
+                  src={selectedDisplayPost?.user?.profile_url || "user-icon.png"}
                   alt="Profile image"
                   width={32}
                   height={32}
                   unoptimized
                   className={styles.registerImagePostInfoUserProfileImage}
                 />
-                <p>{topThreePostImages.topThreePostImages[0]?.user?.name || ""}さんの投稿</p>
+                <p>{selectedDisplayPost?.user?.name || ""}さんの投稿</p>
               </div>
             </div>
           </div>

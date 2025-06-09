@@ -13,13 +13,12 @@ import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { checkDeletedUser } from "@/features/users/endpoint";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
-import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
+import {
+  TopThreePostImages as TopThreePostImagesTypes,
+  TopThreePostImage as TopThreePostImageType,
+} from "@/features/auth/type";
 
-export const LoginForm = ({
-  topThreePostImages,
-}: {
-  topThreePostImages: TopThreePostImagesType;
-}) => {
+export const LoginForm = ({ topThreePostImages }: { topThreePostImages: TopThreePostImagesTypes }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMail, setErrorMail] = useState("");
@@ -29,13 +28,14 @@ export const LoginForm = ({
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
-  
+  const [selectedDisplayPost, setSelectedDisplayPost] = useState<TopThreePostImageType | null>(
+    null
+  );
+
   useEffect(() => {
     if (topThreePostImages.topThreePostImages.length === 0) return;
-    const images = topThreePostImages.topThreePostImages.map((post) => post.images);
-    const randomIndex = Math.floor(Math.random() * images.length);
-    setSelectedImageUrl(images[randomIndex].url);
+    const randomIndex = Math.floor(Math.random() * topThreePostImages.topThreePostImages.length);
+    setSelectedDisplayPost(topThreePostImages.topThreePostImages[randomIndex]);
   }, [topThreePostImages]);
 
   const mailValidation = () => {
@@ -129,24 +129,26 @@ export const LoginForm = ({
         <div className={styles.loginContainer}>
           <div className={styles.loginImageContainer}>
             <Image
-              src={selectedImageUrl || ""}
-              alt="Login image"
+              src={selectedDisplayPost?.images.url || "/default-login-image.jpg"}
+              alt="Login image" 
               className="object-cover w-full h-full"
               width={864}
               height={800}
             />
             <div className={styles.loginImagePostInfoContainer}>
-              <p className={styles.loginImagePostInfoContainerTitle}>{topThreePostImages.topThreePostImages[0]?.title || ""}</p>
+              <p className={styles.loginImagePostInfoContainerTitle}>
+                {selectedDisplayPost?.title || ""}
+              </p>
               <div className={styles.loginImagePostInfoUserContainer}>
                 <Image
-                  src={topThreePostImages.topThreePostImages[0]?.user?.profile_url || ""}
+                  src={selectedDisplayPost?.user?.profile_url || "user-icon.png"}
                   alt="Profile image"
                   width={32}
                   height={32}
                   unoptimized
                   className={styles.loginImagePostInfoUserProfileImage}
                 />
-                <p>{topThreePostImages.topThreePostImages[0]?.user?.name || ""}さんの投稿</p>
+                <p>{selectedDisplayPost?.user?.name || ""}さんの投稿</p>
               </div>
             </div>
           </div>
