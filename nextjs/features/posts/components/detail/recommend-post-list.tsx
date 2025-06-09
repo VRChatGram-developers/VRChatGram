@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "@/features/posts/styles/recommend-post-list.module.scss";
-import { PostDetail as PostDetailType, RecommendPost } from "@/features/posts/types/index";
+import { RecommendPost } from "@/features/posts/types/index";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState } from "react";
 import dynamic from "next/dynamic";
@@ -12,18 +12,17 @@ const PostCard = dynamic(
 );
 
 export const RecommendPostList = ({
-  post,
+  initialRecommendPostList,
   setIsLiked,
 }: {
-  post: PostDetailType;
+  initialRecommendPostList: RecommendPost[];
   setIsLiked: (isLiked: boolean) => void;
 }) => {
   const { handleLikeOrUnlike } = useLikePost();
-  const [recommendPostList, setRecommendPostList] = useState<RecommendPost[]>(
-    post.recommendPostList
-  );
+  const [recommendPostList, setRecommendPostList] =
+    useState<RecommendPost[]>(initialRecommendPostList);
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
-    Object.fromEntries(post.recommendPostList.map((post) => [post.id, post.is_liked]))
+    Object.fromEntries(recommendPostList.map((post) => [post.id, post.is_liked]))
   );
 
   const handleLike = async (postId: string) => {

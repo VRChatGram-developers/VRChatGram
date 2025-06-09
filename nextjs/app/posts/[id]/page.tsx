@@ -1,23 +1,31 @@
-import { PostDetail } from "@/features/posts/components";
-import { fetchPostById } from "@/features/posts/endpoint";
+import {
+  fetchPostById,
+  fetchOtherPostList,
+  fetchRecommendPostList,
+} from "@/features/posts/endpoint";
 import { headers } from "next/headers";
-import { Suspense } from "react";
-import { ClipLoader } from "react-spinners";
+import dynamic from "next/dynamic";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  // await addViewCountToPost(id, new Headers(await headers()));
-  const post = await fetchPostById(id, new Headers(await headers()));
-  if (typeof post === "string") {
-    return <div>{post}</div>;
+
+  const PostDetail = dynamic(() =>
+    import("@/features/posts/components/detail/post-detail").then((mod) => mod.PostDetail)
+  );
+
+  const [post, { otherPostList }, { recommendPostList }] = await Promise.all([
+    fetchPostById(id, new Headers(await headers())),
+    fetchOtherPostList(id, new Headers(await headers())),
+    fetchRecommendPostList(id, new Headers(await headers())),
+  ]);
+  if (
+    typeof post === "string" ||
+    typeof otherPostList === "string" ||
+    typeof recommendPostList === "string"
+  ) {
+    return <div>{post || otherPostList || recommendPostList}</div>;
   }
   return (
-    <Suspense fallback={
-      <div className="flex justify-center items-center h-screen">
-        <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
-      </div>
-    }>
-      <PostDetail post={post} />
-    </Suspense>
+    <PostDetail post={post} otherPostList={otherPostList} recommendPostList={recommendPostList} />
   );
 }

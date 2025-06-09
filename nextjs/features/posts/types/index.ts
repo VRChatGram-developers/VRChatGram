@@ -16,19 +16,7 @@ export type PostList = {
 };
 
 export type UserOtherPost = {
-  id: string;
-  title: string;
-  images: Image[];
-  is_liked: boolean;
-  user: User;
-};
-
-export type RecommendPost = {
-  id: string;
-  title: string;
-  images: Image[];
-  is_liked: boolean;
-  user: User;
+  otherPostList: OtherPost[];
 };
 
 export type Image = {
@@ -49,10 +37,26 @@ export type PostDetail = {
   user: User;
   likeCount: number;
   view_count: number;
-  otherPostList: UserOtherPost[];
+  otherPostList: OtherPost[];
   recommendPostList: RecommendPost[];
   isLiked: boolean;
   isMyPost: boolean;
+};
+
+export type OtherPost = {
+  id: string;
+  title: string;
+  images: Image[];
+  is_liked: boolean;
+  user: User;
+};
+
+export type RecommendPost = {
+  id: string;
+  title: string;
+  images: Image[];
+  is_liked: boolean;
+  user: User;
 };
 
 export type BoothItem = {

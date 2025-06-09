@@ -5,15 +5,17 @@ import { FaRegEye } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa6";
 import Image from "next/image";
-import { PostDetail as PostDetailType } from "@/features/posts/types/index";
+import {
+  PostDetail as PostDetailType,
+  OtherPost,
+  RecommendPost,
+} from "@/features/posts/types/index";
 import { useState, useEffect, useRef } from "react";
-import { OtherPostList } from "./other-post-list";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
 import { GrPersonalComputer } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import useLikePost from "../../hooks/use-like-post";
-import { RecommendPostList } from "./recommend-post-list";
 import { useSession } from "next-auth/react";
 import { LoginFormModal } from "@/features/auth/components/login-form-modal";
 import { useModal } from "@/provider/modal-provider";
@@ -22,8 +24,30 @@ import { createQueryParams } from "@/utils/queryParams";
 import { addViewCountToPost } from "../../endpoint";
 import { BsThreeDots } from "react-icons/bs";
 import { PostEditForm } from "../form/post-edit-form";
+import dynamic from "next/dynamic";
 
-export const PostDetail = ({ post }: { post: PostDetailType }) => {
+const OtherPostList = dynamic(
+  () =>
+    import("@/features/posts/components/detail/other-post-list").then((mod) => mod.OtherPostList),
+  { ssr: false }
+);
+const RecommendPostList = dynamic(
+  () =>
+    import("@/features/posts/components/detail/recommend-post-list").then(
+      (mod) => mod.RecommendPostList
+    ),
+  { ssr: false }
+);
+
+export const PostDetail = ({
+  post,
+  otherPostList,
+  recommendPostList,
+}: {
+  post: PostDetailType;
+  otherPostList: OtherPost[];
+  recommendPostList: RecommendPost[];
+}) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -343,8 +367,12 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
         </div>
       </div>
 
-      <OtherPostList post={post} setIsLiked={setIsLiked} />
-      <RecommendPostList post={post} setIsLiked={setIsLiked} />
+      <OtherPostList
+        userOtherPostList={otherPostList}
+        setIsLiked={setIsLiked}
+        userName={post.user.name}
+      />
+      <RecommendPostList initialRecommendPostList={recommendPostList} setIsLiked={setIsLiked} />
     </>
   );
 };

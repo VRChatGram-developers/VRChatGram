@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "@/features/posts/styles/other-post-list.module.scss";
-import { PostDetail as PostDetailType, UserOtherPost } from "@/features/posts/types/index";
+import { OtherPost } from "@/features/posts/types/index";
 import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useState } from "react";
 import dynamic from "next/dynamic";
@@ -12,16 +12,18 @@ const PostCard = dynamic(
 );
 
 export const OtherPostList = ({
-  post,
+  userOtherPostList,
   setIsLiked,
+  userName,
 }: {
-  post: PostDetailType;
+  userOtherPostList: OtherPost[];
   setIsLiked: (isLiked: boolean) => void;
+  userName: string;
 }) => {
   const { handleLikeOrUnlike } = useLikePost();
-  const [otherPostList, setOtherPostList] = useState<UserOtherPost[]>(post.otherPostList);
+  const [otherPostList, setOtherPostList] = useState<OtherPost[]>(userOtherPostList || []);
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
-    Object.fromEntries(post.otherPostList.map((post) => [post.id, post.is_liked]))
+    Object.fromEntries(userOtherPostList.map((post: OtherPost) => [post.id, post.is_liked]))
   );
 
   const handleLike = async (postId: string) => {
@@ -41,7 +43,7 @@ export const OtherPostList = ({
 
   return (
     <div className={styles.otherPostsContainer}>
-      <p className={styles.otherPostsTitle}>「{post.user?.name}」他の投稿</p>
+      <p className={styles.otherPostsTitle}>「{userName}」他の投稿</p>
       <div className={styles.otherPostsListContainer}>
         {otherPostList.map((post) => (
           <PostCard
