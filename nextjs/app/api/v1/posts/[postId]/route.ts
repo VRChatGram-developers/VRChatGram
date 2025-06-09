@@ -8,6 +8,13 @@ import { Prisma } from "@prisma/client";
 
 export const runtime = "edge";
 
+type Image = {
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+};
+
 const fetchRecommendPostListByTagName = async (tagName: string) => {
   const where: Prisma.postsWhereInput = {};
   if (tagName) {
@@ -268,13 +275,16 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
         title: title,
         description: description,
         images: {
-          upsert: images.map(
-            (image: { id: string; url: string; width: number; height: number }) => ({
-              where: { id: image.id },
-              update: { url: image.url },
-              create: { url: image.url, width: image.width, height: image.height },
-            })
-          ),
+          deleteMany: {
+            id: {
+              notIn: images.map((image: Image) => image.id),
+            },
+          },
+          upsert: images.map((image: Image) => ({
+            where: { id: image.id },
+            update: { url: image.url },
+            create: { url: image.url, width: image.width, height: image.height },
+          })),
         },
         show_sensitive_type: show_sensitive_type,
         user_id: user.id,
@@ -292,6 +302,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
 
     return NextResponse.json({ status: 200, message: "投稿に成功しました" });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "投稿に失敗しました" }, { status: 500 });
   }
 }
