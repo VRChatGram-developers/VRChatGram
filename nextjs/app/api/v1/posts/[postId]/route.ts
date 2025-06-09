@@ -126,6 +126,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
         title: true,
         view_count: true,
         description: true,
+        show_sensitive_type: true,
         images: true,
         tags: {
           select: {
@@ -258,6 +259,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
               title: item.name,
               detail: item.detail,
               url: item.url,
+              image: item.image,
             },
             create: {
               title: item.name,

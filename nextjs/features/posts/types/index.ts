@@ -42,6 +42,7 @@ export type PostDetail = {
   id: bigint;
   title: string;
   description: string;
+  show_sensitive_type: string;
   images: Image[];
   tags: Tag[];
   booth_items: BoothItem[];
@@ -64,7 +65,7 @@ export type Booth = {
   id: string;
   title: string;
   detail: string;
-  image: Image | null;
+  image: string;
   url: string;
 };
 
