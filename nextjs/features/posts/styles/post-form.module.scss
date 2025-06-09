@@ -85,23 +85,20 @@
     .postContainer {
       max-height: 90vh;
       display: flex;
-      // grid-template-rows: 5rem auto 5rem;
       flex-direction: column;
 
       .postDetailContainer {
         display: grid;
 
-        // height: 40rem;
         // height: 40rem; // 固定またはmax-heightでもOK
         overflow: hidden;
         overflow-y: scroll;
 
         .postDetailContent {
-          
           flex: 1;
-          // height: 40rem;
           border-right: 2px solid;
           padding: 1rem 2rem;
+          overflow-y: auto;
           .postDetailTitleContainer {
             margin-bottom: 1.5rem;
             font-size: 1em;
@@ -114,11 +111,6 @@
               border-radius: 3px;
               line-height: 1.5;
               background-color: #f2f8f8;
-            }
-
-            .errorTitleMessage {
-              padding-top: 0.5rem;
-              color: red;
             }
           }
           .postDetailTagContainer {
@@ -443,6 +435,9 @@
   }
 }
 
-.error_message {
+.errorMessage {
+  padding-top: 0.5rem;
   color: red;
+  font-size: 1em;
+  font-weight: bold;
 }

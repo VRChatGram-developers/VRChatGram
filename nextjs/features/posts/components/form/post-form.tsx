@@ -138,6 +138,9 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     for (let index = 0; index < boothItems.length; index++) {
       try {
         new URL(boothItems[index]);
+        if (!boothItems[index].includes("https://booth.pm/")) {
+          throw new Error();
+        }
       } catch (error) {
         const errorMessage = "正しい形式のURLを入力してください";
         const newErrorBoothItems = [...errorBoothItems];
@@ -346,7 +349,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="タイトルを入力して下さい"
                       />
-                      {errorTitle && <div className={styles.errorTitleMessage}>{errorTitle}</div>}
+                      {errorTitle && <div className={styles.errorMessage}>{errorTitle}</div>}
                     </div>
 
                     <div className={styles.postDetailTagContainer}>
@@ -421,7 +424,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                                 placeholder={`BoothのURLを貼って下さい`}
                               />
                               {errorBoothItems[index] && (
-                                <div className={styles.error_message}>{errorBoothItems[index]}</div>
+                                <div className={styles.errorMessage}>{errorBoothItems[index]}</div>
                               )}
                             </form>
                             <div className={styles.postDetailMaterialFormButtonContainer}>
