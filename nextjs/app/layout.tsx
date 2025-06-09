@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     type: "website",
     title: "VRCSS",
     description:
-      "VRChatの写真を投稿できる",
+      "VRChatに特化したソーシャルメディアプラットフォーム",
     siteName: "VRCSS",
-    url: "https://www.vrcss.com/",
+    url: process.env.NEXT_PUBLIC_APP_URL,
     images: {
       url: "/assets/vrcss.svg",
       type: "image/svg",
