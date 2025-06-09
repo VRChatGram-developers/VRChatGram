@@ -77,7 +77,7 @@ export const UserPostList = ({ user }: { user: User }) => {
             key={i}
             onClick={() => setCurrentPage(i)}
             className={`
-              ${currentPage === i + 1
+              ${currentPage === i
                 ? styles.paginationSelectedButton
                 : styles.paginationNotSelectButton}
 
