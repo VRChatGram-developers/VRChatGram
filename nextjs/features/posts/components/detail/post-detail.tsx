@@ -35,11 +35,11 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: _, status } = useSession();
   const { setSearchQuery } = useSearchStore();
-  const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
+  const [isDropdownEditMenuOpen, setIsDropdownEditMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleDropdownMenuOpen = () => {
-    setIsDropdownMenuOpen(!isDropdownMenuOpen);
+    setIsDropdownEditMenuOpen(!isDropdownEditMenuOpen);
   };
 
   useEffect(() => {
@@ -57,6 +57,22 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
       setIsOverflowing(textRef.current.scrollHeight > 344); // 21.5rem = 344px
     }
   }, [post.description]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsDropdownEditMenuOpen(false);
+      }
+    };
+
+    if (isDropdownEditMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isDropdownEditMenuOpen, setIsDropdownEditMenuOpen]);
 
   const [selectedImage, setSelectedImage] = useState(post.images[0].url);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -204,7 +220,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               </div>
               <div className={styles.postDetailDropdownMenuContainer}>
                 <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
-                {isDropdownMenuOpen && (
+                {isDropdownEditMenuOpen && (
                   <div ref={menuRef} className={styles.menuContainer}>
                     <div
                       className={styles.menuItem}
@@ -301,7 +317,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                     }}
                   >
                     <Image
-                      src={boothItem.booth.url || "/user-icon.png"}
+                      src={boothItem.booth.image || "/user-icon.png"}
                       alt="avatar"
                       width={200}
                       height={200}

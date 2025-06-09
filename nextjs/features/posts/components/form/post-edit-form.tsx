@@ -12,7 +12,9 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
   const [title, setTitle] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
-  const [selectedAgeRestriction, setSelectedAgeRestriction] = useState<string>("all");
+  const [selectedAgeRestriction, setSelectedAgeRestriction] = useState<string>(
+    post.show_sensitive_type.toString() || "all"
+  );
   const [description, setDescription] = useState<string>("");
   const [boothItems, setBoothItems] = useState<Booth[]>([]);
   const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
@@ -185,7 +187,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
         title: "",
         detail: "",
         url: "",
-        image: null,
+        image: "",
       },
     ]);
   };
