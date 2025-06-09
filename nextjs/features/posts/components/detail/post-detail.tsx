@@ -20,6 +20,8 @@ import { useModal } from "@/provider/modal-provider";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";
 import { addViewCountToPost } from "../../endpoint";
+import { BsThreeDots } from "react-icons/bs";
+import { PostEditForm } from "../form/post-edit-form";
 
 export const PostDetail = ({ post }: { post: PostDetailType }) => {
   const textRef = useRef<HTMLParagraphElement | null>(null);
@@ -33,6 +35,12 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: _, status } = useSession();
   const { setSearchQuery } = useSearchStore();
+  const [isDropdownEditMenuOpen, setIsDropdownEditMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const handleDropdownMenuOpen = () => {
+    setIsDropdownEditMenuOpen(!isDropdownEditMenuOpen);
+  };
 
   useEffect(() => {
     addViewCountToPost(post.id.toString());
@@ -49,6 +57,22 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
       setIsOverflowing(textRef.current.scrollHeight > 344); // 21.5rem = 344px
     }
   }, [post.description]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsDropdownEditMenuOpen(false);
+      }
+    };
+
+    if (isDropdownEditMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isDropdownEditMenuOpen, setIsDropdownEditMenuOpen]);
 
   const [selectedImage, setSelectedImage] = useState(post.images[0].url);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -108,6 +132,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
               alt="avatar"
               width={500}
               height={500}
+              quality={100}
               className={styles.postMainImage}
               unoptimized
             />
@@ -193,6 +218,21 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                 )}
                 <p className={styles.postDetailInfomationLikeCount}>{likeCount}</p>
               </div>
+              <div className={styles.postDetailDropdownMenuContainer}>
+                <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
+                {isDropdownEditMenuOpen && (
+                  <div ref={menuRef} className={styles.menuContainer}>
+                    <div
+                      className={styles.menuItem}
+                      onClick={() => {
+                        openModal(<PostEditForm onClose={closeModal} post={post} />);
+                      }}
+                    >
+                      編集する
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div className={styles.postDetailProfileContainer}>
               <div className={styles.postDetailProfileIconContainer}>
@@ -277,11 +317,12 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                     }}
                   >
                     <Image
-                      src={boothItem.booth.image.toString()}
+                      src={boothItem.booth.image || "/user-icon.png"}
                       alt="avatar"
                       width={200}
                       height={200}
                       className={styles.postDetailProfileBoothImage}
+                      unoptimized
                     />
                     <div className={styles.postDetailProfileBoothInfomationContainer}>
                       <p className={styles.postDetailProfileBoothInfomationTitle}>

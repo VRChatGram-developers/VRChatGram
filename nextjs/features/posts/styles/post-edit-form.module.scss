@@ -94,20 +94,24 @@
     .postContainer {
       max-height: 90vh;
       display: flex;
+      // grid-template-rows: 5rem auto 5rem;
       flex-direction: column;
 
       .postDetailContainer {
         display: grid;
 
+        // height: 40rem;
         // height: 40rem; // 固定またはmax-heightでもOK
         overflow: hidden;
         overflow-y: scroll;
 
         .postDetailContent {
+          
           flex: 1;
+          // height: 40rem;
           border-right: 2px solid;
           padding: 1rem 2rem;
-          overflow-y: auto;
+          // overflow-y: auto;
           .postDetailTitleContainer {
             margin-bottom: 1.5rem;
             font-size: 1em;
@@ -373,6 +377,11 @@
           font-size: 1rem;
           font-weight: bold;
         }
+        &:disabled {
+          background-color: #ccc;
+          color: #666;
+          cursor: not-allowed;
+        }
 
         &:hover {
           filter: brightness(0.95);
@@ -396,6 +405,9 @@
   .postDetailContainer {
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
+    .postDetailContent {
+      overflow-y: auto;
+    }
   }
 }
 
