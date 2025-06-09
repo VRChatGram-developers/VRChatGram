@@ -148,11 +148,6 @@ export const PostDetail = ({
     router.push(`/posts?${createQueryParams({ tag: tagName, page: 1 })}`);
   };
 
-  const zoomPostImage = () => {
-    setIsZoomed(true);
-    openModal(<ZoomPostImage imageUrl={selectedImage} onClose={() => setIsZoomed(false)} />);
-  };
-
   return (
     <>
       {isZoomed && <ZoomPostImage imageUrl={selectedImage} onClose={() => setIsZoomed(false)} />}

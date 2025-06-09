@@ -19,6 +19,10 @@
         height: 100%;
         object-fit: contain;
         border-radius: 0.5rem;
+
+        &:hover {
+          cursor: zoom-in;
+        }
       }
       .navigateNextStyle {
         position: absolute;
