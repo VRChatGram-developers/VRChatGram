@@ -7,21 +7,25 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
-import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
+import {
+  TopThreePostImages as TopThreePostImagesTypes,
+  TopThreePostImage as TopThreePostImageType,
+} from "@/features/auth/type";
 
 export const ResetPassword = ({
   topThreePostImages,
 }: {
-  topThreePostImages: TopThreePostImagesType;
+  topThreePostImages: TopThreePostImagesTypes;
 }) => {
   const [isSendPasswordResetEmail, setIsSendPasswordResetEmail] = useState<boolean>(false);
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [selectedDisplayPost, setSelectedDisplayPost] = useState<TopThreePostImageType | null>(
+    null
+  );
 
   useEffect(() => {
     if (topThreePostImages.topThreePostImages.length === 0) return;
-    const images = topThreePostImages.topThreePostImages.map((post) => post.images);
-    const randomIndex = Math.floor(Math.random() * images.length);
-    setSelectedImageUrl(images[randomIndex].url);
+    const randomIndex = Math.floor(Math.random() * topThreePostImages.topThreePostImages.length);
+    setSelectedDisplayPost(topThreePostImages.topThreePostImages[randomIndex]);
   }, [topThreePostImages]);
   const router = useRouter();
 
@@ -122,7 +126,7 @@ export const ResetPassword = ({
         </div>
         <div className={styles.resetPasswordImageContainer}>
           <Image
-            src={selectedImageUrl || ""}
+            src={selectedDisplayPost?.images.url || "/default-login-image.jpg"}
             alt="Login page image"
             className="object-cover w-full h-full"
             width={864}
@@ -130,18 +134,18 @@ export const ResetPassword = ({
           />
           <div className={styles.resetPasswordPostInfoContainer}>
             <p className={styles.resetPasswordPostInfoContainerTitle}>
-              {topThreePostImages.topThreePostImages[0]?.title || ""}
+              {selectedDisplayPost?.title || ""}
             </p>
             <div className={styles.resetPasswordPostInfoUserContainer}>
               <Image
-                src={topThreePostImages.topThreePostImages[0]?.user?.profile_url || ""}
+                src={selectedDisplayPost?.user?.profile_url || "user-icon.png"}
                 alt="Profile image"
                 width={32}
                 height={32}
                 unoptimized
                 className={styles.resetPasswordPostInfoUserProfileImage}
               />
-              <p>{topThreePostImages.topThreePostImages[0]?.user?.name || ""}さんの投稿</p>
+              <p>{selectedDisplayPost?.user?.name || ""}さんの投稿</p>
             </div>
           </div>
         </div>
