@@ -6,7 +6,10 @@ import { useState, useEffect } from "react";
 import styles from "@/features/auth/styles/sign-up-form.module.scss";
 import { checkEmail } from "@/features/users/endpoint";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
-import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
+import {
+  TopThreePostImages as TopThreePostImagesTypes,
+  TopThreePostImage as TopThreePostImageType,
+} from "@/features/auth/type";
 
 export const SignUpForm = ({
   email,
@@ -21,18 +24,17 @@ export const SignUpForm = ({
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   setIsSignUp: (isSignUp: boolean) => void;
-  topThreePostImages: TopThreePostImagesType;
+  topThreePostImages: TopThreePostImagesTypes;
 }) => {
   const [errorMail, setErrorMail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const [selectedDisplayPost, setSelectedDisplayPost] = useState<TopThreePostImageType | null>(null);
 
   useEffect(() => {
     if (topThreePostImages.topThreePostImages.length === 0) return;
-    const images = topThreePostImages.topThreePostImages.map((post) => post.images);
-    const randomIndex = Math.floor(Math.random() * images.length);
-    setSelectedImageUrl(images[randomIndex].url);
+    const randomIndex = Math.floor(Math.random() * topThreePostImages.topThreePostImages.length);
+    setSelectedDisplayPost(topThreePostImages.topThreePostImages[randomIndex]);
   }, [topThreePostImages]);
 
   const mailValidation = () => {
@@ -221,7 +223,7 @@ export const SignUpForm = ({
       </div>
       <div className={styles.registerImageContainer}>
         <Image
-          src={selectedImageUrl || ""}
+          src={selectedDisplayPost?.images.url || "/default-login-image.jpg"}
           alt="Signup image"
           className="object-cover w-full h-full"
           width={864}
@@ -229,18 +231,18 @@ export const SignUpForm = ({
         />
         <div className={styles.registerImagePostInfoContainer}>
           <p className={styles.registerImagePostInfoContainerTitle}>
-            {topThreePostImages.topThreePostImages[0]?.title || ""}
+            {selectedDisplayPost?.title || ""}
           </p>
           <div className={styles.registerImagePostInfoUserContainer}>
             <Image
-              src={topThreePostImages.topThreePostImages[0]?.user?.profile_url || ""}
+              src={selectedDisplayPost?.user?.profile_url || "user-icon.png"}
               alt="Profile image"
               width={32}
               height={32}
               unoptimized
               className={styles.registerImagePostInfoUserProfileImage}
             />
-            <p>{topThreePostImages.topThreePostImages[0]?.user?.name || ""}さんの投稿</p>
+            <p>{selectedDisplayPost?.user?.name || ""}さんの投稿</p>
           </div>
         </div>
       </div>
