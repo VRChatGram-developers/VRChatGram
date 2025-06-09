@@ -139,37 +139,15 @@ export const fetchS3SignedUrl = async ({
   return data;
 };
 
-export const updatePost = async <T>(postId: string, post: T) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const { boothItems, ...rest } = post;
-  const boothItemsResponse = await Promise.all(
-    boothItems.map(async (link: { id: string; url: string; title: string; detail: string }) => {
-      if (link.url.includes("https://")) {
-        const response = await fetch(`${API_URL}/api/v1/booth?url=${link.url}.json`);
-        if (response.ok) {
-          const data = await response.json();
-          const { description, name, images } = await data;
-          return {
-            id: link.id,
-            detail: description,
-            name: name,
-            image: images[0].original,
-            url: link.url,
-          };
-        }
-      }
-    })
-  );
-  console.log(boothItemsResponse);
-  const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
-    method: "PATCH",
-    body: JSON.stringify({ ...rest, boothItems: boothItemsResponse }),
+export const convertToWebp = async (file: File, width: number): Promise<Blob> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("width", width.toString());
+
+  const res = await fetch(`${API_URL}/api/v1/s3/webp`, {
+    method: "POST",
+    body: formData,
   });
-  if (!response.ok) {
-    console.error(response);
-    return "Failed to update post";
-  }
-  const data = await response.json();
+  const data = await res.blob();
   return data;
 };
