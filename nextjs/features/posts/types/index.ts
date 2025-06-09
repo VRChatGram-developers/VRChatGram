@@ -42,6 +42,7 @@ export type PostDetail = {
   id: bigint;
   title: string;
   description: string;
+  show_sensitive_type: string;
   images: Image[];
   tags: Tag[];
   booth_items: BoothItem[];
@@ -51,6 +52,7 @@ export type PostDetail = {
   otherPostList: UserOtherPost[];
   recommendPostList: RecommendPost[];
   isLiked: boolean;
+  isMyPost: boolean;
 };
 
 export type BoothItem = {
@@ -61,10 +63,17 @@ export type BoothItem = {
 };
 
 export type Booth = {
-  id: bigint;
+  id: string;
   title: string;
   detail: string;
-  image: Image;
+  image: string;
+  url: string;
+};
+
+export type BoothForUpdate = {
+  id: string;
+  title: string;
+  detail: string;
   url: string;
 };
 
@@ -89,6 +98,15 @@ export type Tag = {
 };
 
 export type ImageData = {
+  file: File;
+  file_data: string;
+  file_name: string;
+  width: number;
+  height: number;
+};
+
+export type ImageDataForUpdate = {
+  id: string;
   file: File;
   file_data: string;
   file_name: string;
