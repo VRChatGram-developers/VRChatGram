@@ -163,6 +163,7 @@ export const Header = () => {
 
                       setIsDropdownOpen((prev) => !prev);
                     }}
+                    className={styles.dropdownMenuIcon}
                     size={24}
                   />
                 </div>

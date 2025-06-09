@@ -25,6 +25,7 @@ import { addViewCountToPost } from "../../endpoint";
 import { BsThreeDots } from "react-icons/bs";
 import { PostEditForm } from "../form/post-edit-form";
 import dynamic from "next/dynamic";
+import { ZoomPostImage } from "../zoom-post-image";
 
 const OtherPostList = dynamic(
   () =>
@@ -60,6 +61,7 @@ export const PostDetail = ({
   const { data: _, status } = useSession();
   const { setSearchQuery } = useSearchStore();
   const [isDropdownEditMenuOpen, setIsDropdownEditMenuOpen] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleDropdownMenuOpen = () => {
@@ -148,6 +150,7 @@ export const PostDetail = ({
 
   return (
     <>
+      {isZoomed && <ZoomPostImage imageUrl={selectedImage} onClose={() => setIsZoomed(false)} />}
       <div className={styles.postDetailContainer}>
         <div className={styles.postImageContainer}>
           <div className={styles.postMainImageContainer}>
@@ -159,6 +162,7 @@ export const PostDetail = ({
               quality={100}
               className={styles.postMainImage}
               unoptimized
+              onClick={() => setIsZoomed(true)}
             />
             {currentIndex !== post.images.length - 1 && (
               <MdOutlineNavigateNext
