@@ -132,6 +132,10 @@
     display: flex;
     align-items: center;
 
+    .dropdownMenuIcon {
+      cursor: pointer;
+    }
+
     .userProfileIcon {
       border-radius: 50%;
       aspect-ratio: 1/1;
