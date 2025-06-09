@@ -197,12 +197,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
       })) || [];
     const serializedOtherPostList = bigIntToStringMap(otherPostListWithLikes);
 
+    const isMyPost = post.user.my_id === user?.my_id;
+
     return NextResponse.json({
       ...serializedPost,
       likeCount,
       isLiked,
       otherPostList: serializedOtherPostList,
       recommendPostList: serializedRecommendPostList,
+      isMyPost,
     });
   } catch (error) {
     console.error(error);

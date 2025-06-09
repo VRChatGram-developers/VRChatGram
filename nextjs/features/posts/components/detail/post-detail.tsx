@@ -218,22 +218,25 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                 )}
                 <p className={styles.postDetailInfomationLikeCount}>{likeCount}</p>
               </div>
-              <div className={styles.postDetailDropdownMenuContainer}>
-                <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
-                {isDropdownEditMenuOpen && (
-                  <div ref={menuRef} className={styles.menuContainer}>
-                    <div
-                      className={styles.menuItem}
-                      onClick={() => {
-                        openModal(<PostEditForm onClose={closeModal} post={post} />);
-                      }}
-                    >
-                      編集する
+              {post.isMyPost && (
+                <div className={styles.postDetailDropdownMenuContainer}>
+                  <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
+                  {isDropdownEditMenuOpen && (
+                    <div ref={menuRef} className={styles.menuContainer}>
+                      <div
+                        className={styles.menuItem}
+                        onClick={() => {
+                          openModal(<PostEditForm onClose={closeModal} post={post} />);
+                        }}
+                      >
+                        編集する
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
+
             <div className={styles.postDetailProfileContainer}>
               <div className={styles.postDetailProfileIconContainer}>
                 <Image

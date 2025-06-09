@@ -52,6 +52,7 @@ export type PostDetail = {
   otherPostList: UserOtherPost[];
   recommendPostList: RecommendPost[];
   isLiked: boolean;
+  isMyPost: boolean;
 };
 
 export type BoothItem = {
