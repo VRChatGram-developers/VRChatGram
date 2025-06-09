@@ -247,7 +247,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
         show_sensitive_type: selectedAgeRestriction,
       });
 
-      const toastId = toast.success("投稿しました！", {
+      const toastId = toast.success("更新しました！", {
         isLoading: false,
         autoClose: false,
         transition: Slide,
