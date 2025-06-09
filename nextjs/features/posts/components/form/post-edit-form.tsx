@@ -507,7 +507,10 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
           </div>
 
           <div className={styles.submitContainer}>
-            <button onClick={handleSubmit}>
+            <button
+              onClick={handleSubmit}
+              disabled={images.length === 0}
+            >
               <p className={styles.postButtonText}>更新する</p>
             </button>
           </div>
