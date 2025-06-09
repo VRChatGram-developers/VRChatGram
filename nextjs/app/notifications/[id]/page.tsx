@@ -18,5 +18,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     ...notification,
     publishedAt: formattedDate,
   };
+
+  if (serializedNotification.publishedAt < new Date().toISOString()) {
+    return null;
+  }
+
   return <NotificationDetail notification={serializedNotification} />;
 }
