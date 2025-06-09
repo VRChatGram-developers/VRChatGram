@@ -381,6 +381,11 @@
           font-size: 1rem;
           font-weight: bold;
         }
+
+        &:hover {
+          filter: brightness(0.95);
+          cursor: pointer;
+        }
       }
     }
   }
