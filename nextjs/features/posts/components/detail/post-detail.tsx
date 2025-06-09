@@ -202,7 +202,7 @@ export const PostDetail = ({ post }: { post: PostDetailType }) => {
                 )}
                 <p className={styles.postDetailInfomationLikeCount}>{likeCount}</p>
               </div>
-              <div className={styles.postDetailInfomationDropdownMenuContainer}>
+              <div className={styles.postDetailDropdownMenuContainer}>
                 <BsThreeDots size={24} onClick={handleDropdownMenuOpen} />
                 {isDropdownMenuOpen && (
                   <div ref={menuRef} className={styles.menuContainer}>

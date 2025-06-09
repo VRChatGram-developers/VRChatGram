@@ -128,13 +128,14 @@
           }
         }
 
-        .postDetailInfomationDropdownMenuContainer {
+        .postDetailDropdownMenuContainer {
           display: flex;
           flex-direction: row;
           align-items: center;
           gap: 0.5rem;
           position: relative;
           width: 100%;
+          cursor: pointer;
 
           .menuContainer {
             width: max-content;
