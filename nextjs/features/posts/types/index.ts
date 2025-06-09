@@ -61,10 +61,17 @@ export type BoothItem = {
 };
 
 export type Booth = {
-  id: bigint;
+  id: string;
   title: string;
   detail: string;
-  image: Image;
+  image: Image | null;
+  url: string;
+};
+
+export type BoothForUpdate = {
+  id: string;
+  title: string;
+  detail: string;
   url: string;
 };
 
@@ -89,6 +96,15 @@ export type Tag = {
 };
 
 export type ImageData = {
+  file: File;
+  file_data: string;
+  file_name: string;
+  width: number;
+  height: number;
+};
+
+export type ImageDataForUpdate = {
+  id: string;
   file: File;
   file_data: string;
   file_name: string;
