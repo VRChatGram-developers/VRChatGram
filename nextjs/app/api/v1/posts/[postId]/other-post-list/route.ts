@@ -5,7 +5,7 @@ import prisma from "@/prisma/client";
 import { auth } from "@/libs/firebase/auth";
 import { toJson } from "@/utils/json";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const fetchOtherPostList = async (userId: string, postId: string) => {
   return await prisma.posts.findMany({

@@ -4,7 +4,7 @@ import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import prisma from "@/prisma/client";
 import { auth } from "@/libs/firebase/auth";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 type Image = {
   id: string;

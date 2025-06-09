@@ -65,11 +65,14 @@ export default async function Home() {
     }),
   ]);
 
-  const notifications = notificationsData.contents.map((notification: Notification) => {
-    return {
-      ...notification,
-    };
-  });
+  const notifications = notificationsData.contents
+    .filter((notification: Notification) => notification.publishedAt < new Date().toISOString())
+    .map((notification: Notification) => {
+      return {
+        ...notification,
+      };
+    });
+
   const serializedNotifications = notifications.map((notification: Notification) => {
     const year = new Date(notification.publishedAt).getFullYear();
     const month = String(new Date(notification.publishedAt).getMonth() + 1).padStart(2, "0"); // `01` 形式にする
