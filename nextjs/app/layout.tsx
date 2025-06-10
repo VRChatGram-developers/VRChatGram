@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "VRCSS",
     description:
-      "VRChatの写真を投稿できる",
+      "VRChatに特化したソーシャルメディアプラットフォーム",
     creator: "@vrcss",
     images: {
       url: "/assets/vrcss.svg",
