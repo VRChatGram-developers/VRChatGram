@@ -87,8 +87,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
     // 投稿の最初のタグを取得
     const postFirstTag = post.tags.map((tag) => tag.tag.name).pop() ?? "";
     const recommendPostList = await fetchRecommendPostListByTagName(postFirstTag);
-    console.log("recommendPostList");
-    console.log(recommendPostList);
 
     // ランダムに並び替えて、最初の4件を取得
     const shuffledRecommendPostList = recommendPostList.sort(() => 0.5 - Math.random()).slice(0, 4);
