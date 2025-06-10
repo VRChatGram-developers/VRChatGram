@@ -56,7 +56,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const otherPostList = await fetchOtherPostList(user?.my_id ?? "", postId);
+    const post = await prisma.posts.findFirst({ where: { id: postId } });
+
+    if (!post) {
+      return NextResponse.json({ error: "postが見つかりません" }, { status: 400 });
+    }
+
+    const otherPostList = await fetchOtherPostList(post.user_id, postId);
 
     const otherPostListWithLikes =
       otherPostList.map((post) => ({
