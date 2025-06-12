@@ -97,6 +97,13 @@
             color: #fff;
             border-radius: 0.5rem;
             width: 100%;
+            font-weight: bold;
+            font-family: "Noto Sans JP", sans-serif;
+            transition: filter 0.2s;
+
+            &:hover {
+              filter: brightness(0.95);
+            }
           }
         }
 
