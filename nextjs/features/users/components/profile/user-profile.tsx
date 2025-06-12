@@ -2,7 +2,7 @@
 
 import styles from "@/features/users/styles/user-profile.module.scss";
 import Image from "next/image";
-import { SocialLink, User, UserPosts } from "@/features/users/types/index";
+import { SocialLink, User } from "@/features/users/types/index";
 import { useState, useRef } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { followUser, unfollowUser } from "@/features/users/endpoint";
@@ -19,7 +19,7 @@ import { DropdownMenu } from "./drop-down-menu";
 import { FaImage } from "react-icons/fa6";
 import { Slide, toast } from "react-toastify";
 
-export const UserProfile = ({ user, userPosts }: { user: User; userPosts: UserPosts }) => {
+export const UserProfile = ({ user }: { user: User }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -300,13 +300,13 @@ export const UserProfile = ({ user, userPosts }: { user: User; userPosts: UserPo
                 </div>
                 <div className={styles.profuleUserStatusContainer}>
                   <div className={styles.profileViewCount}>
-                    <p>{userPosts.totalViews}閲覧</p>
+                    <p>{user.totalViews}閲覧</p>
                   </div>
                   <div className={styles.profilePostCount}>
-                    <p>投稿{userPosts.posts[0]?.length ?? 0}件</p>
+                    <p>投稿{user.posts[0]?.length ?? 0}件</p>
                   </div>
                   <div className={styles.profileLikeCount}>
-                    <p>{userPosts.totalLikes} いいね</p>
+                    <p>{user.totalLikes} いいね</p>
                   </div>
                 </div>
               </>
@@ -376,10 +376,9 @@ export const UserProfile = ({ user, userPosts }: { user: User; userPosts: UserPo
           introductionTitle={introductionTitle}
           introductionDetail={introductionDetail}
           handleEditSocialLink={handleEditSocialLink}
-          top4Posts={userPosts.top4Posts}
         />
       )}
-      {activeTab === 1 && <UserPostList userPosts={userPosts} />}
+      {activeTab === 1 && <UserPostList user={user} />}
     </>
   );
 };
