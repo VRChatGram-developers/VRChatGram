@@ -127,6 +127,8 @@
 
       .profileUserNameContainer {
         color: #fff;
+        font-family: "Noto Sans JP";
+        padding: 1rem 0;
 
         .profileUserNameText {
           font-weight: bold;
@@ -150,12 +152,26 @@
       .profuleUserStatusContainer {
         display: flex;
         font-size: 1.5rem;
-        gap: 1rem;
+        gap: 1.5rem;
         font-weight: lighter;
         color: #fff;
+        font-family: "Noto Sans JP";
+        font-weight: bold;
 
-        .profileUserNameContainer {
-          .profileUserNameText {}
+        > *:not(:first-child) {
+          position: relative;
+          padding-left: 1.5rem;
+      
+          &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 1em;
+            background-color: #fff;
+          }
         }
       }
 
@@ -400,19 +416,19 @@
     padding: 12rem 3rem 2rem 3rem !important;
 
     .profuleUserStatusContainer {
-      font-size: 1.2rem !important;
+      font-size: 1rem !important;
     }
   }
 
   .profileUserNameText {
-    font-size: 2.5rem !important;
+    font-size: 2rem !important;
   }
 
   .mobileButtonContainer {
     display: flex !important;
     align-items: center !important;
     gap: 2rem !important;
-    padding: 1rem 0 !important;
+    padding: 2rem 0 0 !important;
   }
 
   .unFollowButtonContainer {
