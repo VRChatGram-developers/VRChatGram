@@ -34,3 +34,9 @@
     grid-auto-flow: column;
   }
 }
+
+@media (max-width: 768px) {
+  .latestPostTitle {
+    font-size: 2rem !important;
+  }
+}
