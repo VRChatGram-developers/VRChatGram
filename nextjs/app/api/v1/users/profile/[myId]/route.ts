@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 import { toJson } from "@/utils/json";
-import _ from "lodash";
 import { auth } from "@/libs/firebase/auth";
 import prisma from "@/prisma/client";
 import { platform_types } from "@prisma/client";
@@ -25,7 +24,7 @@ const generateNumericUUID = () => {
   return sectionLengths
     .map((len) => Array.from({ length: len }, () => Math.floor(Math.random() * 9) + 1).join(""))
     .join("-");
-}
+};
 
 export async function PUT(request: Request, { params }: { params: Promise<{ myId: string }> }) {
   try {
@@ -138,28 +137,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
             follower_id: true,
           },
         },
-        posts: {
-          select: {
-            id: true,
-            title: true,
-            show_sensitive_type: true,
-            view_count: true,
-            images: {
-              select: {
-                id: true,
-                url: true,
-                width: true,
-                height: true,
-              },
-            },
-            likes: {
-              select: {
-                id: true,
-                user_id: true,
-              },
-            },
-          },
-        },
         social_links: {
           select: {
             id: true,
@@ -178,13 +155,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
     }));
 
     const isCurrentUser = currentUser?.id === user?.id;
-    const postsWithLikes =
-      user?.posts.map((post) => ({
-        ...toJson(post),
-        likesCount: post.likes.length,
-        images: post.images.map(toJson),
-        isLiked: post.likes.some((like) => like.user_id == currentUser?.id),
-      })) || [];
 
     if (user?.social_links.length === 0) {
       [
@@ -202,10 +172,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
       });
     }
 
-    const totalLikes = postsWithLikes.reduce((total, post) => total + post.likesCount, 0);
-    const top4Posts = postsWithLikes.sort((a, b) => b.likesCount - a.likesCount).slice(0, 4);
-    const totalViews = postsWithLikes.reduce((total, post) => total + post.view_count, 0);
-    const chunkedPostsWithLikes = _.chunk(postsWithLikes, 20);
     const isFollowedByAccount = Boolean(
       user?.following.find((follower_user) => follower_user?.follower_id === currentUser?.id)
     );
@@ -218,10 +184,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
       introduction_detail: user?.introduction_detail,
       profile_url: user?.profile_url,
       header_url: user?.header_url,
-      posts: chunkedPostsWithLikes,
-      totalLikes: totalLikes,
-      top4Posts: top4Posts,
-      totalViews: totalViews,
       isCurrentUser: isCurrentUser,
       social_links: user?.social_links.map(toJson),
       isFollowedByAccount: isFollowedByAccount,
