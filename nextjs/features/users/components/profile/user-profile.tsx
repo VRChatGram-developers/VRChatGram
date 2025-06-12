@@ -306,7 +306,7 @@ export const UserProfile = ({ user }: { user: User }) => {
                     <p>投稿{user.posts[0]?.length ?? 0}件</p>
                   </div>
                   <div className={styles.profileLikeCount}>
-                    <p>{user.totalLikes} いいね</p>
+                    <p>{user.totalLikes}いいね</p>
                   </div>
                 </div>
               </>
