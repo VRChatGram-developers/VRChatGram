@@ -231,16 +231,16 @@ export const PostDetail = ({
                   <Image
                     src="/heart-outline.png"
                     alt="heart"
-                    width={20}
-                    height={20}
+                    width={16}
+                    height={16}
                     onClick={handleClickLikeOrUnlike}
                   />
                 ) : (
                   <Image
                     src="/before-good-for-post-detail.png"
                     alt="heart"
-                    width={20}
-                    height={20}
+                    width={18}
+                    height={18}
                     onClick={handleClickLikeOrUnlike}
                   />
                 )}
