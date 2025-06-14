@@ -224,23 +224,23 @@ export const PostDetail = ({
             <div className={styles.postDetailInformationContainer}>
               <div className={styles.postDetailInfomationViewContainer}>
                 <FaRegEye size={24} className={styles.postDetailInfomationViewIcon} />
-                <p className={styles.postDetailInfomationView}>{post.view_count} View</p>
+                <p className={styles.postDetailInfomationView}>{post.view_count}View</p>
               </div>
               <div className={styles.postDetailInfomationLikeCountContainer}>
                 {isLiked ? (
                   <Image
                     src="/heart-outline.png"
                     alt="heart"
-                    width={20}
-                    height={20}
+                    width={18}
+                    height={18}
                     onClick={handleClickLikeOrUnlike}
                   />
                 ) : (
                   <Image
                     src="/before-good-for-post-detail.png"
                     alt="heart"
-                    width={20}
-                    height={20}
+                    width={18}
+                    height={18}
                     onClick={handleClickLikeOrUnlike}
                   />
                 )}
