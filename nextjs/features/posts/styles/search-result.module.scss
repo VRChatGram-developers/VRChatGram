@@ -23,37 +23,59 @@
       grid-template-rows: 1fr 1fr;
       margin-left: 1rem;
       width: 100%;
-      .searchDetailTitle {
-        font-size: 40px;
-        font-weight: bold;
+      color: #000000;
+
+      .searchDetailTitleContainer{
         display: flex;
         align-items: center;
-      }
+
+        .searchDetailTitle {
+          font-size: 2.5rem;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+        }
+      }     
 
       .searchDetailContent {
         display: flex;
         justify-content: space-between;
         .searchPostCount {
-          font-size: 20px;
+          font-family: "Noto Sans JP";
+          font-weight: bold;
+          font-size: 1.5rem;
         }
         .searchSortContainer {
           display: flex;
           align-items: flex-end;
           .searchSortLabel {
+            border: 1px solid #000;
+            border-radius: 0.5rem;
+            overflow: hidden; 
+
+            .searchSortLabelIcon {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              position: relative;
+
+              .searchSortLabelIconArrow {
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 32px;
+                height: 32px;
+                margin-right: 0.5rem;
+                color: #000;
+              }
+            }
+
             display: inline-flex;
             align-items: center;
             position: relative;
-            &::after {
-              position: absolute;
-              right: 15px;
-              width: 10px;
-              height: 7px;
-              background-color: #535353;
-              clip-path: polygon(0 0, 100% 0, 50% 100%);
-              content: "";
-              pointer-events: none;
-            }
             .searchSortSelect {
+              border-radius: 0.5rem;
               appearance: none;
               min-width: 230px;
               height: 2.8em;
@@ -65,6 +87,8 @@
               background-color: #fff;
               color: #333333;
               font-size: 1em;
+              font-family: "Noto Sans JP";
+              font-weight: bold;
               cursor: pointer;
               text-align: center;
             }
@@ -182,10 +206,19 @@
     flex-direction: column !important;
     gap: 1rem !important;
 
-    .searchDetailContent{
-      display: grid !important;
-      grid-template-columns: 1fr !important;
-      gap: 1rem !important;
+    .searchDetailContainer{
+      margin-left: 0 !important;
+      .searchDetailContent{
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important; 
+      }
+      .searchDetailTitle{
+        font-size: 2rem !important;
+      }
+      .searchPostCount{
+        font-size: 1rem !important;
+      }
     }
   }
 }

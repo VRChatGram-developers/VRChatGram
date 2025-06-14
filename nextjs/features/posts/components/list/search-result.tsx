@@ -13,7 +13,7 @@ import useLikePost from "@/features/posts/hooks/use-like-post";
 import { useRouter } from "next/navigation";
 import { PhotoGallery } from "@/features/posts/photo-gallerys/photo-gallery";
 import { Image as ImageType, User } from "@/features/posts/types";
-
+import { RiArrowDownSLine } from "react-icons/ri";
 
 type PhotoGalleryPost = {
   postId: string;
@@ -148,26 +148,33 @@ export const SearchResult = ({
           priority
         />
         <div className={styles.searchDetailContainer}>
-          <p className={styles.searchDetailTitle}>
-            {title != "undefined" ? `${title}` : selectedTag === "#ALL" ? "ALL" : `${selectedTag}`}
-          </p>
+          <div className={styles.searchDetailTitleContainer}>
+            <p className={styles.searchDetailTitle}>
+              {title != "undefined" ? `${title}` : selectedTag === "#ALL" ? "ALL" : `${selectedTag}`}
+            </p>
+          </div>
           <div className={styles.searchDetailContent}>
             <div>
-              <p className={styles.searchPostCount}>投稿数: {postCount}</p>
+              <p className={styles.searchPostCount}>投稿数 : {postCount}</p>
             </div>
             <div className={styles.searchSortContainer}>
               <label className={styles.searchSortLabel}>
-                <select
-                  className={styles.searchSortSelect}
-                  value={selectedSortOption}
-                  onChange={handleSortChange}
-                >
-                  {searchSortOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                <div className={styles.searchSortLabelIcon}>
+                  <select
+                    className={styles.searchSortSelect}
+                    value={selectedSortOption}
+                    onChange={handleSortChange}
+                  >
+                    {searchSortOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className={styles.searchSortLabelIconArrow}>
+                    <RiArrowDownSLine size={32} />
+                  </div>
+                </div>
               </label>
             </div>
           </div>
