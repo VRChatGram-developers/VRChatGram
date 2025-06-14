@@ -112,6 +112,8 @@
         flex-direction: row;
         align-items: center;
         gap: 1.5rem;
+        color: #5D5D5D;
+
         .postDetailInfomationViewContainer {
           display: flex;
           flex-direction: row;
@@ -122,6 +124,7 @@
 
           .postDetailInfomationView {
             font-size: 1rem;
+            white-space: nowrap;
           }
         }
         .postDetailInfomationLikeCountContainer {

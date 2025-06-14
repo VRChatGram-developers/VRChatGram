@@ -224,7 +224,7 @@ export const PostDetail = ({
             <div className={styles.postDetailInformationContainer}>
               <div className={styles.postDetailInfomationViewContainer}>
                 <FaRegEye size={24} className={styles.postDetailInfomationViewIcon} />
-                <p className={styles.postDetailInfomationView}>{post.view_count} View</p>
+                <p className={styles.postDetailInfomationView}>{post.view_count}View</p>
               </div>
               <div className={styles.postDetailInfomationLikeCountContainer}>
                 {isLiked ? (
