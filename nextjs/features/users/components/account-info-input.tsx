@@ -20,11 +20,14 @@ export const AccountInfoInput = ({
   password,
   setIsSignUp,
   topThreePostImages,
+  setIsSignUpCompleted,
+  
 }: {
   email: string;
   password: string;
   setIsSignUp: (isSignUp: boolean) => void;
   topThreePostImages: TopThreePostImagesTypes;
+  setIsSignUpCompleted: (isSignUpCompleted: boolean) => void;
 }) => {
   const router = useRouter();
   const sexOptions = [
@@ -134,6 +137,7 @@ export const AccountInfoInput = ({
 
       setIsLoading(true);
 
+      // google loginかどうか
       await createUser({
         email: email,
         password: password,
@@ -145,6 +149,7 @@ export const AccountInfoInput = ({
           day: Number(day),
         },
         gender: selectedSex,
+        isGoogleLogin: false,
       });
     } catch (error) {
       toast.error("アカウント作成に失敗しました", {
@@ -157,6 +162,7 @@ export const AccountInfoInput = ({
       setIsLoading(false);
       setIsSignUp(false);
       router.push("/signup");
+      setIsSignUpCompleted(false);
     }
   };
 

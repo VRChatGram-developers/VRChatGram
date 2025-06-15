@@ -119,13 +119,18 @@
         .googleLoginContainer {
           margin: 2rem;
           width: 100%;
-          max-width: 15rem;
+          max-width: 20rem;
           border-radius: 0.5rem;
           .googleLoginButton {
             width: 100%;
             display: flex;
             padding: 1rem 2.5rem 1rem 1.5rem;
             background-color: #fff;
+
+            transition: filter 0.2s;
+            &:hover {
+              filter: brightness(0.95);
+            }
           }
           .googleLoginText {
             margin-left: 2rem;
