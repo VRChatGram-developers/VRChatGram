@@ -11,6 +11,7 @@ import {
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/libs/firebase/client";
 import { signIn } from "next-auth/react";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -62,7 +63,32 @@ export const createUser = async (user: requestCreateUser) => {
   try {
     const { password, email, ...userData } = user;
 
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    let userCredential;
+    if (!user.isGoogleLogin) {
+      userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    } else {
+      // Google login時のユーザー作成
+      const provider = new GoogleAuthProvider();
+      userCredential = await signInWithPopup(auth, provider);
+      const token = await userCredential.user.getIdToken();
+      const email = userCredential.user.email;
+
+      const response = await fetch(`${API_URL}/api/v1/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...userData, uid: userCredential.user.uid, email: email }),
+      });
+
+      await signIn("credentials", {
+        idToken: token,
+        redirect: false,
+      });
+
+      const data = await response.json();
+      return data;
+    }
 
     const response = await fetch(`${API_URL}/api/v1/users`, {
       method: "POST",
@@ -326,4 +352,17 @@ export const fetchS3SignedUrl = async ({
   }
   const data = await response.json();
   return data;
+};
+
+export const checkRegisteredByUid = async (uid: string): Promise<boolean | string> => {
+  const response = await fetch(`${API_URL}/api/v1/users/check_registered_by_uid`, {
+    method: "POST",
+    body: JSON.stringify({ uid }),
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to check registered by uid";
+  }
+  const data = await response.json();
+  return data.isRegisteredByUid;
 };

@@ -56,6 +56,7 @@ export type requestCreateUser = {
   gender: string;
   email: string;
   password: string;
+  isGoogleLogin: boolean;
 };
 
 export type SocialLink = {
