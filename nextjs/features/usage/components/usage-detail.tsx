@@ -10,7 +10,7 @@ export const UsageDetail = ({ usage }: { usage: Usage }) => {
     <div className={styles.notificationDetailContainer}>
       <div className={styles.notificationDetailContentContainer}>
         <div className={styles.notificationDetailTitle}>{usage.title}</div>
-        <div className={styles.notificationDetailContentText}>{parse(usage.content)}</div>
+        <div className="prose">{parse(usage.content)}</div>
         <div className={styles.notificationDetailBackButton}>
           <Link href="/">トップへ戻る</Link>
         </div>
