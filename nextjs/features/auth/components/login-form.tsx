@@ -17,13 +17,8 @@ import {
   TopThreePostImages as TopThreePostImagesTypes,
   TopThreePostImage as TopThreePostImageType,
 } from "@/features/auth/type";
-import { useGoogleSignIn } from "@/features/auth/hooks/use-google-signin";
 
-export const LoginForm = ({
-  topThreePostImages,
-}: {
-  topThreePostImages: TopThreePostImagesTypes;
-}) => {
+export const LoginForm = ({ topThreePostImages }: { topThreePostImages: TopThreePostImagesTypes }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMail, setErrorMail] = useState("");
@@ -37,22 +32,11 @@ export const LoginForm = ({
     null
   );
 
-  const { handleGoogleSignIn, fetchGoogleCredentials } = useGoogleSignIn();
   useEffect(() => {
     if (topThreePostImages.topThreePostImages.length === 0) return;
     const randomIndex = Math.floor(Math.random() * topThreePostImages.topThreePostImages.length);
     setSelectedDisplayPost(topThreePostImages.topThreePostImages[randomIndex]);
   }, [topThreePostImages]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      console.log("sessionStorage.getItem('googleLogin')", sessionStorage.getItem("googleLogin"));
-      if (sessionStorage.getItem("googleLogin")) {
-        sessionStorage.removeItem("googleLogin");
-        fetchGoogleCredentials();
-      }
-    }
-  }, []);
 
   const mailValidation = () => {
     setErrorMail("");
@@ -146,7 +130,7 @@ export const LoginForm = ({
           <div className={styles.loginImageContainer}>
             <Image
               src={selectedDisplayPost?.images.url || "/default-login-image.jpg"}
-              alt="Login image"
+              alt="Login image" 
               className="object-cover w-full h-full"
               width={864}
               height={800}
@@ -279,21 +263,21 @@ export const LoginForm = ({
                   </p>
                 </div>
 
-                <div>
-                  <p
-                    style={{ marginTop: "16px", fontSize: "10px" }}
-                    className="text-center text-[#000000] mt-[30px]"
-                  >
-                    ---------------------------または---------------------------
-                  </p>
-                </div>
+                {/* <div>
+              <p
+                style={{ marginTop: "16px", fontSize: "10px" }}
+                className="text-center text-[#000000] mt-[30px]"
+              >
+                ---------------------------または---------------------------
+              </p>
+            </div>
 
-                <div className={styles.googleLoginContainer}>
-                  <button className={styles.googleLoginButton} onClick={handleGoogleSignIn}>
-                    <Image src="/google-icon.png" alt="Google Icon" width={24} height={24} />
-                    <p className={styles.googleLoginText}>Googleで続行</p>
-                  </button>
-                </div>
+            <div className={styles.googleLoginContainer}>
+              <button className={styles.googleLoginButton}>
+                <Image src="/google-icon.png" alt="Google Icon" width={24} height={24} />
+                <p className={styles.googleLoginText}>Googleで続行</p>
+              </button>
+            </div> */}
               </div>
             </div>
           </div>

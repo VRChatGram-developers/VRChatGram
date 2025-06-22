@@ -18,7 +18,6 @@ export const SignUpForm = ({
   setPassword,
   setIsSignUp,
   topThreePostImages,
-  setIsSignUpCompleted,
 }: {
   email: string;
   password: string;
@@ -26,7 +25,6 @@ export const SignUpForm = ({
   setPassword: (password: string) => void;
   setIsSignUp: (isSignUp: boolean) => void;
   topThreePostImages: TopThreePostImagesTypes;
-  setIsSignUpCompleted: (isSignUpCompleted: boolean) => void;
 }) => {
   const [errorMail, setErrorMail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
@@ -93,7 +91,7 @@ export const SignUpForm = ({
       return;
     }
 
-    setIsSignUpCompleted(true);
+    setIsSignUp(true);
   };
 
   return (
@@ -205,7 +203,7 @@ export const SignUpForm = ({
               </p>
             </div>
 
-            <div>
+            {/* <div>
               <p
                 style={{ marginTop: "16px", fontSize: "10px" }}
                 className="text-center text-[#000000] mt-[30px]"
@@ -219,7 +217,7 @@ export const SignUpForm = ({
                 <Image src="/google-icon.png" alt="Google Icon" width={24} height={24} />
                 <p className={styles.googleLoginText}>Googleで続行</p>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

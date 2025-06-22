@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SignUpForm } from "@/features/auth/components/sign-up-form";
 import { AccountInfoInput } from "@/features/users/components/account-info-input";
 import { TopThreePostImages as TopThreePostImagesType } from "@/features/auth/type";
@@ -13,14 +13,6 @@ export const UserCreate = ({
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignUpCompleted, setIsSignUpCompleted] = useState<boolean>(false);
-
-  useEffect(() => {
-    const googleLogin = sessionStorage.getItem("googleLogin");
-    if (googleLogin) {
-      setIsSignUpCompleted(true);
-    }
-  }, []);
 
   return (
     <div>
@@ -30,7 +22,6 @@ export const UserCreate = ({
           password={password}
           setIsSignUp={setIsSignUp}
           topThreePostImages={topThreePostImages}
-          setIsSignUpCompleted={setIsSignUpCompleted}
         />
       ) : (
         <SignUpForm
@@ -40,7 +31,6 @@ export const UserCreate = ({
           setPassword={setPassword}
           setIsSignUp={setIsSignUp}
           topThreePostImages={topThreePostImages}
-          setIsSignUpCompleted={setIsSignUpCompleted}
         />
       )}
     </div>
