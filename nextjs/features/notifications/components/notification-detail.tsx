@@ -28,7 +28,7 @@ export const NotificationDetail = ({ notification }: { notification: Notificatio
           <div className={styles.notificationDetailPublishedAt}>{notification.publishedAt}</div>
         </div>
         <div className={styles.notificationDetailTitle}>{notification.title}</div>
-        <div className={styles.notificationDetailContentText}>{parse(notification.content)}</div>
+        <div className="prose">{parse(notification.content)}</div>
         <div className={styles.notificationDetailBackButton}>
           <Link href="/notifications">一覧へ戻る</Link>
         </div>
