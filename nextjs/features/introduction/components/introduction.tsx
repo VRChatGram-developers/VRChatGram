@@ -10,7 +10,7 @@ export const Introduction = ({ introduction }: { introduction: IntroductionType 
     <div className={styles.notificationDetailContainer}>
       <div className={styles.notificationDetailContentContainer}>
         <div className={styles.notificationDetailTitle}>{introduction.title}</div>
-        <div className={styles.notificationDetailContentText}>{parse(introduction.content)}</div>
+        <div className="prose">{parse(introduction.content)}</div>
         <div className={styles.notificationDetailBackButton}>
           <Link href="/">トップへ戻る</Link>
         </div>
