@@ -334,39 +334,41 @@ export const PostDetail = ({
                 </div>
               </div>
             </div>
-            <div className={styles.postDetailProfileBoothContainer}>
-              <div className={styles.postDetailProfileBoothTitleContainer}>
-                <p className={styles.postDetailProfileBoothTitle}>Booth購入リスト</p>
-              </div>
-              <div className={styles.postDetailProfileBoothContent}>
-                {post.booth_items.map((boothItem) => (
-                  <div
-                    className={styles.postDetailProfileBoothItem}
-                    key={boothItem.id}
-                    onClick={() => {
-                      window.open(boothItem.booth.url, "_blank");
-                    }}
-                  >
-                    <Image
-                      src={boothItem.booth.image || "/user-icon.png"}
-                      alt="avatar"
-                      width={200}
-                      height={200}
-                      className={styles.postDetailProfileBoothImage}
-                      unoptimized
-                    />
-                    <div className={styles.postDetailProfileBoothInfomationContainer}>
-                      <p className={styles.postDetailProfileBoothInfomationTitle}>
-                        {boothItem.booth.title}
-                      </p>
-                      <p className={styles.postDetailProfileBoothInfomation}>
-                        {boothItem.booth.detail}
-                      </p>
+            {post.booth_items.length > 0 && (
+              <div className={styles.postDetailProfileBoothContainer}>
+                <div className={styles.postDetailProfileBoothTitleContainer}>
+                  <p className={styles.postDetailProfileBoothTitle}>Booth購入リスト</p>
+                </div>
+                <div className={styles.postDetailProfileBoothContent}>
+                  {post.booth_items.map((boothItem) => (
+                    <div
+                      className={styles.postDetailProfileBoothItem}
+                      key={boothItem.id}
+                      onClick={() => {
+                        window.open(boothItem.booth.url, "_blank");
+                      }}
+                    >
+                      <Image
+                        src={boothItem.booth.image || "/user-icon.png"}
+                        alt="avatar"
+                        width={200}
+                        height={200}
+                        className={styles.postDetailProfileBoothImage}
+                        unoptimized
+                      />
+                      <div className={styles.postDetailProfileBoothInfomationContainer}>
+                        <p className={styles.postDetailProfileBoothInfomationTitle}>
+                          {boothItem.booth.title}
+                        </p>
+                        <p className={styles.postDetailProfileBoothInfomation}>
+                          {boothItem.booth.detail}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
