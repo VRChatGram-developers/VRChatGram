@@ -6,10 +6,24 @@ import { useSearchStore } from "@/libs/store/search-store";
 import { useRouter } from "next/navigation";
 import { createQueryParams } from "@/utils/queryParams";
 import Link from "next/link";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   const router = useRouter();
   const { setSearchQuery } = useSearchStore();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  const isDarkMode = theme === "dark";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const redirectToPostSearchListByTagName = (tagName: string) => {
     setSearchQuery(`#${tagName}`);
@@ -17,7 +31,11 @@ const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
   };
 
   return (
-    <div className={styles.popularTagContainer}>
+    <div
+      className={`${styles.popularTagContainer} ${
+        isDarkMode ? styles.darkPopularTagContainer : ""
+      }`}
+    >
       <div className={styles.popularTagTitleWrapper}>
         <h2 className={styles.popularTagTitle}>作品を検索する</h2>
       </div>

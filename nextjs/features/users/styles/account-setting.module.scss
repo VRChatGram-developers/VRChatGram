@@ -20,9 +20,9 @@
 
         .accountSettingContentContainer {
             padding: 1.5rem 9rem 1.5rem 9rem;
-            background-color: #fff;
             display: grid;
             gap: 1rem;
+            background-color: #fff;
 
             .emailSettingConatiner {
                 display: flex;
@@ -161,6 +161,11 @@
             }
         }
 
+        .darkAccountSettingContentContainer {
+            background-color: rgba(31, 31, 31, 31); // こちらが上書き
+            color: #eee; // こちらが上書き
+        }
+
         .accountSettingSaveButtonContainer {
             margin-top: 5rem;
             background-color: #9BEA4D;
@@ -193,6 +198,8 @@
                 padding: 0.5rem 1rem;
             }
         }
+
+        
     }
 }
 

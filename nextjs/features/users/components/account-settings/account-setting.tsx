@@ -10,11 +10,14 @@ import { AccountSetting as AccountSettingType } from "../../types/index";
 import { EmailSetting } from "./email-setting";
 import styles from "@/features/users/styles/account-setting.module.scss";
 import { Slide, toast } from "react-toastify";
+import { useTheme } from "next-themes";
+
 export const AccountSetting = ({ accountSetting }: { accountSetting: AccountSettingType }) => {
   const { openModal, closeModal } = useModal();
   const [showSensitiveType, setShowSensitiveType] = useState(accountSetting.show_sensitive_type);
   const [gender, setGender] = useState(accountSetting.gender);
   const router = useRouter();
+  const { theme } = useTheme();
 
   const genderList = [
     {
@@ -35,6 +38,8 @@ export const AccountSetting = ({ accountSetting }: { accountSetting: AccountSett
     const newValue = showSensitiveType === "all" ? "safe" : "all";
     setShowSensitiveType(newValue);
   };
+
+  const isDarkMode = theme === "dark";
 
   const handleUpdate = async () => {
     try {
@@ -64,7 +69,11 @@ export const AccountSetting = ({ accountSetting }: { accountSetting: AccountSett
     <div className={styles.accountSettingContainer}>
       <div className={styles.accountSettingTitle}>アカウント設定</div>
       <div className={styles.accountSettingContentContainerWrapper}>
-        <div className={styles.accountSettingContentContainer}>
+        <div
+          className={`${styles.accountSettingContentContainer} ${
+            isDarkMode ? styles.darkAccountSettingContentContainer : ""
+          }`}
+        >
           <div className={styles.emailSettingConatiner}>
             <div className={styles.emailSettingLabel}>メールアドレス</div>
             <div

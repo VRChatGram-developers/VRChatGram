@@ -20,6 +20,10 @@
   }
 }
 
+.darkLatestPostContainer {
+  background-color: rgba(31, 31, 31, 31);
+}
+
 // 1,280px以上（デスクトップ）
 @media (min-width: 1280px) {
   .latestPostListConatiner {

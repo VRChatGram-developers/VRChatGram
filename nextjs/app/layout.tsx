@@ -7,6 +7,7 @@ import { Footer } from "@/components/layouts/footer";
 import { ModalProvider } from "@/provider/modal-provider";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ThemaProvider } from "@/provider/thema-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,8 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     title: "VRCSS",
-    description:
-      "VRChatに特化したソーシャルメディアプラットフォーム",
+    description: "VRChatに特化したソーシャルメディアプラットフォーム",
     siteName: "VRCSS",
     url: process.env.NEXT_PUBLIC_APP_URL,
     images: {
@@ -41,18 +41,16 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "VRCSS",
-    description:
-      "VRChatに特化したソーシャルメディアプラットフォーム",
+    description: "VRChatに特化したソーシャルメディアプラットフォーム",
     creator: "@vrcss",
     images: {
       url: "/assets/vrcss.svg",
       type: "image/svg",
       width: 1200,
       height: 630,
-    }
+    },
   },
 };
-
 
 export default function RootLayout({
   children,
@@ -62,18 +60,21 @@ export default function RootLayout({
   return (
     <SessionProvider>
       <ModalProvider>
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
           <head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <link rel="icon" type="image/svg" sizes="50x50" href="/header/vrcss_icon.svg" />
           </head>
+
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased layout`}>
-            <div id="modal-root">
-              <Header />
-              <main> {children}</main>
-              <ToastContainer position="bottom-right" autoClose={3000} />
-              <Footer />
-            </div>
+            <ThemaProvider>
+              <div id="modal-root" className="dark dark:bg-black dark:text-white">
+                <Header />
+                <main> {children}</main>
+                <ToastContainer position="bottom-right" autoClose={3000} />
+                <Footer />
+              </div>
+            </ThemaProvider>
           </body>
         </html>
       </ModalProvider>

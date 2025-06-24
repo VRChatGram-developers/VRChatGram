@@ -5,8 +5,22 @@ import { Notification } from "../types/index";
 import styles from "../styles/main.module.scss";
 import Link from "@/node_modules/next/link";
 import parse from "html-react-parser";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 const Main = ({ notifications }: { notifications: Notification[] }) => {
+  const { theme } = useTheme();
+  const isDarkMode = theme === "dark";
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   const testNews = [
     {
       imageURL: "https://pbs.twimg.com/media/GiIBx39a0AE30pa?format=jpg&name=large",
@@ -41,7 +55,7 @@ const Main = ({ notifications }: { notifications: Notification[] }) => {
   return (
     <>
       {/* PC用 */}
-      <div className={styles.mainContainer}>
+      <div className={`${styles.mainContainer} ${isDarkMode ? styles.darkMainContainer : ""}`}>
         <div className={styles.topImage}>
           <div className={styles.topNoticeMainContainer}>
             {testNews.length > 0 && (
