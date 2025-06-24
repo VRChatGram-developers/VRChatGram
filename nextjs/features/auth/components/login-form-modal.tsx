@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { Link, TextField } from "@mui/material";
 import { IoEyeSharp, IoEyeOffSharp } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 export const LoginFormModal = ({
   onClose,
@@ -25,6 +26,7 @@ export const LoginFormModal = ({
 
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+  const router = useRouter();
 
   const isEmailValidated = () => {
     setErrorEmail("");
@@ -62,9 +64,10 @@ export const LoginFormModal = ({
 
   useEffect(() => {
     if (status === "authenticated") {
+      router.refresh();
       onClose();
     }
-  }, [status, session, onClose]);
+  }, [status, session, onClose, router]);
 
   const handleSignIn = async () => {
     setFireBaseError("");
