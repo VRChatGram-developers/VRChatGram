@@ -2,18 +2,17 @@
 
 import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { FaCamera } from "react-icons/fa";
 import { RiArrowDownSLine } from "react-icons/ri";
 import styles from "../styles/header.module.scss";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useModal } from "@/provider/modal-provider";
 import { PostForm } from "@/features/posts/components/form/post-form";
 import { DropdownMenu } from "@/components/layouts/dropdown-menu";
 import { useSearchStore } from "@/libs/store/search-store";
 import { createQueryParams } from "@/utils/queryParams";
-import { useEffect, useCallback } from "react";
 import { fetchUserForHeader } from "@/features/users/endpoint";
 import { UserForHeader } from "@/features/users/types";
 import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
@@ -22,6 +21,7 @@ import { useCloseMenuOnRouteChange } from "@/hooks/use-close-menu-on-route-chang
 
 export const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const { openModal, closeModal } = useModal();
   const [openMenu, setOpenMenu] = useState(false);
   const [user, setUser] = useState<UserForHeader | null>(null);
@@ -71,6 +71,12 @@ export const Header = () => {
 
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isDropdownOpen, setIsDropdownOpen, handleClickOutside]);
+
+  useEffect(() => {
+    if (!pathname.includes("/posts")) {
+      setSearchQuery("");
+    }
+  }, [pathname, setSearchQuery]);
 
   const handleSearch = async () => {
     const isTagSearch = searchQuery.includes("#");
