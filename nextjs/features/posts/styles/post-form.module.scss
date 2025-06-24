@@ -107,7 +107,6 @@
           flex: 1;
           border-right: 2px solid;
           padding: 1rem 2rem;
-          overflow-y: auto;
           .postDetailTitleContainer {
             margin-bottom: 1.5rem;
             font-size: 1em;
@@ -396,6 +395,9 @@
   .postDetailContainer {
     grid-auto-flow: column;
     grid-template-columns: 1fr 1fr;
+    .postDetailContent {
+      overflow-y: auto;
+    }
   }
 }
 
