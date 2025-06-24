@@ -5,6 +5,7 @@ import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
 import { UserForHeader } from "@/features/users/types";
 import Image from "next/image";
 import Link from "next/link";
+import { ThemaSwitch } from "@/components/thema-switch";
 
 type DropdownMenuProps = {
   isOpen: boolean;
@@ -61,6 +62,10 @@ export const DropdownMenu = ({ isOpen, user }: DropdownMenuProps) => {
           <div className={styles.offcanvas__menu__setting_container}>
             <div className={styles.offcanvas__menu__setting_container__item}>
               <Link href={`/users/account-settings`}>アカウント設定</Link>
+            </div>
+            <div className={styles.offcanvas__menu__thema_switch_container}>
+              <p className={styles.offcanvas__menu__thema_switch_container__text}>ダークモード</p>
+              <ThemaSwitch />
             </div>
           </div>
           <div className={styles.offcanvas__logout_container}>

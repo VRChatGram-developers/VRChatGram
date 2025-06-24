@@ -216,6 +216,10 @@
   }
 }
 
+.darkPopularTagContainer {
+  background-color: #000;
+}
+
 // 1,280px以上（デスクトップ）
 @media (min-width: 1280px) {
   .tagListContainer {

@@ -3,18 +3,16 @@
 import styles from "../styles/latest-post.module.scss";
 import { LatestPost as LatestPostType } from "../types/index";
 import useLikePost from "@/features/posts/hooks/use-like-post";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useTheme } from "next-themes";
+
 const PostCard = dynamic(
   () => import("@/features/posts/components/post-card").then((mod) => mod.PostCard),
   { ssr: false }
 );
 
-const LatestPost = ({
-  latestPostList,
-}: {
-  latestPostList: LatestPostType[];
-}) => {
+const LatestPost = ({ latestPostList }: { latestPostList: LatestPostType[] }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setIsLiked] = useState(false);
   const { handleLikeOrUnlike } = useLikePost();
@@ -22,6 +20,17 @@ const LatestPost = ({
   const [likedPosts, setLikedPosts] = useState<{ [postId: string]: boolean }>(
     Object.fromEntries(latestPostList.map((post) => [post.id, post.is_liked]))
   );
+  const { theme } = useTheme();
+  const isDarkMode = theme === "dark";
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const handleLike = async (postId: string) => {
     const currentLiked = likedPosts[postId];
@@ -40,7 +49,11 @@ const LatestPost = ({
 
   return (
     <>
-      <div className={styles.latestPostContainer}>
+      <div
+        className={`${styles.latestPostContainer} ${
+          isDarkMode ? styles.darkLatestPostContainer : ""
+        }`}
+      >
         <p className={styles.latestPostTitle}>新着</p>
         <div className={styles.latestPostListConatiner}>
           {latestPosts.map((post) => (

@@ -19,6 +19,7 @@ import { UserForHeader } from "@/features/users/types";
 import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
 import Link from "next/link";
 import { useCloseMenuOnRouteChange } from "@/hooks/use-close-menu-on-route-change";
+import { ThemaSwitch } from "@/components/thema-switch";
 
 export const Header = () => {
   const router = useRouter();
@@ -289,6 +290,10 @@ export const Header = () => {
                         >
                           アカウント設定
                         </Link>
+                      </div>
+                      <div className={styles.moduleDrawerMenuLinkAccountSettingsContainer}>
+                        <p className={styles.moduleDrawerMenutext}>ダークモード</p>
+                        <ThemaSwitch />
                       </div>
                     </div>
                     <div
