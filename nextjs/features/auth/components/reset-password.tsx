@@ -118,7 +118,7 @@ export const ResetPassword = ({
 
               <div className={styles.resetPasswordButtonContent}>
                 <button onClick={handleResetPassword} className={styles.userCreateButton}>
-                  パスワードを変更
+                  パスワードを再発行
                 </button>
               </div>
             </div>
