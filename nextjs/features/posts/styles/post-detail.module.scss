@@ -167,9 +167,16 @@
             .menuItem {
               font-size: 0.8rem;
               width: 100%;
-              padding: 0.5rem 1rem;
+              padding: 0.25rem  1rem;
               cursor: pointer;
               border-radius: 0.25rem;
+
+              .postDetailEditContainer {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5rem;
+              }
 
               &:hover {
                 background-color: #000;
