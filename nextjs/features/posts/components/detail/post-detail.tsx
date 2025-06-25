@@ -26,6 +26,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { PostEditForm } from "../form/post-edit-form";
 import dynamic from "next/dynamic";
 import { ZoomPostImage } from "../zoom-post-image";
+import { FiEdit } from "react-icons/fi";
 
 const OtherPostList = dynamic(
   () =>
@@ -257,7 +258,10 @@ export const PostDetail = ({
                           openModal(<PostEditForm onClose={closeModal} post={post} />);
                         }}
                       >
-                        編集する
+                        <div className={styles.postDetailEditContainer}>
+                          <FiEdit size={16} className={styles.postDetailEditIcon} />
+                          <p className={styles.postDetailEditText}>編集</p>
+                        </div>
                       </div>
                     </div>
                   )}
