@@ -3,7 +3,7 @@
 import styles from "@/features/posts/styles/search-result.module.scss";
 import { Post } from "@/features/posts/types/index";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { MdOutlineLastPage } from "react-icons/md";
 import { MdOutlineFirstPage } from "react-icons/md";
 import { fetchPosts } from "@/features/posts/endpoint";
@@ -71,17 +71,16 @@ export const SearchResult = ({
     { label: "今週の人気順", value: "this_week_popular" },
   ];
 
-  // タグ選択、検索時にAPIからのデータが変更されたら、postListを更新
   useEffect(() => {
     setPostList(posts);
+  
+    const updatedLikedPosts = Object.fromEntries(
+      posts.map((post) => [post.id, post.is_liked])
+    );
+    setLikedPosts(updatedLikedPosts);
   }, [posts]);
 
-  useEffect(() => {
-    const updatedLikedPosts = Object.fromEntries(postList.map((post) => [post.id, post.is_liked]));
-    if (JSON.stringify(updatedLikedPosts) !== JSON.stringify(likedPosts)) {
-      setLikedPosts(updatedLikedPosts);
-    }
-
+  useMemo(() => {
     setPhotoGalleryPosts(
       postList.map((post) => ({
         postId: post.id,
@@ -95,7 +94,7 @@ export const SearchResult = ({
       }))
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postList, changedCurrentPage]);
+  }, [postList, changedCurrentPage, likedPosts]);
 
   const handlePageChange = async (page: number) => {
     setChangedCurrentPage(page);
@@ -150,7 +149,11 @@ export const SearchResult = ({
         <div className={styles.searchDetailContainer}>
           <div className={styles.searchDetailTitleContainer}>
             <p className={styles.searchDetailTitle}>
-              {title != "undefined" ? `${title}` : selectedTag === "#ALL" ? "ALL" : `${selectedTag}`}
+              {title != "undefined"
+                ? `${title}`
+                : selectedTag === "#ALL"
+                ? "ALL"
+                : `${selectedTag}`}
             </p>
           </div>
           <div className={styles.searchDetailContent}>
