@@ -21,6 +21,10 @@
       .profileIntroduceTitle {
         font-size: 1.5rem;
         font-weight: bold;
+        font-family: "Noto Sans JP";
+        padding: 0.5rem;
+        border: 1px solid #000;
+        border-radius: 0.5rem;
       }
       .profileIntroduce {
         font-size: 1rem;
@@ -28,6 +32,10 @@
         font-weight: lighter;
         word-break: break-all;
         white-space: break-spaces;
+        border: 1px solid #000;
+        font-family: "Noto Sans JP";
+        padding: 0.5rem;
+        border-radius: 0.5rem;
       }
     }
 
