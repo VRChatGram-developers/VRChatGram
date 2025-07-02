@@ -38,7 +38,7 @@ export const SocialLink = ({
               <input
                 type="text"
                 defaultValue={socialLink.platform_url}
-                className={styles.profileIntroduceLink}
+                className={styles.profileIntroduceLinkEdit}
                 onChange={(e) => {
                   handleEditSocialLink(e, index);
                 }}
