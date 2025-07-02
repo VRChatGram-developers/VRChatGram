@@ -32,13 +32,25 @@ export async function generateMetadata({
       url: `${process.env.NEXT_PUBLIC_APP_URL}/posts/${id}`,
       images: [
         {
-          url: post.images[0].url,
+          url: post.images[0].url.endsWith(".mp4") ? "/video-thumbnail.png" : post.images[0].url,
           width: 1280,
           height: 720,
         },
       ],
       locale: "ja_JP",
       type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${post.title}`,
+      description: post.description,
+      images: [
+        {
+          url: post.images[0].url.endsWith(".mp4") ? "/video-thumbnail.png" : post.images[0].url,
+          width: 1280,
+          height: 720,
+        },
+      ],
     },
   };
 }
