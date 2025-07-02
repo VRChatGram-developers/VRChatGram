@@ -44,7 +44,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr); /* 4等分のグリッド */
       grid-auto-rows: 1fr; /* 行の高さを均等にする */
-      gap: 10px;
+      gap: 1rem;
       .postImageSub {
         width: 100%;
         aspect-ratio: 1; /* 正方形のボックスを維持 */
