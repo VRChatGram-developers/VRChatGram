@@ -1,20 +1,21 @@
-.notificationDetailContainer {
+.usageDetailContainer {
   display: grid;
   gap: 1.5rem;
   padding: 6rem 13rem 1.5rem 13rem;
 
-  .notificationDetailTitle {
+  .usageDetailTitle {
     font-size: 1.5rem;
     font-weight: bold;
     font-family: "Noto Sans JP";
+    text-align: center;
   }
 
-  .notificationDetailTypeContainer {
+  .usageDetailTypeContainer {
     display: flex;
     gap: 1rem;
     align-items: center;
 
-    .notificationDetailTypeBugFix {
+    .usageDetailTypeBugFix {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -25,7 +26,7 @@
       font-weight: bold;
     }
 
-    .notificationDetailTypeUpdate {
+    .usageDetailTypeUpdate {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -37,14 +38,14 @@
     }
   }
 
-  .notificationDetailContentContainer {
+  .usageDetailContentContainer {
     display: grid;
     background-color: #fff;
     padding: 1.5rem 8rem 1.5rem 8rem;
     border-radius: 1rem;
     gap: 1rem;
 
-    .notificationDetailBackButton {
+    .usageDetailBackButton {
       text-align: center;
       font-size: 0.9rem;
       font-family: "Noto Sans JP";
@@ -54,7 +55,7 @@
     }
   }
 
-  .notificationDetailContentText {
+  .usageDetailContentText {
     font-size: 1rem;
     font-family: "Noto Sans JP";
   }
@@ -66,10 +67,10 @@
 
 /* タブレット */
 @media (max-width: 1024px) {
-  .notificationDetailContainer {
+  .usageDetailContainer {
     padding: 6rem 10rem 1.5rem 10rem;
 
-    .notificationDetailContentContainer {
+    .usageDetailContentContainer {
       padding: 2rem 2rem !important;
     }
   }
@@ -77,10 +78,10 @@
 
 /* タブレット  ~ スマートフォン */
 @media (max-width: 768px) {
-  .notificationDetailContainer {
+  .usageDetailContainer {
     padding: 6rem 1rem !important;
 
-    .notificationDetailContentContainer {
+    .usageDetailContentContainer {
       padding: 2rem 2rem !important;
     }
   }

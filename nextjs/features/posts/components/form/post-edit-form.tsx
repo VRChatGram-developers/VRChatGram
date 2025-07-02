@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useMemo } from "react";
 import { updatePost, fetchS3SignedUrl } from "../../endpoint";
 import styles from "@/features/posts/styles/post-edit-form.module.scss";
 import { PostDetail, ImageDataForUpdate, Booth } from "../../types";
@@ -16,7 +16,15 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
     post.show_sensitive_type.toString() || "all"
   );
   const [description, setDescription] = useState<string>("");
-  const [boothItems, setBoothItems] = useState<Booth[]>([]);
+  const [boothItems, setBoothItems] = useState<Booth[]>([
+    {
+      id: "00000000-0000-0000-0000-000000000000",
+      title: "",
+      detail: "",
+      url: "",
+      image: "",
+    },
+  ]);
   const [errorBoothItems, setErrorBoothItems] = useState<string[]>([""]);
   const [errorTitle, setErrorTitle] = useState("");
   const [mainImage, setMainImage] = useState<ImageDataForUpdate | null>(null);
@@ -24,11 +32,24 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  useEffect(() => {
+  useMemo(() => {
     setTitle(post.title);
     setTags(post.tags.map((tag) => tag.tag.name));
     setDescription(post.description);
-    setBoothItems(post.booth_items.map((boothItem) => boothItem.booth));
+    if (post.booth_items.length > 0) {
+      setBoothItems(post.booth_items.map((boothItem) => boothItem.booth));
+    } else {
+      setBoothItems([
+        {
+          id: "00000000-0000-0000-0000-000000000000",
+          title: "",
+          detail: "",
+          url: "",
+          image: "",
+        },
+      ]);
+    }
+
     if (post.images.length > 0) {
       setMainImage({
         id: post.images[0].id.toString(),
@@ -243,7 +264,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
       await updatePost(post.id.toString(), {
         title,
         description,
-        boothItems,
+        boothItems: boothItems.filter((boothItem) => boothItem.url !== ""),
         images: postImages,
         tags,
         show_sensitive_type: selectedAgeRestriction,
@@ -507,10 +528,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
           </div>
 
           <div className={styles.submitContainer}>
-            <button
-              onClick={handleSubmit}
-              disabled={images.length === 0}
-            >
+            <button onClick={handleSubmit} disabled={images.length === 0}>
               <p className={styles.postButtonText}>更新する</p>
             </button>
           </div>

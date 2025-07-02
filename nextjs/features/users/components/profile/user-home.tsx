@@ -36,7 +36,7 @@ export const UserHome = ({
             <input
               type="text"
               defaultValue={introductionTitle}
-              className={styles.profileIntroduceTitle}
+              className={styles.profileIntroduceTitleEdit}
               onChange={(e) => {
                 setIntroductionTitle(e.target.value);
               }}
@@ -44,7 +44,7 @@ export const UserHome = ({
             />
             <textarea
               defaultValue={introductionDetail}
-              className={styles.profileIntroduce}
+              className={styles.profileIntroduceEdit}
               onChange={(e) => {
                 setIntroductionDetail(e.target.value);
               }}

@@ -7,11 +7,11 @@ import Link from "next/link";
 
 export const Introduction = ({ introduction }: { introduction: IntroductionType }) => {
   return (
-    <div className={styles.notificationDetailContainer}>
-      <div className={styles.notificationDetailContentContainer}>
-        <div className={styles.notificationDetailTitle}>{introduction.title}</div>
-        <div className="prose">{parse(introduction.content)}</div>
-        <div className={styles.notificationDetailBackButton}>
+    <div className={styles.introductionDetailContainer}>
+      <div className={styles.introductionDetailContentContainer}>
+        <div className={styles.introductionDetailTitle}>{introduction.title}</div>
+        <div className="prose max-w-full" >{parse(introduction.content)}</div>
+        <div className={styles.introductionDetailBackButton}>
           <Link href="/">トップへ戻る</Link>
         </div>
       </div>
