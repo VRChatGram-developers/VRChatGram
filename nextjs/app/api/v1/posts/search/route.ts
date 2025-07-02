@@ -104,13 +104,17 @@ export async function GET(request: Request) {
       };
     }
 
-    let orderBy: Prisma.postsOrderByWithRelationInput = {};
-    if (sort) {
-      if (sort === "newest") {
+    let orderBy: Prisma.postsOrderByWithRelationInput;
+    switch (sort) {
+      case "newest":
         orderBy = { created_at: "desc" };
-      } else if (sort === "popular") {
+        break;
+      case "popular":
         orderBy = { likes: { _count: "desc" } };
-      }
+        break;
+      default:
+        orderBy = { created_at: "desc" };
+        break;
     }
 
     let posts;
