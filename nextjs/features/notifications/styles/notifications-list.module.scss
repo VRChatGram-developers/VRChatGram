@@ -5,10 +5,12 @@
   justify-content: center;
   padding-top: 6rem;
   min-height: 30rem;
+
   .notificationsListContent {
     display: grid;
     gap: 1rem;
     max-width: 60rem;
+
     .notificationsElementContainer {
       cursor: pointer;
       background-color: #fff;
@@ -30,6 +32,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
           .notificationsPublishDateText {
             font-size: 1rem;
           }
@@ -70,8 +73,10 @@
           font-weight: bold;
           font-family: "Noto Sans JP";
         }
+
         .notificationsContentTextContent {
           overflow: hidden;
+
           .notificationsContentText {
             overflow: hidden;
             text-overflow: ellipsis;
@@ -92,7 +97,7 @@
     justify-content: center;
     padding: 4rem 0;
 
-    .paginationMoveButton{
+    .paginationMoveButton {
       margin: 0 0.5rem;
       cursor: pointer;
       width: 40px;
@@ -138,10 +143,15 @@
 }
 
 @media (min-width: 576px) {
-    .paginationMoveFirstButton {
-        margin-right: 1rem;
-    }
-    .paginationMoveLastButton{
-        margin-left: 1rem;
-    }
+  .notificationsListContainer {
+    min-height: 30rem;
+  }
+
+  .paginationMoveFirstButton {
+    margin-right: 1rem;
+  }
+
+  .paginationMoveLastButton {
+    margin-left: 1rem;
+  }
 }
