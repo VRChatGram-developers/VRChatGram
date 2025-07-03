@@ -69,7 +69,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
     const post = await prisma.posts.findUniqueOrThrow({
-      where: { id: postId },
+      where: { id: postId, deleted_at: null },
       select: {
         tags: {
           select: {
