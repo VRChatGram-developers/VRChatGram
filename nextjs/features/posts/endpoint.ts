@@ -161,7 +161,6 @@ export const updatePost = async <T>(postId: string, post: T) => {
       }
     })
   );
-  console.log(boothItemsResponse);
   const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
     method: "PATCH",
     body: JSON.stringify({ ...rest, boothItems: boothItemsResponse }),
@@ -195,6 +194,18 @@ export const fetchRecommendPostList = async (postId: string, headers?: Headers) 
   if (!response.ok) {
     console.error(response);
     return "Failed to fetch recommend posts";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const deletePost = async (postId: string) => {
+  const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    console.error(response);
+    return "Failed to delete post";
   }
   const data = await response.json();
   return data;
