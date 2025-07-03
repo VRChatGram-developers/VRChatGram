@@ -27,6 +27,8 @@ import { PostEditForm } from "../form/post-edit-form";
 import dynamic from "next/dynamic";
 import { ZoomPostImage } from "../zoom-post-image";
 import { FiEdit } from "react-icons/fi";
+import { FiTrash } from "react-icons/fi";
+import { DeletePostConfirm } from "./delete-post-confirm";
 
 const OtherPostList = dynamic(
   () =>
@@ -261,6 +263,19 @@ export const PostDetail = ({
                         <div className={styles.postDetailEditContainer}>
                           <FiEdit size={16} className={styles.postDetailEditIcon} />
                           <p className={styles.postDetailEditText}>編集</p>
+                        </div>
+                      </div>
+                      <div
+                        className={styles.menuItem}
+                        onClick={() => {
+                          openModal(
+                            <DeletePostConfirm postId={post.id.toString()} onClose={closeModal} />
+                          );
+                        }}
+                      >
+                        <div className={styles.postDetailEditContainer}>
+                          <FiTrash size={16} className={styles.postDetailEditIcon} />
+                          <p className={styles.postDetailEditText}>削除</p>
                         </div>
                       </div>
                     </div>

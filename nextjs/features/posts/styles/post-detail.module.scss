@@ -170,7 +170,7 @@
             .menuItem {
               font-size: 0.8rem;
               width: 100%;
-              padding: 0.25rem  1rem;
+              padding: 0.5rem  1rem;
               cursor: pointer;
               border-radius: 0.25rem;
 
@@ -380,6 +380,10 @@
 @media (max-width: 768px) {
   .postDetailTitle {
     font-size: 2rem !important;
+  }
+
+  .postMainImageContainer {
+   border-top: 1px solid #aaa !important;
   }
 }
 
