@@ -66,7 +66,7 @@ export default function RootLayout({
             <link rel="icon" type="image/svg" sizes="50x50" href="/header/vrcss_icon.svg" />
             {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
               <>
-                <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID} />
+                <meta name="google-adsense-account" content={`ca-pub-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`} />
                 <Script
                   async
                   src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
