@@ -32,10 +32,9 @@ export const metadata: Metadata = {
     siteName: "VRCSS",
     url: process.env.NEXT_PUBLIC_APP_URL,
     images: {
-      url: "/assets/vrcss-ogp.png",
+      url: "/assets/vrcss.png",
       type: "image/png",
       width: 1200,
-      height: 630,
     },
   },
   twitter: {
@@ -44,10 +43,9 @@ export const metadata: Metadata = {
     description: "VRChatに特化したソーシャルメディアプラットフォーム",
     creator: "@vrcss",
     images: {
-      url: "/assets/vrcss-ogp.png",
+      url: "/assets/vrcss.png",
       type: "image/png",
       width: 1200,
-      height: 630,
     },
   },
 };
