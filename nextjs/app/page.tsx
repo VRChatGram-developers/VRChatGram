@@ -91,10 +91,22 @@ export default async function Home() {
     return <div>{popularTagList}</div>;
   }
   const { popularPostList, latestPostList } = homeData;
+  const GoogleAd = dynamic(() => import("@/features/home/components/google-adsense"), {
+    loading: () => (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader color="#69BEEF" size={100} className="w-full h-full" />
+      </div>
+    ),
+  });
+
+  const dataSlotId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_DATA_SLOT_ID || "";
 
   return (
     <>
       <Main notifications={serializedNotifications} />
+      {dataSlotId && (
+        <GoogleAd slot={dataSlotId} style={{ width: "100%", height: "60px" }} responsive="true" />
+      )}
       <PopularPostList popularPostList={popularPostList} />
       <PopularTag popularTagList={popularTagList} />
       <LatestPost latestPostList={latestPostList} />
