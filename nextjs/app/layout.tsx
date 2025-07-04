@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "VRCSS",
     description: "VRChatに特化したソーシャルメディアプラットフォーム",
     creator: "@vrcss",
