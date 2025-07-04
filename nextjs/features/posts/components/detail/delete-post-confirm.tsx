@@ -38,7 +38,7 @@ export const DeletePostConfirm = ({ postId, onClose }: { postId: string; onClose
       <div className={styles.postDeleteContentContainer}>
         <div className={styles.postDeleteAlertDescriptionContainer}>
           <div>
-            この操作は取り消せません。<br></br>削除するとこの投稿は完全に失われます。よろしいですか？
+            この操作は取り消せません。<br></br>削除するとこの投稿は完全に失われます。<br></br>よろしいですか？
           </div>
         </div>
       </div>
