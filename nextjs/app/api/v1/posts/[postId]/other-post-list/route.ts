@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 
 const fetchOtherPostList = async (userId: string, postId: string) => {
   return await prisma.posts.findMany({
-    where: { user_id: userId, id: { not: postId } },
+    where: { user_id: userId, id: { not: postId }, deleted_at: null },
     select: {
       id: true,
       title: true,

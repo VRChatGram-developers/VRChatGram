@@ -8,6 +8,7 @@ export const runtime = "edge";
 export async function GET() {
   try {
     const posts = await prisma.posts.findMany({
+      where: { deleted_at: null },
       select: {
         title: true,
         likes: {

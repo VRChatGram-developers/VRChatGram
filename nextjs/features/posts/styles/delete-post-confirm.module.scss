@@ -1,0 +1,118 @@
+.postDeleteContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    position: relative;
+    border-radius: 10px;
+    padding: 3rem 3rem 2rem 3rem;
+    background-color: white;
+    max-width: 400px;
+
+    .postDeleteContentContainer {
+        width: 100%;
+        gap: 2rem;
+        display: flex;
+        flex-direction: column;
+
+        .postDeleteAlertDescriptionContainer {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9rem;
+            font-family: "Noto Sans JP", sans-serif;
+            gap: 1rem;
+
+            .postDeleteAlertDescriptionListContainer {
+                background-color: #F5F5F5;
+                padding: 1rem;
+            }
+        }
+
+        .postDeletePasswordContainer {
+            font-size: 0.9rem;
+            font-family: "Noto Sans JP", sans-serif;
+
+            .postDeletePasswordInput {
+                height: 0.9rem;
+                border: 0.8px solid black;
+                background-color: #F1F1F1;
+                padding: 0.5rem;
+            }
+        }
+    }
+
+    .postDeleteAlertIcon {
+        background-color: #FF7D7D;
+        color: white;
+        border: 2px solid #D9D9D9;
+        height: 56px;
+        width: 56px;
+        border-radius: 50%;
+        z-index: 5;
+        position: absolute;
+        top: -30px;
+    }
+
+    .postDeleteTitleContainer {
+        font-size: 1.5rem;
+        font-weight: bold;
+        font-family: "Noto Sans JP", sans-serif;
+    }
+
+    .postDeleteBorder {
+        width: 100%;
+        border: 0.8px solid black;
+    }
+
+    .postDeleteAndCancelButtonContainer {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        gap: 1rem;
+
+        .postDeleteCancelButtonContainer {
+            display: flex;
+            justify-content: flex-end;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            font-family: "Noto Sans JP", sans-serif;
+
+            .postDeleteCancelButton {
+                background-color: #F1F1F1;
+                color: #555;
+                padding: 0.5rem 1rem;
+                border-radius: 10px;
+
+                &:hover {
+                    filter: brightness(0.9);
+                }
+            }
+        }
+
+        .postDeleteButtonContainer {
+            display: flex;
+            justify-content: flex-end;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: "Noto Sans JP", sans-serif;
+
+            .postDeleteButton {
+                background-color: #FF7D7D;
+                padding: 0.5rem 1rem;
+                border-radius: 10px;
+
+                &:hover {
+                    filter: brightness(0.9);
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .postDeleteTitleContainer {
+        padding: 1.5rem 2rem !important;
+    }
+}

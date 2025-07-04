@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import prisma from "@/prisma/client";
 import { auth } from "@/libs/firebase/auth";
+import PostService from "@/app/api/services/post-service";
 
 export const runtime = "nodejs";
 
@@ -32,7 +33,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
     const post = await prisma.posts.findUniqueOrThrow({
-      where: { id: postId },
+      where: { id: postId, deleted_at: null },
       select: {
         id: true,
         title: true,
@@ -196,5 +197,24 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "投稿に失敗しました" }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ postId: string }> }
+) {
+  try {
+    const { postId } = await params;
+    if (!postId) {
+      return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
+    }
+
+    const postService = new PostService();
+    const result = await postService.deletePostAndRelatedData(postId);
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "投稿の削除に失敗しました" }, { status: 500 });
   }
 }

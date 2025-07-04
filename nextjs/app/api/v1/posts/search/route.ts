@@ -92,7 +92,7 @@ export async function GET(request: Request) {
     //検索の開始位置を取得。
     const offset = (page - 1) * limit;
 
-    const where: Prisma.postsWhereInput = {};
+    const where: Prisma.postsWhereInput = { deleted_at: null };
     if (title) {
       where.title = { contains: title };
     }

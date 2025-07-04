@@ -122,7 +122,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
 
     const user = await prisma.users.findUnique({
       where: {
-        my_id: myId,
+        my_id: myId
       },
       select: {
         id: true,
@@ -139,6 +139,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ myId
           },
         },
         posts: {
+          where: {
+            deleted_at: null,
+          },
           select: {
             id: true,
             title: true,

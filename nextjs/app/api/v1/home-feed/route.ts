@@ -18,6 +18,7 @@ export async function POST(request: Request) {
     }
 
     const popularPostList = await prisma.posts.findMany({
+      where: { deleted_at: null },
       orderBy: { likes: { _count: "desc" } },
       select: {
         id: true,
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
     });
 
     const latestPostList = await prisma.posts.findMany({
+      where: { deleted_at: null },
       orderBy: { created_at: "desc" },
       select: {
         id: true,
@@ -71,7 +73,7 @@ export async function POST(request: Request) {
 
     const latestPostListWithX = await prisma.posts.findMany({
       orderBy: { created_at: "desc" },
-      where: { is_posted_x: true },
+      where: { is_posted_x: true, deleted_at: null },
       select: {
         id: true,
         show_sensitive_type: true,
