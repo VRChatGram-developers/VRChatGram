@@ -381,6 +381,14 @@
 
 }
 
+@mixin profileHeaderUserIconContainerBase {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 0.5rem;
+}
+
 @media (max-width: 768px) {
 
   .profileHeaderUserIconInputContainer {
@@ -393,11 +401,17 @@
   }
 
   .profileUserIconContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0 0.5rem;
+    @include profileHeaderUserIconContainerBase;
+
+    .profileHeaderUserIcon {
+      aspect-ratio: 1/1 !important;
+      border-radius: 50% !important;
+      object-fit: cover !important;
+    }
+  }
+
+  .profileUserIconContainerEdit {
+    @include profileHeaderUserIconContainerBase;
     width: 100%;
 
     .profileHeaderUserIcon {
