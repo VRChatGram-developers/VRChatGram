@@ -55,8 +55,8 @@ export const PostCard = ({ postCardProps }: { postCardProps: PostCardProps }) =>
         <Image
           src={postImageUrl || samplePostImageUrl}
           alt={`ピックアップ画像`}
-          width={402}
-          height={402}
+          width={320}
+          height={320}
           className={styles.likesPostsItemImage}
           unoptimized
           priority
