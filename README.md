@@ -47,6 +47,7 @@ npm run seed
 
 5.以下のURLでページを開く
 
+
 http://localhost:3000
 
 
