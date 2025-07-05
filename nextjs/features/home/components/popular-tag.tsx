@@ -96,8 +96,8 @@ const PopularTag = ({ popularTagList }: { popularTagList: Tag[] }) => {
         </div>
       </div>
       <div className={styles.tagListContainer}>
-        {popularTagList.map((tag) => (
-          <div className={styles.tagListContent} key={tag.id}>
+        {popularTagList.map((tag, index) => (
+          <div className={styles.tagListContent} key={`${tag.id}-${index}`}>
             <Image
               src={tag.url || "/home/femailtag-icon.png"}
               alt={`#${tag.name}`}
