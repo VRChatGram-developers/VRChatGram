@@ -256,7 +256,7 @@ export const UserProfile = ({ user }: { user: User }) => {
                     </button>
                   </div>
                 </div>
-                <div className={styles.profileUserIconContainer}>
+                <div className={styles.profileUserIconContainerEdit}>
                   <Image
                     src={previewProfileUrl || user.profile_url || IconImageURL}
                     alt="profile"
