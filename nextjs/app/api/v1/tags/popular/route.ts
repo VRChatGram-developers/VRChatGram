@@ -27,6 +27,12 @@ export async function GET(
       const popularPostImageByTagId = await prisma.post_tags.findMany({
         select: {
           tag_id: true,
+          tag: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           post: {
             select: {
               images: {
@@ -43,11 +49,6 @@ export async function GET(
             },
           },
         },
-        where: {
-          tag_id: {
-            in: popularTagList.map((tag) => tag.id.toString()),
-          },
-        },
         orderBy: {
           post: {
             likes: {
@@ -56,14 +57,14 @@ export async function GET(
           },
         },
         take: Number(limit),
-      })
+      });
 
       return NextResponse.json(
-        popularTagList.map((tag) => {
+        popularPostImageByTagId.map((tag) => {
           return {
-            id: tag.id,
-            name: tag.name,
-            url: popularPostImageByTagId.find((post) => post.tag_id === tag.id)?.post.images[0].url,
+            id: tag.tag.id,
+            name: tag.tag.name,
+            url: tag.post.images[0].url,
           };
         })
       );
