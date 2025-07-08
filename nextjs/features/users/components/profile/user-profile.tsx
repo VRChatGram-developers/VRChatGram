@@ -16,8 +16,9 @@ import { useRouter } from "next/navigation";
 import { LoginFormModal } from "@/features/auth/components/login-form-modal";
 import { useModal } from "@/provider/modal-provider";
 import { DropdownMenu } from "./drop-down-menu";
-import { FaImage } from "react-icons/fa6";
+import { CiImageOn } from "react-icons/ci";
 import { Slide, toast } from "react-toastify";
+import { GoFileDirectory } from "react-icons/go";
 
 export const UserProfile = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -196,7 +197,7 @@ export const UserProfile = ({ user }: { user: User }) => {
       >
         {isUserEditing && (
           <div className={styles.headerIconEditContainer}>
-            <FaImage size={40} />
+            <CiImageOn size={40} color="#fff" />
             <div className={styles.profileInputTextContainer}>
               <p className={styles.profileInputText}>ここにドロップ&ドロップ</p>
               <p className={styles.profileInputText}>または</p>
@@ -209,11 +210,7 @@ export const UserProfile = ({ user }: { user: User }) => {
               hidden
             />
             <div className={styles.headerUserIconInputButtonContainer}>
-              <img
-                src={"/upload-file.png"}
-                alt="profile"
-                className={styles.headerUserIconInputButtonImage}
-              />
+              <GoFileDirectory size={20} color="#fff" />
               <button
                 className={styles.profileInputButton}
                 onClick={() => backgroundFileInputRef.current?.click()}
@@ -229,7 +226,7 @@ export const UserProfile = ({ user }: { user: User }) => {
             {isUserEditing ? (
               <div className={styles.profileHeaderUserIconInputContainer}>
                 <div className={styles.profileHeaderUserIconInput}>
-                  <FaImage size={32} />
+                  <CiImageOn size={32} color="#fff" />
                   <div className={styles.profileInputTextContainer}>
                     <p className={styles.profileInputText}>ここにドロップ&ドロップ</p>
                     <p className={styles.profileInputText}>または</p>
@@ -243,11 +240,7 @@ export const UserProfile = ({ user }: { user: User }) => {
                   />
 
                   <div className={styles.profileHeaderUserIconInputButtonContainer}>
-                    <img
-                      src={"/upload-file.png"}
-                      alt="profile"
-                      className={styles.profileHeaderUserIconInputButtonImage}
-                    />
+                    <GoFileDirectory size={20} color="#fff" />
                     <button
                       className={styles.profileInputButton}
                       onClick={() => fileInputRef.current?.click()}
