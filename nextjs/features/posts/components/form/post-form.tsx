@@ -23,10 +23,16 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedPostImageTypes, setSelectedPostImageTypes] = useState<string[]>(["avatar"]);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
     { label: "18歳以上", isSensitive: true, value: "safe" },
+  ];
+
+  const postImageTypeOptions = [
+    { label: "アバター写真", isSensitive: false, value: "avatar" },
+    { label: "ワールド写真", isSensitive: false, value: "world" },
   ];
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -122,6 +128,14 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       setSelectedAgeRestriction(value);
     }
   };
+
+  const handlePostImageTypeChange = (value: string) => {
+   setSelectedPostImageTypes((prev) =>
+    prev.includes(value)
+      ? prev.filter((v) => v !== value) // すでにある → 削除
+      : [...prev, value] // なければ追加
+  );
+}
 
   const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newBoothItems = [...boothItems];
@@ -395,6 +409,24 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                               value={option.value}
                               checked={selectedAgeRestriction === option.value}
                               onChange={() => handleCheckboxChange(option.value)}
+                            />
+                            {option.label}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div className={styles.postImageTypeContainer}>
+                      <p className={styles.postDetailTitleText}>写真の種類</p>
+                      <div className={styles.postImageTypeContent}>
+                        {postImageTypeOptions.map((option) => (
+                          <label key={option.value} className={styles.postImageTypeLabel}>
+                            <input
+                              type="checkbox"
+                              name="ageRestriction"
+                              className={styles.postImageTypeInput}
+                              value={option.value}
+                              checked={selectedPostImageTypes.includes(option.value)}
+                              onChange={() => handlePostImageTypeChange(option.value)}
                             />
                             {option.label}
                           </label>
