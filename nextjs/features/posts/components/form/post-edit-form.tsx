@@ -33,6 +33,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>([""]);
   const [photoTypes, setPhotoTypes] = useState<PhotoType[]>([]);
+  const [errorPostTypes, setErrorPostTypes] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -210,6 +211,14 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
     return true;
   };
 
+  const isValidPostTypes = () => {
+    if (selectedPostTypes.length === 0) {
+      setErrorPostTypes("写真の種類を選択してください");
+      return false;
+    }
+    return true;
+  };
+
   const addBoothItem = () => {
     setBoothItems([
       ...boothItems,
@@ -240,8 +249,9 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
   const handleSubmit = async () => {
     const isBoothItemsValid = isValidBoothItemsLink();
     const isTitleValid = isValidTitle();
+    const isPostTypesValid = isValidPostTypes();
 
-    if (!isBoothItemsValid || !isTitleValid) {
+    if (!isBoothItemsValid || !isTitleValid || !isPostTypesValid) {
       return;
     }
 
@@ -431,7 +441,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
                 </div>
               </div>
               <div className={styles.postImageTypeContainer}>
-                <p className={styles.postDetailTitleText}>投稿種別</p>
+                <p className={styles.postDetailTitleText}>写真の種類</p>
                 <div className={styles.postImageTypeContent}>
                   {photoTypes.map((photoType) => (
                     <label key={photoType.id} className={styles.postImageTypeLabel}>
@@ -447,6 +457,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
                     </label>
                   ))}
                 </div>
+                {errorPostTypes && <div className={styles.errorMessage}>{errorPostTypes}</div>}
               </div>
               <div className={styles.postDetailTextAreaContainer}>
                 <p className={styles.postDetailTitleText}>作品説明</p>
