@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import prisma from "@/prisma/client";
 import { auth } from "@/libs/firebase/auth";
-import PostService from "@/app/api/services/post-service";
+import { PostRepositoryImpl } from "@/app/api/repository/post-repository-impl";
+import { PostServiceImpl } from "@/app/api/services/post-service-impl";
+import { UserRepositoryImpl } from "@/app/api/repository/user-repository-impl";
 
 export const runtime = "nodejs";
 
@@ -234,7 +236,10 @@ export async function DELETE(
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const postService = new PostService();
+    const postService = new PostServiceImpl(
+      new PostRepositoryImpl(),
+      new UserRepositoryImpl()
+    );
     const result = await postService.deletePostAndRelatedData(postId);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
