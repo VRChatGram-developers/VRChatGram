@@ -96,14 +96,25 @@
       .postDetailTextContaienr {
         display: flex;
         align-content: center;
-        .postDetailText {
+        gap: 1rem;
+
+        .postDetailAvatar {
           color: #fff;
           font-weight: bold;
           background-color: #69beef;
           padding: 1rem 2rem;
           border-radius: 0.5rem;
         }
+        .postDetailWorld {
+          color: #fff;
+          font-weight: bold;
+          background-color: #151C4B;
+          padding: 1rem 2rem;
+          border-radius: 0.5rem;
+        }
       }
+
+
       .postDetailTitleContainer {
         .postDetailTitle {
           font-size: 2rem;

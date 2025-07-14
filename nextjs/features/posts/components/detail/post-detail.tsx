@@ -219,7 +219,20 @@ export const PostDetail = ({
         <div className={styles.postDetailContent}>
           <div className={styles.postDetailInfoContainer}>
             <div className={styles.postDetailTextContaienr}>
-              <p className={styles.postDetailText}>アバター写真</p>
+              {post.post_photo_types.map(({ photo_type }) => {
+                return (
+                  <div
+                    key={photo_type.id}
+                    className={
+                      photo_type.name === "アバター写真"
+                        ? styles.postDetailAvatar
+                        : styles.postDetailWorld
+                    }
+                  >
+                    {photo_type.name}
+                  </div>
+                );
+              })}
             </div>
             <div className={styles.postDetailTitleContainer}>
               <p className={styles.postDetailTitle}>{post.title}</p>

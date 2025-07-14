@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
-    const { title, description, boothItems, images, tags, show_sensitive_type } =
+    const { title, description, boothItems, images, tags, show_sensitive_type, photo_types } =
       await request.json();
 
     const user = await prisma.users.findUnique({
@@ -39,6 +39,12 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
+
+    const photoTypes = await prisma.photoTypes.findMany({
+      where: {
+        id: { in: photo_types },
+      },
+    });
 
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
 
@@ -65,6 +71,11 @@ export async function POST(request: Request) {
               description: description,
               booth_items: {
                 create: formatBoothItems(boothItems),
+              },
+              post_photo_types: {
+                create: photoTypes.map((photoType) => ({
+                  photo_type_id: photoType.id,
+                })),
               },
               images: {
                 create: images,
