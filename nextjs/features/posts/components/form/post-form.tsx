@@ -8,6 +8,9 @@ import { Id, Slide, toast } from "react-toastify";
 import axios, { AxiosProgressEvent } from "axios";
 import { RxCross2 } from "react-icons/rx";
 import { useDropzone } from "react-dropzone";
+import { PhotoType } from "../../types";
+import { useEffect } from "react";
+import { fetchPhotoTypes } from "../../endpoint";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -23,6 +26,17 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>(["阿波"]);
+  const [photoTypes, setPhotoTypes] = useState<PhotoType[]>([]);
+
+  useEffect(() => {
+    const getPhotoTypes = async () => {
+      const types = await fetchPhotoTypes();
+      setPhotoTypes(types);
+      setSelectedPostTypes(types.filter((type) => type.name === "アバター写真").map((type) => type.id));
+    };
+    getPhotoTypes();
+  }, []);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
@@ -123,6 +137,12 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
+  const handlePostImageTypeChange = (value: string) => {
+    setSelectedPostTypes((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
   const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newBoothItems = [...boothItems];
     newBoothItems[index] = e.target.value;
@@ -214,6 +234,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     try {
       await createPost({
         title,
+        photo_types: selectedPostTypes,
         description,
         boothItems,
         images: postImages,
@@ -397,6 +418,24 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                               onChange={() => handleCheckboxChange(option.value)}
                             />
                             {option.label}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div className={styles.postImageTypeContainer}>
+                      <p className={styles.postDetailTitleText}>投稿種別</p>
+                      <div className={styles.postImageTypeContent}>
+                        {photoTypes.map((photoType) => (
+                          <label key={photoType.id} className={styles.postImageTypeLabel}>
+                            <input
+                              type="checkbox"
+                              name="ageRestriction"
+                              className={styles.postImageTypeInput}
+                              value={photoType.id}
+                              checked={selectedPostTypes.includes(photoType.id)}
+                              onChange={() => handlePostImageTypeChange(photoType.id)}
+                            />
+                            {photoType.name}
                           </label>
                         ))}
                       </div>
