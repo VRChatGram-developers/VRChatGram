@@ -51,6 +51,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
             },
           },
         },
+        post_photo_types: {
+          select: {
+            photo_type: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         likes: true,
         booth_items: {
           include: {
