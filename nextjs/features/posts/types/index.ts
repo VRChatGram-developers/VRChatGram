@@ -41,6 +41,9 @@ export type PostDetail = {
   recommendPostList: RecommendPost[];
   isLiked: boolean;
   isMyPost: boolean;
+  post_photo_types: {
+    photo_type: PhotoType;
+  }[];
 };
 
 export type OtherPost = {
@@ -116,4 +119,9 @@ export type ImageDataForUpdate = {
   file_name: string;
   width: number;
   height: number;
+};
+
+export type PhotoType = {
+  id: string;
+  name: string;
 };
