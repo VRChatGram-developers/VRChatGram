@@ -6,6 +6,7 @@ import { Id, Slide, toast } from "react-toastify";
 import axios, { AxiosProgressEvent } from "axios";
 import { RxCross2 } from "react-icons/rx";
 import { useRouter } from "next/navigation";
+import { fetchPhotoTypes } from "@/features/posts/endpoint";
 
 export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: PostDetail }) => {
   const [images, setImages] = useState<ImageDataForUpdate[]>([]);
@@ -29,6 +30,8 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
   const [errorTitle, setErrorTitle] = useState("");
   const [mainImage, setMainImage] = useState<ImageDataForUpdate | null>(null);
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
+  const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>([""]);
+  const [photoTypes, setPhotoTypes] = useState<PhotoType[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -36,6 +39,8 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
     setTitle(post.title);
     setTags(post.tags.map((tag) => tag.tag.name));
     setDescription(post.description);
+    setSelectedPostTypes(post.post_photo_types.map((photoType) => photoType.photo_type.id));
+    setPhotoTypes(post.post_photo_types.map((photoType) => photoType.photo_type));
     if (post.booth_items.length > 0) {
       setBoothItems(post.booth_items.map((boothItem) => boothItem.booth));
     } else {
@@ -74,6 +79,10 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
             id: image.id.toString(),
           }))
         );
+      });
+
+      fetchPhotoTypes().then((photoTypes) => {
+        setPhotoTypes(photoTypes);
       });
     }
   }, [post]);
@@ -221,6 +230,12 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
     setImages(images.filter((_, i) => i !== index));
   };
 
+  const handlePostImageTypeChange = (value: string) => {
+    setSelectedPostTypes((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
   const handleSubmit = async () => {
     const isBoothItemsValid = isValidBoothItemsLink();
     const isTitleValid = isValidTitle();
@@ -268,6 +283,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
         images: postImages,
         tags,
         show_sensitive_type: selectedAgeRestriction,
+        photo_types: selectedPostTypes,
       });
 
       const toastId = toast.success("更新しました！", {
@@ -409,6 +425,24 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
                         onChange={() => handleCheckboxChange(option.value)}
                       />
                       {option.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className={styles.postImageTypeContainer}>
+                <p className={styles.postDetailTitleText}>投稿種別</p>
+                <div className={styles.postImageTypeContent}>
+                  {photoTypes.map((photoType) => (
+                    <label key={photoType.id} className={styles.postImageTypeLabel}>
+                      <input
+                        type="checkbox"
+                        name="ageRestriction"
+                        className={styles.postImageTypeInput}
+                        value={photoType.id}
+                        checked={selectedPostTypes.includes(photoType.id)}
+                        onChange={() => handlePostImageTypeChange(photoType.id)}
+                      />
+                      {photoType.name}
                     </label>
                   ))}
                 </div>

@@ -216,6 +216,50 @@
               }
             }
           }
+
+          .postImageTypeContainer {
+            margin-bottom: 1.5rem;
+            .postImageTypeContent {
+              display: flex;
+              flex-wrap: wrap;
+              border: none;
+              .postImageTypeLabel {
+                font-size: 0.8rem;
+                display: flex;
+                align-items: center;
+                margin-right: 1rem;
+                position: relative;
+                cursor: pointer;
+                gap: 0.5rem;
+                &::before {
+                  width: 1.5rem;
+                  height: 1.5rem;
+                  border-radius: 3px;
+                  border: 2px solid #d6dde3;
+                  content: "";
+                }
+                &:has(:checked)::after {
+                  position: absolute;
+                  top: 5px;
+                  left: 9px;
+                  transform: rotate(45deg);
+                  width: 7px;
+                  height: 12px;
+                  border: solid #2589d0;
+                  border-width: 0 3px 3px 0;
+                  content: "";
+                }
+                .postImageTypeInput {
+                  display: none;
+                  margin-left: 0.5rem;
+                }
+                &:not(:first-child) {
+                  margin-left: 0.5rem;
+                }
+              }
+            }
+          }
+          
           .postDetailTextAreaContainer {
             margin-bottom: 1.3rem;
             .postDetailTextArea {

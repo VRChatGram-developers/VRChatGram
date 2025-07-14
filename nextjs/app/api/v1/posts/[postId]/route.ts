@@ -4,6 +4,7 @@ import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import prisma from "@/prisma/client";
 import { auth } from "@/libs/firebase/auth";
 import PostService from "@/app/api/services/post-service";
+import { photoType } from "@prisma/client";
 
 export const runtime = "nodejs";
 
@@ -123,7 +124,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
-    const { title, description, boothItems, images, tags, show_sensitive_type } =
+    const { title, description, boothItems, images, tags, show_sensitive_type, photo_types } =
       await request.json();
 
     const user = await prisma.users.findUnique({
@@ -134,6 +135,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
     if (!user) {
       return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
+
+    const photoTypes = await prisma.photoTypes.findMany({
+      where: {
+        id: { in: photo_types },
+      },
+    });
 
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
 
@@ -187,6 +194,14 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
             where: { id: image.id },
             update: { url: image.url },
             create: { url: image.url, width: image.width, height: image.height },
+          })),
+        },
+        post_photo_types: {
+          deleteMany: {},
+
+          // 2. 選択されたIDに基づいて新しい関連を作成
+          create: photoTypes.map((photoType: { id: string }) => ({
+            photo_type_id: photoType.id,
           })),
         },
         show_sensitive_type: show_sensitive_type,
