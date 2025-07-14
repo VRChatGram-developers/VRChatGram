@@ -7,6 +7,7 @@ import axios, { AxiosProgressEvent } from "axios";
 import { RxCross2 } from "react-icons/rx";
 import { useRouter } from "next/navigation";
 import { fetchPhotoTypes } from "@/features/posts/endpoint";
+import { PhotoType } from "@/features/posts/types";
 
 export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: PostDetail }) => {
   const [images, setImages] = useState<ImageDataForUpdate[]>([]);

@@ -4,7 +4,6 @@ import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import prisma from "@/prisma/client";
 import { auth } from "@/libs/firebase/auth";
 import PostService from "@/app/api/services/post-service";
-import { photoType } from "@prisma/client";
 
 export const runtime = "nodejs";
 
