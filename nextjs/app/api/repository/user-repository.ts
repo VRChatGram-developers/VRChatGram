@@ -1,12 +1,17 @@
-import prisma from "@/prisma/client";
 
-export class UserRepository {
+export interface User {
+  id: string;
+  uid: string;
+  name: string;
+  email: string;
+  profile_url: string;
+  my_id: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date | null;
+}
 
-  async getUserByUid(uid: string) {
-    const user = await prisma.users.findUnique({ where: { uid } });
-    if (!user) {
-      throw new Error("User not found");
-    }
-    return user;
-  }
+
+export interface UserRepository {
+  getUserByUid(uid: string): Promise<User>;
 }

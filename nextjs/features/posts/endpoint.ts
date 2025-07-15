@@ -1,4 +1,4 @@
-import { Tag, PostDetail, PostList } from "./types/index";
+import { Tag, PostDetail, PostList, PhotoType } from "./types/index";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -206,6 +206,15 @@ export const deletePost = async (postId: string) => {
   if (!response.ok) {
     console.error(response);
     return "Failed to delete post";
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const fetchPhotoTypes = async (): Promise<PhotoType[]> => {
+  const response = await fetch(`${API_URL}/api/v1/posts/create`);
+  if (!response.ok) {
+    console.error(response);
   }
   const data = await response.json();
   return data;

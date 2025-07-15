@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 import { bigIntToStringMap } from "@/utils/bigIntToStringMapper";
 import prisma from "@/prisma/client";
 import { auth } from "@/libs/firebase/auth";
-import PostService from "@/app/api/services/post-service";
+import { PostRepositoryImpl } from "@/app/api/repository/post-repository-impl";
+import { PostServiceImpl } from "@/app/api/services/post-service-impl";
+import { UserRepositoryImpl } from "@/app/api/repository/user-repository-impl";
 
 export const runtime = "nodejs";
 
@@ -44,6 +46,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ post
         tags: {
           select: {
             tag: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        post_photo_types: {
+          select: {
+            photo_type: {
               select: {
                 id: true,
                 name: true,
@@ -113,7 +125,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
       return NextResponse.json({ error: "ログインしてください" }, { status: 401 });
     }
 
-    const { title, description, boothItems, images, tags, show_sensitive_type } =
+    const { title, description, boothItems, images, tags, show_sensitive_type, photo_types } =
       await request.json();
 
     const user = await prisma.users.findUnique({
@@ -124,6 +136,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
     if (!user) {
       return NextResponse.json({ error: "ユーザーが見つかりません" }, { status: 404 });
     }
+
+    const photoTypes = await prisma.photoTypes.findMany({
+      where: {
+        id: { in: photo_types },
+      },
+    });
 
     const filteredTags = tags.filter((tag: string) => tag !== undefined && tag !== null);
 
@@ -179,6 +197,14 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ po
             create: { url: image.url, width: image.width, height: image.height },
           })),
         },
+        post_photo_types: {
+          deleteMany: {},
+
+          // 2. 選択されたIDに基づいて新しい関連を作成
+          create: photoTypes.map((photoType: { id: string }) => ({
+            photo_type_id: photoType.id,
+          })),
+        },
         show_sensitive_type: show_sensitive_type,
         user_id: user.id,
       },
@@ -210,7 +236,10 @@ export async function DELETE(
       return NextResponse.json({ error: "idが指定されていません" }, { status: 400 });
     }
 
-    const postService = new PostService();
+    const postService = new PostServiceImpl(
+      new PostRepositoryImpl(),
+      new UserRepositoryImpl()
+    );
     const result = await postService.deletePostAndRelatedData(postId);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
