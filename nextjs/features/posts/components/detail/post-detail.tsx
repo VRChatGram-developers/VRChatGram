@@ -75,6 +75,9 @@ export const PostDetail = ({
 
   useEffect(() => {
     addViewCountToPost(post.id.toString());
+  }, []);
+
+  useEffect(() => {
     const hasPhotoTypes = post.post_photo_types.length > 0;
 
     const photoTypes = hasPhotoTypes
@@ -82,7 +85,7 @@ export const PostDetail = ({
       : [{ id: "00000000-0000-0000-0000-000000000000", name: "アバター写真" }];
 
     setPhotoType(photoTypes);
-  }, []);
+  }, [post.post_photo_types]);
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);

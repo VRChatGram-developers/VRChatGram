@@ -37,12 +37,10 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  useMemo(() => {
+  useMemo(async () => {
     setTitle(post.title);
     setTags(post.tags.map((tag) => tag.tag.name));
     setDescription(post.description);
-    setSelectedPostTypes(post.post_photo_types.map((photoType) => photoType.photo_type.id));
-    setPhotoTypes(post.post_photo_types.map((photoType) => photoType.photo_type));
     if (post.booth_items.length > 0) {
       setBoothItems(post.booth_items.map((boothItem) => boothItem.booth));
     } else {
@@ -83,9 +81,14 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
         );
       });
 
-      fetchPhotoTypes().then((photoTypes) => {
-        setPhotoTypes(photoTypes);
-      });
+      const photoTypes = await fetchPhotoTypes();
+      setPhotoTypes(photoTypes);
+
+      if (post.post_photo_types.length === 0) {
+        setSelectedPostTypes(["アバター写真"]);
+      } else {
+        setSelectedPostTypes(post.post_photo_types.map((photoType) => photoType.photo_type.id));
+      }
     }
   }, [post]);
 
