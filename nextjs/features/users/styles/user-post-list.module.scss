@@ -4,7 +4,7 @@
   padding: 0 8rem;
 
   .userPostsTitle {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #151c4b;
     padding: 1.5rem 0;
@@ -88,10 +88,4 @@
     .paginationMoveLastButton{
         margin-left: 1rem;
     }
-}
-
-@media (max-width: 768px) {
-  .userPostsTitle {
-    font-size: 2rem !important;
-  }
 }

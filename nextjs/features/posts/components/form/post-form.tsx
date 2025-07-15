@@ -8,6 +8,10 @@ import { Id, Slide, toast } from "react-toastify";
 import axios, { AxiosProgressEvent } from "axios";
 import { RxCross2 } from "react-icons/rx";
 import { useDropzone } from "react-dropzone";
+import { PhotoType } from "../../types";
+import { useEffect } from "react";
+import { fetchPhotoTypes } from "../../endpoint";
+import { useRouter } from "next/navigation";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -23,16 +27,23 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedPostImageTypes, setSelectedPostImageTypes] = useState<string[]>(["avatar"]);
+  const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>(["11111111-1111-1111-1111-111111111111"]);
+  const [photoTypes, setPhotoTypes] = useState<PhotoType[]>([]);
+  const [errorPostTypes, setErrorPostTypes] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const getPhotoTypes = async () => {
+      const types = await fetchPhotoTypes();
+      setPhotoTypes(types);
+      setSelectedPostTypes(types.filter((type) => type.name === "アバター写真").map((type) => type.id));
+    };
+    getPhotoTypes();
+  }, []);
 
   const ageRestrictionOptions = [
     { label: "全年齢", isSensitive: false, value: "all" },
     { label: "18歳以上", isSensitive: true, value: "safe" },
-  ];
-
-  const postImageTypeOptions = [
-    { label: "アバター写真", isSensitive: false, value: "avatar" },
-    { label: "ワールド写真", isSensitive: false, value: "world" },
   ];
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -130,12 +141,10 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handlePostImageTypeChange = (value: string) => {
-   setSelectedPostImageTypes((prev) =>
-    prev.includes(value)
-      ? prev.filter((v) => v !== value) // すでにある → 削除
-      : [...prev, value] // なければ追加
-  );
-}
+    setSelectedPostTypes((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
 
   const handleBoothItemChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newBoothItems = [...boothItems];
@@ -184,6 +193,14 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     return true;
   };
 
+  const isValidPostTypes = () => {
+    if (selectedPostTypes.length === 0) {
+      setErrorPostTypes("写真の種類を選択してください");
+      return false;
+    }
+    return true;
+  };
+
   const addBoothItem = () => {
     setBoothItems([...boothItems, ""]);
   };
@@ -200,8 +217,9 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     setIsLoading(true);
     const isBoothItemsValid = isValidBoothItemsLink();
     const isTitleValid = isValidTitle();
+    const isPostTypesValid = isValidPostTypes();
 
-    if (!isBoothItemsValid || !isTitleValid) {
+    if (!isBoothItemsValid || !isTitleValid || !isPostTypesValid) {
       setIsLoading(false);
       return;
     }
@@ -228,6 +246,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
     try {
       await createPost({
         title,
+        photo_types: selectedPostTypes,
         description,
         boothItems,
         images: postImages,
@@ -244,6 +263,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       setTimeout(() => {
         toast.dismiss(toastId);
       }, 2000);
+      router.refresh();
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -418,20 +438,21 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
                     <div className={styles.postImageTypeContainer}>
                       <p className={styles.postDetailTitleText}>写真の種類</p>
                       <div className={styles.postImageTypeContent}>
-                        {postImageTypeOptions.map((option) => (
-                          <label key={option.value} className={styles.postImageTypeLabel}>
+                        {photoTypes.map((photoType) => (
+                          <label key={photoType.id} className={styles.postImageTypeLabel}>
                             <input
                               type="checkbox"
                               name="ageRestriction"
                               className={styles.postImageTypeInput}
-                              value={option.value}
-                              checked={selectedPostImageTypes.includes(option.value)}
-                              onChange={() => handlePostImageTypeChange(option.value)}
+                              value={photoType.id}
+                              checked={selectedPostTypes.includes(photoType.id)}
+                              onChange={() => handlePostImageTypeChange(photoType.id)}
                             />
-                            {option.label}
+                            {photoType.name}
                           </label>
                         ))}
                       </div>
+                      {errorPostTypes && <div className={styles.errorMessage}>{errorPostTypes}</div>}
                     </div>
                     <div className={styles.postDetailTextAreaContainer}>
                       <p className={styles.postDetailTitleText}>作品説明</p>

@@ -29,6 +29,7 @@ import { ZoomPostImage } from "../zoom-post-image";
 import { FiEdit } from "react-icons/fi";
 import { FiTrash } from "react-icons/fi";
 import { DeletePostConfirm } from "./delete-post-confirm";
+import { PhotoType } from "@/features/posts/types";
 
 const OtherPostList = dynamic(
   () =>
@@ -66,6 +67,7 @@ export const PostDetail = ({
   const [isDropdownEditMenuOpen, setIsDropdownEditMenuOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [photoTypes, setPhotoType] = useState<PhotoType[]>();
 
   const handleDropdownMenuOpen = () => {
     setIsDropdownEditMenuOpen(!isDropdownEditMenuOpen);
@@ -74,6 +76,16 @@ export const PostDetail = ({
   useEffect(() => {
     addViewCountToPost(post.id.toString());
   }, []);
+
+  useEffect(() => {
+    const hasPhotoTypes = post.post_photo_types.length > 0;
+
+    const photoTypes = hasPhotoTypes
+      ? post.post_photo_types.map((type) => type.photo_type)
+      : [{ id: "00000000-0000-0000-0000-000000000000", name: "アバター写真" }];
+
+    setPhotoType(photoTypes);
+  }, [post.post_photo_types]);
 
   useEffect(() => {
     setSelectedImage(post.images[0].url);
@@ -219,7 +231,18 @@ export const PostDetail = ({
         <div className={styles.postDetailContent}>
           <div className={styles.postDetailInfoContainer}>
             <div className={styles.postDetailTextContaienr}>
-              <p className={styles.postDetailText}>アバター写真</p>
+              {photoTypes?.map(({ id, name }) => {
+                return (
+                  <div
+                    key={id}
+                    className={
+                      name === "アバター写真" ? styles.postDetailAvatar : styles.postDetailWorld
+                    }
+                  >
+                    {name}
+                  </div>
+                );
+              })}
             </div>
             <div className={styles.postDetailTitleContainer}>
               <p className={styles.postDetailTitle}>{post.title}</p>

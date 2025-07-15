@@ -51,7 +51,7 @@ export const RecommendPostList = ({
               postId: post.id,
               myId: post.user?.my_id,
               postName: post.title,
-              postImageUrl: post.images[0].url,
+              postImageUrl: post.images[0]?.url ?? "",
               postImageCount: post.images.length,
               userName: post.user?.name,
               userImageUrl: post.user?.profile_url ?? "",
