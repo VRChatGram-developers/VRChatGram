@@ -29,6 +29,7 @@ import { ZoomPostImage } from "../zoom-post-image";
 import { FiEdit } from "react-icons/fi";
 import { FiTrash } from "react-icons/fi";
 import { DeletePostConfirm } from "./delete-post-confirm";
+import { PhotoType } from "@/features/posts/types";
 
 const OtherPostList = dynamic(
   () =>
@@ -66,6 +67,7 @@ export const PostDetail = ({
   const [isDropdownEditMenuOpen, setIsDropdownEditMenuOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [photoTypes, setPhotoType] = useState<PhotoType[]>();
 
   const handleDropdownMenuOpen = () => {
     setIsDropdownEditMenuOpen(!isDropdownEditMenuOpen);
@@ -73,6 +75,13 @@ export const PostDetail = ({
 
   useEffect(() => {
     addViewCountToPost(post.id.toString());
+    const hasPhotoTypes = post.post_photo_types.length > 0;
+
+    const photoTypes = hasPhotoTypes
+      ? post.post_photo_types.map((type) => type.photo_type)
+      : [{ id: "00000000-0000-0000-0000-000000000000", name: "アバター写真" }];
+
+    setPhotoType(photoTypes);
   }, []);
 
   useEffect(() => {
@@ -219,17 +228,15 @@ export const PostDetail = ({
         <div className={styles.postDetailContent}>
           <div className={styles.postDetailInfoContainer}>
             <div className={styles.postDetailTextContaienr}>
-              {post.post_photo_types.map(({ photo_type }) => {
+              {photoTypes?.map(({ id, name }) => {
                 return (
                   <div
-                    key={photo_type.id}
+                    key={id}
                     className={
-                      photo_type.name === "アバター写真"
-                        ? styles.postDetailAvatar
-                        : styles.postDetailWorld
+                      name === "アバター写真" ? styles.postDetailAvatar : styles.postDetailWorld
                     }
                   >
-                    {photo_type.name}
+                    {name}
                   </div>
                 );
               })}
