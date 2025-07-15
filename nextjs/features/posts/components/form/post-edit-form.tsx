@@ -85,7 +85,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
       setPhotoTypes(photoTypes);
 
       if (post.post_photo_types.length === 0) {
-        setSelectedPostTypes(["アバター写真"]);
+        setSelectedPostTypes(["11111111-1111-1111-1111-111111111111"]);
       } else {
         setSelectedPostTypes(post.post_photo_types.map((photoType) => photoType.photo_type.id));
       }
