@@ -44,7 +44,7 @@ export const PhotoGallery = ({ posts }: { posts: PhotoGalleryProps[] }) => {
   return (
     <RowsPhotoAlbum
       photos={photoObjects}
-      targetRowHeight={300}
+      targetRowHeight={280}
       render={{
         wrapper: (props, { photo }) => <PhotoCard {...props} {...photo} />,
       }}
