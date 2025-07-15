@@ -79,12 +79,17 @@
       .postImageTag {
         display: flex;
         padding: 0.5rem;
-        border: 1px solid #000;
+        border: 1px solid #ccc;
         border-radius: 0.5rem;
         align-items: center;
         .postImageTagText {
           margin-right: 0.5rem;
           font-weight: bold;
+        }
+
+        &:hover {
+          background-color: #f0f0f0;
+          cursor: pointer;
         }
       }
     }
