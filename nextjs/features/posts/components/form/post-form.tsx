@@ -11,6 +11,7 @@ import { useDropzone } from "react-dropzone";
 import { PhotoType } from "../../types";
 import { useEffect } from "react";
 import { fetchPhotoTypes } from "../../endpoint";
+import { useRouter } from "next/navigation";
 
 export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -29,6 +30,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>(["阿波"]);
   const [photoTypes, setPhotoTypes] = useState<PhotoType[]>([]);
   const [errorPostTypes, setErrorPostTypes] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const getPhotoTypes = async () => {
@@ -261,6 +263,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
       setTimeout(() => {
         toast.dismiss(toastId);
       }, 2000);
+      router.refresh();
     } catch (error) {
       console.error(error);
       setIsLoading(false);

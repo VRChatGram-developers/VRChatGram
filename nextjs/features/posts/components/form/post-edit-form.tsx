@@ -311,6 +311,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
       }, 2000);
 
       router.push(`/posts/${post.id}`);
+      router.refresh();
     } catch (error) {
       console.error(error);
       toast.update(toastId, {
