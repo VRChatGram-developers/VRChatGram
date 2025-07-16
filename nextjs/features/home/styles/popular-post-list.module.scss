@@ -1,5 +1,5 @@
 .popularPostListContainer {
-  padding: 3rem 12rem;
+  padding: 3rem 1.5rem;
   width: 100%;
 
   .popularPostListTitle {
@@ -22,6 +22,10 @@
 
 // 1,280px以上（デスクトップ）
 @media (min-width: 1280px) {
+  .popularPostListContainer {
+    padding: 3rem 12rem !important;
+  }
+
   .popularPostList {
     grid-template-columns: repeat(4, 1fr);
     grid-auto-flow: row;
