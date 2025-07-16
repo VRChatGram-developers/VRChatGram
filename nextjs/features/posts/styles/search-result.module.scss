@@ -3,7 +3,6 @@
   height: 100%;
   color: #151c4b;
   font-family: "Noto Sans JP", sans-serif;
-  padding: 0 10.5rem;
 
   .searchContainer {
     display: flex;
@@ -178,6 +177,9 @@
 
 // 1,280px以上（デスクトップ）
 @media (min-width: 1280px) {
+  .userPostsContainer {
+    padding: 0 10.5rem !important;
+  }
   .userPostsList {
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
