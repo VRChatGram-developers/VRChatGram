@@ -8,6 +8,7 @@ import { ModalProvider } from "@/provider/modal-provider";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,6 +75,9 @@ export default function RootLayout({
                   strategy="afterInteractive"
                 />
               </>
+            )}
+            {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
+              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!}/>
             )}
           </head>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased layout`}>
