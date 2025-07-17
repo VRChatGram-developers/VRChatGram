@@ -53,9 +53,11 @@
       }
 }
 
-.myViewsPostsContainer {
-    padding: 6rem 8rem 2rem 8rem !important;
-  }
+@media (min-width: 1280px) {
+    .myViewsPostsContainer {
+        padding: 6rem 12rem 2rem 12rem !important;
+    }
+}
 
 @media (min-width: 576px) {
     .paginationMoveFirstButton {
