@@ -432,7 +432,7 @@ export const PostEditForm = ({ onClose, post }: { onClose: () => void; post: Pos
                   {ageRestrictionOptions.map((option) => (
                     <label key={option.value} className={styles.postDetailAgeLimitLabel}>
                       <input
-                        type="checkbox"
+                        type="radio"
                         name="ageRestriction"
                         className={styles.postDetailAgeLimitInput}
                         value={option.value}
