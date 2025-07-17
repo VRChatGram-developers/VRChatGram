@@ -288,6 +288,16 @@
   }
 }
 
+@media (min-width: 1280px) {
+  .mainContainer {
+    padding: 5rem 0rem 3rem 0rem !important;
+  }
+
+  .mainSecondContainer {
+    padding: 0 12rem !important;
+  }
+}
+
 // 1024px未満（タブレット）
 @media (max-width: 1039px) {
   .mainContainer {

@@ -64,7 +64,8 @@ export const PhotoCard = ({
                 src={userImageUrl || "/user-icon.png"}
                 alt="new-post-image"
                 className={styles.userInfoIcon}
-                fill
+                width={30}
+                height={30}
                 unoptimized
                 priority
               />

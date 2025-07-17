@@ -5,8 +5,8 @@
   display: inline-block;
   transition: 0.1s all linear;
   font-family: "Noto Sans JP", sans-serif;
-  min-width: 20rem;
-  min-height: 20rem;
+  // min-width: 20rem;
+  // min-height: 20rem;
 
   &:hover {
     .userInfoLikeContainer {
@@ -170,5 +170,12 @@
         cursor: pointer;
       }
     }
+  }
+}
+
+@media (max-width: 1023px) {
+  .likesPostsItem {
+    min-width: 15rem;
+    min-height: 15rem;
   }
 }

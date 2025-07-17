@@ -27,7 +27,7 @@ export const PostForm = ({ onClose }: { onClose: () => void }) => {
   const [isCompositionStart, setIsCompositionStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>(["阿波"]);
+  const [selectedPostTypes, setSelectedPostTypes] = useState<string[]>(["11111111-1111-1111-1111-111111111111"]);
   const [photoTypes, setPhotoTypes] = useState<PhotoType[]>([]);
   const [errorPostTypes, setErrorPostTypes] = useState("");
   const router = useRouter();

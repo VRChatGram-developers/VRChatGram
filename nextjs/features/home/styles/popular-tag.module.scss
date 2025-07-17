@@ -176,7 +176,7 @@
       object-fit: contain;
       position: relative !important;
       width: auto !important;
-      min-width: 11rem;
+      min-width: 8rem;
       aspect-ratio: 1;
       cursor: pointer;
 
@@ -195,7 +195,7 @@
         .tagListText {
           color: #fff;
           font-weight: bold;
-          font-size: 1.5rem;
+          font-size: 1rem;
         }
       }
       .tagImage {
@@ -218,6 +218,10 @@
 
 // 1,280px以上（デスクトップ）
 @media (min-width: 1280px) {
+  .popularTagContainer {
+    padding: 3rem 12rem !important;
+  }
+
   .tagListContainer {
     grid-template-columns: repeat(6, 1fr);
   }
@@ -229,13 +233,25 @@
 }
 
 // 1040px以上1,279px未満（デスクトップ中）
-@media (max-width: 1279px) {
+@media (min-width: 1040px) AND (max-width: 1279px) {
   .tagListContainer {
     overflow-x: auto;
   }
   .searchButtonContainer {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    min-height: 13rem;
+  }
+}
+
+@media (max-width: 1039px) {
+  .tagListContainer {
+    overflow-x: auto;
+  }
+
+  .searchButtonContainer {
     grid-auto-flow: row;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr;
     min-height: 25rem;
   }
 }
