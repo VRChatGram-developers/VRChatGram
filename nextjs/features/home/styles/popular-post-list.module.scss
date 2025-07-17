@@ -6,8 +6,7 @@
     color: #151c4b;
     font-family: "Noto Sans JP";
     font-weight: bold;
-    // font-size: 2.5rem;
-    font-size: 2.5rem;
+    font-size: 2rem;
     text-align: center;
     margin-bottom: 2rem;
   }
@@ -27,17 +26,18 @@
 }
 
 // 1040px以上1,279px未満（デスクトップ中）
-@media (min-width: 1040px) and (max-width: 1279px) {
+@media (min-width: 1024px) and (max-width: 1279px) {
   .popularPostList {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 // 768px以上1,280px未満（タブレット）
-@media (max-width: 1039px) {
+@media (max-width: 1023px) {
   .popularPostList {
     overflow-x: auto;
     grid-auto-flow: column;
+    // grid-auto-columns: 20rem;
   }
 }
 
