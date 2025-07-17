@@ -19,6 +19,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.4.2",
+    "@next/third-parties": "^15.4.2-canary.5",
     "@prisma/client": "^5.20.0",
     "@tidbcloud/prisma-adapter": "^5.20.0",
     "@tidbcloud/serverless": "^0.2.0",
