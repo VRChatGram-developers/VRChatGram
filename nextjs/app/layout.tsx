@@ -9,6 +9,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import ThemeRegistry from "./theme-registry";
+import MainLayout from "@/components/layouts/main-layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,34 +63,41 @@ export default function RootLayout({
   return (
     <SessionProvider>
       <ModalProvider>
-        <html lang="en">
-          <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <link rel="icon" type="image/svg" sizes="50x50" href="/header/vrcss_icon.svg" />
-            {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
-              <>
-                <meta name="google-adsense-account" content={`ca-pub-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`} />
-                <Script
-                  async
-                  src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
-                  crossOrigin="anonymous"
-                  strategy="afterInteractive"
-                />
-              </>
-            )}
-            {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
-              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!}/>
-            )}
-          </head>
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased layout`}>
-            <div id="modal-root">
-              <Header />
-              <main> {children}</main>
-              <ToastContainer position="bottom-right" autoClose={3000} />
-              <Footer />
-            </div>
-          </body>
-        </html>
+        <ThemeRegistry options={{ key: "mui" }}>
+          <html lang="en">
+            <head>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <link rel="icon" type="image/svg" sizes="50x50" href="/header/vrcss_icon.svg" />
+              {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
+                <>
+                  <meta
+                    name="google-adsense-account"
+                    content={`ca-pub-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
+                  />
+                  <Script
+                    async
+                    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
+                    crossOrigin="anonymous"
+                    strategy="afterInteractive"
+                  />
+                </>
+              )}
+              {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
+                <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!} />
+              )}
+            </head>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased layout`}>
+              <div id="modal-root">
+                <MainLayout>
+                  {/* <Header /> */}
+                  {children}
+                  {/* <ToastContainer position="bottom-right" autoClose={3000} /> */}
+                  {/* <Footer /> */}
+                </MainLayout>
+              </div>
+            </body>
+          </html>
+        </ThemeRegistry>
       </ModalProvider>
     </SessionProvider>
   );
