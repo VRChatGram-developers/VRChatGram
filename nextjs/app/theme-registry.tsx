@@ -9,7 +9,8 @@ import { theme } from './theme';
 
 // この実装はMUIの公式ドキュメントに基づいています。
 // https://github.com/mui/material-ui/blob/master/examples/material-ui-nextjs-ts/src/components/ThemeRegistry/ThemeRegistry.tsx
-export default function ThemeRegistry(props: { options: any, children: React.ReactNode }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const ThemeRegistry = (props: { options: any, children: React.ReactNode }) => {
   const { options, children } = props;
 
   const [{ cache, flush }] = React.useState(() => {

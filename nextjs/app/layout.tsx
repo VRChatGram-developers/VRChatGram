@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/features/auth/providers/SessionProvider";
-import { Header } from "@/components/layouts/header";
-import { Footer } from "@/components/layouts/footer";
+// import { Header } from "@/components/layouts/header";
+// import { Footer } from "@/components/layouts/footer";
 import { ModalProvider } from "@/provider/modal-provider";
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import ThemeRegistry from "./theme-registry";
+import { ThemeRegistry } from "./theme-registry";
 import MainLayout from "@/components/layouts/main-layout";
 
 const geistSans = Geist({

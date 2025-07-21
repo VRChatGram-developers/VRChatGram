@@ -18,7 +18,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "@/components/styles/new-header.module.scss";
 
 // --- Styled Components (from MUI sample) ---
 const Search = styled("div")(({ theme }) => ({
@@ -227,7 +226,6 @@ export const Header = ({ open, drawerWidth, onDrawerToggle }: HeaderProps) => {
         keepMounted
         open={isMenuOpen}
         onClose={handleMenuClose}
-        className={styles.headerMenu}
         sx={{
           "& .MuiMenuItem-root": {
             fontSize: "0.8rem", // ここでフォントサイズを指定
