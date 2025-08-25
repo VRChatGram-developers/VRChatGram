@@ -1,317 +1,243 @@
 "use client";
 
-import Image from "next/image";
-import { FaSearch } from "react-icons/fa";
-import { useRouter, usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { FaCamera } from "react-icons/fa";
-import { RiArrowDownSLine } from "react-icons/ri";
-import styles from "../styles/header.module.scss";
-import { useState, useRef, useEffect, useCallback } from "react";
-import { useModal } from "@/provider/modal-provider";
-import { PostForm } from "@/features/posts/components/form/post-form";
-import { DropdownMenu } from "@/components/layouts/dropdown-menu";
-import { useSearchStore } from "@/libs/store/search-store";
-import { createQueryParams } from "@/utils/queryParams";
-import { fetchUserForHeader } from "@/features/users/endpoint";
-import { UserForHeader } from "@/features/users/types";
-import { logOutWithFirebaseAuth } from "@/libs/firebase/firebase-auth";
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import Badge from "@mui/material/Badge";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MoreIcon from "@mui/icons-material/MoreVert";
 import Link from "next/link";
-import { useCloseMenuOnRouteChange } from "@/hooks/use-close-menu-on-route-change";
+import Image from "next/image";
 
-export const Header = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const { openModal, closeModal } = useModal();
-  const [openMenu, setOpenMenu] = useState(false);
-  const [user, setUser] = useState<UserForHeader | null>(null);
-  const { status, data: session } = useSession();
-  const { searchQuery, setSearchQuery } = useSearchStore();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const dropdownMenuIconRef = useRef<HTMLDivElement>(null);
-  const dropdownMenuRef = useRef<HTMLDivElement>(null);
-  useCloseMenuOnRouteChange(setOpenMenu);
+// --- Styled Components (from MUI sample) ---
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: "10rem",
+  backgroundColor: "#0000000d",
+  "&:hover": {
+    backgroundColor: "#0000000d",
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: "10rem",
+  width: "40rem",
+  //   [theme.breakpoints.up('sm')]: {
+  //     marginLeft: theme.spacing(3),
+  //     width: 'auto',
+  //   },
+}));
 
-  const menuFunction = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    setOpenMenu((prev) => !prev);
-  };
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = await fetchUserForHeader();
-      if (typeof user === "string") {
-        console.error(user);
-      } else {
-        setUser(user);
-      }
-    };
-
-    if (session) {
-      fetchUser();
-    }
-  }, [session]);
-
-  const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
-      if (dropdownMenuRef.current && !dropdownMenuRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "100%",
     },
-    [dropdownMenuRef, setIsDropdownOpen]
+  },
+}));
+
+const AppBar = styled(MuiAppBar)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+}));
+
+// 親コンポーネントから受け取るpropsの型定義
+interface HeaderProps {
+  open: boolean;
+  drawerWidth: number;
+  onDrawerToggle: () => void;
+}
+
+export const Header = ({ open, drawerWidth, onDrawerToggle }: HeaderProps) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const menuId = "primary-search-account-menu";
+
+  const mobileMenuId = "primary-search-account-menu-mobile";
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <Badge badgeContent={4} color="error">
+            <MailIcon />
+          </Badge>
+        </IconButton>
+        <p>Messages</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+          <Badge badgeContent={17} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <p>Notifications</p>
+      </MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>
+    </Menu>
   );
-
-  useEffect(() => {
-    if (isDropdownOpen) {
-      document.addEventListener("click", handleClickOutside);
-    } else {
-      document.removeEventListener("click", handleClickOutside);
-    }
-
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [isDropdownOpen, setIsDropdownOpen, handleClickOutside]);
-
-  useEffect(() => {
-    if (!pathname.includes("/posts")) {
-      setSearchQuery("");
-    }
-  }, [pathname, setSearchQuery]);
-
-  const handleSearch = async () => {
-    const isTagSearch = searchQuery.includes("#");
-    const keyword = isTagSearch ? searchQuery.replace("#", "") : searchQuery;
-
-    const query = createQueryParams({
-      [isTagSearch ? "tag" : "title"]: keyword,
-      page: 1,
-    });
-
-    setSearchQuery(searchQuery);
-    await router.push(`/posts?${query}`);
-    setOpenMenu(false);
-  };
-
-  const handleRedirectToLogin = () => {
-    router.push("/login");
-    setOpenMenu(false);
-  };
-
-  const handleRedirectToSignup = () => {
-    router.push("/signup");
-    setOpenMenu(false);
-  };
 
   return (
-    <>
-      <header className={styles.headerContainer}>
-        <Link
-          href="/"
-          className={styles.headerImageContainer}
-          onClick={() => setOpenMenu(false)}
-          prefetch={true}
-        >
-          <Image
-            src="/header/vrcss_icon.svg"
-            alt="Logo"
-            layout="fill"
-            objectFit="contain"
-            className={styles.logo}
-          />
-        </Link>
-
-        {/* PC Only */}
-        <div className={styles.searchInputContainer}>
-          <input
-            type="text"
-            placeholder="何かお探しですか？"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          />
-          <FaSearch size={24} className={styles.FaSearch} onClick={handleSearch} />
-        </div>
-
-        <div className={styles.headerButtonsContainer}>
-          {status == "loading" ? (
-            <></>
-          ) : status !== "authenticated" ? (
-            <>
-              <button onClick={handleRedirectToLogin} className={styles.signInButton}>
-                <p className={styles.signInButtonText}>ログイン</p>
-              </button>
-              <button onClick={handleRedirectToSignup} className={styles.signUpButton}>
-                <p className={styles.signUpButtonText}>新規登録</p>
-              </button>
-            </>
-          ) : (
-            <>
-              <div className={styles.postButtonContainer}>
-                <button onClick={() => openModal(<PostForm onClose={closeModal} />)}>
-                  <p className={styles.postButtonText}>写真を投稿</p>
-                  <FaCamera size={24} />
-                </button>
-              </div>
-              <div className={styles.userIconContainer}>
-                <Image
-                  src={user?.profile_url || "/user-icon.png"}
-                  alt="User Icon"
-                  width={60}
-                  height={60}
-                  className={styles.userProfileIcon}
-                  unoptimized
-                  priority
-                />
-                <div ref={dropdownMenuIconRef}>
-                  <RiArrowDownSLine
-                    onClick={(e) => {
-                      e.stopPropagation();
-
-                      setIsDropdownOpen((prev) => !prev);
-                    }}
-                    className={styles.dropdownMenuIcon}
-                    size={24}
-                  />
-                </div>
-                {/* {isDropdownOpen && ( */}
-                <div ref={dropdownMenuRef}>
-                  <DropdownMenu isOpen={isDropdownOpen} setIsOpen={setIsDropdownOpen} user={user} />
-                </div>
-                {/* )} */}
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Mobile Only */}
-        <div className={styles.headerMobileContainer} onClick={(e) => menuFunction(e)}>
-          <div
-            className={`${styles.headerMobileHumburger} ${
-              openMenu ? styles.headerMobileHumburgerOpen : undefined
-            }`}
-          >
-            <span className={openMenu ? styles.spanOpen : undefined}></span>
-            <span className={openMenu ? styles.spanOpen : undefined}></span>
-            <span className={openMenu ? styles.spanOpen : undefined}></span>
-          </div>
-        </div>
-      </header>
-      <div
-        className={`${styles.headerMobileDrawerMenu} ${
-          openMenu ? styles.headerMobileDrawerMenuOpen : undefined
-        }`}
-        ref={menuRef}
+    <Box sx={{ flexGrow: 1, borderBottom: "1px solid #0000000d", zIndex: 1500 }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          width: `calc(100% - 0px)`,
+          ml: `${open ? drawerWidth : 0}px`,
+          borderBottom: "1px solid #0000000d",
+          transition: (theme) =>
+            theme.transitions.create(["margin", "width"], {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.leavingScreen,
+            }),
+          ...(open && {
+            transition: (theme) =>
+              theme.transitions.create(["margin", "width"], {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+          }),
+        }}
       >
-        <div className={styles.headerMobileDraweContainer}>
-          <div className={styles.searchInputMobileContainer}>
-            <input
-              type="text"
-              placeholder="何かお探しですか？"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <FaSearch size={24} className={styles.FaSearch} onClick={handleSearch} />
-          </div>
-          <div className={styles.headerMobileButtonsContainer}>
-            {status == "loading" ? (
-              <></>
-            ) : status !== "authenticated" ? (
-              <>
-                <Link
-                  href="/login"
-                  onClick={() => setOpenMenu(false)}
-                  className={styles.signInButton}
-                >
-                  <p className={styles.signInButtonText}>ログイン</p>
-                </Link>
-                <Link
-                  href="/signup"
-                  onClick={() => setOpenMenu(false)}
-                  className={styles.signUpButton}
-                >
-                  <p className={styles.signUpButtonText}>新規登録</p>
-                </Link>
-              </>
-            ) : (
-              <>
-                <div className={styles.postButtonContainer}>
-                  <button onClick={() => openModal(<PostForm onClose={closeModal} />)}>
-                    <p className={styles.postButtonText}>写真を投稿</p>
-                    <FaCamera size={24} />
-                  </button>
-                </div>
-
-                {/* memo Webサイズの時に押した時は下記と同じのを出したい */}
-                <div className={styles.userIconContainer}>
-                  <div className={styles.userProfileContainer}>
-                    <Image
-                      src={user?.profile_url || "/user-icon.png"}
-                      alt="User Icon"
-                      width={100}
-                      height={100}
-                      className={styles.userProfileIcon}
-                      unoptimized
-                    />
-                    <p className={styles.userNameText}>{user?.name}</p>
-                    <p className={styles.userIdText}>{user?.my_id}</p>
-                  </div>
-                  <div className={styles.moduleDrawerMenuContent}>
-                    <div className={styles.moduleDrawerMenuSection}>
-                      <div className={styles.moduleDrawerMenuLinkContainer}>
-                        <Link
-                          href={`/users/${user?.my_id}`}
-                          className={styles.moduleDrawerMenutext}
-                          prefetch={true}
-                        >
-                          ダッシュボード
-                        </Link>
-                      </div>
-                      <div className={styles.moduleDrawerMenuLinkContainer}>
-                        <Link
-                          href="/users/likes"
-                          className={styles.moduleDrawerMenutext}
-                          prefetch={true}
-                        >
-                          良いね一覧
-                        </Link>
-                      </div>
-                      <div className={styles.moduleDrawerMenuLinkContainer}>
-                        <Link
-                          href="/users/views"
-                          className={styles.moduleDrawerMenutext}
-                          prefetch={true}
-                        >
-                          閲覧履歴
-                        </Link>
-                      </div>
-                    </div>
-                    <div className={styles.moduleDrawerMenuSection}>
-                      <div className={styles.moduleDrawerMenuLinkAccountSettingsContainer}>
-                        <Link
-                          href="/users/account-settings"
-                          className={styles.moduleDrawerMenutext}
-                          prefetch={true}
-                        >
-                          アカウント設定
-                        </Link>
-                      </div>
-                    </div>
-                    <div
-                      className={styles.moduleDrawerMenuSection}
-                      onClick={logOutWithFirebaseAuth}
-                    >
-                      <div className={`${styles.moduleDrawerMenuLinkLogoutContainer}`}>
-                        <button className={`${styles.moduleDrawerMenutext}`}>ログアウト</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </>
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={onDrawerToggle} // 親から渡された関数でサイドバーを開閉
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Link href="/">
+            <Image src="/assets/vrcss-icon.svg" alt="VRCSS" width={40} height={40} />
+          </Link>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase placeholder="検索…" inputProps={{ "aria-label": "search" }} />
+          </Search>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </Box>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      {renderMobileMenu}
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        id={menuId}
+        keepMounted
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+        sx={{
+          "& .MuiMenuItem-root": {
+            fontSize: "0.8rem", // ここでフォントサイズを指定
+          },
+        }}
+      >
+        <MenuItem onClick={handleMenuClose}>ダッシュボード</MenuItem>
+        <MenuItem onClick={handleMenuClose}>良いね一覧</MenuItem>
+        <MenuItem onClick={handleMenuClose}>閲覧履歴</MenuItem>
+        <MenuItem onClick={handleMenuClose}>アカウント設定</MenuItem>
+        <MenuItem onClick={handleMenuClose}>ログアウト</MenuItem>
+      </Menu>
+    </Box>
   );
-};
+}
